@@ -1,4 +1,4 @@
-﻿namespace Game.RunTime.Services.Contracts
+﻿namespace Engine.RunTime.Services.Contracts
 {
 	/// <summary>
 	/// Represents a random service.

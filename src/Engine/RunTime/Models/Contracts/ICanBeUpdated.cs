@@ -1,4 +1,4 @@
-﻿namespace Game.RunTime.Models.Contracts
+﻿namespace Engine.RunTime.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that can be updated.

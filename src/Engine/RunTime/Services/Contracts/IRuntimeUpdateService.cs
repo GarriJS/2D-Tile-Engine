@@ -1,6 +1,6 @@
-﻿using Game.RunTime.Models.Contracts;
+﻿using Engine.RunTime.Models.Contracts;
 
-namespace Game.RunTime.Services.Contracts
+namespace Engine.RunTime.Services.Contracts
 {
     /// <summary>
     /// Represents a runtime update manager.

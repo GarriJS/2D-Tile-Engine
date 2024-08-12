@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Game.RunTime.Services
+namespace Engine.RunTime.Services
 {
 	/// <summary>
 	/// Represents a random service.

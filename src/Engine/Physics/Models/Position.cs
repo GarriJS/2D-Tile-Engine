@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Game.Physics.Models
+namespace Engine.Physics.Models
 {
 	/// <summary>
 	/// Represents a position.

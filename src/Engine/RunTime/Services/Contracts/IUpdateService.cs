@@ -1,7 +1,7 @@
-﻿using Game.RunTime.Models.Contracts;
+﻿using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Game.RunTime.Services.Contracts
+namespace Engine.RunTime.Services.Contracts
 {
     /// <summary>
     /// Represents a update service.

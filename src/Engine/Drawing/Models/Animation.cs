@@ -1,7 +1,7 @@
-﻿using Game.RunTime.Models.Contracts;
+﻿using Engine.RunTime.Models.Contracts;
 using System;
 
-namespace Game.Drawing.Models
+namespace Engine.Drawing.Models
 {
 	/// <summary>
 	/// Represents the animation.

@@ -1,10 +1,10 @@
-﻿using Game.Drawing.Models.Contracts;
-using Game.Drawing.Services.Contracts;
-using Game.RunTime.Services.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
+using Engine.Drawing.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace Game.RunTime.Managers
+namespace Engine.RunTime.Managers
 {
 	/// <summary>
 	/// Represents a runtime draw manager.

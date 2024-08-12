@@ -1,10 +1,10 @@
-﻿using Game.Drawing.Services.Contracts;
-using Game.RunTime.Models.Contracts;
-using Game.RunTime.Services.Contracts;
+﻿using Engine.Drawing.Services.Contracts;
+using Engine.RunTime.Models.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace Game.RunTime.Managers
+namespace Engine.RunTime.Managers
 {
     /// <summary>
     /// Represents a run time update manager.

@@ -1,11 +1,11 @@
-﻿using Game.Core.Initialization;
+﻿using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Game
+namespace Engine
 {
-	public class Game1 : Microsoft.Xna.Framework.Game
+	public class Game1 : Game
 	{
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;

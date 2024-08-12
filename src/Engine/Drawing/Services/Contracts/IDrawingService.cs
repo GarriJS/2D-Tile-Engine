@@ -1,7 +1,7 @@
-﻿using Game.Drawing.Models.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Game.Drawing.Services.Contracts
+namespace Engine.Drawing.Services.Contracts
 {
 	public interface IDrawingService
 	{

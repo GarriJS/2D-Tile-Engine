@@ -1,6 +1,6 @@
-﻿using Game.Drawing.Models.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
 
-namespace Game.RunTime.Services.Contracts
+namespace Engine.RunTime.Services.Contracts
 {   
 	/// <summary>
 	/// Represents a runtime draw manager.

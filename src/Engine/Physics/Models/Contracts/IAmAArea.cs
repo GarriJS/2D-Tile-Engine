@@ -1,4 +1,4 @@
-﻿using Game.Physics.Models.Contracts;
+﻿using Engine.Physics.Models.Contracts;
 
 namespace Engine.Physics.Models.Contracts
 {

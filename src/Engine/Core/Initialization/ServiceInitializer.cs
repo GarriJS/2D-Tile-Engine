@@ -1,11 +1,11 @@
-﻿using Game.Drawing.Services;
-using Game.Drawing.Services.Contracts;
-using Game.RunTime.Managers;
-using Game.RunTime.Services;
-using Game.RunTime.Services.Contracts;
+﻿using Engine.Drawing.Services;
+using Engine.Drawing.Services.Contracts;
+using Engine.RunTime.Managers;
+using Engine.RunTime.Services;
+using Engine.RunTime.Services.Contracts;
 using System;
 
-namespace Game.Core.Initialization
+namespace Engine.Core.Initialization
 {
 	/// <summary>
 	/// Represents a service initializer

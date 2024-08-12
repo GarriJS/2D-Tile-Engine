@@ -1,5 +1,5 @@
 ﻿using Engine.Physics.Models.Contracts;
-using Game.Physics.Models;
+using Engine.Physics.Models;
 
 namespace Engine.Physics.Models
 {

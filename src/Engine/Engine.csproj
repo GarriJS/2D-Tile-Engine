@@ -23,6 +23,9 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DiscModels\DiscModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Physics\Services\Contracts\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">

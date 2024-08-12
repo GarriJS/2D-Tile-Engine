@@ -1,7 +1,7 @@
 ﻿using Engine.Physics.Models.Contracts;
 using Engine.Tiling.Models.Contracts;
-using Game.Drawing.Models;
-using Game.Physics.Models;
+using Engine.Drawing.Models;
+using Engine.Physics.Models;
 
 namespace Engine.Tiling.Models
 {

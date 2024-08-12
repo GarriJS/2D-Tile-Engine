@@ -1,4 +1,4 @@
-﻿namespace Game.Drawing.Services.Contracts
+﻿namespace Engine.Drawing.Services.Contracts
 {
 	/// <summary>
 	/// Represents a animation service.

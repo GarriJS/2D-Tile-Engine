@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Game.Drawing.Models
+namespace Engine.Drawing.Models
 {
 	/// <summary>
 	/// Represents a sprite.

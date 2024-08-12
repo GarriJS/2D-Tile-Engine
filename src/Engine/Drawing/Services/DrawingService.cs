@@ -1,9 +1,9 @@
-﻿using Game.Drawing.Models.Contracts;
-using Game.Drawing.Services.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
+using Engine.Drawing.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Game.Drawing.Services
+namespace Engine.Drawing.Services
 {
 	/// <summary>
 	/// Represents a drawing service.
