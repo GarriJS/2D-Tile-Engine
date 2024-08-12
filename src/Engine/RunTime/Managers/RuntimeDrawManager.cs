@@ -12,15 +12,15 @@ namespace Engine.RunTime.Managers
 	public class RuntimeDrawManager : DrawableGameComponent, IRuntimeDrawService
 	{
 		/// <summary>
-		/// Gets or sets the active sorted draw data.
+		/// Gets or sets the active sorted drawables.
 		/// </summary>
-		private SortedDictionary<int, List<ICanBeDrawn>> ActiveSortedDrawData { get; set; }
+		private SortedDictionary<int, List<IAmDrawable>> ActiveSortedDrawData { get; set; }
 		
 		/// <summary>
 		/// Creates a new instance of the runtime draw manager.
 		/// </summary>
 		/// <param name="game">The game.</param>
-		public RuntimeDrawManager(Microsoft.Xna.Framework.Game game) : base(game) 
+		public RuntimeDrawManager(Game game) : base(game) 
 		{ 
 		
 		}
@@ -30,16 +30,16 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		public override void Initialize()
 		{
-			this.ActiveSortedDrawData = new SortedDictionary<int, List<ICanBeDrawn>>();
+			this.ActiveSortedDrawData = new SortedDictionary<int, List<IAmDrawable>>();
 			base.Initialize();
 		}
 
 		/// <summary>
-		/// Adds the draw data.
+		/// Adds the drawable.
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddDrawData(int layer, ICanBeDrawn drawable)
+		public void AddDrawData(int layer, IAmDrawable drawable)
 		{
 			if (true == this.ActiveSortedDrawData.TryGetValue(layer, out var layerList))
 			{
@@ -47,17 +47,17 @@ namespace Engine.RunTime.Managers
 			}
 			else
 			{
-				layerList = new List<ICanBeDrawn>() { drawable };
+				layerList = new List<IAmDrawable>() { drawable };
 				this.ActiveSortedDrawData.Add(layer, layerList);
 			}
 		}
 
 		/// <summary>
-		/// Removes the draw data.
+		/// Removes the drawable.
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveDrawData(int layer, ICanBeDrawn drawable)
+		public void RemoveDrawData(int layer, IAmDrawable drawable)
 		{
 			if (true == this.ActiveSortedDrawData.TryGetValue(layer, out var layerList))
 			{
@@ -66,11 +66,11 @@ namespace Engine.RunTime.Managers
 		}
 
 		/// <summary>
-		/// Changes the draw data layer.
+		/// Changes the drawable layer.
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void ChangeDrawDataLayer(int layer, ICanBeDrawn drawable)
+		public void ChangeDrawDataLayer(int layer, IAmDrawable drawable)
 		{ 
 			this.RemoveDrawData(layer, drawable);
 			this.AddDrawData(layer, drawable);

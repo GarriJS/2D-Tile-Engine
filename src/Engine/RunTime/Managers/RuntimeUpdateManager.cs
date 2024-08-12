@@ -1,15 +1,14 @@
-﻿using Engine.Drawing.Services.Contracts;
-using Engine.RunTime.Models.Contracts;
+﻿using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace Engine.RunTime.Managers
 {
-    /// <summary>
-    /// Represents a run time update manager.
-    /// </summary>
-    public class RuntimeUpdateManager : DrawableGameComponent, IRuntimeUpdateService
+	/// <summary>
+	/// Represents a run time update manager.
+	/// </summary>
+	public class RuntimeUpdateManager : DrawableGameComponent, IRuntimeUpdateService
 	{
 		/// <summary>
 		/// Gets or sets the active sorted updateable.
@@ -20,7 +19,7 @@ namespace Engine.RunTime.Managers
 		/// Initializes a new instance of the run time update manager.
 		/// </summary>
 		/// <param name="game"></param>
-		public RuntimeUpdateManager(Microsoft.Xna.Framework.Game game) : base(game)
+		public RuntimeUpdateManager(Game game) : base(game)
 		{
 
 		}

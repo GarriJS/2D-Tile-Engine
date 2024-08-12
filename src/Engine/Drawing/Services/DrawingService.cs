@@ -1,5 +1,6 @@
 ﻿using Engine.Drawing.Models.Contracts;
 using Engine.Drawing.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -29,13 +30,25 @@ namespace Engine.Drawing.Services
 		}
 
 		/// <summary>
-		/// Draws the draw data. 
+		/// Draws the drawable. 
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void Draw(GameTime gameTime, ICanBeDrawn drawable)
+		public void Draw(GameTime gameTime, IAmDrawable drawable)
 		{
 			this.SpriteBatch.Draw(drawable.Sprite.Texture, drawable.Position.Coordinates, drawable.Sprite.TextureBox, Color.White);
+		}
+
+		/// <summary>
+		/// Draws the animated.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="animated">The animated.</param>
+		public void Draw(GameTime gameTime, IAmAnimated animated)
+		{
+			var animationService = this._gameServiceContainer.GetService<IAnimationService>();
+			animationService.UpdateAnimationFrame(gameTime, animated.Animation);
+			this.SpriteBatch.Draw(animated.Sprite.Texture, animated.Position.Coordinates, animated.Sprite.TextureBox, Color.White);
 		}
 	}
 }

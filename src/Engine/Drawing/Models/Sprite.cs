@@ -12,7 +12,7 @@ namespace Engine.Drawing.Models
 		/// <summary>
 		/// Gets or sets the draw data name.
 		/// </summary>
-		public string DrawDataName { get => this.SpritesheetName + this.SpritesheetBox; }
+		public string DrawDataName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the spritesheet name.

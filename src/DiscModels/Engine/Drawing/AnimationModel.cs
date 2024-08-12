@@ -8,8 +8,8 @@ namespace DiskModels.Engine.Drawing
 		[DataMember(Name = "currentFrameIndex", Order = 2)]
 		public int CurrentFrameIndex { get; set; }
 
-		[DataMember(Name = "frameConstantDuration", Order = 3)]
-		public int? FrameConstantDuration { get; set; }
+		[DataMember(Name = "frameDuration", Order = 3)]
+		public int? FrameDuration { get; set; }
 
 		[DataMember(Name = "frameMinDuration", Order = 4)]
 		public int? FrameMinDuration { get; set; }
@@ -17,7 +17,7 @@ namespace DiskModels.Engine.Drawing
 		[DataMember(Name = "frameMaxDuration", Order = 5)]
 		public int? FrameMaxDuration { get; set; }
 
-		[DataMember(Name = "sprites", Order = 6)]
-		public SpriteModel[] Sprites { get; set; }
+		[DataMember(Name = "frames", Order = 6)]
+		public SpriteModel[] Frames { get; set; }
 	}
 }

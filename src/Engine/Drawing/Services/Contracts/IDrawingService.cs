@@ -6,10 +6,17 @@ namespace Engine.Drawing.Services.Contracts
 	public interface IDrawingService
 	{
 		/// <summary>
-		/// Draws the draw data. 
+		/// Draws the drawable. 
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void Draw(GameTime gameTime, ICanBeDrawn drawable);
+		public void Draw(GameTime gameTime, IAmDrawable drawable);
+
+		/// <summary>
+		/// Draws the animated.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="animated">The animated.</param>
+		public void Draw(GameTime gameTime, IAmAnimated animated);
 	}
 }

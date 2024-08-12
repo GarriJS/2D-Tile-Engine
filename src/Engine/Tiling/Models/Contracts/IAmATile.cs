@@ -6,7 +6,7 @@ namespace Engine.Tiling.Models.Contracts
 	/// <summary>
 	/// Represents a tile.
 	/// </summary>
-	public interface IAmATile : ICanBeDrawn, IHaveArea
+	public interface IAmATile : IAmDrawable, IHaveArea
 	{
 		/// <summary>
 		/// Gets the row.

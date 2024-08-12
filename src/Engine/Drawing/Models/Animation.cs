@@ -6,7 +6,7 @@ namespace Engine.Drawing.Models
 	/// <summary>
 	/// Represents the animation.
 	/// </summary>
-	public class Animation : IDisposable, ICanBeUpdated
+	public class Animation : IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the current frame index.

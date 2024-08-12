@@ -12,20 +12,20 @@ namespace Engine.RunTime.Services.Contracts
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddDrawData(int layer, ICanBeDrawn drawable);
+		public void AddDrawData(int layer, IAmDrawable drawable);
 
 		/// <summary>
 		/// Removes the draw data.
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveDrawData(int layer, ICanBeDrawn drawable);
+		public void RemoveDrawData(int layer, IAmDrawable drawable);
 
 		/// <summary>
 		/// Changes the draw data layer.
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void ChangeDrawDataLayer(int layer, ICanBeDrawn drawable);
+		public void ChangeDrawDataLayer(int layer, IAmDrawable drawable);
 	}
 }
