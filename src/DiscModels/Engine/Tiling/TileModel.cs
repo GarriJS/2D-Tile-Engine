@@ -1,9 +1,9 @@
-﻿using DiskModels.Engine.Drawing;
-using DiskModels.Engine.Physics.Contracts;
-using DiskModels.Engine.Tiling.Contracts;
+﻿using DiscModels.Engine.Drawing;
+using DiscModels.Engine.Physics.Contracts;
+using DiscModels.Engine.Tiling.Contracts;
 using System.Runtime.Serialization;
 
-namespace DiskModels.Engine.Tiling
+namespace DiscModels.Engine.Tiling
 {
 	[DataContract(Name = "tile")]
 	public class TileModel : IAmATileModel

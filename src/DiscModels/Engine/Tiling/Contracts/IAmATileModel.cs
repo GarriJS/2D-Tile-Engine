@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DiskModels.Engine.Tiling.Contracts
+namespace DiscModels.Engine.Tiling.Contracts
 {
 	public interface IAmATileModel
 	{

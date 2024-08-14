@@ -1,19 +1,25 @@
-﻿using Engine.Core.Initialization;
+﻿using DiscModels.Engine.Drawing;
+using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using DiscModels.Engine.Physics;
+using Engine.Drawing.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
+using Engine.Terminal.Services.Contracts;
 
 namespace Engine
 {
 	public class Game1 : Game
 	{
 		private GraphicsDeviceManager _graphics;
-		private SpriteBatch _spriteBatch;
 
 		public Game1()
 		{
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
+
+			Window.AllowUserResizing = true;
+
 			this.IsMouseVisible = true;
 		}
 
@@ -21,13 +27,15 @@ namespace Engine
 		{
 			_ = ServiceInitializer.InitializeServices(this);
 
+			this._graphics.PreferredBackBufferWidth = 1920;
+			this._graphics.PreferredBackBufferHeight = 1200;
+			this._graphics.ApplyChanges();
+
 			base.Initialize();
 		}
 
 		protected override void LoadContent()
 		{
-			this._spriteBatch = new SpriteBatch(GraphicsDevice);
-
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -38,7 +46,11 @@ namespace Engine
 				Exit();
 			}
 
-			// TODO: Add your update logic here
+			if (Keyboard.GetState().IsKeyDown(Keys.OemTilde))
+			{
+				var consoleService = this.Services.GetService<IConsoleService>();
+				consoleService.ToggleConsole();
+			}
 
 			base.Update(gameTime);
 		}
@@ -46,8 +58,7 @@ namespace Engine
 		protected override void Draw(GameTime gameTime)
 		{
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
-
-			// TODO: Add your drawing code here
+			var drawService = this.Services.GetService<IDrawingService>();
 
 			base.Draw(gameTime);
 		}

@@ -2,10 +2,16 @@
 using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Services;
 using Engine.Drawing.Services.Contracts;
+using Engine.Physics.Services;
+using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Managers;
 using Engine.RunTime.Services;
 using Engine.RunTime.Services.Contracts;
+using Engine.Terminal.Services;
+using Engine.Terminal.Services.Contracts;
+using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 namespace Engine.Core.Initialization
 {
@@ -25,12 +31,15 @@ namespace Engine.Core.Initialization
 			{
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
-				(typeof(ITextureService), new TextureService(game.Services)),
+				(typeof(ITextureService), new TextureManager(game)),
 				(typeof(IRandomService), new RandomService()),
+				(typeof(IConsoleService), new ConsoleService(game.Services)),
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IUpdateService), new UpdateService(game.Services)),
 				(typeof(ISpriteService), new SpriteService(game.Services)),
 				(typeof(IAnimationService), new AnimationService(game.Services)),
+				(typeof(IImageService), new ImageService(game.Services)),
+				(typeof(IPositionService), new PositionService(game.Services)),
 			};
 		}
 
@@ -44,17 +53,22 @@ namespace Engine.Core.Initialization
 			var serviceContractPairs = GetServiceContractPairs(game);
 			bool success = true;
 
-			try
+			foreach (var (type, provider) in serviceContractPairs)
 			{
-				foreach (var (type, provider) in serviceContractPairs)
+				try
 				{
 					game.Services.AddService(type, provider);
+
+					if (provider is GameComponent gameComponent)
+					{
+						game.Components.Add(gameComponent);
+					}
 				}
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Service initialization failed: {ex.Message}");
-				success = false;
+				catch (Exception ex)
+				{
+					Debug.WriteLine($"Service initialization failed for {type}: {ex.Message}");
+					success = false;
+				}
 			}
 
 			return success;

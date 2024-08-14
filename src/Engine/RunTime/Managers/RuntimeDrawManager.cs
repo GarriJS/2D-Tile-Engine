@@ -12,17 +12,23 @@ namespace Engine.RunTime.Managers
 	public class RuntimeDrawManager : DrawableGameComponent, IRuntimeDrawService
 	{
 		/// <summary>
-		/// Gets or sets the active sorted drawables.
+		/// Gets or sets the active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> ActiveSortedDrawData { get; set; }
+		private SortedDictionary<int, List<IAmDrawable>> ActiveDrawables { get; set; }
 		
+		/// <summary>
+		/// Gets or sets the overlaid active drawables.
+		/// </summary>
+		private SortedDictionary<int, List<IAmDrawable>> OverlaidActiveDrawables { get; set; }
+
 		/// <summary>
 		/// Creates a new instance of the runtime draw manager.
 		/// </summary>
 		/// <param name="game">The game.</param>
 		public RuntimeDrawManager(Game game) : base(game) 
-		{ 
-		
+		{
+			this.ActiveDrawables = new SortedDictionary<int, List<IAmDrawable>>();
+			this.OverlaidActiveDrawables = new SortedDictionary<int, List<IAmDrawable>>();
 		}
 
 		/// <summary>
@@ -30,7 +36,6 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		public override void Initialize()
 		{
-			this.ActiveSortedDrawData = new SortedDictionary<int, List<IAmDrawable>>();
 			base.Initialize();
 		}
 
@@ -39,16 +44,34 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddDrawData(int layer, IAmDrawable drawable)
+		public void AddDrawable(int layer, IAmDrawable drawable)
 		{
-			if (true == this.ActiveSortedDrawData.TryGetValue(layer, out var layerList))
+			if (true == this.ActiveDrawables.TryGetValue(layer, out var layerList))
 			{
 				layerList.Add(drawable);
 			}
 			else
 			{
 				layerList = new List<IAmDrawable>() { drawable };
-				this.ActiveSortedDrawData.Add(layer, layerList);
+				this.ActiveDrawables.Add(layer, layerList);
+			}
+		}
+
+		/// <summary>
+		/// Adds the overlaid drawable.
+		/// </summary>
+		/// <param name="layer">The layer.</param>
+		/// <param name="drawable">The drawable.</param>
+		public void AddOverlaidDrawable(int layer, IAmDrawable drawable)
+		{
+			if (true == this.OverlaidActiveDrawables.TryGetValue(layer, out var layerList))
+			{
+				layerList.Add(drawable);
+			}
+			else
+			{
+				layerList = new List<IAmDrawable>() { drawable };
+				this.OverlaidActiveDrawables.Add(layer, layerList);
 			}
 		}
 
@@ -57,9 +80,22 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveDrawData(int layer, IAmDrawable drawable)
+		public void RemoveDrawable(int layer, IAmDrawable drawable)
 		{
-			if (true == this.ActiveSortedDrawData.TryGetValue(layer, out var layerList))
+			if (true == this.ActiveDrawables.TryGetValue(layer, out var layerList))
+			{
+				layerList.Remove(drawable);
+			}
+		}
+
+		/// <summary>
+		/// Removes the overlaid drawable.
+		/// </summary>
+		/// <param name="layer">The layer.</param>
+		/// <param name="drawable">The drawable.</param>
+		public void RemoveOverlaidDrawable(int layer, IAmDrawable drawable)
+		{
+			if (true == this.OverlaidActiveDrawables.TryGetValue(layer, out var layerList))
 			{
 				layerList.Remove(drawable);
 			}
@@ -70,10 +106,21 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void ChangeDrawDataLayer(int layer, IAmDrawable drawable)
+		public void ChangeDrawableLayer(int layer, IAmDrawable drawable)
 		{ 
-			this.RemoveDrawData(layer, drawable);
-			this.AddDrawData(layer, drawable);
+			this.RemoveDrawable(layer, drawable);
+			this.AddDrawable(layer, drawable);
+		}
+
+		/// <summary>
+		/// Changes the overlaid drawable layer.
+		/// </summary>
+		/// <param name="layer">The layer.</param>
+		/// <param name="drawable">The drawable.</param>
+		public void ChangeOverlaidDrawableLayer(int layer, IAmDrawable drawable)
+		{
+			this.RemoveOverlaidDrawable(layer, drawable);
+			this.AddOverlaidDrawable(layer, drawable);
 		}
 
 		/// <summary>
@@ -84,13 +131,29 @@ namespace Engine.RunTime.Managers
 		{
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
 
-			foreach (var layer in this.ActiveSortedDrawData.Values)
+			drawingService.BeginDraw();
+
+			foreach (var layer in this.ActiveDrawables.Values)
 			{
 				foreach (var drawable in layer)
 				{ 
 					drawingService.Draw(gameTime, drawable);
 				}
 			}
+
+			drawingService.EndDraw();
+
+			drawingService.BeginDraw();
+
+			foreach (var layer in this.OverlaidActiveDrawables.Values)
+			{
+				foreach (var drawable in layer)
+				{
+					drawingService.Draw(gameTime, drawable);
+				}
+			}
+
+			drawingService.EndDraw();
 
 			base.Draw(gameTime);
 		}

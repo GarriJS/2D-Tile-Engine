@@ -1,4 +1,4 @@
-﻿using DiskModels.Engine.Drawing;
+﻿using DiscModels.Engine.Drawing;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Models;
@@ -31,15 +31,16 @@ namespace Engine.Drawing.Services
 		public Sprite GetSprite(SpriteModel spriteModel)
 		{
 			var textureService = this._gameServiceContainer.GetService<ITextureService>();
-			var texture = textureService.GetTexture(spriteModel.SpritesheetName, spriteModel.SpritesheetBox);
+			var textureName = textureService.GetTextureName(spriteModel.SpritesheetName, spriteModel.SpritesheetBox);
+			var texture = textureService.GetTexture(textureName);
 			var textureBox = new Rectangle(TextureConstants.TEXTURE_EXTENSION_AMOUNT,
 										   TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-										   spriteModel.SpritesheetBox.Width + TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-										   spriteModel.SpritesheetBox.Height + TextureConstants.TEXTURE_EXTENSION_AMOUNT);
+										   spriteModel.SpritesheetBox.Width,
+										   spriteModel.SpritesheetBox.Height);
 
 			return new Sprite
 			{
-				DrawDataName = spriteModel.SpritesheetName + spriteModel.SpritesheetBox,
+				TextureName = textureName,
 				SpritesheetName = spriteModel.SpritesheetName,
 				SpritesheetCoordinate = spriteModel.SpritesheetBox.Location,
 				TextureBox = textureBox,

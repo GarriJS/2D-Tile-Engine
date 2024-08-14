@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Engine.RunTime.Services.Contracts;
+using System;
 
 namespace Engine.RunTime.Services
 {
 	/// <summary>
 	/// Represents a random service.
 	/// </summary>
-	public class RandomService
+	public class RandomService : IRandomService
 	{
 		/// <summary>
 		/// Gets or sets the random generator.

@@ -6,6 +6,16 @@ namespace Engine.Drawing.Services.Contracts
 	public interface IDrawingService
 	{
 		/// <summary>
+		/// Begins the draw.
+		/// </summary>
+		public void BeginDraw();
+
+		/// <summary>
+		/// Ends the draw.
+		/// </summary>
+		public void EndDraw();
+
+		/// <summary>
 		/// Draws the drawable. 
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>

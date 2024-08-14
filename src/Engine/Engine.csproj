@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
@@ -24,9 +24,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DiscModels\DiscModels.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Physics\Services\Contracts\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />

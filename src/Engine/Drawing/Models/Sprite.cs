@@ -10,9 +10,9 @@ namespace Engine.Drawing.Models
 	public class Sprite : IDisposable
 	{
 		/// <summary>
-		/// Gets or sets the draw data name.
+		/// Gets or sets the texture name.
 		/// </summary>
-		public string DrawDataName { get; set; }
+		public string TextureName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the spritesheet name.

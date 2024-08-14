@@ -1,6 +1,5 @@
 ﻿using Engine.Drawing.Models.Contracts;
 using Engine.Drawing.Services.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -27,6 +26,22 @@ namespace Engine.Drawing.Services
 			this._gameServiceContainer = gameServices;
 			var graphicDeviceService = this._gameServiceContainer.GetService<IGraphicsDeviceService>();
 			this.SpriteBatch = new SpriteBatch(graphicDeviceService.GraphicsDevice);
+		}
+
+		/// <summary>
+		/// Begins the draw.
+		/// </summary>
+		public void BeginDraw()
+		{ 
+			this.SpriteBatch.Begin();
+		}
+
+		/// <summary>
+		/// Ends the draw.
+		/// </summary>
+		public void EndDraw()
+		{ 
+			this.SpriteBatch.End();
 		}
 
 		/// <summary>

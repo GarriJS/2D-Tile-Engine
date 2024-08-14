@@ -8,7 +8,7 @@ namespace Engine.RunTime.Managers
 	/// <summary>
 	/// Represents a run time update manager.
 	/// </summary>
-	public class RuntimeUpdateManager : DrawableGameComponent, IRuntimeUpdateService
+	public class RuntimeUpdateManager : GameComponent, IRuntimeUpdateService
 	{
 		/// <summary>
 		/// Gets or sets the active sorted updateable.
@@ -18,10 +18,10 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Initializes a new instance of the run time update manager.
 		/// </summary>
-		/// <param name="game"></param>
+		/// <param name="game">The game.</param>
 		public RuntimeUpdateManager(Game game) : base(game)
 		{
-
+			this.ActiveSortedUpdateables = new SortedDictionary<int, List<ICanBeUpdated>>();
 		}
 
 		/// <summary>
@@ -29,7 +29,6 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		public override void Initialize()
 		{
-			this.ActiveSortedUpdateables = new SortedDictionary<int, List<ICanBeUpdated>>();
 			base.Initialize();
 		}
 
@@ -76,10 +75,10 @@ namespace Engine.RunTime.Managers
 		}
 
 		/// <summary>
-		/// Draws the active updateables.
+		/// Updates the active updateables.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		public override void Draw(GameTime gameTime)
+		public override void Update(GameTime gameTime)
 		{
 			var updateService = this.Game.Services.GetService<IUpdateService>();
 
@@ -91,7 +90,7 @@ namespace Engine.RunTime.Managers
 				}
 			}
 
-			base.Draw(gameTime);
+			base.Update(gameTime);
 		}
 	}
 }
