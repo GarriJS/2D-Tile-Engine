@@ -5,6 +5,7 @@ using Engine.RunTime.Services.Contracts;
 using Engine.Terminal.Model;
 using Engine.Terminal.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Engine.Terminal.Services
 {
@@ -119,11 +120,11 @@ namespace Engine.Terminal.Services
 
 			var textArea = imageService.GetImage(imageModel);
 			runtimeDrawService.AddOverlaidDrawable(1, textArea);
-
 			this.Console = new Console
 			{
 				ConsoleBackGround = background,
-				ConsoleTextArea = textArea
+				ConsoleTextArea = textArea,
+				ConsoleLines = new List<ConsoleLine>()
 			};
 		}
 

@@ -1,0 +1,20 @@
+[
+  {
+    "actionControlDescription": "Toggle Console",
+    "actionType": 6,
+    "controlKeys": [ 192 ],
+    "controlMouseButtons": [ 6 ]
+  },
+  {
+    "actionControlDescription": "test1",
+    "actionType": 2,
+    "controlKeys": null,
+    "controlMouseButtons": null
+  },
+  {
+    "actionControlDescription": "test2",
+    "actionType": 3,
+    "controlKeys": [ 1 ],
+    "controlMouseButtons": [ 1 ]
+  }
+]

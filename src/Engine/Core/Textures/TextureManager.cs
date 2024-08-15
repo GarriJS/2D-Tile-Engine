@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Engine.Core.Textures
 {
@@ -71,6 +72,11 @@ namespace Engine.Core.Textures
 			var imagesPath = $@"{this.Game.Content.RootDirectory}\Images";
 			string[] imagesFiles = Directory.GetFiles(imagesPath);
 
+			if (false == imagesFiles.Any())
+			{
+				return;
+			}
+
 			foreach (string imagesFile in imagesFiles)
 			{
 				try
@@ -99,6 +105,11 @@ namespace Engine.Core.Textures
 		{
 			var tileSetsPath = $@"{this.Game.Content.RootDirectory}\TileSets";
 			string[] tileSetFiles = Directory.GetFiles(tileSetsPath);
+
+			if (false == tileSetFiles.Any())
+			{
+				return;
+			}
 
 			foreach (string tileSetFile in tileSetFiles)
 			{

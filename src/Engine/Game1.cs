@@ -6,6 +6,9 @@ using DiscModels.Engine.Physics;
 using Engine.Drawing.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Engine.Terminal.Services.Contracts;
+using Engine.Controls.Services;
+using Engine.Controls.Services.Contracts;
+using Engine.Controls.Models.Enums;
 
 namespace Engine
 {
@@ -41,12 +44,15 @@ namespace Engine
 
 		protected override void Update(GameTime gameTime)
 		{
+			var controlService = this.Services.GetService<IControlService>();
+			var controlState = controlService.ControlState;
+
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 			{
 				Exit();
 			}
 
-			if (Keyboard.GetState().IsKeyDown(Keys.OemTilde))
+			if (true == controlService.ControlState.FreshActionTypes.Contains(ActionTypes.ToggleConsole))
 			{
 				var consoleService = this.Services.GetService<IConsoleService>();
 				consoleService.ToggleConsole();

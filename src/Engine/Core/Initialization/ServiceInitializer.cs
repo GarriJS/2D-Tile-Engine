@@ -1,4 +1,6 @@
-﻿using Engine.Core.Textures;
+﻿using Engine.Controls.Services;
+using Engine.Controls.Services.Contracts;
+using Engine.Core.Textures;
 using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Services;
 using Engine.Drawing.Services.Contracts;
@@ -32,7 +34,9 @@ namespace Engine.Core.Initialization
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
 				(typeof(ITextureService), new TextureManager(game)),
+				(typeof(IControlService), new ControlManager(game)),
 				(typeof(IRandomService), new RandomService()),
+				(typeof(IActionControlServices), new ActionControlService(game.Services)),
 				(typeof(IConsoleService), new ConsoleService(game.Services)),
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IUpdateService), new UpdateService(game.Services)),

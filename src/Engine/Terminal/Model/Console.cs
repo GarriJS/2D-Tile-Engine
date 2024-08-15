@@ -1,4 +1,5 @@
 ﻿using Engine.Drawing.Models;
+using System.Collections.Generic;
 
 namespace Engine.Terminal.Model
 {
@@ -16,5 +17,10 @@ namespace Engine.Terminal.Model
 		/// Gets or sets the console text area.
 		/// </summary>
 		public Image ConsoleTextArea { get; set; }
+
+		/// <summary>
+		/// Gets or sets the console lines.
+		/// </summary>
+		public List<ConsoleLine> ConsoleLines { get; set; }
 	}
 }
