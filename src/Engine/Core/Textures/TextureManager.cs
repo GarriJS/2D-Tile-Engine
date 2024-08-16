@@ -67,6 +67,9 @@ namespace Engine.Core.Textures
 			return $"{spritesheet}_{spritesheetBox.X}_{spritesheetBox.Y}_{spritesheetBox.Width}_{spritesheetBox.Height}";
 		}
 
+		/// <summary>
+		/// Initializes the image.
+		/// </summary>
 		private void InitializeImages()
 		{
 			var imagesPath = $@"{this.Game.Content.RootDirectory}\Images";

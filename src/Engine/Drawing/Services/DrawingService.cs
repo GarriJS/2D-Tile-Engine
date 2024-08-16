@@ -1,4 +1,6 @@
-﻿using Engine.Drawing.Models.Contracts;
+﻿using Engine.Controls.Typing;
+using Engine.Drawing.Models;
+using Engine.Drawing.Models.Contracts;
 using Engine.Drawing.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,6 +66,31 @@ namespace Engine.Drawing.Services
 			var animationService = this._gameServiceContainer.GetService<IAnimationService>();
 			animationService.UpdateAnimationFrame(gameTime, animated.Animation);
 			this.SpriteBatch.Draw(animated.Sprite.Texture, animated.Position.Coordinates, animated.Sprite.TextureBox, Color.White);
+		}
+
+		/// <summary>
+		/// Draws the test.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="drawableText">The drawable text.</param>
+		public void Draw(GameTime gameTime, DrawableText drawableText)
+		{
+			var formattedText = KeyboardTyping.FormatForDrawString(drawableText.Text);
+			
+			this.SpriteBatch.DrawString(drawableText.SpriteFont, formattedText, drawableText.Position.Coordinates, Color.White);
+		}
+
+		/// <summary>
+		/// Draws the test.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="drawableText">The drawable text.</param>
+		/// <param name="color">The color.</param>
+		public void Draw(GameTime gameTime, DrawableText drawableText, Color color)
+		{
+			var formattedText = KeyboardTyping.FormatForDrawString(drawableText.Text);
+
+			this.SpriteBatch.DrawString(drawableText.SpriteFont, formattedText, drawableText.Position.Coordinates, color);
 		}
 	}
 }

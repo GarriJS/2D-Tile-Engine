@@ -9,6 +9,7 @@ using Engine.Terminal.Services.Contracts;
 using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Models.Enums;
+using Engine.Controls.Typing;
 
 namespace Engine
 {
@@ -59,14 +60,35 @@ namespace Engine
 			}
 
 			base.Update(gameTime);
+
+			KeyboardTyping.OldPressedKeys = Keyboard.GetState().GetPressedKeys();
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
+			var consoleService = this.Services.GetService<IConsoleService>();
 			var drawService = this.Services.GetService<IDrawingService>();
 
 			base.Draw(gameTime);
+
+			drawService.BeginDraw();
+			if (null != consoleService.Console.ActiveConsoleLine)
+			{
+				drawService.Draw(gameTime, consoleService.Console.ActiveConsoleLine.Command);
+				
+				foreach (var recommendedArg in consoleService.Console.RecommendedArguments)
+				{
+					drawService.Draw(gameTime, recommendedArg);
+				}
+
+				foreach (var commandLine in consoleService.Console.ConsoleLines)
+				{
+					drawService.Draw(gameTime, commandLine.Command, Color.Salmon);
+					drawService.Draw(gameTime, commandLine.Response, Color.Yellow);
+				}
+			}
+			drawService.EndDraw();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using Engine.Drawing.Models;
 using System.Collections.Generic;
 
-namespace Engine.Terminal.Model
+namespace Engine.Terminal.Models
 {
 	/// <summary>
 	/// Represents a console.
@@ -22,5 +22,15 @@ namespace Engine.Terminal.Model
 		/// Gets or sets the console lines.
 		/// </summary>
 		public List<ConsoleLine> ConsoleLines { get; set; }
+
+		/// <summary>
+		/// Gets or sets the active console line.
+		/// </summary>
+		public ConsoleLine ActiveConsoleLine { get; set; }
+
+		/// <summary>
+		/// Gets or sets the recommended arguments.
+		/// </summary>
+		public List<DrawableText> RecommendedArguments { get; set; }
 	}
 }

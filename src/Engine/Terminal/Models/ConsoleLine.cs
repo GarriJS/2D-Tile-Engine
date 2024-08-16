@@ -1,4 +1,6 @@
-﻿namespace Engine.Terminal.Model
+﻿using Engine.Drawing.Models;
+
+namespace Engine.Terminal.Models
 {
 	/// <summary>
 	/// Represents a console line.
@@ -8,11 +10,11 @@
 		/// <summary>
 		/// Gets or sets the command.
 		/// </summary>
-		public string Command { get; set; }
+		public DrawableText Command { get; set; }
 		
 		/// <summary>
 		/// Gets or sets the response.
 		/// </summary>
-		public string Response { get; set; }
+		public DrawableText Response { get; set; }
 	}
 }
