@@ -13,18 +13,13 @@ namespace Engine.Terminal.Services.Contracts
 		public Console Console { get; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the console is active.
+		/// </summary>
+		public bool ConsoleActive { get; }
+
+		/// <summary>
 		/// Toggles the console.
 		/// </summary>
 		public void ToggleConsole();
-
-		/// <summary>
-		/// Starts the console.
-		/// </summary>
-		public void StartConsole();
-
-		/// <summary>
-		/// Stops the console.
-		/// </summary>
-		public void StopConsole();
 	}
 }

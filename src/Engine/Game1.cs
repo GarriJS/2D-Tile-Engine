@@ -10,6 +10,7 @@ using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Models.Enums;
 using Engine.Controls.Typing;
+using Engine.Core.Fonts.Contracts;
 
 namespace Engine
 {
@@ -40,7 +41,10 @@ namespace Engine
 
 		protected override void LoadContent()
 		{
-			// TODO: use this.Content to load your game content here
+			foreach (var loadable in ServiceInitializer.Loadables)
+			{ 
+				loadable.LoadContent();
+			}
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -67,27 +71,12 @@ namespace Engine
 		protected override void Draw(GameTime gameTime)
 		{
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
-			var consoleService = this.Services.GetService<IConsoleService>();
 			var drawService = this.Services.GetService<IDrawingService>();
+
+			drawService.BeginDraw();
 
 			base.Draw(gameTime);
 
-			drawService.BeginDraw();
-			if (null != consoleService.Console.ActiveConsoleLine)
-			{
-				drawService.Draw(gameTime, consoleService.Console.ActiveConsoleLine.Command);
-				
-				foreach (var recommendedArg in consoleService.Console.RecommendedArguments)
-				{
-					drawService.Draw(gameTime, recommendedArg);
-				}
-
-				foreach (var commandLine in consoleService.Console.ConsoleLines)
-				{
-					drawService.Draw(gameTime, commandLine.Command, Color.Salmon);
-					drawService.Draw(gameTime, commandLine.Response, Color.Yellow);
-				}
-			}
 			drawService.EndDraw();
 		}
 	}

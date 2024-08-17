@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Core.Contracts;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Core.Textures.Contracts
@@ -6,14 +7,15 @@ namespace Engine.Core.Textures.Contracts
 	/// <summary>
 	/// Represents a texture service.
 	/// </summary>
-	public interface ITextureService
+	public interface ITextureService : ILoadContent
 	{
 		/// <summary>
 		/// Gets the texture.
 		/// </summary>
 		/// <param name="textureName">The texture name.</param>
+		/// <param name="spritesheetName">The spritesheet name.</param>
 		/// <returns>The texture.</returns>
-		public Texture2D GetTexture(string textureName);
+		public Texture2D GetTexture(string textureName, string spritesheetName = null);
 
 		/// <summary>
 		/// Gets the texture name.

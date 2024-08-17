@@ -131,8 +131,6 @@ namespace Engine.RunTime.Managers
 		{
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
 
-			drawingService.BeginDraw();
-
 			foreach (var layer in this.ActiveDrawables.Values)
 			{
 				foreach (var drawable in layer)
@@ -141,10 +139,6 @@ namespace Engine.RunTime.Managers
 				}
 			}
 
-			drawingService.EndDraw();
-
-			drawingService.BeginDraw();
-
 			foreach (var layer in this.OverlaidActiveDrawables.Values)
 			{
 				foreach (var drawable in layer)
@@ -152,8 +146,6 @@ namespace Engine.RunTime.Managers
 					drawingService.Draw(gameTime, drawable);
 				}
 			}
-
-			drawingService.EndDraw();
 
 			base.Draw(gameTime);
 		}

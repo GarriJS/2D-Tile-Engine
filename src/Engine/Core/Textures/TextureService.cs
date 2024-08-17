@@ -1,6 +1,7 @@
 ﻿using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ using System.Linq;
 namespace Engine.Core.Textures
 {
 	/// <summary>
-	/// Represents a texture manager.
+	/// Represents a texture service.
 	/// </summary>
-	public class TextureManager : GameComponent, ITextureService
+	public class TextureService : ITextureService
 	{
+		private readonly GameServiceContainer _gameServiceContainer;
+
 		/// <summary>
 		/// Gets or sets the textures by texture name.
 		/// </summary>
@@ -26,34 +29,45 @@ namespace Engine.Core.Textures
 		private Dictionary<string, Texture2D> Spritesheets { get; set; }
 
 		/// <summary>
-		/// Initializes a new instance of the texture manager.
+		/// Initializes a new instance of the texture service.
 		/// </summary>
-		/// <param name="game">The game.</param>
-		public TextureManager(Game game) : base(game)
+		/// <param name="gameServices">The game services.</param>
+		public TextureService(GameServiceContainer gameServices)
 		{
+			this._gameServiceContainer = gameServices;
 			this.Textures = new Dictionary<string, Texture2D>();
 			this.Spritesheets = new Dictionary<string, Texture2D>();
 		}
 
 		/// <summary>
-		/// Initializes the texture manager.
+		/// Loads the texture content.
 		/// </summary>
-		public override void Initialize()
+		public void LoadContent()
 		{
-			this.InitializeImages();
-			this.InitializeTileSets();
-
-			base.Initialize();
+			this.LoadImages();
+			this.LoadTileSets();
 		}
 
 		/// <summary>
 		/// Gets the texture.
 		/// </summary>
 		/// <param name="textureName">The texture name.</param>
+		/// <param name="spritesheetName">The spritesheet name.</param>
 		/// <returns>The texture.</returns>
-		public Texture2D GetTexture(string textureName)
+		public Texture2D GetTexture(string textureName, string spritesheetName = null)
 		{
-			return this.Textures[textureName];
+			if (true == this.Textures.TryGetValue(textureName, out var texture))
+			{
+				return texture;
+			}
+			else if ((false == string.IsNullOrEmpty(spritesheetName)) &&
+				     (true == this.Spritesheets.TryGetValue(spritesheetName, out var spritesheet)))
+			{ 
+				return spritesheet;
+			}
+
+			Debug.WriteLine($"Texture {textureName} and Spritesheet {spritesheetName} were not found.");
+			return null;
 		}
 
 		/// <summary>
@@ -68,11 +82,12 @@ namespace Engine.Core.Textures
 		}
 
 		/// <summary>
-		/// Initializes the image.
+		/// Loads the image.
 		/// </summary>
-		private void InitializeImages()
+		private void LoadImages()
 		{
-			var imagesPath = $@"{this.Game.Content.RootDirectory}\Images";
+			var contentManager = this._gameServiceContainer.GetService<ContentManager>();
+			var imagesPath = $@"{contentManager.RootDirectory}\Images";
 			string[] imagesFiles = Directory.GetFiles(imagesPath);
 
 			if (false == imagesFiles.Any())
@@ -85,14 +100,8 @@ namespace Engine.Core.Textures
 				try
 				{
 					var imageName = Path.GetFileNameWithoutExtension(imagesFile);
-					var texture = this.Game.Content.Load<Texture2D>($@"Images\{imageName}");
-					var sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
-					var textureData = new Color[sourceRectangle.Width * sourceRectangle.Height];
-					texture.GetData(0, sourceRectangle, textureData, 0, textureData.Length);
-					var extendedTexture = this.ExtendTexture(sourceRectangle.Width, sourceRectangle.Height, textureData, TextureConstants.TEXTURE_EXTENSION_AMOUNT);
-					texture.Dispose();
-					var textureName = this.GetTextureName(imageName, sourceRectangle);
-					this.Textures.Add(textureName, extendedTexture);
+					var texture = contentManager.Load<Texture2D>($@"Images\{imageName}");
+					this.Spritesheets.Add(imageName, texture);
 				}
 				catch (Exception ex)
 				{
@@ -102,11 +111,12 @@ namespace Engine.Core.Textures
 		}
 
 		/// <summary>
-		/// Initializes the tile sets.
+		/// Loads the tile sets.
 		/// </summary>
-		private void InitializeTileSets()
+		private void LoadTileSets()
 		{
-			var tileSetsPath = $@"{this.Game.Content.RootDirectory}\TileSets";
+			var contentManager = this._gameServiceContainer.GetService<ContentManager>();
+			var tileSetsPath = $@"{contentManager.RootDirectory}\TileSets";
 			string[] tileSetFiles = Directory.GetFiles(tileSetsPath);
 
 			if (false == tileSetFiles.Any())
@@ -119,9 +129,9 @@ namespace Engine.Core.Textures
 				try
 				{
 					var textureName = Path.GetFileNameWithoutExtension(tileSetFile);
-					var texture = this.Game.Content.Load<Texture2D>($@"TileSets\{textureName}");
+					var texture = contentManager.Load<Texture2D>($@"TileSets\{textureName}");
 					this.Spritesheets.Add(textureName, texture);
-					this.InitializeTileTextures(textureName);
+					this.LoadTileTextures(textureName);
 				}
 				catch (Exception ex)
 				{
@@ -131,9 +141,9 @@ namespace Engine.Core.Textures
 		}
 
 		/// <summary>
-		/// Initializes the tile textures.
+		/// Loads the tile textures.
 		/// </summary>
-		private void InitializeTileTextures(string tileSetName)
+		private void LoadTileTextures(string tileSetName)
 		{
 			var spritesheet = this.Spritesheets[tileSetName];
 
@@ -268,7 +278,8 @@ namespace Engine.Core.Textures
 				}
 			}
 
-			var extendedTexture = new Texture2D(this.Game.GraphicsDevice, extendedWidth, extendedHeight);
+			var graphicsDeviceService = this._gameServiceContainer.GetService<IGraphicsDeviceService>();
+			var extendedTexture = new Texture2D(graphicsDeviceService.GraphicsDevice, extendedWidth, extendedHeight);
 			extendedTexture.SetData(extendedTextureData);
 
 			return extendedTexture;

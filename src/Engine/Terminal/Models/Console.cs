@@ -32,5 +32,10 @@ namespace Engine.Terminal.Models
 		/// Gets or sets the recommended arguments.
 		/// </summary>
 		public List<DrawableText> RecommendedArguments { get; set; }
+
+		/// <summary>
+		/// Gets or sets the cursor.
+		/// </summary>
+		public Animation Cursor { get; set; }
 	}
 }

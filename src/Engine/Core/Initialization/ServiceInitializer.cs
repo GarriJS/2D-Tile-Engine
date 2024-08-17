@@ -1,5 +1,8 @@
 ﻿using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
+using Engine.Core.Contracts;
+using Engine.Core.Fonts;
+using Engine.Core.Fonts.Contracts;
 using Engine.Core.Textures;
 using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Services;
@@ -12,7 +15,9 @@ using Engine.RunTime.Services.Contracts;
 using Engine.Terminal.Services;
 using Engine.Terminal.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Engine.Core.Initialization
@@ -22,6 +27,11 @@ namespace Engine.Core.Initialization
 	/// </summary>
 	public static class ServiceInitializer
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public static List<ILoadContent> Loadables { get; } = new List<ILoadContent>();
+
 		/// <summary>
 		/// Initializes the game services.
 		/// </summary>
@@ -42,6 +52,11 @@ namespace Engine.Core.Initialization
 					{
 						game.Components.Add(gameComponent);
 					}
+
+					if (provider is ILoadContent loadable)
+					{
+						Loadables.Add(loadable);
+					}
 				}
 				catch (Exception ex)
 				{
@@ -60,22 +75,24 @@ namespace Engine.Core.Initialization
 		/// <returns>The service contract pairs.</returns>
 		private static (Type type, object provider)[] GetServiceContractPairs(Game1 game)
 		{
-			return new (Type type, object provider)[]
-			{
+			return
+			[
+				(typeof(ContentManager), game.Content),
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
-				(typeof(ITextureService), new TextureManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
 				(typeof(IConsoleService), new ConsoleManager(game)),
 				(typeof(IRandomService), new RandomService()),
+				(typeof(ITextureService), new TextureService(game.Services)),
 				(typeof(IActionControlServices), new ActionControlService(game.Services)),
+				(typeof(IFontService), new FontService(game.Services)),
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IUpdateService), new UpdateService(game.Services)),
 				(typeof(ISpriteService), new SpriteService(game.Services)),
 				(typeof(IAnimationService), new AnimationService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
-			};
+			];
 		}
 	}
 }

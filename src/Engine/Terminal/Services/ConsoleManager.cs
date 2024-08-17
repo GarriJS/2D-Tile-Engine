@@ -1,6 +1,8 @@
 ﻿using DiscModels.Engine.Drawing;
 using DiscModels.Engine.Physics;
 using Engine.Controls.Typing;
+using Engine.Core.Constants;
+using Engine.Core.Fonts.Contracts;
 using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Models;
@@ -10,7 +12,6 @@ using Engine.Terminal.Commands.Models;
 using Engine.Terminal.Models;
 using Engine.Terminal.Services.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,12 @@ namespace Engine.Terminal.Services
 	/// <summary>
 	/// Represents a console manager.
 	/// </summary>
-	public class ConsoleManager : GameComponent, IConsoleService
+	public class ConsoleManager : DrawableGameComponent, IConsoleService
 	{
 		/// <summary>
-		/// Gets or sets a value indicating whether the console is started.
+		/// Gets or sets a value indicating whether the console is active.
 		/// </summary>
-		private bool ConsoleStarted { get; set; }
+		public bool ConsoleActive { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the console.
@@ -44,7 +45,7 @@ namespace Engine.Terminal.Services
 		/// <param name="game">The game.</param>
 		public ConsoleManager(Game game) : base(game)
 		{
-			this.ConsoleStarted = false;
+			this.ConsoleActive = false;
 		}
 
 		/// <summary>
@@ -52,54 +53,10 @@ namespace Engine.Terminal.Services
 		/// </summary>
 		public override void Initialize()
 		{
-			var imageService = this.Game.Services.GetService<IImageService>();
-			ImageModel imageModel;
-			imageModel = new ImageModel
-			{
-				Position = new PositionModel
-				{
-					X = 0,
-					Y = 0
-				},
-				Sprite = new SpriteModel
-				{
-					SpritesheetBox = new Rectangle
-					{
-						X = 0,
-						Y = 0,
-						Width = 1080,
-						Height = 1080
-					},
-					SpritesheetName = "console_back_ground"
-				}
-			};
-
-			var background = imageService.GetImage(imageModel);
-			imageModel = new ImageModel
-			{
-				Position = new PositionModel
-				{
-					X = 0,
-					Y = 1080
-				},
-				Sprite = new SpriteModel
-				{
-					SpritesheetBox = new Rectangle
-					{
-						X = 0,
-						Y = 0,
-						Width = 1080,
-						Height = 20
-					},
-					SpritesheetName = "console_text_area"
-				}
-			};
-
-			var textArea = imageService.GetImage(imageModel);
 			this.Console = new Console
 			{
-				ConsoleBackGround = background,
-				ConsoleTextArea = textArea,
+				ConsoleBackGround = null,
+				ConsoleTextArea = null,
 				ConsoleLines = new List<ConsoleLine>(),
 				RecommendedArguments = new List<DrawableText>()
 			};
@@ -110,12 +67,33 @@ namespace Engine.Terminal.Services
 		}
 
 		/// <summary>
+		/// Toggles the console.
+		/// </summary>
+		public void ToggleConsole()
+		{
+			if (true == this.ConsoleActive)
+			{
+				this.StopConsole();
+			}
+			else
+			{
+				if ((null == this.Console.ConsoleBackGround) ||
+					(null == this.Console.ConsoleTextArea))
+				{
+					this.LoadConsoleTextures();	
+				}
+
+				this.StartConsole();
+			}
+		}
+
+		/// <summary>
 		/// Updates the console manager.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		public override void Update(GameTime gameTime)
 		{
-			if (false == this.ConsoleStarted)
+			if (false == this.ConsoleActive)
 			{
 				return;
 			}
@@ -124,7 +102,7 @@ namespace Engine.Terminal.Services
 			var oldPressedKeys = KeyboardTyping.OldPressedKeys;
 			var newLineContent = string.Empty;
 
-			if (true == pressedKeys?.Any())
+			if (0 < pressedKeys.Length)
 			{
 				var isShiftPressed = pressedKeys.Any(e => (e == Keys.LeftShift) ||
 														  (e == Keys.RightShift));
@@ -149,10 +127,12 @@ namespace Engine.Terminal.Services
 						if (1 == args.Length)
 						{
 							this.Console.ActiveConsoleLine.Command.Text = $" -> {this.Console.RecommendedArguments.FirstOrDefault().Text}";
+							this.Console.RecommendedArguments.Clear();
 						}
 						else if (2 == args.Length)
 						{
 							this.Console.ActiveConsoleLine.Command.Text = $" -> {args[0]} {this.Console.RecommendedArguments.FirstOrDefault().Text}";
+							this.Console.RecommendedArguments.Clear();
 						}
 
 						return;
@@ -168,6 +148,16 @@ namespace Engine.Terminal.Services
 						continue;
 					}
 
+					if (Keys.Delete == pressedKey)
+					{
+						if (4 < this.Console.ActiveConsoleLine.Command.Text.Length)
+						{
+							this.Console.ActiveConsoleLine.Command.Text = " -> ";
+						}
+
+						continue;
+					}
+
 					if (Keys.Enter == pressedKey)
 					{
 						if (false == string.IsNullOrEmpty(this.Console.ActiveConsoleLine.Command.Text))
@@ -175,7 +165,7 @@ namespace Engine.Terminal.Services
 							this.ProcessActiveConsoleLine();
 						}
 
-						continue;
+						return;
 					}
 
 					var mappedChar = KeyboardTyping.ToChar(pressedKey, isShiftPressed);
@@ -207,12 +197,206 @@ namespace Engine.Terminal.Services
 		}
 
 		/// <summary>
+		/// Draws the console.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		public override void Draw(GameTime gameTime)
+		{
+			if (false == this.ConsoleActive)
+			{
+				return;
+			}
+
+			var drawService = this.Game.Services.GetService<IDrawingService>();
+
+			drawService.Draw(gameTime, this.Console.ConsoleBackGround);
+			drawService.Draw(gameTime, this.Console.ConsoleTextArea);
+
+			if (null != this.Console.ActiveConsoleLine)
+			{
+				drawService.Write(gameTime, this.Console.ActiveConsoleLine.Command);
+			}
+
+			if (true == this.Console.ConsoleLines.Any())
+			{
+				foreach (var consoleLine in this.Console.ConsoleLines)
+				{
+					drawService.Write(gameTime, consoleLine.Command, Color.GreenYellow);
+					drawService.Write(gameTime, consoleLine.Response, Color.Salmon);
+				}
+			}
+
+			if (0 < Keyboard.GetState().GetPressedKeys().Length)
+			{
+				this.Console.Cursor.CurrentFrameIndex = 0;
+				this.Console.Cursor.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+			}
+
+			var cursorPosition = new Vector2(
+									this.Console.ActiveConsoleLine.Command.SpriteFont.MeasureString(this.Console.ActiveConsoleLine.Command.Text).X,
+									this.Console.ConsoleTextArea.Position.Y + 2);
+
+			drawService.Draw(gameTime, this.Console.Cursor, cursorPosition, Color.White);
+
+			if (true == this.Console.RecommendedArguments.Any())
+			{
+				foreach (var recommendedArgument in this.Console.RecommendedArguments)
+				{
+					recommendedArgument.Position.X = cursorPosition.X;
+					drawService.Write(gameTime, recommendedArgument);
+				}
+			}
+
+			base.Draw(gameTime);
+		}
+
+		/// <summary>
+		/// Loads the console textures.
+		/// </summary>
+		private void LoadConsoleTextures()
+		{
+			int screenWidth = Game.GraphicsDevice.Viewport.Width;
+			int screenHeight = Game.GraphicsDevice.Viewport.Height;
+			var imageService = this.Game.Services.GetService<IImageService>();
+
+			ImageModel imageModel;
+			imageModel = new ImageModel
+			{
+				Position = new PositionModel
+				{
+					X = 0,
+					Y = 0
+				},
+				Sprite = new SpriteModel
+				{
+					SpritesheetBox = new Rectangle
+					{
+						X = 0,
+						Y = 0,
+						Width = screenWidth / 2,
+						Height = screenHeight / 2
+					},
+					SpritesheetName = "gray_transparent"
+				}
+			};
+
+			this.Console.ConsoleBackGround = imageService.GetImage(imageModel);
+			imageModel = new ImageModel
+			{
+				Position = new PositionModel
+				{
+					X = 0,
+					Y = this.Console.ConsoleBackGround.Position.Y + this.Console.ConsoleBackGround.Sprite.SpritesheetBox.Height,
+				},
+				Sprite = new SpriteModel
+				{
+					SpritesheetBox = new Rectangle
+					{
+						X = 0,
+						Y = 0,
+						Width = screenWidth / 2,
+						Height = 20
+					},
+					SpritesheetName = "gray"
+				}
+			};
+
+			this.Console.ConsoleTextArea = imageService.GetImage(imageModel);
+			var fontService = this.Game.Services.GetService<IFontService>();
+			var spriteFont = fontService.GetSpriteFont(FontNames.MonoRegular);
+
+			this.Console.ActiveConsoleLine = new ConsoleLine
+			{
+				Command = new DrawableText
+				{
+					Text = " -> ",
+					SpriteFont = spriteFont,
+					Position = new Position
+					{
+						Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y)
+					}
+				},
+				Response = new DrawableText
+				{
+					Text = " <- ",
+					SpriteFont = spriteFont,
+					Position = null
+				},
+			};
+
+			var animationModel = new AnimationModel
+			{
+				CurrentFrameIndex = 0,
+				FrameDuration = 750,
+				Frames =
+				[
+					new SpriteModel
+					{ 
+						SpritesheetBox = new Rectangle
+						{ 
+							X= 0,
+							Y= 0,
+							Width = 1,
+							Height = this.Console.ConsoleTextArea.Sprite.TextureBox.Height - 4
+						},
+						SpritesheetName = "white"
+					},
+					new SpriteModel
+					{
+						SpritesheetBox = new Rectangle
+						{
+							X= 0,
+							Y= 0,
+							Width = 1,
+							Height = this.Console.ConsoleTextArea.Sprite.TextureBox.Height - 4
+						},
+						SpritesheetName = "empty"
+					}
+				]
+			};
+
+			var animationService = this.Game.Services.GetService<IAnimationService>();
+			this.Console.Cursor = animationService.GetAnimation(animationModel);
+		}
+
+		/// <summary>
+		/// Starts the console.
+		/// </summary>
+		private void StartConsole()
+		{
+			if ((true == this.ConsoleActive) ||
+				(null == this.Console))
+			{
+				return;
+			}
+
+			this.ConsoleActive = true;
+			this.UpdateRecommendedArguments(this.Console.ActiveConsoleLine.Command.Text);
+		}
+
+		/// <summary>
+		/// Stops the console.
+		/// </summary>
+		private void StopConsole()
+		{
+			if ((false == this.ConsoleActive) ||
+				(null == this.Console))
+			{
+				return;
+			}
+
+			this.ConsoleActive = false;
+			this.Console.ActiveConsoleLine.Command.Text = " -> ";
+			this.Console.RecommendedArguments.Clear();
+		}
+
+		/// <summary>
 		/// Updates the recommended arguments.
 		/// </summary>
 		/// <param name="formattedText"></param>
 		private void UpdateRecommendedArguments(string formattedText)
 		{
-			this.Console.RecommendedArguments = new List<DrawableText>();
+			this.Console.RecommendedArguments.Clear();
 
 			if (0 == formattedText.Length)
 			{
@@ -221,7 +405,7 @@ namespace Engine.Terminal.Services
 
 			var args = formattedText.Substring(4)
 									.Split(' ')
-								    .ToArray();
+									.ToArray();
 			var runtimeDrawService = this.Game.Services.GetService<IRuntimeDrawService>();
 
 			if (1 == args.Length)
@@ -344,7 +528,7 @@ namespace Engine.Terminal.Services
 																				  .Where(e => false == string.IsNullOrEmpty(e))
 																				  .ToArray();
 
-			if (false == commandLineArguments.Any())
+			if (0 == commandLineArguments.Length)
 			{
 				return;
 			}
@@ -359,15 +543,16 @@ namespace Engine.Terminal.Services
 
 			this.Console.ActiveConsoleLine.Command.Position = new Position
 			{
-				Coordinates = new Vector2(0, 1080 - 40)
+				Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y - 40)
 			};
 			this.Console.ActiveConsoleLine.Response.Position = new Position
 			{
-				Coordinates = new Vector2(0, 1080 - 20)
+				Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y - 20)
 			};
 
 			this.Console.ConsoleLines.Add(this.Console.ActiveConsoleLine);
-			var spriteFont = this.Game.Content.Load<SpriteFont>($@"..\..\..\Content\Fonts\MonoRegular");
+			var fontService = this.Game.Services.GetService<IFontService>();
+			var spriteFont = fontService.GetSpriteFont(FontNames.MonoRegular);
 			this.Console.ActiveConsoleLine = new ConsoleLine
 			{
 				Command = new DrawableText
@@ -376,55 +561,7 @@ namespace Engine.Terminal.Services
 					SpriteFont = spriteFont,
 					Position = new Position
 					{
-						Coordinates = new Vector2(0, this.Console.ConsoleBackGround.Sprite.TextureBox.Height)
-					}
-				},
-				Response = new DrawableText
-				{
-					Text = " <- ",
-					SpriteFont = spriteFont,
-					Position = null
-				},
-			};
-		}
-
-		/// <summary>
-		/// Toggles the console.
-		/// </summary>
-		public void ToggleConsole()
-		{
-			if (true == this.ConsoleStarted)
-			{
-				this.StopConsole();
-			}
-			else
-			{
-				this.StartConsole();
-			}
-		}
-
-		/// <summary>
-		/// Starts the console.
-		/// </summary>
-		public void StartConsole()
-		{
-			if ((true == this.ConsoleStarted) ||
-				(null == this.Console))
-			{
-				return;
-			}
-
-			this.ConsoleStarted = true;
-			var spriteFont = this.Game.Content.Load<SpriteFont>($@"..\..\..\Content\Fonts\MonoRegular");
-			this.Console.ActiveConsoleLine = new ConsoleLine
-			{
-				Command = new DrawableText
-				{
-					Text = " -> ",
-					SpriteFont = spriteFont,
-					Position = new Position
-					{
-						Coordinates = new Vector2(0, this.Console.ConsoleBackGround.Sprite.TextureBox.Height)
+						Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y)
 					}
 				},
 				Response = new DrawableText
@@ -435,27 +572,7 @@ namespace Engine.Terminal.Services
 				},
 			};
 
-			var runtimeDrawService = this.Game.Services.GetService<IRuntimeDrawService>();
-			runtimeDrawService.AddOverlaidDrawable(1, Console.ConsoleBackGround);
-			runtimeDrawService.AddOverlaidDrawable(1, Console.ConsoleTextArea);
-		}
-
-		/// <summary>
-		/// Stops the console.
-		/// </summary>
-		public void StopConsole()
-		{
-			if ((false == this.ConsoleStarted) ||
-				(null == this.Console))
-			{
-				return;
-			}
-
-			this.ConsoleStarted = false;
-			this.Console.ActiveConsoleLine = null;
-			var runtimeDrawService = this.Game.Services.GetService<IRuntimeDrawService>();
-			runtimeDrawService.RemoveOverlaidDrawable(1, this.Console.ConsoleBackGround);
-			runtimeDrawService.RemoveOverlaidDrawable(1, this.Console.ConsoleTextArea);
+			this.UpdateRecommendedArguments(" -> ");
 		}
 	}
 }

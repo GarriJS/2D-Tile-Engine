@@ -69,11 +69,25 @@ namespace Engine.Drawing.Services
 		}
 
 		/// <summary>
-		/// Draws the test.
+		/// Draws the animated.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="animation">The animation.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="color">The color.</param>
+		public void Draw(GameTime gameTime, Animation animation, Vector2 coordinates, Color color)
+		{
+			var animationService = this._gameServiceContainer.GetService<IAnimationService>();
+			animationService.UpdateAnimationFrame(gameTime, animation);
+			this.SpriteBatch.Draw(animation.CurrentFrame.Texture, coordinates, animation.CurrentFrame.TextureBox, color);
+		}
+
+		/// <summary>
+		/// Writes the drawable text.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawableText">The drawable text.</param>
-		public void Draw(GameTime gameTime, DrawableText drawableText)
+		public void Write(GameTime gameTime, DrawableText drawableText)
 		{
 			var formattedText = KeyboardTyping.FormatForDrawString(drawableText.Text);
 			
@@ -81,12 +95,12 @@ namespace Engine.Drawing.Services
 		}
 
 		/// <summary>
-		/// Draws the test.
+		/// Writes the drawable text.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawableText">The drawable text.</param>
 		/// <param name="color">The color.</param>
-		public void Draw(GameTime gameTime, DrawableText drawableText, Color color)
+		public void Write(GameTime gameTime, DrawableText drawableText, Color color)
 		{
 			var formattedText = KeyboardTyping.FormatForDrawString(drawableText.Text);
 
