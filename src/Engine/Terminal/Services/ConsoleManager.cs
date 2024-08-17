@@ -55,8 +55,9 @@ namespace Engine.Terminal.Services
 		{
 			this.Console = new Console
 			{
-				ConsoleBackGround = null,
-				ConsoleTextArea = null,
+				SelectedRecommendedArgumentIndex = 0,
+				ConsoleBackground = null,
+				ActiveConsoleLineBackground = null,
 				ConsoleLines = new List<ConsoleLine>(),
 				RecommendedArguments = new List<DrawableText>()
 			};
@@ -77,10 +78,10 @@ namespace Engine.Terminal.Services
 			}
 			else
 			{
-				if ((null == this.Console.ConsoleBackGround) ||
-					(null == this.Console.ConsoleTextArea))
+				if ((null == this.Console.ConsoleBackground) ||
+					(null == this.Console.ActiveConsoleLineBackground))
 				{
-					this.LoadConsoleTextures();	
+					this.LoadConsoleTextures();
 				}
 
 				this.StartConsole();
@@ -109,16 +110,47 @@ namespace Engine.Terminal.Services
 
 				foreach (var pressedKey in pressedKeys)
 				{
+					if (Keys.Up == pressedKey)
+					{
+						if (0 < this.Console.SelectedRecommendedArgumentIndex)
+						{
+							this.Console.SelectedRecommendedArgumentIndex--;
+						}
+
+						continue;
+					}
+
+					if (Keys.Down == pressedKey)
+					{
+						if (this.Console.SelectedRecommendedArgumentIndex < this.Console.RecommendedArguments.Count - 1)
+						{
+							this.Console.SelectedRecommendedArgumentIndex++;
+						}
+
+						continue;
+					}
+
 					if ((true == oldPressedKeys.Contains(pressedKey)) ||
 						(Keys.OemTilde == pressedKey) ||
 						((0 == this.Console.ActiveConsoleLine.Command.Text.Length) &&
 						 (Keys.Space == pressedKey)))
 					{
+						this.Console.SelectedRecommendedArgumentIndex = 0;
 						continue;
 					}
 
+					if (Keys.Enter == pressedKey)
+					{
+						if (false == string.IsNullOrEmpty(this.Console.ActiveConsoleLine.Command.Text))
+						{
+							this.ProcessActiveConsoleLine();
+						}
+
+						return;
+					}
+
 					if ((Keys.Tab == pressedKey) &&
-						(true == this.Console.RecommendedArguments.Any()))
+						(0 < this.Console.RecommendedArguments.Count()))
 					{
 						var args = this.Console.ActiveConsoleLine.Command.Text.Substring(4)
 																			  .Split(' ')
@@ -126,13 +158,15 @@ namespace Engine.Terminal.Services
 
 						if (1 == args.Length)
 						{
-							this.Console.ActiveConsoleLine.Command.Text = $" -> {this.Console.RecommendedArguments.FirstOrDefault().Text}";
+							this.Console.ActiveConsoleLine.Command.Text = $" -> {this.Console.RecommendedArguments[this.Console.SelectedRecommendedArgumentIndex].Text}";
 							this.Console.RecommendedArguments.Clear();
+							this.Console.SelectedRecommendedArgumentIndex = 0;
 						}
 						else if (2 == args.Length)
 						{
-							this.Console.ActiveConsoleLine.Command.Text = $" -> {args[0]} {this.Console.RecommendedArguments.FirstOrDefault().Text}";
+							this.Console.ActiveConsoleLine.Command.Text = $" -> {args[0]} {this.Console.RecommendedArguments[this.Console.SelectedRecommendedArgumentIndex].Text}";
 							this.Console.RecommendedArguments.Clear();
+							this.Console.SelectedRecommendedArgumentIndex = 0;
 						}
 
 						return;
@@ -158,16 +192,6 @@ namespace Engine.Terminal.Services
 						continue;
 					}
 
-					if (Keys.Enter == pressedKey)
-					{
-						if (false == string.IsNullOrEmpty(this.Console.ActiveConsoleLine.Command.Text))
-						{
-							this.ProcessActiveConsoleLine();
-						}
-
-						return;
-					}
-
 					var mappedChar = KeyboardTyping.ToChar(pressedKey, isShiftPressed);
 
 					if (true == mappedChar.HasValue)
@@ -185,7 +209,7 @@ namespace Engine.Terminal.Services
 				formattedText = Regex.Replace(formattedText, @"\s{2,}", " ");
 				var stringWidth = this.Console.ActiveConsoleLine.Command.SpriteFont.MeasureString(formattedText).X;
 
-				if (this.Console.ConsoleTextArea.Sprite.TextureBox.Width >= stringWidth)
+				if (this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Width >= stringWidth)
 				{
 					this.Console.ActiveConsoleLine.Command.Text = formattedText;
 				}
@@ -209,15 +233,15 @@ namespace Engine.Terminal.Services
 
 			var drawService = this.Game.Services.GetService<IDrawingService>();
 
-			drawService.Draw(gameTime, this.Console.ConsoleBackGround);
-			drawService.Draw(gameTime, this.Console.ConsoleTextArea);
+			drawService.Draw(gameTime, this.Console.ConsoleBackground);
+			drawService.Draw(gameTime, this.Console.ActiveConsoleLineBackground);
 
 			if (null != this.Console.ActiveConsoleLine)
 			{
 				drawService.Write(gameTime, this.Console.ActiveConsoleLine.Command);
 			}
 
-			if (true == this.Console.ConsoleLines.Any())
+			if (0 < this.Console.ConsoleLines.Count)
 			{
 				foreach (var consoleLine in this.Console.ConsoleLines)
 				{
@@ -234,17 +258,29 @@ namespace Engine.Terminal.Services
 
 			var cursorPosition = new Vector2(
 									this.Console.ActiveConsoleLine.Command.SpriteFont.MeasureString(this.Console.ActiveConsoleLine.Command.Text).X,
-									this.Console.ConsoleTextArea.Position.Y + 2);
+									this.Console.ActiveConsoleLineBackground.Position.Y + 2);
 
 			drawService.Draw(gameTime, this.Console.Cursor, cursorPosition, Color.White);
 
-			if (true == this.Console.RecommendedArguments.Any())
+			if (0 < this.Console.RecommendedArguments.Count())
 			{
+				this.Console.RecommendedArgumentsBackground.Position.X = cursorPosition.X - 2;
+				drawService.Draw(gameTime, this.Console.RecommendedArgumentsBackground);
+				
+				this.Console.SelectedRecommendedArgumentBackground.Position.X = this.Console.RecommendedArgumentsBackground.Position.X - this.Console.SelectedRecommendedArgumentBackground.Sprite.TextureBox.Width;
+				this.Console.SelectedRecommendedArgumentBackground.Position.Y = this.Console.RecommendedArgumentsBackground.Position.Y + (this.Console.SelectedRecommendedArgumentIndex * 20);
+				drawService.Draw(gameTime, this.Console.SelectedRecommendedArgumentBackground);
+
+				this.Console.SelectedRecommendedArgumentSelector.Position.X = this.Console.SelectedRecommendedArgumentBackground.Position.X;
+				this.Console.SelectedRecommendedArgumentSelector.Position.Y = this.Console.SelectedRecommendedArgumentBackground.Position.Y;
+				drawService.Write(gameTime, this.Console.SelectedRecommendedArgumentSelector);
+
 				foreach (var recommendedArgument in this.Console.RecommendedArguments)
 				{
 					recommendedArgument.Position.X = cursorPosition.X;
-					drawService.Write(gameTime, recommendedArgument);
+					drawService.Write(gameTime, recommendedArgument, Color.White);
 				}
+
 			}
 
 			base.Draw(gameTime);
@@ -280,13 +316,13 @@ namespace Engine.Terminal.Services
 				}
 			};
 
-			this.Console.ConsoleBackGround = imageService.GetImage(imageModel);
+			this.Console.ConsoleBackground = imageService.GetImage(imageModel);
 			imageModel = new ImageModel
 			{
 				Position = new PositionModel
 				{
 					X = 0,
-					Y = this.Console.ConsoleBackGround.Position.Y + this.Console.ConsoleBackGround.Sprite.SpritesheetBox.Height,
+					Y = this.Console.ConsoleBackground.Position.Y + this.Console.ConsoleBackground.Sprite.SpritesheetBox.Height,
 				},
 				Sprite = new SpriteModel
 				{
@@ -301,7 +337,49 @@ namespace Engine.Terminal.Services
 				}
 			};
 
-			this.Console.ConsoleTextArea = imageService.GetImage(imageModel);
+			this.Console.ActiveConsoleLineBackground = imageService.GetImage(imageModel);
+			imageModel = new ImageModel
+			{
+				Position = new PositionModel
+				{
+					X = 0,
+					Y = this.Console.ActiveConsoleLineBackground.Position.Y + this.Console.ActiveConsoleLineBackground.Sprite.SpritesheetBox.Height,
+				},
+				Sprite = new SpriteModel
+				{
+					SpritesheetBox = new Rectangle
+					{
+						X = 0,
+						Y = 0,
+						Width = 0,
+						Height = 20
+					},
+					SpritesheetName = "black"
+				}
+			};
+
+			this.Console.RecommendedArgumentsBackground = imageService.GetImage(imageModel);
+			imageModel = new ImageModel
+			{
+				Position = new PositionModel
+				{
+					X = 0,
+					Y = 0,
+				},
+				Sprite = new SpriteModel
+				{
+					SpritesheetBox = new Rectangle
+					{
+						X = 0,
+						Y = 0,
+						Width = 25,
+						Height = 20
+					},
+					SpritesheetName = "black"
+				}
+			};
+
+			this.Console.SelectedRecommendedArgumentBackground = imageService.GetImage(imageModel);
 			var fontService = this.Game.Services.GetService<IFontService>();
 			var spriteFont = fontService.GetSpriteFont(FontNames.MonoRegular);
 
@@ -313,7 +391,7 @@ namespace Engine.Terminal.Services
 					SpriteFont = spriteFont,
 					Position = new Position
 					{
-						Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y)
+						Coordinates = new Vector2(0, this.Console.ActiveConsoleLineBackground.Position.Y)
 					}
 				},
 				Response = new DrawableText
@@ -324,6 +402,16 @@ namespace Engine.Terminal.Services
 				},
 			};
 
+			this.Console.SelectedRecommendedArgumentSelector = new DrawableText
+			{
+				Text = " -> ",
+				Position = new Position
+				{
+					Coordinates = new Vector2(0, 0)
+				},
+				SpriteFont = spriteFont
+			};
+
 			var animationModel = new AnimationModel
 			{
 				CurrentFrameIndex = 0,
@@ -331,13 +419,13 @@ namespace Engine.Terminal.Services
 				Frames =
 				[
 					new SpriteModel
-					{ 
+					{
 						SpritesheetBox = new Rectangle
-						{ 
+						{
 							X= 0,
 							Y= 0,
 							Width = 1,
-							Height = this.Console.ConsoleTextArea.Sprite.TextureBox.Height - 4
+							Height = this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height - 4
 						},
 						SpritesheetName = "white"
 					},
@@ -348,7 +436,7 @@ namespace Engine.Terminal.Services
 							X= 0,
 							Y= 0,
 							Width = 1,
-							Height = this.Console.ConsoleTextArea.Sprite.TextureBox.Height - 4
+							Height = this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height - 4
 						},
 						SpritesheetName = "empty"
 					}
@@ -396,10 +484,13 @@ namespace Engine.Terminal.Services
 		/// <param name="formattedText"></param>
 		private void UpdateRecommendedArguments(string formattedText)
 		{
+			var oldRecommendationCount = this.Console.RecommendedArguments.Count;
 			this.Console.RecommendedArguments.Clear();
 
 			if (0 == formattedText.Length)
 			{
+				this.Console.SelectedRecommendedArgumentIndex = 0;
+
 				return;
 			}
 
@@ -422,7 +513,7 @@ namespace Engine.Terminal.Services
 
 				foreach (var matchingDomain in matchingDomains)
 				{
-					var y = this.Console.ConsoleBackGround.Sprite.TextureBox.Height + this.Console.ConsoleTextArea.Sprite.TextureBox.Height;
+					var y = this.Console.ConsoleBackground.Sprite.TextureBox.Height + this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height;
 
 					foreach (var existingDomain in this.Console.RecommendedArguments)
 					{
@@ -460,7 +551,7 @@ namespace Engine.Terminal.Services
 
 					foreach (var matchingDomain in matchingCommands)
 					{
-						var y = this.Console.ConsoleBackGround.Sprite.TextureBox.Height + this.Console.ConsoleTextArea.Sprite.TextureBox.Height;
+						var y = this.Console.ConsoleBackground.Sprite.TextureBox.Height + this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height;
 
 						foreach (var existingDomain in this.Console.RecommendedArguments)
 						{
@@ -494,7 +585,7 @@ namespace Engine.Terminal.Services
 
 					if (relevantArgument != null)
 					{
-						var y = this.Console.ConsoleBackGround.Sprite.TextureBox.Height + this.Console.ConsoleTextArea.Sprite.TextureBox.Height;
+						var y = this.Console.ConsoleBackground.Sprite.TextureBox.Height + this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height;
 
 						foreach (var existingDomain in this.Console.RecommendedArguments)
 						{
@@ -514,6 +605,27 @@ namespace Engine.Terminal.Services
 						this.Console.RecommendedArguments.Add(drawableText);
 					}
 				}
+			}
+
+			if (0 < this.Console.RecommendedArguments.Count)
+			{
+				var largestX = 0f;
+
+				foreach (var recommendedArgument in this.Console.RecommendedArguments)
+				{
+					var stringLength = recommendedArgument.SpriteFont.MeasureString(recommendedArgument.Text).X;
+					if (stringLength > largestX)
+					{
+						largestX = stringLength;
+					}
+				}
+
+				this.Console.RecommendedArgumentsBackground.Sprite.TextureBox = new Rectangle
+				{
+					Y = (int)this.Console.ActiveConsoleLineBackground.Position.Y + this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height,
+					Width = (int)largestX + 4,
+					Height = this.Console.RecommendedArguments.Count * 20,
+				};
 			}
 		}
 
@@ -543,11 +655,11 @@ namespace Engine.Terminal.Services
 
 			this.Console.ActiveConsoleLine.Command.Position = new Position
 			{
-				Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y - 40)
+				Coordinates = new Vector2(0, this.Console.ActiveConsoleLineBackground.Position.Y - 40)
 			};
 			this.Console.ActiveConsoleLine.Response.Position = new Position
 			{
-				Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y - 20)
+				Coordinates = new Vector2(0, this.Console.ActiveConsoleLineBackground.Position.Y - 20)
 			};
 
 			this.Console.ConsoleLines.Add(this.Console.ActiveConsoleLine);
@@ -561,7 +673,7 @@ namespace Engine.Terminal.Services
 					SpriteFont = spriteFont,
 					Position = new Position
 					{
-						Coordinates = new Vector2(0, this.Console.ConsoleTextArea.Position.Y)
+						Coordinates = new Vector2(0, this.Console.ActiveConsoleLineBackground.Position.Y)
 					}
 				},
 				Response = new DrawableText
