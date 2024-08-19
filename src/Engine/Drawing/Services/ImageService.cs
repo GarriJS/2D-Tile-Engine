@@ -9,18 +9,13 @@ namespace Engine.Drawing.Services
 	/// <summary>
 	/// Represents a image service.
 	/// </summary>
-	public class ImageService : IImageService
+	/// <remarks>
+	/// Initializes the image service.
+	/// </remarks>
+	/// <param name="gameService">The game services.</param>
+	public class ImageService(GameServiceContainer gameService) : IImageService
 	{
-		private readonly GameServiceContainer _gameServiceContainer;
-
-		/// <summary>
-		/// Initializes the image service.
-		/// </summary>
-		/// <param name="gameService">The game services.</param>
-		public ImageService(GameServiceContainer gameService)
-		{
-			this._gameServiceContainer = gameService;
-		}
+		private readonly GameServiceContainer _gameServiceContainer = gameService;
 
 		/// <summary>
 		/// Gets the image.

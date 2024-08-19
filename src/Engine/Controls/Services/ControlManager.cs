@@ -12,7 +12,11 @@ namespace Engine.Controls.Services
 	/// <summary>
 	/// Represents a control manager.
 	/// </summary>
-	public class ControlManager : GameComponent, IControlService
+	/// <remarks>
+	/// Initializes a new instance of the control manager.
+	/// </remarks>
+	/// <param name="game">The game.</param>
+	public class ControlManager(Game game) : GameComponent(game), IControlService
 	{
 		/// <summary>
 		/// Gets or sets the action controls.
@@ -28,15 +32,6 @@ namespace Engine.Controls.Services
 		/// Gets or sets the control state.
 		/// </summary>
 		public ControlState ControlState { get; private set; }
-
-		/// <summary>
-		/// Initializes a new instance of the control manager.
-		/// </summary>
-		/// <param name="game">The game.</param>
-		public ControlManager(Game game) : base(game)
-		{
-		
-		}
 
 		/// <summary>
 		/// Initializes the control manager.

@@ -14,30 +14,23 @@ namespace Engine.Core.Textures
 	/// <summary>
 	/// Represents a texture service.
 	/// </summary>
-	public class TextureService : ITextureService
+	/// <remarks>
+	/// Initializes a new instance of the texture service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class TextureService(GameServiceContainer gameServices) : ITextureService
 	{
-		private readonly GameServiceContainer _gameServiceContainer;
+		private readonly GameServiceContainer _gameServiceContainer = gameServices;
 
 		/// <summary>
 		/// Gets or sets the textures by texture name.
 		/// </summary>
-		private Dictionary<string, Texture2D> Textures { get; set; }
+		private Dictionary<string, Texture2D> Textures { get; set; } = new Dictionary<string, Texture2D>();
 
 		/// <summary>
 		/// Gets or sets the sprite sheets. 
 		/// </summary>
-		private Dictionary<string, Texture2D> Spritesheets { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the texture service.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public TextureService(GameServiceContainer gameServices)
-		{
-			this._gameServiceContainer = gameServices;
-			this.Textures = new Dictionary<string, Texture2D>();
-			this.Spritesheets = new Dictionary<string, Texture2D>();
-		}
+		private Dictionary<string, Texture2D> Spritesheets { get; set; } = new Dictionary<string, Texture2D>();
 
 		/// <summary>
 		/// Loads the texture content.

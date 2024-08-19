@@ -9,27 +9,21 @@ namespace Engine.RunTime.Managers
 	/// <summary>
 	/// Represents a runtime draw manager.
 	/// </summary>
-	public class RuntimeDrawManager : DrawableGameComponent, IRuntimeDrawService
+	/// <remarks>
+	/// Creates a new instance of the runtime draw manager.
+	/// </remarks>
+	/// <param name="game">The game.</param>
+	public class RuntimeDrawManager(Game game) : DrawableGameComponent(game), IRuntimeDrawService
 	{
 		/// <summary>
 		/// Gets or sets the active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> ActiveDrawables { get; set; }
-		
+		private SortedDictionary<int, List<IAmDrawable>> ActiveDrawables { get; set; } = new SortedDictionary<int, List<IAmDrawable>>();
+
 		/// <summary>
 		/// Gets or sets the overlaid active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> OverlaidActiveDrawables { get; set; }
-
-		/// <summary>
-		/// Creates a new instance of the runtime draw manager.
-		/// </summary>
-		/// <param name="game">The game.</param>
-		public RuntimeDrawManager(Game game) : base(game) 
-		{
-			this.ActiveDrawables = new SortedDictionary<int, List<IAmDrawable>>();
-			this.OverlaidActiveDrawables = new SortedDictionary<int, List<IAmDrawable>>();
-		}
+		private SortedDictionary<int, List<IAmDrawable>> OverlaidActiveDrawables { get; set; } = new SortedDictionary<int, List<IAmDrawable>>();
 
 		/// <summary>
 		/// Initializes the runtime draw manager.

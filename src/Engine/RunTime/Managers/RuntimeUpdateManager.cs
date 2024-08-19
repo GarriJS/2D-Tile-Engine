@@ -8,21 +8,16 @@ namespace Engine.RunTime.Managers
 	/// <summary>
 	/// Represents a run time update manager.
 	/// </summary>
-	public class RuntimeUpdateManager : GameComponent, IRuntimeUpdateService
+	/// <remarks>
+	/// Initializes a new instance of the run time update manager.
+	/// </remarks>
+	/// <param name="game">The game.</param>
+	public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
 	{
 		/// <summary>
 		/// Gets or sets the active sorted updateable.
 		/// </summary>
-		private SortedDictionary<int, List<ICanBeUpdated>> ActiveSortedUpdateables { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the run time update manager.
-		/// </summary>
-		/// <param name="game">The game.</param>
-		public RuntimeUpdateManager(Game game) : base(game)
-		{
-			this.ActiveSortedUpdateables = new SortedDictionary<int, List<ICanBeUpdated>>();
-		}
+		private SortedDictionary<int, List<ICanBeUpdated>> ActiveSortedUpdateables { get; set; } = new SortedDictionary<int, List<ICanBeUpdated>>();
 
 		/// <summary>
 		/// Initializes the runtime update manager.

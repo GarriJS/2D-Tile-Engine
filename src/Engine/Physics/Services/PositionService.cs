@@ -8,18 +8,13 @@ namespace Engine.Physics.Services
 	/// <summary>
 	/// Represents a position service.
 	/// </summary>
-	public class PositionService : IPositionService
+	/// <remarks>
+	/// Initializes the position service.
+	/// </remarks>
+	/// <param name="gameService">The game services.</param>
+	public class PositionService(GameServiceContainer gameService) : IPositionService
 	{
-		private readonly GameServiceContainer _gameServiceContainer;
-
-		/// <summary>
-		/// Initializes the position service.
-		/// </summary>
-		/// <param name="gameService">The game services.</param>
-		public PositionService(GameServiceContainer gameService)
-		{
-			this._gameServiceContainer = gameService;
-		}
+		private readonly GameServiceContainer _gameServiceContainer = gameService;
 
 		/// <summary>
 		/// Gets the position.

@@ -10,18 +10,13 @@ namespace Engine.Drawing.Services
 	/// <summary>
 	/// Represents a sprite service.
 	/// </summary>
-	public class SpriteService : ISpriteService
+	/// <remarks>
+	/// Initializes the sprite service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class SpriteService(GameServiceContainer gameServices) : ISpriteService
 	{
-		private readonly GameServiceContainer _gameServiceContainer;
-
-		/// <summary>
-		/// Initializes the sprite service.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public SpriteService(GameServiceContainer gameServices)
-		{
-			this._gameServiceContainer = gameServices;
-		}
+		private readonly GameServiceContainer _gameServiceContainer = gameServices;
 
 		/// <summary>
 		/// Gets the sprite.

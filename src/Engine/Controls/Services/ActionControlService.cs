@@ -15,18 +15,13 @@ namespace Engine.Controls.Services
 	/// <summary>
 	/// Represents a action control service.
 	/// </summary>
-	public class ActionControlService : IActionControlServices
+	/// <remarks>
+	/// Initializes the action control service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
 	{
-		private readonly GameServiceContainer _gameServiceContainer;
-
-		/// <summary>
-		/// Initializes the action control service.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public ActionControlService(GameServiceContainer gameServices)
-		{
-			this._gameServiceContainer = gameServices;
-		}
+		private readonly GameServiceContainer _gameServiceContainer = gameServices;
 
 		/// <summary>
 		/// Gets the action controls.

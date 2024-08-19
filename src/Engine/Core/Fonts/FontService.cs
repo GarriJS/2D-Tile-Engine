@@ -13,24 +13,18 @@ namespace Engine.Core.Fonts
 	/// <summary>s
 	/// Represents a font service.
 	/// </summary>
-	public class FontService : IFontService
+	/// <remarks>
+	/// Initializes a new instance of the font service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class FontService(GameServiceContainer gameServices) : IFontService
 	{
-		private readonly GameServiceContainer _gameServiceContainer;
+		private readonly GameServiceContainer _gameServiceContainer = gameServices;
 
 		/// <summary>
 		/// Gets or sets the sprite fonts.
 		/// </summary>
-		private Dictionary<string, SpriteFont> SpriteFonts { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the font service.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public FontService(GameServiceContainer gameServices)
-		{
-			this._gameServiceContainer = gameServices;
-			this.SpriteFonts = new Dictionary<string, SpriteFont>();
-		}
+		private Dictionary<string, SpriteFont> SpriteFonts { get; set; } = new Dictionary<string, SpriteFont>();
 
 		/// <summary>
 		/// Loads the font content.

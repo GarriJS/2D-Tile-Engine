@@ -22,12 +22,16 @@ namespace Engine.Terminal.Managers
 	/// <summary>
 	/// Represents a console manager.
 	/// </summary>
-	public class ConsoleManager : DrawableGameComponent, IConsoleService
+	/// <remarks>
+	/// Initializes the console manager.
+	/// </remarks>
+	/// <param name="game">The game.</param>
+	public class ConsoleManager(Game game) : DrawableGameComponent(game), IConsoleService
 	{
 		/// <summary>
 		/// Gets or sets a value indicating whether the console is active.
 		/// </summary>
-		public bool ConsoleActive { get; private set; }
+		public bool ConsoleActive { get; private set; } = false;
 
 		/// <summary>
 		/// Gets or sets the console.
@@ -38,15 +42,6 @@ namespace Engine.Terminal.Managers
 		/// Gets or sets the command profiles.
 		/// </summary>
 		private List<CommandProfile> CommandProfiles { get; set; }
-
-		/// <summary>
-		/// Initializes the console manager.
-		/// </summary>
-		/// <param name="game">The game.</param>
-		public ConsoleManager(Game game) : base(game)
-		{
-			this.ConsoleActive = false;
-		}
 
 		/// <summary>
 		/// Initializes the console manager.
