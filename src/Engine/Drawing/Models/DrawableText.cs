@@ -1,5 +1,5 @@
-﻿using Engine.Physics.Models;
-using Engine.Physics.Models.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
+using Engine.Physics.Models;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Drawing.Models
@@ -7,7 +7,7 @@ namespace Engine.Drawing.Models
 	/// <summary>
 	/// Represents drawable text.
 	/// </summary>
-	public class DrawableText : IHavePosition
+	public class DrawableText : IAmWritable
 	{
 		/// <summary>
 		/// Gets or sets the text.
@@ -20,8 +20,8 @@ namespace Engine.Drawing.Models
 		public Position Position { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sprite font. 
+		/// Gets or sets the font. 
 		/// </summary>
-		public SpriteFont SpriteFont { get; set; }
+		public SpriteFont Font { get; set; }
 	}
 }

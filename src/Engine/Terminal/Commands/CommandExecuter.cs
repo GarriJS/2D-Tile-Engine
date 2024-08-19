@@ -39,6 +39,36 @@ namespace Engine.Terminal.Commands
 			return "Invalid Domain";
 		}
 
+		/// <summary>
+		/// Gets the arg value.
+		/// </summary>
+		/// <param name="argument">The argument.</param>
+		/// <param name="argString">The arg string.</param>
+		/// <returns>The arg value.</returns>
+		private static object GetArgValue(CommandArgumentDefinition argument, string argString)
+		{
+			var argType = argument.ArgumentType;
+
+			if ((true == argType.IsArray) &&
+				('[' == argString[0]) &&
+				(']' == argString[^1]))
+			{
+				var subArgs = argString[1..^1].Split(',')
+											  .Where(e => false == string.IsNullOrEmpty(e))
+											  .ToArray();
+				var subValues = Array.CreateInstance(argType.GetElementType(), subArgs.Length);
+
+				for (int i = 0; i < subArgs.Length; i++)
+				{
+					subValues.SetValue(Convert.ChangeType(subArgs[i], argType.GetElementType()), i);
+				}
+
+				return subValues;
+			}
+
+			return Convert.ChangeType(argString, argType);
+		}
+
 		private static string ExecuteTileArguments(List<CommandProfile> commandProfiles, string[] args, string command)
 		{
 			var tileProfile = commandProfiles.FirstOrDefault(e => e.Domain == "tile");
@@ -61,8 +91,10 @@ namespace Engine.Terminal.Commands
 			switch (command.ToLower())
 			{
 				case "add":
+					int layer = 0;
 					int spritesheetX = 0;
 					int spritesheetY = 0;
+					int[] collisionTypes = [];
 					var tileModel = new TileModel
 					{
 						Sprite = new SpriteModel()
@@ -74,11 +106,9 @@ namespace Engine.Terminal.Commands
 
 						try
 						{
-							var argString = args[argument.ArgumentOrder + 2];
-							var argumentType = argument.ArgumentType;
-							argValue = Convert.ChangeType(argString, argumentType);
+							argValue = GetArgValue(argument, args[argument.ArgumentOrder + 2]);
 						}
-						catch 
+						catch
 						{
 							return $"Error Parsing {argument.ArgumentName}";
 						}
@@ -86,7 +116,7 @@ namespace Engine.Terminal.Commands
 						switch (argument.ArgumentName)
 						{
 							case "layer":
-
+								layer = (int)argValue;
 								break;
 							case "col":
 								tileModel.Column = (int)argValue;
@@ -102,6 +132,9 @@ namespace Engine.Terminal.Commands
 								break;
 							case "spritesheet_y":
 								spritesheetY = (int)argValue;
+								break;
+							case "collision types":
+								collisionTypes = (int[])argValue;
 								break;
 						}
 					}
@@ -123,7 +156,7 @@ namespace Engine.Terminal.Commands
 							X = tileModel.Column * TileConstants.TILE_SIZE,
 							Y = tileModel.Row * TileConstants.TILE_SIZE
 						},
-						CollisionTypes = Array.Empty<string>()
+						CollisionTypes = [] // TODO 
 					};
 
 					return "Tile Added";

@@ -130,6 +130,7 @@ namespace Engine.RunTime.Managers
 		public override void Draw(GameTime gameTime)
 		{
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
+			drawingService.BeginDraw();
 
 			foreach (var layer in this.ActiveDrawables.Values)
 			{
@@ -138,6 +139,9 @@ namespace Engine.RunTime.Managers
 					drawingService.Draw(gameTime, drawable);
 				}
 			}
+
+			drawingService.EndDraw();
+			drawingService.BeginDraw();
 
 			foreach (var layer in this.OverlaidActiveDrawables.Values)
 			{
@@ -148,6 +152,7 @@ namespace Engine.RunTime.Managers
 			}
 
 			base.Draw(gameTime);
+			drawingService.EndDraw();
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using Engine.RunTime.Models.Contracts;
-using System;
+﻿using System;
 
 namespace Engine.Drawing.Models
 {
@@ -50,7 +49,7 @@ namespace Engine.Drawing.Models
 		{
 			foreach (var frame in this.Frames)
 			{ 
-				frame.Dispose();
+				frame?.Dispose();
 			}
 		}
 	}

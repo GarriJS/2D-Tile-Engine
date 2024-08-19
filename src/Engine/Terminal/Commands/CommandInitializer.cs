@@ -1,6 +1,5 @@
 ﻿using Engine.Terminal.Commands.Models;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Engine.Terminal.Commands
 {
@@ -41,81 +40,93 @@ namespace Engine.Terminal.Commands
 
 			tileCommandProfile.Parameters.Add("add", new List<CommandArgumentDefinition>
 			{
-				new CommandArgumentDefinition 
+				new()
 				{
 					ArgumentOrder = 0,
 					ArgumentName = "layer",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 1,
 					ArgumentName = "col",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 2,
 					ArgumentName = "row",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 3,
 					ArgumentName = "spritesheet",
 					ArgumentType = typeof(string),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 4,
 					ArgumentName = "spritesheet_x",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 5,
 					ArgumentName = "spritesheet_y",
 					ArgumentType = typeof(int),
+				},
+				new()
+				{
+					ArgumentOrder = 6,
+					ArgumentName = "collision types",
+					ArgumentType = typeof(int[]),
 				}
 			});
 
 			tileCommandProfile.Parameters.Add("addTest", new List<CommandArgumentDefinition>
 			{
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 0,
 					ArgumentName = "layer",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 1,
 					ArgumentName = "col",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 2,
 					ArgumentName = "row",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 3,
 					ArgumentName = "spritesheet",
 					ArgumentType = typeof(string),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 4,
 					ArgumentName = "spritesheet_x",
 					ArgumentType = typeof(int),
 				},
-				new CommandArgumentDefinition
+				new()
 				{
 					ArgumentOrder = 5,
 					ArgumentName = "spritesheet_y",
 					ArgumentType = typeof(int),
+				},
+				new()
+				{
+					ArgumentOrder = 6,
+					ArgumentName = "collision types",
+					ArgumentType = typeof(int[]),
 				}
 			});
 

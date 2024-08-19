@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Engine.Terminal.Services
+namespace Engine.Terminal.Managers
 {
 	/// <summary>
 	/// Represents a console manager.
@@ -207,7 +207,7 @@ namespace Engine.Terminal.Services
 				var updateLineContent = $"{this.Console.ActiveConsoleLine.Command.Text}{newLineContent}";
 				var formattedText = KeyboardTyping.FormatForDrawString(updateLineContent);
 				formattedText = Regex.Replace(formattedText, @"\s{2,}", " ");
-				var stringWidth = this.Console.ActiveConsoleLine.Command.SpriteFont.MeasureString(formattedText).X;
+				var stringWidth = this.Console.ActiveConsoleLine.Command.Font.MeasureString(formattedText).X;
 
 				if (this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Width >= stringWidth)
 				{
@@ -232,6 +232,7 @@ namespace Engine.Terminal.Services
 			}
 
 			var drawService = this.Game.Services.GetService<IDrawingService>();
+			drawService.BeginDraw();
 
 			drawService.Draw(gameTime, this.Console.ConsoleBackground);
 			drawService.Draw(gameTime, this.Console.ActiveConsoleLineBackground);
@@ -257,7 +258,7 @@ namespace Engine.Terminal.Services
 			}
 
 			var cursorPosition = new Vector2(
-									this.Console.ActiveConsoleLine.Command.SpriteFont.MeasureString(this.Console.ActiveConsoleLine.Command.Text).X,
+									this.Console.ActiveConsoleLine.Command.Font.MeasureString(this.Console.ActiveConsoleLine.Command.Text).X,
 									this.Console.ActiveConsoleLineBackground.Position.Y + 2);
 
 			drawService.Draw(gameTime, this.Console.Cursor, cursorPosition, Color.White);
@@ -266,14 +267,17 @@ namespace Engine.Terminal.Services
 			{
 				this.Console.RecommendedArgumentsBackground.Position.X = cursorPosition.X - 2;
 				drawService.Draw(gameTime, this.Console.RecommendedArgumentsBackground);
-				
-				this.Console.SelectedRecommendedArgumentBackground.Position.X = this.Console.RecommendedArgumentsBackground.Position.X - this.Console.SelectedRecommendedArgumentBackground.Sprite.TextureBox.Width;
-				this.Console.SelectedRecommendedArgumentBackground.Position.Y = this.Console.RecommendedArgumentsBackground.Position.Y + (this.Console.SelectedRecommendedArgumentIndex * 20);
-				drawService.Draw(gameTime, this.Console.SelectedRecommendedArgumentBackground);
 
-				this.Console.SelectedRecommendedArgumentSelector.Position.X = this.Console.SelectedRecommendedArgumentBackground.Position.X;
-				this.Console.SelectedRecommendedArgumentSelector.Position.Y = this.Console.SelectedRecommendedArgumentBackground.Position.Y;
-				drawService.Write(gameTime, this.Console.SelectedRecommendedArgumentSelector);
+				if (1 < this.Console.RecommendedArguments.Count())
+				{
+					this.Console.SelectedRecommendedArgumentBackground.Position.X = this.Console.RecommendedArgumentsBackground.Position.X - this.Console.SelectedRecommendedArgumentBackground.Sprite.TextureBox.Width;
+					this.Console.SelectedRecommendedArgumentBackground.Position.Y = this.Console.RecommendedArgumentsBackground.Position.Y + (this.Console.SelectedRecommendedArgumentIndex * 20);
+					drawService.Draw(gameTime, this.Console.SelectedRecommendedArgumentBackground);
+
+					this.Console.SelectedRecommendedArgumentSelector.Position.X = this.Console.SelectedRecommendedArgumentBackground.Position.X;
+					this.Console.SelectedRecommendedArgumentSelector.Position.Y = this.Console.SelectedRecommendedArgumentBackground.Position.Y;
+					drawService.Write(gameTime, this.Console.SelectedRecommendedArgumentSelector);
+				}
 
 				foreach (var recommendedArgument in this.Console.RecommendedArguments)
 				{
@@ -284,6 +288,7 @@ namespace Engine.Terminal.Services
 			}
 
 			base.Draw(gameTime);
+			drawService.EndDraw();
 		}
 
 		/// <summary>
@@ -388,7 +393,7 @@ namespace Engine.Terminal.Services
 				Command = new DrawableText
 				{
 					Text = " -> ",
-					SpriteFont = spriteFont,
+					Font = spriteFont,
 					Position = new Position
 					{
 						Coordinates = new Vector2(0, this.Console.ActiveConsoleLineBackground.Position.Y)
@@ -397,7 +402,7 @@ namespace Engine.Terminal.Services
 				Response = new DrawableText
 				{
 					Text = " <- ",
-					SpriteFont = spriteFont,
+					Font = spriteFont,
 					Position = null
 				},
 			};
@@ -409,7 +414,7 @@ namespace Engine.Terminal.Services
 				{
 					Coordinates = new Vector2(0, 0)
 				},
-				SpriteFont = spriteFont
+				Font = spriteFont
 			};
 
 			var animationModel = new AnimationModel
@@ -522,7 +527,7 @@ namespace Engine.Terminal.Services
 
 					var drawableText = new DrawableText
 					{
-						SpriteFont = this.Console.ActiveConsoleLine.Command.SpriteFont,
+						Font = this.Console.ActiveConsoleLine.Command.Font,
 						Text = matchingDomain,
 						Position = new Position
 						{
@@ -560,7 +565,7 @@ namespace Engine.Terminal.Services
 
 						var drawableText = new DrawableText
 						{
-							SpriteFont = this.Console.ActiveConsoleLine.Command.SpriteFont,
+							Font = this.Console.ActiveConsoleLine.Command.Font,
 							Text = matchingDomain,
 							Position = new Position
 							{
@@ -594,8 +599,8 @@ namespace Engine.Terminal.Services
 
 						var drawableText = new DrawableText
 						{
-							SpriteFont = this.Console.ActiveConsoleLine.Command.SpriteFont,
-							Text = $"{relevantArgument.ArgumentName}, {relevantArgument.ArgumentType}",
+							Font = this.Console.ActiveConsoleLine.Command.Font,
+							Text = $"{relevantArgument.ArgumentName}: {relevantArgument.ArgumentType.Name}",
 							Position = new Position
 							{
 								Coordinates = new Vector2(0, y)
@@ -613,7 +618,7 @@ namespace Engine.Terminal.Services
 
 				foreach (var recommendedArgument in this.Console.RecommendedArguments)
 				{
-					var stringLength = recommendedArgument.SpriteFont.MeasureString(recommendedArgument.Text).X;
+					var stringLength = recommendedArgument.Font.MeasureString(recommendedArgument.Text).X;
 					if (stringLength > largestX)
 					{
 						largestX = stringLength;
@@ -623,7 +628,7 @@ namespace Engine.Terminal.Services
 				this.Console.RecommendedArgumentsBackground.Sprite.TextureBox = new Rectangle
 				{
 					Y = (int)this.Console.ActiveConsoleLineBackground.Position.Y + this.Console.ActiveConsoleLineBackground.Sprite.TextureBox.Height,
-					Width = (int)largestX + 4,
+					Width = (int)largestX + 8,
 					Height = this.Console.RecommendedArguments.Count * 20,
 				};
 			}
@@ -634,7 +639,6 @@ namespace Engine.Terminal.Services
 		/// </summary>
 		private void ProcessActiveConsoleLine()
 		{
-			this.Console.RecommendedArguments = new List<DrawableText>();
 			var commandLineArguments = this.Console.ActiveConsoleLine.Command.Text.Substring(4)
 																				  .Split(' ')
 																				  .Where(e => false == string.IsNullOrEmpty(e))
@@ -645,6 +649,7 @@ namespace Engine.Terminal.Services
 				return;
 			}
 
+			this.Console.RecommendedArguments = new List<DrawableText>();
 			this.Console.ActiveConsoleLine.Response.Text = $" <- {CommandExecuter.ExecuteArguments(this.CommandProfiles, commandLineArguments)}";
 
 			foreach (var consoleLines in this.Console.ConsoleLines)
@@ -670,7 +675,7 @@ namespace Engine.Terminal.Services
 				Command = new DrawableText
 				{
 					Text = " -> ",
-					SpriteFont = spriteFont,
+					Font = spriteFont,
 					Position = new Position
 					{
 						Coordinates = new Vector2(0, this.Console.ActiveConsoleLineBackground.Position.Y)
@@ -679,7 +684,7 @@ namespace Engine.Terminal.Services
 				Response = new DrawableText
 				{
 					Text = " <- ",
-					SpriteFont = spriteFont,
+					Font = spriteFont,
 					Position = null
 				},
 			};

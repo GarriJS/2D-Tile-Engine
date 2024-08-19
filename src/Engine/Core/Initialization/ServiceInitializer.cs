@@ -12,8 +12,10 @@ using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Managers;
 using Engine.RunTime.Services;
 using Engine.RunTime.Services.Contracts;
-using Engine.Terminal.Services;
+using Engine.Terminal.Managers;
 using Engine.Terminal.Services.Contracts;
+using Engine.UserInterface.Services;
+using Engine.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -28,9 +30,9 @@ namespace Engine.Core.Initialization
 	public static class ServiceInitializer
 	{
 		/// <summary>
-		/// 
+		/// Gets the loadables.
 		/// </summary>
-		public static List<ILoadContent> Loadables { get; } = new List<ILoadContent>();
+		public static List<ILoadContent> Loadables { get; } = [];
 
 		/// <summary>
 		/// Initializes the game services.
@@ -82,7 +84,6 @@ namespace Engine.Core.Initialization
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
 				(typeof(IConsoleService), new ConsoleManager(game)),
-				(typeof(IRandomService), new RandomService()),
 				(typeof(ITextureService), new TextureService(game.Services)),
 				(typeof(IActionControlServices), new ActionControlService(game.Services)),
 				(typeof(IFontService), new FontService(game.Services)),
@@ -92,6 +93,8 @@ namespace Engine.Core.Initialization
 				(typeof(IAnimationService), new AnimationService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
+				(typeof(ITextInputLineService), new TextLineService(game.Services)),
+				(typeof(IRandomService), new RandomService()),
 			];
 		}
 	}

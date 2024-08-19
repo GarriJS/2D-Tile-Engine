@@ -49,6 +49,14 @@ namespace Engine.Drawing.Services
 		/// <summary>
 		/// Draws the drawable. 
 		/// </summary>
+		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color)
+		{
+			this.SpriteBatch.Draw(texture, coordinates, sourceRectangle, color);
+		}
+
+		/// <summary>
+		/// Draws the drawable. 
+		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
 		public void Draw(GameTime gameTime, IAmDrawable drawable)
@@ -83,6 +91,19 @@ namespace Engine.Drawing.Services
 		}
 
 		/// <summary>
+		/// Writes the text.
+		/// </summary>
+		/// <param name="font">The front.</param>
+		/// <param name="text">The text.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		public void Write(SpriteFont font, string text, Vector2 coordinates, Color color)
+		{
+			var formattedText = KeyboardTyping.FormatForDrawString(text);
+
+			this.SpriteBatch.DrawString(font, formattedText, coordinates, color);
+		}
+
+		/// <summary>
 		/// Writes the drawable text.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
@@ -91,7 +112,7 @@ namespace Engine.Drawing.Services
 		{
 			var formattedText = KeyboardTyping.FormatForDrawString(drawableText.Text);
 			
-			this.SpriteBatch.DrawString(drawableText.SpriteFont, formattedText, drawableText.Position.Coordinates, Color.White);
+			this.SpriteBatch.DrawString(drawableText.Font, formattedText, drawableText.Position.Coordinates, Color.White);
 		}
 
 		/// <summary>
@@ -104,7 +125,17 @@ namespace Engine.Drawing.Services
 		{
 			var formattedText = KeyboardTyping.FormatForDrawString(drawableText.Text);
 
-			this.SpriteBatch.DrawString(drawableText.SpriteFont, formattedText, drawableText.Position.Coordinates, color);
+			this.SpriteBatch.DrawString(drawableText.Font, formattedText, drawableText.Position.Coordinates, color);
+		}
+
+		/// <summary>
+		/// Writes and draws the writable drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="writableDrawable">The writable drawable.</param>
+		public void Draw(GameTime gameTime, IAmWriteableAndDrawable writableDrawable)
+		{
+			this.SpriteBatch.Draw(writableDrawable.Sprite.Texture, writableDrawable.Position.Coordinates, writableDrawable.Sprite.TextureBox, Color.White);
 		}
 	}
 }

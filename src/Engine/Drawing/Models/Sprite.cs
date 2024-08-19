@@ -44,7 +44,7 @@ namespace Engine.Drawing.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.Texture.Dispose();
+			this.Texture?.Dispose();
 		}
 	}
 }
