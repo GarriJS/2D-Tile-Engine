@@ -51,7 +51,7 @@ namespace Engine.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.Sprite.Dispose();
+			this.Sprite?.Dispose();
 		}
 	}
 }

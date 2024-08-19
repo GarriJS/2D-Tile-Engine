@@ -36,9 +36,9 @@ namespace Engine.UserInterface.Services
 				{
 					newPosition = 0;
 				}
-				else if (newPosition > textSize.X + (textLine.TextOffset.X * 2) + 2 - textLine.MaxVisibleTextWidth)
+				else if (newPosition > textSize.X + (textLine.TextOffset.X * 2) + 4 - textLine.MaxVisibleTextWidth)
 				{
-					newPosition = (int)(textSize.X + (textLine.TextOffset.X * 2) + 2 - textLine.MaxVisibleTextWidth);
+					newPosition = (int)(textSize.X + (textLine.TextOffset.X * 2) + 4 - textLine.MaxVisibleTextWidth);
 				}
 
 				if (newPosition == textLine.Sprite?.TextureBox.X)
@@ -76,12 +76,12 @@ namespace Engine.UserInterface.Services
 			{
 				textLine.Text = newText;
 				var newTextSize = textLine.Font.MeasureString(newText);
-				this.MoveTextLineViewArea(textLine, (int)(newTextSize.X - textLine.MaxVisibleTextWidth + (textLine.TextOffset.X * 2)) + 2 - textLine.Sprite.TextureBox.X);
+				this.MoveTextLineViewArea(textLine, (int)(newTextSize.X - textLine.MaxVisibleTextWidth + (textLine.TextOffset.X * 2)) + 4 - textLine.Sprite.TextureBox.X);
 				textSize = newTextSize;
 			}
 			else
 			{
-				this.MoveTextLineViewArea(textLine, (int)(textSize.X + (textLine.TextOffset.X * 2)));
+				this.MoveTextLineViewArea(textLine, (int)(textSize.X + (textLine.TextOffset.X * 2)) + 4);
 			}
 
 			var graphicsDeviceService = this._gameServiceContainer.GetService<IGraphicsDeviceService>();
