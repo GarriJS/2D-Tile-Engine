@@ -12,7 +12,7 @@ namespace Engine.Drawing.Services
 	/// </summary>
 	public class DrawingService : IDrawingService
     {
-		private readonly GameServiceContainer _gameServiceContainer;
+		private readonly GameServiceContainer _gameServices;
         
 		/// <summary>
 		/// Gets the sprite batch.
@@ -25,8 +25,8 @@ namespace Engine.Drawing.Services
 		/// <param name="gameServices">The game services.</param>
         public DrawingService(GameServiceContainer gameServices)
 		{
-			this._gameServiceContainer = gameServices;
-			var graphicDeviceService = this._gameServiceContainer.GetService<IGraphicsDeviceService>();
+			this._gameServices = gameServices;
+			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			this.SpriteBatch = new SpriteBatch(graphicDeviceService.GraphicsDevice);
 		}
 
@@ -71,7 +71,7 @@ namespace Engine.Drawing.Services
 		/// <param name="animated">The animated.</param>
 		public void Draw(GameTime gameTime, IAmAnimated animated)
 		{
-			var animationService = this._gameServiceContainer.GetService<IAnimationService>();
+			var animationService = this._gameServices.GetService<IAnimationService>();
 			animationService.UpdateAnimationFrame(gameTime, animated.Animation);
 			this.SpriteBatch.Draw(animated.Sprite.Texture, animated.Position.Coordinates, animated.Sprite.TextureBox, Color.White);
 		}
@@ -85,7 +85,7 @@ namespace Engine.Drawing.Services
 		/// <param name="color">The color.</param>
 		public void Draw(GameTime gameTime, Animation animation, Vector2 coordinates, Color color)
 		{
-			var animationService = this._gameServiceContainer.GetService<IAnimationService>();
+			var animationService = this._gameServices.GetService<IAnimationService>();
 			animationService.UpdateAnimationFrame(gameTime, animation);
 			this.SpriteBatch.Draw(animation.CurrentFrame.Texture, coordinates, animation.CurrentFrame.TextureBox, color);
 		}

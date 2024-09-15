@@ -16,7 +16,7 @@ namespace Engine.Drawing.Services
 	/// <param name="gameServices">The game services.</param>
 	public class AnimationService(GameServiceContainer gameServices) : IAnimationService
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameServices;
+		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the animation.
@@ -25,7 +25,7 @@ namespace Engine.Drawing.Services
 		/// <returns>The animation.</returns>
 		public Animation GetAnimation(AnimationModel animationModel)
 		{
-			var spriteService = this._gameServiceContainer.GetService<ISpriteService>();
+			var spriteService = this._gameServices.GetService<ISpriteService>();
 			var frames = new Sprite[animationModel.Frames.Length];
 
 			for (int i = 0; i < frames.Length; i++)
@@ -47,7 +47,7 @@ namespace Engine.Drawing.Services
 			}
 			else
 			{
-				var randomService = this._gameServiceContainer.GetService<RandomService>();
+				var randomService = this._gameServices.GetService<RandomService>();
 				animation.FrameDuration = randomService.GetRandomInt(animationModel.FrameMinDuration.Value, animationModel.FrameMaxDuration.Value);
 			}
 
@@ -73,7 +73,7 @@ namespace Engine.Drawing.Services
 				if ((true == animation.FrameMinDuration.HasValue) &&
 					(true == animation.FrameMaxDuration.HasValue))
 				{
-					var randomService = this._gameServiceContainer.GetService<IRandomService>();
+					var randomService = this._gameServices.GetService<IRandomService>();
 					animation.FrameDuration = randomService.GetRandomInt(animation.FrameMinDuration.Value, animation.FrameMaxDuration.Value);
 				}
 				else

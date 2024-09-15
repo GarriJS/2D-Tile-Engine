@@ -16,7 +16,7 @@ namespace Engine.Drawing.Services
 	/// <param name="gameServices">The game services.</param>
 	public class SpriteService(GameServiceContainer gameServices) : ISpriteService
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameServices;
+		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the sprite.
@@ -25,7 +25,7 @@ namespace Engine.Drawing.Services
 		/// <returns>The sprite.</returns>
 		public Sprite GetSprite(SpriteModel spriteModel)
 		{
-			var textureService = this._gameServiceContainer.GetService<ITextureService>();
+			var textureService = this._gameServices.GetService<ITextureService>();
 			var textureName = textureService.GetTextureName(spriteModel.SpritesheetName, spriteModel.SpritesheetBox);
 			var texture = textureService.GetTexture(textureName, spriteModel.SpritesheetName);
 			var textureBox = new Rectangle(TextureConstants.TEXTURE_EXTENSION_AMOUNT,

@@ -14,7 +14,7 @@ namespace Engine.Physics.Services
 	/// <param name="gameService">The game services.</param>
 	public class PositionService(GameServiceContainer gameService) : IPositionService
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameService;
+		private readonly GameServiceContainer _gameServices = gameService;
 
 		/// <summary>
 		/// Gets the position.

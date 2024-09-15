@@ -21,7 +21,7 @@ namespace Engine.Controls.Services
 	/// <param name="gameServices">The game services.</param>
 	public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameServices;
+		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the action controls.

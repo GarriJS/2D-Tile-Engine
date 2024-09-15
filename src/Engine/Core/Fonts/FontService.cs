@@ -19,7 +19,7 @@ namespace Engine.Core.Fonts
 	/// <param name="gameServices">The game services.</param>
 	public class FontService(GameServiceContainer gameServices) : IFontService
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameServices;
+		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets the sprite fonts.
@@ -31,7 +31,7 @@ namespace Engine.Core.Fonts
 		/// </summary>
 		public void LoadContent()
 		{
-			var contentManager = this._gameServiceContainer.GetService<ContentManager>();
+			var contentManager = this._gameServices.GetService<ContentManager>();
 			var spriteFontPath = $@"{contentManager.RootDirectory}\Fonts";
 			string[] spriteFontFiles = Directory.GetFiles(spriteFontPath);
 

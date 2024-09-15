@@ -20,7 +20,7 @@ namespace Engine.Core.Textures
 	/// <param name="gameServices">The game services.</param>
 	public class TextureService(GameServiceContainer gameServices) : ITextureService
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameServices;
+		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets the textures by texture name.
@@ -79,7 +79,7 @@ namespace Engine.Core.Textures
 		/// </summary>
 		private void LoadImages()
 		{
-			var contentManager = this._gameServiceContainer.GetService<ContentManager>();
+			var contentManager = this._gameServices.GetService<ContentManager>();
 			var imagesPath = $@"{contentManager.RootDirectory}\Images";
 			string[] imagesFiles = Directory.GetFiles(imagesPath);
 
@@ -108,7 +108,7 @@ namespace Engine.Core.Textures
 		/// </summary>
 		private void LoadTileSets()
 		{
-			var contentManager = this._gameServiceContainer.GetService<ContentManager>();
+			var contentManager = this._gameServices.GetService<ContentManager>();
 			var tileSetsPath = $@"{contentManager.RootDirectory}\TileSets";
 			string[] tileSetFiles = Directory.GetFiles(tileSetsPath);
 
@@ -271,7 +271,7 @@ namespace Engine.Core.Textures
 				}
 			}
 
-			var graphicsDeviceService = this._gameServiceContainer.GetService<IGraphicsDeviceService>();
+			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var extendedTexture = new Texture2D(graphicsDeviceService.GraphicsDevice, extendedWidth, extendedHeight);
 			extendedTexture.SetData(extendedTextureData);
 

@@ -93,7 +93,8 @@ namespace Engine.Core.Initialization
 				(typeof(IAnimationService), new AnimationService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
-				(typeof(ITextInputLineService), new TextLineService(game.Services)),
+				(typeof(ITextLineService), new TextLineService(game.Services)),
+				(typeof(ICursorService), new CursorService(game.Services)),
 				(typeof(IRandomService), new RandomService()),
 			];
 		}

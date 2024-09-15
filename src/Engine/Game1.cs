@@ -8,10 +8,10 @@ using Engine.Core.Initialization;
 using Engine.Drawing.Services.Contracts;
 using Engine.Terminal.Services.Contracts;
 using Engine.UserInterface.Models;
-using Engine.UserInterface.Services;
 using Engine.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Engine
 {
@@ -19,7 +19,9 @@ namespace Engine
 	{
 		private GraphicsDeviceManager _graphics;
 
-		private TextLine foo;
+		private TextLineCollection foo;
+
+		private SubTextLine baz;
 
 		public Game1()
 		{
@@ -67,26 +69,49 @@ namespace Engine
 			var fontService = this.Services.GetService<IFontService>();
 			var font = fontService.GetSpriteFont(FontNames.MonoRegular);
 
-			this.foo = new TextLine
+			var bar = new SubTextLine
 			{
-				MaxVisibleTextWidth = 200,
-				Text = "XThis is a test text I want to see how it looks and I need it to be kinda long",
+				Width = 150,
+				Text = "abcdefghijklmnopqrstuvwxyz",
+				TextBuffer = new Vector2(10, 0),
+				Background = background,
+				Font = font
+			};
+
+			this.baz = new SubTextLine
+			{
+				Width = 150,
+				Text = "abcdefghijklmnopqrstuvwxyz",
+				TextBuffer = new Vector2(0, 2),
+				Background = background,
+				Font = font
+			};
+
+			this.foo = new TextLineCollection
+			{
+				Height = 200,
+				Width = 200,
 				TextOffset = new Vector2(2, 2),
 				Background = background,
 				Position = new Physics.Models.Position
 				{
 					Coordinates = new Vector2(0, 0)
-				},
-				Font = font
+				}
 			};
 
-			var textInputLineService = this.Services.GetService<ITextInputLineService>();
-			textInputLineService.UpdateTextLineSprite(this.foo);
+			this.foo.TextLines = new List<SubTextLine> 
+			{ 
+				bar,
+				this.baz
+			};
+
+			var textInputLineService = this.Services.GetService<ITextLineService>();
+			textInputLineService.UpdateTextLineCollectionSprite(this.foo, null, false, false);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-			var textInputLineService = this.Services.GetService<ITextInputLineService>();
+			var textInputLineService = this.Services.GetService<ITextLineService>();
 			var controlService = this.Services.GetService<IControlService>();
 			var controlState = controlService.ControlState;
 
@@ -103,22 +128,22 @@ namespace Engine
 
 			if (Keyboard.GetState().IsKeyDown(Keys.Y))
 			{
-				textInputLineService.UpdateTextLineSprite(this.foo, this.foo.Text + "X");
+				textInputLineService.UpdateTextLineSprite(this.baz, this.baz.Text + "X");
 			}
 
 			if (Keyboard.GetState().IsKeyDown(Keys.U))
 			{
-				textInputLineService.UpdateTextLineSprite(this.foo, this.foo.Text[..^1]);
+				textInputLineService.UpdateTextLineSprite(this.baz, this.baz.Text[..^1]);
 			}
 
 			if (Keyboard.GetState().IsKeyDown(Keys.H))
 			{
-				textInputLineService.MoveTextLineViewArea(this.foo, 2);
+				textInputLineService.MoveTextLineViewArea(this.baz, 2);
 			}
 
 			if (Keyboard.GetState().IsKeyDown(Keys.G))
 			{
-				textInputLineService.MoveTextLineViewArea(this.foo, -2);
+				textInputLineService.MoveTextLineViewArea(this.baz, -2);
 			}
 
 			base.Update(gameTime);

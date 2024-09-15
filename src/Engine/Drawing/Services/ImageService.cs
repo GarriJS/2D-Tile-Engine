@@ -15,7 +15,7 @@ namespace Engine.Drawing.Services
 	/// <param name="gameService">The game services.</param>
 	public class ImageService(GameServiceContainer gameService) : IImageService
 	{
-		private readonly GameServiceContainer _gameServiceContainer = gameService;
+		private readonly GameServiceContainer _gameServices = gameService;
 
 		/// <summary>
 		/// Gets the image.
@@ -24,8 +24,8 @@ namespace Engine.Drawing.Services
 		/// <returns></returns>
 		public Image GetImage(ImageModel imageModel)
 		{
-			var spriteService = this._gameServiceContainer.GetService<ISpriteService>();
-			var positionService = this._gameServiceContainer.GetService<IPositionService>();
+			var spriteService = this._gameServices.GetService<ISpriteService>();
+			var positionService = this._gameServices.GetService<IPositionService>();
 			var sprite = spriteService.GetSprite(imageModel.Sprite);
 			var position = positionService.GetPosition(imageModel.Position);
 

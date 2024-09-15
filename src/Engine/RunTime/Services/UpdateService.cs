@@ -13,7 +13,7 @@ namespace Engine.RunTime.Services
 	/// <param name="gameServices"></param>
 	public class UpdateService(GameServiceContainer gameServices) : IUpdateService
     {
-        private readonly GameServiceContainer _gameServiceContainer = gameServices;
+        private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Updates the updateable.
