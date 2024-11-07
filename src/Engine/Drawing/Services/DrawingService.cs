@@ -2,7 +2,6 @@
 using Engine.Drawing.Models;
 using Engine.Drawing.Models.Contracts;
 using Engine.Drawing.Services.Contracts;
-using Engine.UserInterface.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -75,33 +74,6 @@ namespace Engine.Drawing.Services
 			var animationService = this._gameServices.GetService<IAnimationService>();
 			animationService.UpdateAnimationFrame(gameTime, animated.Animation);
 			this.SpriteBatch.Draw(animated.Sprite.Texture, animated.Position.Coordinates, animated.Sprite.TextureBox, Color.White);
-		}
-
-		/// <summary>
-		/// Draws the text line collection.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="textLineCollection">The text line collection.</param>
-		public void Draw(GameTime gameTime, TextLineCollection textLineCollection)
-		{
-			this.Draw(textLineCollection.Sprite.Texture, new Vector2(0, 0), textLineCollection.Sprite.TextureBox, Color.White);
-
-			var drawCoordinates = new Vector2(
-				textLineCollection.TextOffset.X,
-				textLineCollection.TextOffset.Y);
-
-			foreach (var textLine in textLineCollection.TextLines)
-			{
-				var textureBox = new Rectangle(
-					textLine.Sprite.TextureBox.X,
-					textLine.Sprite.TextureBox.Y,
-					textLine.Sprite.TextureBox.Width - (int)drawCoordinates.X,
-					textLine.Sprite.TextureBox.Height);
-
-				this.Draw(textLine.Sprite.Texture, drawCoordinates, textureBox, Color.White);
-
-				drawCoordinates.Y += textLine.Sprite.SpritesheetBox.Height;
-			}
 		}
 
 		/// <summary>

@@ -1,27 +1,18 @@
 ﻿using DiscModels.Engine.Drawing;
-using Engine.Controls.Models.Enums;
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Constants;
 using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization;
 using Engine.Drawing.Services.Contracts;
-using Engine.Terminal.Services.Contracts;
-using Engine.UserInterface.Models;
-using Engine.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace Engine
 {
 	public class Game1 : Game
 	{
 		private GraphicsDeviceManager _graphics;
-
-		private TextLineCollection foo;
-
-		private SubTextLine baz;
 
 		public Game1()
 		{
@@ -68,74 +59,16 @@ namespace Engine
 
 			var fontService = this.Services.GetService<IFontService>();
 			var font = fontService.GetSpriteFont(FontNames.MonoRegular);
-
-			var bar = new SubTextLine
-			{
-				Width = 110,
-				Text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-				TextBuffer = new Vector2(2, 0),
-				Background = background,
-				Font = font
-			};
-
-			this.baz = new SubTextLine
-			{
-				Width = 110,
-				Text = "a",
-				TextBuffer = new Vector2(2, 2),
-				Background = background,
-				Font = font
-			};
-
-			this.foo = new TextLineCollection
-			{
-				Height = 200,
-				Width = 200,
-				TextOffset = new Vector2(10, 2),
-				Sprite = background,
-				Position = new Physics.Models.Position
-				{
-					Coordinates = new Vector2(0, 0)
-				}
-			};
-
-			this.foo.TextLines = new List<SubTextLine> 
-			{ 
-				bar,
-				this.baz
-			};
-
-			var textInputLineService = this.Services.GetService<ITextLineService>();
-			textInputLineService.UpdateTextLineSprite(this.baz);
-			textInputLineService.UpdateTextLineSprite(bar);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-			var textLineService = this.Services.GetService<ITextLineService>();
 			var controlService = this.Services.GetService<IControlService>();
 			var controlState = controlService.ControlState;
 
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 			{
 				Exit();
-			}
-
-			if (true == controlService.ControlState.FreshActionTypes.Contains(ActionTypes.ToggleConsole))
-			{
-				var consoleService = this.Services.GetService<IConsoleService>();
-				consoleService.ToggleConsole();
-			}
-
-			if (true == Keyboard.GetState().IsKeyDown(Keys.H))
-			{
-				this.baz.Text += 'x';
-				textLineService.UpdateTextLineSprite(this.baz);
-			}
-
-			if (true == Keyboard.GetState().IsKeyDown(Keys.J))
-			{
-				textLineService.MoveTextLineViewArea(this.baz, this.baz.Text.Length);
 			}
 
 			base.Update(gameTime);
@@ -148,11 +81,9 @@ namespace Engine
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
 			var drawService = this.Services.GetService<IDrawingService>();
 
-			drawService.BeginDraw();
+			//drawService.BeginDraw();
 
-			drawService.Draw(gameTime, this.foo);
-
-			drawService.EndDraw();
+			//drawService.EndDraw();
 
 			base.Draw(gameTime);
 		}

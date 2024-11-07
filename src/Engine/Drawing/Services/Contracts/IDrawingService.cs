@@ -1,6 +1,5 @@
 ﻿using Engine.Drawing.Models;
 using Engine.Drawing.Models.Contracts;
-using Engine.UserInterface.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -36,8 +35,6 @@ namespace Engine.Drawing.Services.Contracts
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="animated">The animated.</param>
 		public void Draw(GameTime gameTime, IAmAnimated animated);
-
-		public void Draw(GameTime gameTime, TextLineCollection textLineCollection);
 
 		/// <summary>
 		/// Writes the text.
