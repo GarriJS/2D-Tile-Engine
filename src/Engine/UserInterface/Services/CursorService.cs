@@ -76,7 +76,7 @@ namespace Engine.UserInterface.Services
 			}
 
 			var textLineService = this._gameServices.GetService<TextLineService>();
-			textLineService.UpdateTextLineSprite(this.TextCursor.TextLine, newText);
+			//textLineService.UpdateTextLineSprite(this.TextCursor.TextLine, newText);
 			this.UpdateSelectedTextLine(newText);
 		}
 

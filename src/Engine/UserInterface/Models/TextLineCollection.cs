@@ -27,11 +27,6 @@ namespace Engine.UserInterface.Models
 		public Vector2 TextOffset { get; set; }
 
 		/// <summary>
-		/// Gets or sets the background.
-		/// </summary>
-		public Sprite Background { get; set; }
-
-		/// <summary>
 		/// Gets or sets the sprite.
 		/// </summary>
 		public Sprite Sprite { get; set; }

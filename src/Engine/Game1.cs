@@ -57,8 +57,8 @@ namespace Engine
 				{
 					X = 0,
 					Y = 0,
-					Width = 1080,
-					Height = 1080
+					Width = 150,
+					Height = 600
 				},
 				SpritesheetName = "gray"
 			};
@@ -71,18 +71,18 @@ namespace Engine
 
 			var bar = new SubTextLine
 			{
-				Width = 150,
-				Text = "abcdefghijklmnopqrstuvwxyz",
-				TextBuffer = new Vector2(10, 0),
+				Width = 110,
+				Text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+				TextBuffer = new Vector2(2, 0),
 				Background = background,
 				Font = font
 			};
 
 			this.baz = new SubTextLine
 			{
-				Width = 150,
-				Text = "abcdefghijklmnopqrstuvwxyz",
-				TextBuffer = new Vector2(0, 2),
+				Width = 110,
+				Text = "a",
+				TextBuffer = new Vector2(2, 2),
 				Background = background,
 				Font = font
 			};
@@ -91,8 +91,8 @@ namespace Engine
 			{
 				Height = 200,
 				Width = 200,
-				TextOffset = new Vector2(2, 2),
-				Background = background,
+				TextOffset = new Vector2(10, 2),
+				Sprite = background,
 				Position = new Physics.Models.Position
 				{
 					Coordinates = new Vector2(0, 0)
@@ -106,12 +106,13 @@ namespace Engine
 			};
 
 			var textInputLineService = this.Services.GetService<ITextLineService>();
-			textInputLineService.UpdateTextLineCollectionSprite(this.foo, null, false, false);
+			textInputLineService.UpdateTextLineSprite(this.baz);
+			textInputLineService.UpdateTextLineSprite(bar);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-			var textInputLineService = this.Services.GetService<ITextLineService>();
+			var textLineService = this.Services.GetService<ITextLineService>();
 			var controlService = this.Services.GetService<IControlService>();
 			var controlState = controlService.ControlState;
 
@@ -126,24 +127,15 @@ namespace Engine
 				consoleService.ToggleConsole();
 			}
 
-			if (Keyboard.GetState().IsKeyDown(Keys.Y))
+			if (true == Keyboard.GetState().IsKeyDown(Keys.H))
 			{
-				textInputLineService.UpdateTextLineSprite(this.baz, this.baz.Text + "X");
+				this.baz.Text += 'x';
+				textLineService.UpdateTextLineSprite(this.baz);
 			}
 
-			if (Keyboard.GetState().IsKeyDown(Keys.U))
+			if (true == Keyboard.GetState().IsKeyDown(Keys.J))
 			{
-				textInputLineService.UpdateTextLineSprite(this.baz, this.baz.Text[..^1]);
-			}
-
-			if (Keyboard.GetState().IsKeyDown(Keys.H))
-			{
-				textInputLineService.MoveTextLineViewArea(this.baz, 2);
-			}
-
-			if (Keyboard.GetState().IsKeyDown(Keys.G))
-			{
-				textInputLineService.MoveTextLineViewArea(this.baz, -2);
+				textLineService.MoveTextLineViewArea(this.baz, this.baz.Text.Length);
 			}
 
 			base.Update(gameTime);
