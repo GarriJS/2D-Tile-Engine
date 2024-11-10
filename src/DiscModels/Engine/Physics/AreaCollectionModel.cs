@@ -1,8 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿using DiscModels.Engine.Physics.Contracts;
+using System.Runtime.Serialization;
 
-namespace DiscModels.Engine.Physics.Contracts
+namespace DiscModels.Engine.Physics
 {
-	public interface IAmAAreaModel
+	public class AreaCollectionModel : IAmAAreaModel
 	{
 		[DataMember(Name = "hasCollision", Order = 1)]
 		public bool HasCollision { get; set; }
@@ -15,5 +16,8 @@ namespace DiscModels.Engine.Physics.Contracts
 
 		[DataMember(Name = "position", Order = 4)]
 		public PositionModel? Position { get; set; }
+
+		[DataMember(Name = "areas", Order = 5)]
+		public SimpleAreaModel[] Areas { get; set; }
 	}
 }

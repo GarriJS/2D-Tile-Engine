@@ -97,33 +97,33 @@ namespace Engine.Controls.Services
 		/// </summary>
 		/// <param name="mouseState">The mouse state.</param>
 		/// <returns>The mouse buttons.</returns>
-		private MouseButtons[] GetPressedMouseButtons(MouseState mouseState)
+		private MouseButtonTypes[] GetPressedMouseButtons(MouseState mouseState)
 		{
-			var activeMouseButtons = new List<MouseButtons>(5);
+			var activeMouseButtons = new List<MouseButtonTypes>(5);
 
 			if (ButtonState.Pressed == mouseState.LeftButton)
 			{
-				activeMouseButtons.Add(MouseButtons.LeftButton);				
+				activeMouseButtons.Add(MouseButtonTypes.LeftButton);				
 			}
 
 			if (ButtonState.Pressed == mouseState.RightButton)
 			{
-				activeMouseButtons.Add(MouseButtons.RightButton);
+				activeMouseButtons.Add(MouseButtonTypes.RightButton);
 			}
 
 			if (ButtonState.Pressed == mouseState.MiddleButton)
 			{
-				activeMouseButtons.Add(MouseButtons.MiddleButton);
+				activeMouseButtons.Add(MouseButtonTypes.MiddleButton);
 			}
 
 			if (ButtonState.Pressed == mouseState.XButton1)
 			{
-				activeMouseButtons.Add(MouseButtons.XButton1);
+				activeMouseButtons.Add(MouseButtonTypes.XButton1);
 			}
 
 			if (ButtonState.Pressed == mouseState.XButton2)
 			{
-				activeMouseButtons.Add(MouseButtons.XButton2);
+				activeMouseButtons.Add(MouseButtonTypes.XButton2);
 			}
 
 			return activeMouseButtons.ToArray();

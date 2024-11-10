@@ -26,6 +26,6 @@ namespace Engine.Controls.Models
 		/// <summary>
 		/// Gets or sets the control mouse buttons.
 		/// </summary>
-		public MouseButtons[] ControlMouseButtons { get; set; }
+		public MouseButtonTypes[] ControlMouseButtons { get; set; }
 	}
 }

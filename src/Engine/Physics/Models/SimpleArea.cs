@@ -1,5 +1,4 @@
 ﻿using Engine.Physics.Models.Contracts;
-using Engine.Physics.Models;
 
 namespace Engine.Physics.Models
 {
@@ -9,7 +8,7 @@ namespace Engine.Physics.Models
 	public class SimpleArea : IAmAArea, IHaveCollisionTypes
 	{
 		/// <summary>
-		/// Gets a value that indicates whether the area has a value.
+		/// Gets a value that indicates whether the area has collision.
 		/// </summary>
 		public bool HasCollision { get; set; }
 

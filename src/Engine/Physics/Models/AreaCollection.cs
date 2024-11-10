@@ -1,27 +1,26 @@
 ﻿using Engine.Physics.Models.Contracts;
-using Engine.Physics.Models;
 
 namespace Engine.Physics.Models
 {
 	/// <summary>
 	/// Represents a area collection
 	/// </summary>
-	public class AreaCollection : IAmAArea
+	public class AreaCollection(float width, float height) : IAmAArea
 	{
 		/// <summary>
-		/// Gets a value that indicates whether the area has a value.
+		/// Gets a value that indicates whether the area has collision.
 		/// </summary>
 		public bool HasCollision { get; set; }
 		
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
-		public float Width { get; }
+		public float Width { get; } = width;
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
-		public float Height { get; }
+		public float Height { get; } = height;
 
 		/// <summary>
 		/// Gets or sets the position.

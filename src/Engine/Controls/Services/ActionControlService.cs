@@ -29,7 +29,7 @@ namespace Engine.Controls.Services
 		public List<ActionControl> GetActionControls()
 		{
 			var actionControls = new List<ActionControl>();
-			var controlsPath = $@"..\..\..\Content\Controls";
+			var controlsPath = $@"..\..\..\..\Engine\Content\Controls";
 			string[] controlFiles = Directory.GetFiles(controlsPath);
 
 			if (false == controlFiles.Any())
@@ -63,7 +63,7 @@ namespace Engine.Controls.Services
 		private ActionControl GetActionControl(ActionControlModel actionControlModel)
 		{
 			Keys[] controlKeys = null;
-			MouseButtons[] controlMouseButtons = null;
+			MouseButtonTypes[] controlMouseButtons = null;
 
 			if (true == actionControlModel.ControlKeys?.Any())
 			{
@@ -77,11 +77,11 @@ namespace Engine.Controls.Services
 
 			if (true == actionControlModel.ControlMouseButtons?.Any())
 			{
-				controlMouseButtons = new MouseButtons[actionControlModel.ControlMouseButtons.Length];
+				controlMouseButtons = new MouseButtonTypes[actionControlModel.ControlMouseButtons.Length];
 
 				for (int i = 0; i < actionControlModel.ControlMouseButtons.Length; i++)
 				{
-					controlMouseButtons[i] = (MouseButtons)actionControlModel.ControlMouseButtons[i];
+					controlMouseButtons[i] = (MouseButtonTypes)actionControlModel.ControlMouseButtons[i];
 				}
 			}
 

@@ -25,18 +25,23 @@ namespace Engine.Core.Textures
 		/// <summary>
 		/// Gets or sets the textures by texture name.
 		/// </summary>
-		private Dictionary<string, Texture2D> Textures { get; set; } = new Dictionary<string, Texture2D>();
+		private Dictionary<string, Texture2D> Textures { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the sprite sheets. 
 		/// </summary>
-		private Dictionary<string, Texture2D> Spritesheets { get; set; } = new Dictionary<string, Texture2D>();
+		private Dictionary<string, Texture2D> Spritesheets { get; set; } = [];
 
 		/// <summary>
 		/// Loads the texture content.
 		/// </summary>
 		public void LoadContent()
 		{
+			var debugTexture = this.GetDebugTexture();
+
+			this.Textures.Add(ImageNames.Debug, debugTexture);
+			this.Spritesheets.Add(SpritesheetNames.Debug, debugTexture);
+
 			this.LoadImages();
 			this.LoadTileSets();
 		}
@@ -276,6 +281,28 @@ namespace Engine.Core.Textures
 			extendedTexture.SetData(extendedTextureData);
 
 			return extendedTexture;
+		}
+
+		/// <summary>
+		/// Gets the debug texture.
+		/// </summary>
+		/// <returns>The debug texture.</returns>
+		private Texture2D GetDebugTexture()
+		{
+			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
+			var texture = new Texture2D(graphicsDeviceService.GraphicsDevice, 1080, 1080);
+			var debugColor = Color.MonoGameOrange;
+			var colorData = new Color[1080 * 1080];
+			
+			for (int i = 0; i < colorData.Length; i++)
+			{
+				colorData[i] = debugColor;
+			}
+
+			texture.SetData(colorData);
+
+			return texture;
 		}
 	}
 }

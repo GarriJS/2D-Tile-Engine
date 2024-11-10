@@ -1,9 +1,9 @@
 ﻿namespace Engine.Controls.Models.Enums
 {
 	/// <summary>
-	/// Represent a mouse button.
+	/// Represent a mouse button types.
 	/// </summary>
-	public enum MouseButtons
+	public enum MouseButtonTypes
 	{
 		/// <summary>
 		/// The right button type.

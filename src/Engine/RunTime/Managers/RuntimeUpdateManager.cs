@@ -1,5 +1,7 @@
 ﻿using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
+using Engine.Signals.Models.Contracts;
+using Engine.Signals.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -17,7 +19,7 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Gets or sets the active sorted updateable.
 		/// </summary>
-		private SortedDictionary<int, List<ICanBeUpdated>> ActiveSortedUpdateables { get; set; } = new SortedDictionary<int, List<ICanBeUpdated>>();
+		private SortedDictionary<int, List<ICanBeUpdated>> ActiveSortedUpdateables { get; set; } = [];
 
 		/// <summary>
 		/// Initializes the runtime update manager.
@@ -40,7 +42,7 @@ namespace Engine.RunTime.Managers
 			}
 			else
 			{
-				layerList = new List<ICanBeUpdated>() { updateable };
+				layerList = [updateable];
 				this.ActiveSortedUpdateables.Add(layer, layerList);
 			}
 		}
@@ -76,12 +78,18 @@ namespace Engine.RunTime.Managers
 		public override void Update(GameTime gameTime)
 		{
 			var updateService = this.Game.Services.GetService<IUpdateService>();
+			var signalService = this.Game.Services.GetService<ISignalService>();
 
 			foreach (var layer in this.ActiveSortedUpdateables.Values)
 			{
 				foreach (var updateable in layer)
 				{
 					updateService.Update(gameTime, updateable);
+
+					if (updateable is IEmitSignals emitter)
+					{ 
+						signalService.ProcessSignalResponses(emitter);
+					}
 				}
 			}
 

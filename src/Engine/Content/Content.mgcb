@@ -82,6 +82,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/gray.png
 
+#begin Images/tile_grid.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/tile_grid.png
+
 #begin Images/white.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -105,18 +117,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:TileSets/brickwall_tileset.png
-
-#begin TileSets/debug_tileset.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileSets/debug_tileset.png
 
 #begin TileSets/grass_tileset.png
 /importer:TextureImporter

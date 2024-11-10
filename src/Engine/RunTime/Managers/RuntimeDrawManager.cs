@@ -18,12 +18,12 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Gets or sets the active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> ActiveDrawables { get; set; } = new SortedDictionary<int, List<IAmDrawable>>();
+		private SortedDictionary<int, List<IAmDrawable>> ActiveDrawables { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the overlaid active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> OverlaidActiveDrawables { get; set; } = new SortedDictionary<int, List<IAmDrawable>>();
+		private SortedDictionary<int, List<IAmDrawable>> OverlaidActiveDrawables { get; set; } = [];
 
 		/// <summary>
 		/// Initializes the runtime draw manager.
@@ -46,7 +46,7 @@ namespace Engine.RunTime.Managers
 			}
 			else
 			{
-				layerList = new List<IAmDrawable>() { drawable };
+				layerList = [drawable];
 				this.ActiveDrawables.Add(layer, layerList);
 			}
 		}
@@ -64,7 +64,7 @@ namespace Engine.RunTime.Managers
 			}
 			else
 			{
-				layerList = new List<IAmDrawable>() { drawable };
+				layerList = [drawable];
 				this.OverlaidActiveDrawables.Add(layer, layerList);
 			}
 		}

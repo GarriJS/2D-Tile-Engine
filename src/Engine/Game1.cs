@@ -10,17 +10,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine
 {
-	public class Game1 : Game
+	public class Game1: Game
 	{
 		private GraphicsDeviceManager _graphics;
 
-		public Game1()
+		public Game1(string foo = null)
 		{
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
 
-			Window.AllowUserResizing = true;
-
+			this.Window.AllowUserResizing = true;
+		
 			this.IsMouseVisible = true;
 		}
 
@@ -29,7 +29,7 @@ namespace Engine
 			_ = ServiceInitializer.InitializeServices(this);
 
 			this._graphics.PreferredBackBufferWidth = 1920;
-			this._graphics.PreferredBackBufferHeight = 1200;
+			this._graphics.PreferredBackBufferHeight = 1080;
 			this._graphics.ApplyChanges();
 
 			base.Initialize();
@@ -79,7 +79,7 @@ namespace Engine
 		protected override void Draw(GameTime gameTime)
 		{
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
-			var drawService = this.Services.GetService<IDrawingService>();
+			//var drawService = this.Services.GetService<IDrawingService>();
 
 			//drawService.BeginDraw();
 

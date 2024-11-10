@@ -12,6 +12,10 @@ using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Managers;
 using Engine.RunTime.Services;
 using Engine.RunTime.Services.Contracts;
+using Engine.Signals.Mangers;
+using Engine.Signals.Services.Contracts;
+using Engine.Tiling.Services;
+using Engine.Tiling.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -76,6 +80,7 @@ namespace Engine.Core.Initialization
 			return
 			[
 				(typeof(ContentManager), game.Content),
+				(typeof(ISignalService), new SignalManager(game)),
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
@@ -88,6 +93,8 @@ namespace Engine.Core.Initialization
 				(typeof(IAnimationService), new AnimationService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
+				(typeof(IAreaService), new AreaService(game.Services)),
+				(typeof(ITileService), new TileService(game.Services)),
 				(typeof(IRandomService), new RandomService()),
 			];
 		}

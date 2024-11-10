@@ -14,10 +14,10 @@ namespace DiscModels.Engine.Tiling
 		[DataMember(Name = "column", Order = 2)]
 		public int Column { get; set; }
 
-		[DataMember(Name = "sprite", Order = 3)]
-		public SpriteModel Sprite { get; set; }
-
-		[DataMember(Name = "area", Order = 4)]
+		[DataMember(Name = "area", Order = 3)]
 		public IAmAAreaModel Area { get; set; }
+
+		[DataMember(Name = "sprite", Order = 4)]
+		public SpriteModel Sprite { get; set; }
 	}
 }
