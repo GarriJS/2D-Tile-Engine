@@ -9,6 +9,11 @@ namespace Engine.Drawing.Models.Contracts
 	public interface IAmDrawable : IHavePosition, IDisposable
 	{    
 		/// <summary>
+		/// Gets the draw layer.
+		/// </summary>
+		public int DrawLayer { get; }
+
+		/// <summary>
 		/// Gets the sprite.
 		/// </summary>
 		public Sprite Sprite { get; }

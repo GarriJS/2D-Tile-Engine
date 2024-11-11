@@ -25,6 +25,17 @@ namespace Engine.Physics.Services
 		/// <param name="areaModel">The area model.</param>
 		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
+		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position = null)
+		{ 
+			return this.GetArea<IAmAArea>(areaModel, position);
+		}
+
+		/// <summary>
+		/// Gets the area.
+		/// </summary>
+		/// <param name="areaModel">The area model.</param>
+		/// <param name="position">The position.</param>
+		/// <returns>The area.</returns>
 		public T GetArea<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea 
 		{
 			var positionService = this._gameServices.GetService<IPositionService>();

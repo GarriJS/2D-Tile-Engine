@@ -1,7 +1,6 @@
 ﻿using DiscModels.Engine.Tiling;
 using DiscModels.Engine.Tiling.Contracts;
 using Engine.Drawing.Services.Contracts;
-using Engine.Physics.Models.Contracts;
 using Engine.Physics.Services.Contracts;
 using Engine.Tiling.Models;
 using Engine.Tiling.Models.Contracts;
@@ -96,8 +95,7 @@ namespace Engine.Tiling.Services
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
 			var spriteService = this._gameServices.GetService<ISpriteService>();
-
-			var area = areaService.GetArea<IAmAArea>(tileModel.Area);
+			var area = areaService.GetArea(tileModel.Area);
 
 			if (tileModel is AnimatedTileModel animatedTileModel)
 			{

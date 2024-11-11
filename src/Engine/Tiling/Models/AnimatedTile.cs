@@ -22,6 +22,11 @@ namespace Engine.Tiling.Models
 		public int Column { get; set; }
 
 		/// <summary>
+		/// Gets or sets the draw layer.
+		/// </summary>
+		public int DrawLayer { get; set; }
+
+		/// <summary>
 		/// Get the sprite.
 		/// </summary>
 		public Sprite Sprite { get => Animation.CurrentFrame; }

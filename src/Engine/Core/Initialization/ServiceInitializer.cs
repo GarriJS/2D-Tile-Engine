@@ -16,6 +16,8 @@ using Engine.Signals.Mangers;
 using Engine.Signals.Services.Contracts;
 using Engine.Tiling.Services;
 using Engine.Tiling.Services.Contracts;
+using Engine.UI.Services;
+using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -27,19 +29,19 @@ namespace Engine.Core.Initialization
 	/// <summary>
 	/// Represents a service initializer
 	/// </summary>
-	public static class ServiceInitializer
+	internal static class ServiceInitializer
 	{
 		/// <summary>
 		/// Gets the loadables.
 		/// </summary>
-		public static List<ILoadContent> Loadables { get; } = [];
+		internal static List<ILoadContent> Loadables { get; } = [];
 
 		/// <summary>
 		/// Initializes the game services.
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>A value indicating whether if all services were initialized.</returns>
-		public static bool InitializeServices(Game1 game)
+		internal static bool InitializeServices(Game1 game)
 		{
 			var serviceContractPairs = GetServiceContractPairs(game);
 			bool success = true;
@@ -75,7 +77,7 @@ namespace Engine.Core.Initialization
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>The service contract pairs.</returns>
-		private static (Type type, object provider)[] GetServiceContractPairs(Game1 game)
+		internal static (Type type, object provider)[] GetServiceContractPairs(Game1 game)
 		{
 			return
 			[
@@ -84,6 +86,7 @@ namespace Engine.Core.Initialization
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
+				(typeof(IUserInterfaceService), new UserInterfaceService(game.Services)),
 				(typeof(ITextureService), new TextureService(game.Services)),
 				(typeof(IActionControlServices), new ActionControlService(game.Services)),
 				(typeof(IFontService), new FontService(game.Services)),

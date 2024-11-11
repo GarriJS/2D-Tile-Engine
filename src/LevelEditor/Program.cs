@@ -1,6 +1,6 @@
 ﻿
 using LevelEditor;
 
-using var game = new Engine.Game1("what");
+using var game = new Engine.Game1();
 GameContainer.Game = game;
 game.Run();

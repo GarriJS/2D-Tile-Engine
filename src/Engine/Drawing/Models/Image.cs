@@ -14,6 +14,11 @@ namespace Engine.Drawing.Models
 		public Position Position { get; set; }
 
 		/// <summary>
+		/// Gets or sets the draw layer.
+		/// </summary>
+		public int DrawLayer { get; set; }
+
+		/// <summary>
 		/// Gets or sets the sprite.
 		/// </summary>
 		public Sprite Sprite { get; set; }

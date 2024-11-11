@@ -1,5 +1,4 @@
 ﻿using Engine.Signals.Models.Contracts;
-using Engine.Signals.Services.Contracts;
 
 namespace Engine.Signals.Models
 {

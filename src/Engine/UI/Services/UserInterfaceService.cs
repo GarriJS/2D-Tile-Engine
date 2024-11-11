@@ -1,9 +1,12 @@
-﻿using Engine.Signals.Models;
-using Engine.Signals.Models.Contracts;
+﻿using DiscModels.Engine.UI;
+using Engine.Drawing.Services.Contracts;
+using Engine.Physics.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.UI.Services
 {
@@ -15,25 +18,89 @@ namespace Engine.UI.Services
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
-		private List<UserInterfaceElement> UserInterfaceElements = [];
+		/// <summary>
+		/// Gets the active visibility group id.
+		/// </summary>
+		public int? ActiveVisibilityGroupId { get; private set; }
 
-		public UserInterfaceElement GetUserInterfaceElement()
-		{ 
-			var uiElement = new UserInterfaceElement();
+		/// <summary>
+		/// Gets or sets the user interface elements.
+		/// </summary>
+		private List<UserInterfaceElement> UserInterfaceElements { get; set; } = [];
+
+		/// <summary>
+		/// Gets or sets the user interface groups.
+		/// </summary>
+		private List<UserInterfaceGroup> UserInterfaceGroups { get; set; } = [];
+
+		/// <summary>
+		/// Gets the user interface element.
+		/// </summary>
+		/// <param name="uiElementModel">The UI element model.</param>
+		/// <returns>The user interface element.</returns>
+		public UserInterfaceElement GetUserInterfaceElement(UserInterfaceElementModel uiElementModel, UserInterfaceGroup userInterfaceGroup = null)
+		{
+			var areaService = this._gameServices.GetService<IAreaService>();
+			var spriteService = this._gameServices.GetService<ISpriteService>();
+			var area = areaService.GetArea(uiElementModel.Area);
+			var sprite = spriteService.GetSprite(uiElementModel.Sprite);
+
+			var uiElement = new UserInterfaceElement
+			{ 
+				UserInterfaceElementName = uiElementModel.UserInterfaceElementName,
+				Sprite = sprite,
+				Area = area
+			};
+			
 			this.UserInterfaceElements.Add(uiElement);
+
+			if (null != userInterfaceGroup)
+			{ 
+				userInterfaceGroup.UserInterfaceElements.Add(uiElement);
+
+				if (false == this.UserInterfaceGroups.Contains(userInterfaceGroup))
+				{
+					this.UserInterfaceGroups.Add(userInterfaceGroup);
+				}
+			}
 
 			return uiElement;
 		}
 
 		/// <summary>
-		/// Processes the signal.
+		/// Toggles the user interface group visibility.
 		/// </summary>
-		/// <param name="receiver">The receiver.</param>
-		/// <param name="signal">The signal.</param>
-		/// <param name="allowSignalResponses">A value indicating whether to allow for signal responses or not.</param>
-		public void ProcessSignal(IReceiveSignals receiver, Signal signal, bool allowSignalResponses = true)
+		/// <param name="visibilityGroupId">The visibility group id.</param>
+		public void ToggleUserInterfaceGroupVisibility(int visibilityGroupId)
 		{
+			var userInterfaceGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == visibilityGroupId);
+			this.ToggleUserInterfaceGroupVisibility(userInterfaceGroup);
+		}
 
+		/// <summary>
+		/// Toggles the user interface group visibility.
+		/// </summary>
+		/// <param name="uiGroup">The user interface group.</param>
+		public void ToggleUserInterfaceGroupVisibility(UserInterfaceGroup uiGroup)
+		{
+			var runtimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+
+			if (true == this.ActiveVisibilityGroupId.HasValue)
+			{ 
+				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
+
+				foreach (var uiElement in activeGroup.UserInterfaceElements)
+				{
+					runtimeDrawService.RemoveOverlaidDrawable(uiElement.DrawLayer, uiElement);
+				}
+			}
+
+			foreach (var uiElement in uiGroup.UserInterfaceElements)
+			{
+				runtimeDrawService.AddOverlaidDrawable(uiElement.DrawLayer, uiElement);
+			}
+
+			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
 		}
 	}
 }
