@@ -3,6 +3,7 @@ using Engine.Controls.Models;
 using Engine.Controls.Models.Enums;
 using Engine.Controls.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
@@ -28,8 +29,10 @@ namespace Engine.Controls.Services
 		/// </summary>
 		public List<ActionControl> GetActionControls()
 		{
+			var contentManager = this._gameServices.GetService<ContentManager>();
+
 			var actionControls = new List<ActionControl>();
-			var controlsPath = $@"..\..\..\..\Engine\Content\Controls";
+			var controlsPath = $@"{contentManager.RootDirectory}\Controls";
 			string[] controlFiles = Directory.GetFiles(controlsPath);
 
 			if (false == controlFiles.Any())

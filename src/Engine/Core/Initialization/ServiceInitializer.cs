@@ -37,6 +37,11 @@ namespace Engine.Core.Initialization
 		internal static List<ILoadContent> Loadables { get; } = [];
 
 		/// <summary>
+		/// Gets the content managers.
+		/// </summary>
+		internal static Dictionary<string, ContentManager> ContentManagers { get; set; } = [];
+
+		/// <summary>
 		/// Initializes the game services.
 		/// </summary>
 		/// <param name="game">The game.</param>

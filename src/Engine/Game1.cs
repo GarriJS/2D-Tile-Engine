@@ -14,13 +14,16 @@ namespace Engine
 	{
 		private GraphicsDeviceManager _graphics;
 
-		public Game1(string foo = null)
+		public Game1(LaunchSettings launchSettings = null)
 		{
+			if (null != launchSettings)
+			{
+				ServiceInitializer.ContentManagers = launchSettings.ContentManagers;
+			}
+
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
-
 			this.Window.AllowUserResizing = true;
-		
 			this.IsMouseVisible = true;
 		}
 

@@ -10,6 +10,7 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.*" />
   </ItemGroup>
     <ItemGroup>
+    <ProjectReference Include="..\Content\Content.csproj" />
     <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>
     <ItemGroup>
