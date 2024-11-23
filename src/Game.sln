@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscModels", "DiscModels\Di
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LevelEditor", "LevelEditor\LevelEditor.csproj", "{1E679615-7A4E-436A-A5AF-CE5F13D85232}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content", "Content\Content.csproj", "{682327C3-0C93-44C3-9FDB-04E709315CE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseContent", "BaseContent\BaseContent.csproj", "{682327C3-0C93-44C3-9FDB-04E709315CE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

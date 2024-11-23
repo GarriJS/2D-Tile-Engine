@@ -4,6 +4,7 @@ using Engine.Controls.Typing;
 using Engine.Core.Constants;
 using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization;
+using Engine.Core.Initialization.Models;
 using Engine.Drawing.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -12,19 +13,19 @@ namespace Engine
 {
 	public class Game1: Game
 	{
-		private GraphicsDeviceManager _graphics;
+		public GraphicsDeviceManager _graphics;
 
-		public Game1(LaunchSettings launchSettings = null)
+		public Game1()
 		{
-			if (null != launchSettings)
-			{
-				ServiceInitializer.ContentManagers = launchSettings.ContentManagers;
-			}
-
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
 			this.Window.AllowUserResizing = true;
 			this.IsMouseVisible = true;
+		}
+
+		public void SetLoadingInstructions(LoadingInstructions loadingInstructions)
+		{
+			LoadingInstructionsContainer.LoadingInstructions = loadingInstructions;
 		}
 
 		protected override void Initialize()

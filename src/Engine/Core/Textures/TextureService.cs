@@ -1,4 +1,5 @@
 ﻿using Engine.Core.Constants;
+using Engine.Core.Initialization;
 using Engine.Core.Textures.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -59,8 +60,8 @@ namespace Engine.Core.Textures
 				return texture;
 			}
 			else if ((false == string.IsNullOrEmpty(spritesheetName)) &&
-				     (true == this.Spritesheets.TryGetValue(spritesheetName, out var spritesheet)))
-			{ 
+					 (true == this.Spritesheets.TryGetValue(spritesheetName, out var spritesheet)))
+			{
 				return spritesheet;
 			}
 
@@ -84,26 +85,20 @@ namespace Engine.Core.Textures
 		/// </summary>
 		private void LoadImages()
 		{
-			var contentManager = this._gameServices.GetService<ContentManager>();
-			var imagesPath = $@"{contentManager.RootDirectory}\Images";
-			string[] imagesFiles = Directory.GetFiles(imagesPath);
+			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
 
-			if (false == imagesFiles.Any())
+			foreach (var contentManagerName in contentManagerNames)
 			{
-				return;
-			}
-
-			foreach (string imagesFile in imagesFiles)
-			{
-				try
+				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
 				{
-					var imageName = Path.GetFileNameWithoutExtension(imagesFile);
-					var texture = contentManager.Load<Texture2D>($@"Images\{imageName}");
-					this.Spritesheets.Add(imageName, texture);
+					continue;
 				}
-				catch (Exception ex)
+
+				var managerSpritesheetNames = LoadingInstructionsContainer.GetImageNamesForContentManager(contentManagerName);
+
+				foreach (var managerSpritesheetName in managerSpritesheetNames)
 				{
-					Debug.WriteLine($"Loading images failed for {imagesFile}: {ex.Message}");
+					contentManager.Load<Texture2D>($@"Images\{managerSpritesheetName}");
 				}
 			}
 		}
@@ -113,27 +108,20 @@ namespace Engine.Core.Textures
 		/// </summary>
 		private void LoadTileSets()
 		{
-			var contentManager = this._gameServices.GetService<ContentManager>();
-			var tileSetsPath = $@"{contentManager.RootDirectory}\TileSets";
-			string[] tileSetFiles = Directory.GetFiles(tileSetsPath);
+			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
 
-			if (false == tileSetFiles.Any())
+			foreach (var contentManagerName in contentManagerNames)
 			{
-				return;
-			}
-
-			foreach (string tileSetFile in tileSetFiles)
-			{
-				try
+				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
 				{
-					var textureName = Path.GetFileNameWithoutExtension(tileSetFile);
-					var texture = contentManager.Load<Texture2D>($@"TileSets\{textureName}");
-					this.Spritesheets.Add(textureName, texture);
-					this.LoadTileTextures(textureName);
+					continue;
 				}
-				catch (Exception ex)
+
+				var managerSpritesheetNames = LoadingInstructionsContainer.GetSpritesheetNamesForContentManager(contentManagerName);
+
+				foreach (var managerSpritesheetName in managerSpritesheetNames)
 				{
-					Debug.WriteLine($"Loading tile set failed for {tileSetFile}: {ex.Message}");
+					contentManager.Load<Texture2D>($@"TileSets\{managerSpritesheetName}");
 				}
 			}
 		}
@@ -294,7 +282,7 @@ namespace Engine.Core.Textures
 			var texture = new Texture2D(graphicsDeviceService.GraphicsDevice, 1080, 1080);
 			var debugColor = Color.MonoGameOrange;
 			var colorData = new Color[1080 * 1080];
-			
+
 			for (int i = 0; i < colorData.Length; i++)
 			{
 				colorData[i] = debugColor;

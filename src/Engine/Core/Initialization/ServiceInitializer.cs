@@ -3,6 +3,7 @@ using Engine.Controls.Services.Contracts;
 using Engine.Core.Contracts;
 using Engine.Core.Fonts;
 using Engine.Core.Fonts.Contracts;
+using Engine.Core.Initialization.Models;
 using Engine.Core.Textures;
 using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Services;
@@ -35,11 +36,6 @@ namespace Engine.Core.Initialization
 		/// Gets the loadables.
 		/// </summary>
 		internal static List<ILoadContent> Loadables { get; } = [];
-
-		/// <summary>
-		/// Gets the content managers.
-		/// </summary>
-		internal static Dictionary<string, ContentManager> ContentManagers { get; set; } = [];
 
 		/// <summary>
 		/// Initializes the game services.
