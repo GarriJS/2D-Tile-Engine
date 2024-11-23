@@ -10,12 +10,17 @@ namespace Engine.Core.Textures.Contracts
 	public interface ITextureService : ILoadContent
 	{
 		/// <summary>
-		/// Gets the texture.
+		/// Gets the debug texture.
+		/// </summary>
+		public Texture2D DebugTexture { get; }
+
+		/// <summary>
+		/// Tries to get the texture.
 		/// </summary>
 		/// <param name="textureName">The texture name.</param>
-		/// <param name="spritesheetName">The spritesheet name.</param>
-		/// <returns>The texture.</returns>
-		public Texture2D GetTexture(string textureName, string spritesheetName = null);
+		/// <param name="texture">The texture.</param>
+		/// <returns>A value indicating whether the texture was found.</returns>
+		public bool TryGetTexture(string textureName, out Texture2D texture);
 
 		/// <summary>
 		/// Gets the texture name.

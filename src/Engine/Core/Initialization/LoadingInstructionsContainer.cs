@@ -32,19 +32,22 @@ namespace Engine.Core.Initialization
 		/// <returns>A list of content manager names.</returns>
 		internal static IList<string> GetContentManagerNames()
 		{
-			var contentList = LoadingInstructions.SpritesheetLinkages.Select(e => e.ContentManagerName)?.ToList();
+			var contentList = LoadingInstructions?.TilesetLinkages?.Select(e => e.ContentManagerName)?
+																   .ToList();
 
 			return contentList ?? [];
 		}
 
 		/// <summary>
-		/// Gets the spritesheet names for the content manager.
+		/// Gets the tile set names for the content manager.
 		/// </summary>
 		/// <param name="contentManagerName">The content manager name.</param>
-		/// <returns>A list of spritesheet names for the content manager name.</returns>
-		internal static IList<string> GetSpritesheetNamesForContentManager(string contentManagerName)
+		/// <returns>A list of tile set names for the content manager name.</returns>
+		internal static IList<string> GetTileSetNamesForContentManager(string contentManagerName)
 		{
-			var contentList = LoadingInstructions.SpritesheetLinkages.Where(e => e.ContentManagerName == contentManagerName)?.Select(e => e.ContentName)?.ToList();
+			var contentList = LoadingInstructions?.TilesetLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
+																   .Select(e => e.ContentName)?
+																   .ToList();
 			
 			return contentList ?? [];	
 		}
@@ -56,7 +59,9 @@ namespace Engine.Core.Initialization
 		/// <returns>A list of image names for the content manager name.</returns>
 		internal static IList<string> GetImageNamesForContentManager(string contentManagerName)
 		{
-			var contentList = LoadingInstructions.ImageLinkages.Where(e => e.ContentManagerName == contentManagerName)?.Select(e => e.ContentName)?.ToList();
+			var contentList = LoadingInstructions?.ImageLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
+																 .Select(e => e.ContentName)?
+																 .ToList();
 
 			return contentList ?? [];
 		}

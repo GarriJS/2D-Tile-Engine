@@ -8,6 +8,6 @@
 		/// <summary>
 		/// Gets the tile size.
 		/// </summary>
-		public static int TILE_SIZE { get; } = 64;
+		public static int TILE_SIZE { get; } = 32;
 	}
 }

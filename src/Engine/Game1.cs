@@ -62,7 +62,7 @@ namespace Engine
 			var background = spriteService.GetSprite(backgroundModel);
 
 			var fontService = this.Services.GetService<IFontService>();
-			var font = fontService.GetSpriteFont(FontNames.MonoRegular);
+			//var font = fontService.GetSpriteFont(FontNames.MonoRegular);
 		}
 
 		protected override void Update(GameTime gameTime)

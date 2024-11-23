@@ -3,7 +3,6 @@ using Engine.Controls.Services.Contracts;
 using Engine.Core.Contracts;
 using Engine.Core.Fonts;
 using Engine.Core.Fonts.Contracts;
-using Engine.Core.Initialization.Models;
 using Engine.Core.Textures;
 using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Services;

@@ -34,22 +34,35 @@ namespace LevelEditor
 				{ BaseContent.ContentExporter.ContentManagerName, basicContentManager }
 			};
 
-			var spritesheetLinkages = new List<ContentManagerLinkage>();
-			var spritesheetNames = BaseContent.ContentExporter.GetSpritesheetNames();
+			var tilesetLinkages = new List<ContentManagerLinkage>();
+			var tilesetNames = BaseContent.ContentExporter.GetTilesetNames();
 			
-			foreach (var spritesheetName in spritesheetNames)
+			foreach (var tilesetName in tilesetNames)
 			{
-				spritesheetLinkages.Add(new ContentManagerLinkage
+				tilesetLinkages.Add(new ContentManagerLinkage
 				{
 					ContentManagerName = BaseContent.ContentExporter.ContentManagerName,
-					ContentName = spritesheetName
+					ContentName = tilesetName
+				});
+			}
+
+			var imageLinkages = new List<ContentManagerLinkage>();
+			var imageNames = BaseContent.ContentExporter.GetImageNames();
+
+			foreach (var imageName in imageNames)
+			{
+				imageLinkages.Add(new ContentManagerLinkage
+				{
+					ContentManagerName = BaseContent.ContentExporter.ContentManagerName,
+					ContentName = imageName
 				});
 			}
 
 			return new LoadingInstructions
 			{
 				ContentManagers = contentManager,
-				SpritesheetLinkages = spritesheetLinkages
+				ImageLinkages = imageLinkages,
+				TilesetLinkages = tilesetLinkages
 			};
 		}
 	}

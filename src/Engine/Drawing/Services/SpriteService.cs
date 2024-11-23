@@ -27,7 +27,12 @@ namespace Engine.Drawing.Services
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
 			var textureName = textureService.GetTextureName(spriteModel.SpritesheetName, spriteModel.SpritesheetBox);
-			var texture = textureService.GetTexture(textureName, spriteModel.SpritesheetName);
+
+			if (false == textureService.TryGetTexture(textureName, out var texture))
+			{
+				texture = textureService.DebugTexture;
+			}
+
 			var textureBox = new Rectangle(TextureConstants.TEXTURE_EXTENSION_AMOUNT,
 										   TextureConstants.TEXTURE_EXTENSION_AMOUNT,
 										   spriteModel.SpritesheetBox.Width,

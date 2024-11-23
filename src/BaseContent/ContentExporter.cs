@@ -14,15 +14,45 @@ namespace BaseContent
 		public static string ContentManagerName { get; } = "Base";
 
 		/// <summary>
-		/// Gets the sprite sheet names.
+		/// Get the font names.
 		/// </summary>
-		/// <returns>A list of spritesheet names.</returns>
-		public static List<string> GetSpritesheetNames()
+		/// <returns>The list of font names.</returns>
+		public static List<string> GetFontNames()
 		{
-			return
-			[
-				"dark_grass_simplified"
-			];
+			var fontPath = $@"{Directory.GetCurrentDirectory()}\Fonts";
+			string[] fontPaths = Directory.GetFiles(fontPath);
+			var fontNames = fontPaths?.Select(e => Path.GetFileNameWithoutExtension(e))
+									  .ToList();
+
+			return fontNames ?? [];
+		}
+
+		/// <summary>
+		/// Gets the tile set names.
+		/// </summary>
+		/// <returns>A list of tile set names.</returns>
+		public static List<string> GetImageNames()
+		{
+			var imagePath = $@"{Directory.GetCurrentDirectory()}\Images";
+			string[] imagePaths = Directory.GetFiles(imagePath);
+			var imageNames = imagePaths?.Select(e => Path.GetFileNameWithoutExtension(e))
+									    .ToList();
+
+			return imageNames ?? [];
+		}
+
+		/// <summary>
+		/// Gets the tile set names.
+		/// </summary>
+		/// <returns>A list of tile set names.</returns>
+		public static List<string> GetTilesetNames()
+		{
+			var tileSetPath = $@"{Directory.GetCurrentDirectory()}\TileSets";
+			string[] tileSetPaths = Directory.GetFiles(tileSetPath);
+			var tileSetNames = tileSetPaths?.Select(e => Path.GetFileNameWithoutExtension(e))
+										    .ToList();
+
+			return tileSetNames ?? [];
 		}
 
 		/// <summary>
@@ -32,9 +62,9 @@ namespace BaseContent
 		/// <returns>The content manager.</returns>
 		public static ContentManager InitializeContentManager(GraphicsDeviceManager graphicsDeviceManager)
 		{
-			string rootDirectory = Directory.GetCurrentDirectory();
 			var serviceProvider = new BasicServiceProvider(graphicsDeviceManager);
-			return new ContentManager(serviceProvider, rootDirectory);
+
+			return new ContentManager(serviceProvider, Directory.GetCurrentDirectory());
 		}
 	}
 }

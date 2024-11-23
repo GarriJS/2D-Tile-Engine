@@ -14,9 +14,9 @@ namespace Engine.Core.Initialization.Models
         public Dictionary<string, ContentManager> ContentManagers { get; set; }
 
         /// <summary>
-        /// Gets or sets spritesheet linkages.
+        /// Gets or sets tile set linkages.
         /// </summary>
-        public List<ContentManagerLinkage> SpritesheetLinkages { get; set; }
+        public List<ContentManagerLinkage> TilesetLinkages { get; set; }
 
 		/// <summary>
 		/// Gets or sets spritesheet linkages.
