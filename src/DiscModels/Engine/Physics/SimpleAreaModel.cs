@@ -19,6 +19,6 @@ namespace DiscModels.Engine.Physics
 		public PositionModel? Position { get; set; }
 
 		[DataMember(Name = "collisionTypes", Order = 5)]
-		public string[] CollisionTypes { get; set; }
+		public required string[] CollisionTypes { get; set; }
 	}
 }

@@ -3,9 +3,6 @@ using Engine.Controls.Models.Enums;
 using Engine.Controls.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Engine.Controls.Services
 {
@@ -57,7 +54,7 @@ namespace Engine.Controls.Services
 		public override void Update(GameTime gameTime)
 		{
 			this.OldControlState = this.ControlState;
-			this.ControlState = this.GetCurrentControlState();
+			//this.ControlState = this.GetCurrentControlState();
 
 			base.Update(gameTime);
 		}

@@ -13,9 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Controls/controls.json
-/copy:Controls/controls.json
-
 #begin Fonts/Monobold.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -108,18 +105,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/white.png
-
-#begin Tilesets/dark_grass_simplified.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Tilesets/dark_grass_simplified.png
 
 #begin TileSets/dark_grass_simplified.png
 /importer:TextureImporter

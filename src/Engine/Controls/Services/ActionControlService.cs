@@ -5,9 +5,6 @@ using Engine.Controls.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -29,10 +26,13 @@ namespace Engine.Controls.Services
 		/// </summary>
 		public List<ActionControl> GetActionControls()
 		{
+			return null;
+
 			var contentManager = this._gameServices.GetService<ContentManager>();
 
 			var actionControls = new List<ActionControl>();
-			var controlsPath = $@"{contentManager.RootDirectory}\Controls";
+			var foo = AppDomain.CurrentDomain.BaseDirectory;
+			var controlsPath = $@"{Directory.GetCurrentDirectory()}\Controls";
 			string[] controlFiles = Directory.GetFiles(controlsPath);
 
 			if (false == controlFiles.Any())
@@ -44,9 +44,11 @@ namespace Engine.Controls.Services
 			{
 				var jsonContent = File.ReadAllText(controlFile);
 				var serializer = new DataContractJsonSerializer(typeof(List<ActionControlModel>));
+
 				using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonContent));
 				{
 					var controls = (List<ActionControlModel>)serializer.ReadObject(stream);
+
 					foreach (var control in controls)
 					{
 						var actionControl = GetActionControl(control);
@@ -128,6 +130,7 @@ namespace Engine.Controls.Services
 
 			return new ActionControlModel
 			{
+				ActionControlDescription = actionControl.ActionControlDescription,
 				ActionType = (int)actionControl.ActionType,
 				ControlKeys = controlKeys,
 				ControlMouseButtons = controlMouseButtons
