@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace BaseContent
 {
@@ -12,6 +13,12 @@ namespace BaseContent
 		/// Gets or sets the content manager name.
 		/// </summary>
 		public string ContentManagerName { get; }
+
+		/// <summary>
+		/// Gets the control names.
+		/// </summary>
+		/// <returns>The control names.</returns>
+		public List<string> GetControlNames();
 
 		/// <summary>
 		/// Get the font names.

@@ -26,6 +26,7 @@ namespace LevelEditor
 		/// Gets or sets the content exporters
 		/// </summary>
 		private static readonly List<IAmAContentExporter> ContentExporters = [
+			new LevelEditor.ContentExporter(),
 			new BaseContent.ContentExporter()
 		];
 
@@ -37,6 +38,7 @@ namespace LevelEditor
 		internal static LoadingInstructions GetLoadingInstructions(GraphicsDeviceManager graphicsDeviceManager)
 		{
 			var contentManagers = new Dictionary<string, ContentManager>();
+			var controlLinkages = new List<ContentManagerLinkage>();
 			var fontLinkages = new List<ContentManagerLinkage>();
 			var tilesetLinkages = new List<ContentManagerLinkage>();
 			var imageLinkages = new List<ContentManagerLinkage>();
@@ -45,9 +47,28 @@ namespace LevelEditor
 			{
 				var contentManager = contentExporter.InitializeContentManager(graphicsDeviceManager);
 				contentManagers.Add(contentExporter.ContentManagerName, contentManager);
+				var controlNames = contentExporter.GetControlNames();
 				var fontNames = contentExporter.GetFontNames();
 				var tilesetNames = contentExporter.GetTilesetNames();
 				var imageNames = contentExporter.GetImageNames();
+
+				foreach (var controlName in controlNames)
+				{
+					controlLinkages.Add(new ContentManagerLinkage
+					{
+						ContentManagerName = contentExporter.ContentManagerName,
+						ContentName = controlName
+					});
+				}
+
+				foreach (var fontName in fontNames)
+				{
+					fontLinkages.Add(new ContentManagerLinkage
+					{
+						ContentManagerName = contentExporter.ContentManagerName,
+						ContentName = fontName
+					});
+				}
 
 				foreach (var tilesetName in tilesetNames)
 				{
@@ -73,7 +94,7 @@ namespace LevelEditor
 				ContentManagers = contentManagers,
 				ImageLinkages = imageLinkages,
 				TilesetLinkages = tilesetLinkages,
-				ControlLinkages = []
+				ControlLinkages = controlLinkages
 			};
 		}
 	}

@@ -13,28 +13,28 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/Monobold.spritefont
+#begin BaseContent/Fonts/Monobold.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/Monobold.spritefont
+/build:BaseContent/Fonts/Monobold.spritefont
 
-#begin Fonts/Monolight.spritefont
+#begin BaseContent/Fonts/Monolight.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/Monolight.spritefont
+/build:BaseContent/Fonts/Monolight.spritefont
 
-#begin Fonts/MonoRegular.spritefont
+#begin BaseContent/Fonts/MonoRegular.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/MonoRegular.spritefont
+/build:BaseContent/Fonts/MonoRegular.spritefont
 
-#begin Images/black.png
+#begin BaseContent/Images/black.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -44,9 +44,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/black.png
+/build:BaseContent/Images/black.png
 
-#begin Images/empty.png
+#begin BaseContent/Images/empty.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -56,9 +56,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/empty.png
+/build:BaseContent/Images/empty.png
 
-#begin Images/gray_transparent.png
+#begin BaseContent/Images/gray_transparent.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -68,9 +68,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/gray_transparent.png
+/build:BaseContent/Images/gray_transparent.png
 
-#begin Images/gray.png
+#begin BaseContent/Images/gray.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -80,9 +80,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/gray.png
+/build:BaseContent/Images/gray.png
 
-#begin Images/tile_grid.png
+#begin BaseContent/Images/tile_grid.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -92,9 +92,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/tile_grid.png
+/build:BaseContent/Images/tile_grid.png
 
-#begin Images/white.png
+#begin BaseContent/Images/white.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -104,9 +104,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/white.png
+/build:BaseContent/Images/white.png
 
-#begin TileSets/dark_grass_simplified.png
+#begin BaseContent/Tilesets/dark_grass_simplified.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -116,5 +116,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TileSets/dark_grass_simplified.png
+/build:BaseContent/Tilesets/dark_grass_simplified.png
 

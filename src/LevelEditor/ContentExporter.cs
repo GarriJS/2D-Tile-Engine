@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BaseContent;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace BaseContent
+namespace LevelEditor
 {
 	/// <summary>
 	/// Represents a content exporter

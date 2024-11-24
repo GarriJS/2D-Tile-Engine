@@ -13,6 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Controls/controls.json
-/copy:Controls/controls.json
+#begin LevelEditorContent/Controls/controls.json
+/copy:LevelEditorContent/Controls/controls.json
 
