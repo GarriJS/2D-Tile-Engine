@@ -7,9 +7,9 @@ namespace DiscModels.Engine.Drawing
 	public class ImageModel
 	{
 		[DataMember(Name = "position", Order = 1)]
-		public required PositionModel Position { get; set; }
+		public PositionModel Position { get; set; }
 
 		[DataMember(Name = "sprite", Order = 1)]
-		public required SpriteModel Sprite { get; set; }
+		public SpriteModel Sprite { get; set; }
 	}
 }

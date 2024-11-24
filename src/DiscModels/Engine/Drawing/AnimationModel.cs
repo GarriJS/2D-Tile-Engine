@@ -18,6 +18,6 @@ namespace DiscModels.Engine.Drawing
 		public int? FrameMaxDuration { get; set; }
 
 		[DataMember(Name = "frames", Order = 5)]
-		public required SpriteModel[] Frames { get; set; }
+		public SpriteModel[] Frames { get; set; }
 	}
 }

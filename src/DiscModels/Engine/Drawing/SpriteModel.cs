@@ -7,9 +7,9 @@ namespace DiscModels.Engine.Drawing
 	public class SpriteModel
 	{
 		[DataMember(Name = "spritesheetName", Order = 1)]
-		public required string SpritesheetName { get; set; }
+		public string SpritesheetName { get; set; }
 
 		[DataMember(Name = "spritesheetBox", Order = 2)]
-		public required Rectangle SpritesheetBox { get; set; }
+		public Rectangle SpritesheetBox { get; set; }
 	}
 }

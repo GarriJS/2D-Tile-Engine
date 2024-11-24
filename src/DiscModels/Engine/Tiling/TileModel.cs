@@ -15,9 +15,9 @@ namespace DiscModels.Engine.Tiling
 		public int Column { get; set; }
 
 		[DataMember(Name = "area", Order = 3)]
-		public required IAmAAreaModel Area { get; set; }
+		public IAmAAreaModel Area { get; set; }
 
 		[DataMember(Name = "sprite", Order = 4)]
-		public required SpriteModel Sprite { get; set; }
+		public SpriteModel Sprite { get; set; }
 	}
 }

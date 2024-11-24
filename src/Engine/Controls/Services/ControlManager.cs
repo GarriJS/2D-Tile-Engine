@@ -3,6 +3,9 @@ using Engine.Controls.Models.Enums;
 using Engine.Controls.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.Controls.Services
 {
@@ -40,8 +43,8 @@ namespace Engine.Controls.Services
 			this.ControlState = new ControlState
 			{
 				Direction = null,
-				FreshActionTypes = new List<ActionTypes>(),
-				ActionTypes = new List<ActionTypes>()
+				FreshActionTypes = [],
+				ActionTypes = []
 			};
 
 			base.Initialize();

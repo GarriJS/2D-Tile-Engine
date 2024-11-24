@@ -96,7 +96,7 @@ namespace Engine.Core.Textures
 
 				foreach (var managerImageName in managerImageNames)
 				{
-					var image = contentManager.Load<Texture2D>($@"Images\{managerImageName}");
+					var image = contentManager.Load<Texture2D>($@"{contentManagerName}\Images\{managerImageName}");
 					this.Tilesets.Add(managerImageName, image);
 				}
 			}
@@ -120,7 +120,7 @@ namespace Engine.Core.Textures
 
 				foreach (var managerTilesetName in managerTilesetNames)
 				{
-					var tileset = contentManager.Load<Texture2D>($@"TileSets\{managerTilesetName}");
+					var tileset = contentManager.Load<Texture2D>($@"{contentManagerName}\TileSets\{managerTilesetName}");
 					this.Tilesets.Add(managerTilesetName, tileset);
 					this.LoadTiles(managerTilesetName, tileset);
 				}

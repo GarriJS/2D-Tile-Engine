@@ -32,10 +32,7 @@ namespace Engine.Core.Initialization
 		/// <returns>A list of content manager names.</returns>
 		internal static IList<string> GetContentManagerNames()
 		{
-			var contentList = LoadingInstructions?.TilesetLinkages?.Select(e => e.ContentManagerName)?
-																   .ToList();
-
-			return contentList ?? [];
+			return LoadingInstructions?.ContentManagers?.Keys?.ToList() ?? [];
 		}
 
 		/// <summary>

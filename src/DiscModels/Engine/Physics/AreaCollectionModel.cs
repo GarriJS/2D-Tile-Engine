@@ -18,6 +18,6 @@ namespace DiscModels.Engine.Physics
 		public PositionModel? Position { get; set; }
 
 		[DataMember(Name = "areas", Order = 5)]
-		public required SimpleAreaModel[] Areas { get; set; }
+		public SimpleAreaModel[] Areas { get; set; }
 	}
 }

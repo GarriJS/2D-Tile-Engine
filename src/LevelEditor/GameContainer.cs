@@ -26,8 +26,8 @@ namespace LevelEditor
 		/// Gets or sets the content exporters
 		/// </summary>
 		private static readonly List<IAmAContentExporter> ContentExporters = [
-			new LevelEditor.ContentExporter(),
-			new BaseContent.ContentExporter()
+			new ContentExporter(LevelEditor.LevelEditorContent.ContentManagerParams.ContentManagerName),
+			new ContentExporter(BaseContent.BaseContent.ContentManagerParams.ContentManagerName)
 		];
 
 		/// <summary>

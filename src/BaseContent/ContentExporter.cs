@@ -9,12 +9,16 @@ namespace BaseContent
 	/// <summary>
 	/// Represents a content exporter
 	/// </summary>
-	public class ContentExporter : IAmAContentExporter
+	/// <remarks>
+	/// Initializes a new instance of the content exporter.
+	/// </remarks>
+	/// <param name="contentMangerName">The content manager name.</param>
+	public class ContentExporter(string contentMangerName) : IAmAContentExporter
 	{
 		/// <summary>
 		/// Gets or sets the content manager name.
 		/// </summary>
-		public string ContentManagerName { get; } = "BaseContent";
+		public string ContentManagerName { get; } = contentMangerName;
 
 		/// <summary>
 		/// Gets the control names.
@@ -23,9 +27,15 @@ namespace BaseContent
 		public List<string> GetControlNames()
 		{
 			var controlPath = $@"{Directory.GetCurrentDirectory()}\{this.ContentManagerName}\Controls";
+
+			if (false == Directory.Exists(controlPath))
+			{
+				return [];
+			}
+
 			string[] controlPaths = Directory.GetFiles(controlPath);
-			var controlName = controlPaths?.Select(e => Path.GetFileNameWithoutExtension(e))?
-									  .ToList();
+			var controlName = controlPaths?.Select(Path.GetFileNameWithoutExtension)?
+										   .ToList();
 
 			return controlName ?? [];
 		}
@@ -37,8 +47,14 @@ namespace BaseContent
 		public List<string> GetFontNames()
 		{
 			var fontPath = $@"{Directory.GetCurrentDirectory()}\{this.ContentManagerName}\Fonts";
+
+			if (false == Directory.Exists(fontPath))
+			{
+				return [];
+			}
+
 			string[] fontPaths = Directory.GetFiles(fontPath);
-			var fontNames = fontPaths?.Select(e => Path.GetFileNameWithoutExtension(e))?
+			var fontNames = fontPaths?.Select(Path.GetFileNameWithoutExtension)?
 									  .ToList();
 
 			return fontNames ?? [];
@@ -51,9 +67,15 @@ namespace BaseContent
 		public List<string> GetImageNames()
 		{
 			var imagePath = $@"{Directory.GetCurrentDirectory()}\{this.ContentManagerName}\Images";
+
+			if (false == Directory.Exists(imagePath))
+			{
+				return [];
+			}
+
 			string[] imagePaths = Directory.GetFiles(imagePath);
 			var imageNames = imagePaths?.Select(e => Path.GetFileNameWithoutExtension(e))?
-									    .ToList();
+										.ToList();
 
 			return imageNames ?? [];
 		}
@@ -65,9 +87,15 @@ namespace BaseContent
 		public List<string> GetTilesetNames()
 		{
 			var tileSetPath = $@"{Directory.GetCurrentDirectory()}\{this.ContentManagerName}\TileSets";
+
+			if (false == Directory.Exists(tileSetPath))
+			{
+				return [];
+			}
+
 			string[] tileSetPaths = Directory.GetFiles(tileSetPath);
 			var tileSetNames = tileSetPaths?.Select(e => Path.GetFileNameWithoutExtension(e))?
-										    .ToList();
+											.ToList();
 
 			return tileSetNames ?? [];
 		}

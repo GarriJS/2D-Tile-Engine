@@ -5,6 +5,9 @@ using Engine.Controls.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -31,7 +34,6 @@ namespace Engine.Controls.Services
 			var contentManager = this._gameServices.GetService<ContentManager>();
 
 			var actionControls = new List<ActionControl>();
-			var foo = AppDomain.CurrentDomain.BaseDirectory;
 			var controlsPath = $@"{Directory.GetCurrentDirectory()}\Controls";
 			string[] controlFiles = Directory.GetFiles(controlsPath);
 

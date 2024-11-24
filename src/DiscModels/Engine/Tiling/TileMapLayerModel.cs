@@ -10,6 +10,6 @@ namespace DiscModels.Engine.Tiling
 		public int Layer { get; set; }
 
 		[DataMember(Name = "tiles", Order = 2)]
-		public required List<IAmATileModel> Tiles { get; set; }
+		public List<IAmATileModel> Tiles { get; set; }
 	}
 }

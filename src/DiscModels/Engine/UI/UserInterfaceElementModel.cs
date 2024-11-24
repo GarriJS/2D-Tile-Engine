@@ -7,12 +7,12 @@ namespace DiscModels.Engine.UI
 	public class UserInterfaceElementModel
 	{
 		[DataMember(Name = "userInterfaceElementName", Order = 1)]
-		public required string UserInterfaceElementName { get; set; }
+		public string UserInterfaceElementName { get; set; }
 
 		[DataMember(Name = "area", Order = 2)]
-		public required IAmAAreaModel Area { get; set; }
+		public IAmAAreaModel Area { get; set; }
 
 		[DataMember(Name = "sprite", Order = 3)]
-		public required SpriteModel Sprite { get; set; }
+		public SpriteModel Sprite { get; set; }
 	}
 }

@@ -7,9 +7,9 @@ namespace DiscModels.Engine.Scenes
 	public class SceneModel
 	{
 		[DataMember(Name = "sceneName", Order = 1)]
-		public required string SceneName { get; set; }
+		public string SceneName { get; set; }
 
 		[DataMember(Name = "tileMap", Order = 2)]
-		public required TileMapModel TileMap { get; set; }
+		public TileMapModel TileMap { get; set; }
 	}
 }
