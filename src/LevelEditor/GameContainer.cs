@@ -92,6 +92,7 @@ namespace LevelEditor
 			return new LoadingInstructions
 			{
 				ContentManagers = contentManagers,
+				FontLinkages = fontLinkages,
 				ImageLinkages = imageLinkages,
 				TilesetLinkages = tilesetLinkages,
 				ControlLinkages = controlLinkages

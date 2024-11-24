@@ -57,7 +57,7 @@ namespace Engine.Controls.Services
 		public override void Update(GameTime gameTime)
 		{
 			this.OldControlState = this.ControlState;
-			//this.ControlState = this.GetCurrentControlState();
+			this.ControlState = this.GetCurrentControlState();
 
 			base.Update(gameTime);
 		}

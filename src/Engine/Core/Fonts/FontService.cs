@@ -1,12 +1,9 @@
 ﻿using Engine.Core.Fonts.Contracts;
+using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace Engine.Core.Fonts
 {
@@ -31,26 +28,21 @@ namespace Engine.Core.Fonts
 		/// </summary>
 		public void LoadContent()
 		{
-			var contentManager = this._gameServices.GetService<ContentManager>();
-			var spriteFontPath = $@"{contentManager.RootDirectory}\Fonts";
-			string[] spriteFontFiles = Directory.GetFiles(spriteFontPath);
+			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
 
-			if (false == spriteFontFiles.Any())
+			foreach (var contentManagerName in contentManagerNames)
 			{
-				return;
-			}
-
-			foreach (string spriteFontFile in spriteFontFiles)
-			{
-				try
+				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
 				{
-					var spriteFontNames = Path.GetFileNameWithoutExtension(spriteFontFile);
-					var spriteFont = contentManager.Load<SpriteFont>($@"Fonts\{spriteFontNames}");
-					this.SpriteFonts.Add(spriteFontNames, spriteFont);
+					continue;
 				}
-				catch (Exception ex)
+
+				var managerFontNames = LoadingInstructionsContainer.GetFontNamesForContentManager(contentManagerName);
+
+				foreach (var managerFontName in managerFontNames)
 				{
-					Debug.WriteLine($"Loading font for {spriteFontFile}: {ex.Message}");
+					var font = contentManager.Load<SpriteFont>($@"{contentManagerName}\Fonts\{managerFontName}");
+					this.SpriteFonts.Add(managerFontName, font);
 				}
 			}
 		}
@@ -63,7 +55,7 @@ namespace Engine.Core.Fonts
 		public SpriteFont GetSpriteFont(string spriteFontName)
 		{
 			if (true == this.SpriteFonts.TryGetValue(spriteFontName, out var font))
-			{ 
+			{
 				return font;
 			}
 

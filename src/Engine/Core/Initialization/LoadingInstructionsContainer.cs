@@ -36,6 +36,34 @@ namespace Engine.Core.Initialization
 		}
 
 		/// <summary>
+		/// Gets the control names for the content manager.
+		/// </summary>
+		/// <param name="contentManagerName">The content manager name.</param>
+		/// <returns>A list of control names for the content manager name.</returns>
+		internal static IList<string> GetControlNamesForContentManager(string contentManagerName)
+		{
+			var controlList = LoadingInstructions?.ControlLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
+																   .Select(e => e.ContentName)?
+																   .ToList();
+
+			return controlList ?? [];
+		}
+
+		/// <summary>
+		/// Gets the font names for the content manager.
+		/// </summary>
+		/// <param name="contentManagerName">The content manager name.</param>
+		/// <returns>A list of font names for the content manager name.</returns>
+		internal static IList<string> GetFontNamesForContentManager(string contentManagerName)
+		{
+			var fontList = LoadingInstructions?.FontLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
+																.Select(e => e.ContentName)?
+																.ToList();
+
+			return fontList ?? [];
+		}
+
+		/// <summary>
 		/// Gets the tile set names for the content manager.
 		/// </summary>
 		/// <param name="contentManagerName">The content manager name.</param>

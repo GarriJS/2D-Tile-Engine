@@ -2,8 +2,8 @@
 using Engine.Controls.Models;
 using Engine.Controls.Models.Enums;
 using Engine.Controls.Services.Contracts;
+using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
@@ -29,32 +29,32 @@ namespace Engine.Controls.Services
 		/// </summary>
 		public List<ActionControl> GetActionControls()
 		{
-			return null;
-
-			var contentManager = this._gameServices.GetService<ContentManager>();
-
 			var actionControls = new List<ActionControl>();
-			var controlsPath = $@"{Directory.GetCurrentDirectory()}\Controls";
-			string[] controlFiles = Directory.GetFiles(controlsPath);
+			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
 
-			if (false == controlFiles.Any())
+			foreach (var contentManagerName in contentManagerNames)
 			{
-				return actionControls;
-			}
+				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
+				{
+					continue;
+				}
 
-			foreach (string controlFile in controlFiles)
-			{
-				var jsonContent = File.ReadAllText(controlFile);
+				var managerFontNames = LoadingInstructionsContainer.GetControlNamesForContentManager(contentManagerName);
 				var serializer = new DataContractJsonSerializer(typeof(List<ActionControlModel>));
 
-				using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonContent));
+				foreach (var managerFontName in managerFontNames)
 				{
-					var controls = (List<ActionControlModel>)serializer.ReadObject(stream);
+					var controlFilePath = Path.Combine(Directory.GetCurrentDirectory(), contentManagerName, "Controls", $"{managerFontName}.json");
+					var controlJson = File.ReadAllText(controlFilePath);
 
-					foreach (var control in controls)
+					using var stream = new MemoryStream(Encoding.UTF8.GetBytes(controlJson));
 					{
-						var actionControl = GetActionControl(control);
-						actionControls.Add(actionControl);
+						var controls = (List<ActionControlModel>)serializer.ReadObject(stream);
+
+						foreach (var control in controls)
+						{
+							actionControls.Add(GetActionControl(control));
+						}
 					}
 				}
 			}
