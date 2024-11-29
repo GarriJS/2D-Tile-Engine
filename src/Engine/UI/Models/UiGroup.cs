@@ -1,6 +1,5 @@
 ﻿using Engine.Signals.Models;
 using Engine.Signals.Models.Contracts;
-using System;
 using System.Collections.Generic;
 
 namespace Engine.UI.Models
@@ -8,7 +7,7 @@ namespace Engine.UI.Models
 	/// <summary>
 	/// Represents a user interface group.
 	/// </summary>
-	public class UserInterfaceGroup : IEmitSignals, IReceiveSignals
+	public class UiGroup : IReceiveSignals
 	{
 		/// <summary>
 		/// Gets or sets the visibility group id.
@@ -16,19 +15,9 @@ namespace Engine.UI.Models
 		public int? VisibilityGroupId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface elements.
+		/// Gets or sets the user interface containers.
 		/// </summary>
-		public IList<UserInterfaceElement> UserInterfaceElements { get; set; }
-
-		/// <summary>
-		/// Gets or sets the signal response processor type.
-		/// </summary>
-		public Type SignalResponseProcessorType { get; set; }
-
-		/// <summary>
-		/// Gets the queue of received signals.
-		/// </summary>
-		public Queue<Signal> SignalResponses { get; set; }
+		public IList<UiZoneContainer> UiZoneContainers { get; set; }
 
 		/// <summary>
 		/// Gets the active signal subscriptions.

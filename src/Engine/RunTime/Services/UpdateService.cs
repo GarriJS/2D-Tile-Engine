@@ -22,7 +22,7 @@ namespace Engine.RunTime.Services
 		/// <param name="updateable">The updateable.</param>
 		public void Update(GameTime gameTime, ICanBeUpdated updateable)
         {
-            //throw new System.InvalidCastException();
+
         }
     }
 }

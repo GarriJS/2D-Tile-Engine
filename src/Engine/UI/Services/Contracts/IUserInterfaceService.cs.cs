@@ -17,6 +17,6 @@ namespace Engine.UI.Services.Contracts
 		/// Toggles the user interface group visibility.
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
-		public void ToggleUserInterfaceGroupVisibility(UserInterfaceGroup uiGroup);
+		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
 	}
 }

@@ -1,10 +1,8 @@
-﻿using DiscModels.Engine.Drawing;
-using Engine.Controls.Services.Contracts;
+﻿using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
-using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
-using Engine.Drawing.Services.Contracts;
+using Engine.Debugging.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -29,7 +27,7 @@ namespace Engine
 
 		protected override void Initialize()
 		{
-			_ = ServiceInitializer.InitializeServices(this);
+			_ = ServiceInitializer.StartServices(this);
 
 			this._graphics.PreferredBackBufferWidth = 1920;
 			this._graphics.PreferredBackBufferHeight = 1080;
@@ -40,28 +38,18 @@ namespace Engine
 
 		protected override void LoadContent()
 		{
+			foreach (var initialization in ServiceInitializer.Initializations)
+			{
+				initialization.Initialize();
+			}
+
 			foreach (var loadable in ServiceInitializer.Loadables)
 			{ 
 				loadable.LoadContent();
 			}
 
-			var backgroundModel = new SpriteModel
-			{
-				SpritesheetBox = new Rectangle
-				{
-					X = 0,
-					Y = 0,
-					Width = 150,
-					Height = 600
-				},
-				SpritesheetName = "gray"
-			};
-
-			var spriteService = this.Services.GetService<ISpriteService>();
-			var background = spriteService.GetSprite(backgroundModel);
-
-			var fontService = this.Services.GetService<IFontService>();
-			//var font = fontService.GetSpriteFont(FontNames.MonoRegular);
+			var debugService = this.Services.GetService<IDebugService>();
+			debugService.ToggleScreenAreaIndicators();
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -72,6 +60,11 @@ namespace Engine
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 			{
 				Exit();
+			}
+
+			if (Keyboard.GetState().IsKeyDown(Keys.G))
+			{
+
 			}
 
 			base.Update(gameTime);

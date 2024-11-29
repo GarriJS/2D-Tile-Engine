@@ -1,8 +1,7 @@
 ﻿using DiscModels.Engine.UI;
-using Engine.Drawing.Services.Contracts;
-using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
+using Engine.UI.Models.Contracts;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -26,45 +25,45 @@ namespace Engine.UI.Services
 		/// <summary>
 		/// Gets or sets the user interface elements.
 		/// </summary>
-		private List<UserInterfaceElement> UserInterfaceElements { get; set; } = [];
+		private List<IAmAUiElement> UserInterfaceElements { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the user interface groups.
 		/// </summary>
-		private List<UserInterfaceGroup> UserInterfaceGroups { get; set; } = [];
+		private List<UiGroup> UserInterfaceGroups { get; set; } = [];
 
 		/// <summary>
 		/// Gets the user interface element.
 		/// </summary>
 		/// <param name="uiElementModel">The UI element model.</param>
 		/// <returns>The user interface element.</returns>
-		public UserInterfaceElement GetUserInterfaceElement(UserInterfaceElementModel uiElementModel, UserInterfaceGroup userInterfaceGroup = null)
+		public IAmAUiElement GetUserInterfaceElement(UserInterfaceElementModel uiElementModel, UiGroup userInterfaceGroup = null)
 		{
-			var areaService = this._gameServices.GetService<IAreaService>();
-			var spriteService = this._gameServices.GetService<ISpriteService>();
-			var area = areaService.GetArea(uiElementModel.Area);
-			var sprite = spriteService.GetSprite(uiElementModel.Sprite);
+			//var areaService = this._gameServices.GetService<IAreaService>();
+			//var spriteService = this._gameServices.GetService<ISpriteService>();
+			//var area = areaService.GetArea(uiElementModel.Area);
+			//var sprite = spriteService.GetSprite(uiElementModel.Sprite);
 
-			var uiElement = new UserInterfaceElement
-			{ 
-				UserInterfaceElementName = uiElementModel.UserInterfaceElementName,
-				Sprite = sprite,
-				Area = area
-			};
+			//var uiElement = new IAmAUserInterfaceElement
+			//{ 
+			//	UserInterfaceElementName = uiElementModel.UserInterfaceElementName,
+			//	Sprite = sprite,
+			//	Area = area
+			//};
 			
-			this.UserInterfaceElements.Add(uiElement);
+			//this.UserInterfaceElements.Add(uiElement);
 
-			if (null != userInterfaceGroup)
-			{ 
-				userInterfaceGroup.UserInterfaceElements.Add(uiElement);
+			//if (null != userInterfaceGroup)
+			//{ 
+			//	userInterfaceGroup.UserInterfaceElements.Add(uiElement);
 
-				if (false == this.UserInterfaceGroups.Contains(userInterfaceGroup))
-				{
-					this.UserInterfaceGroups.Add(userInterfaceGroup);
-				}
-			}
+			//	if (false == this.UserInterfaceGroups.Contains(userInterfaceGroup))
+			//	{
+			//		this.UserInterfaceGroups.Add(userInterfaceGroup);
+			//	}
+			//}
 
-			return uiElement;
+			return null;
 		}
 
 		/// <summary>
@@ -81,7 +80,7 @@ namespace Engine.UI.Services
 		/// Toggles the user interface group visibility.
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
-		public void ToggleUserInterfaceGroupVisibility(UserInterfaceGroup uiGroup)
+		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup)
 		{
 			var runtimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 
@@ -89,15 +88,15 @@ namespace Engine.UI.Services
 			{ 
 				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
 
-				foreach (var uiElement in activeGroup.UserInterfaceElements)
+				foreach (var uiZoneContainer in activeGroup.UiZoneContainers)
 				{
-					runtimeDrawService.RemoveOverlaidDrawable(uiElement.DrawLayer, uiElement);
+					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
 				}
 			}
 
-			foreach (var uiElement in uiGroup.UserInterfaceElements)
+			foreach (var uiZoneContainer in uiGroup.UiZoneContainers)
 			{
-				runtimeDrawService.AddOverlaidDrawable(uiElement.DrawLayer, uiElement);
+				runtimeDrawService.AddOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
 			}
 
 			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
