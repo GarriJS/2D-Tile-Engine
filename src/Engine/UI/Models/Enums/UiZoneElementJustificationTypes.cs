@@ -1,9 +1,9 @@
 ﻿namespace Engine.UI.Models.Enums
 {
 	/// <summary>
-	/// Represents a user interface zone container justification type.
+	/// Represents a user interface zone element justification type.
 	/// </summary>
-	public enum UiZoneContainerJustificationTypes
+	public enum UiZoneElementJustificationTypes
 	{
 		/// <summary>
 		/// The none type.

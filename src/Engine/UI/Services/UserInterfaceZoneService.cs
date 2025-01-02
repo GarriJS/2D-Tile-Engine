@@ -75,13 +75,11 @@ namespace Engine.UI.Services
 
 					var zone = new UiZone
 					{
-						UserInterfaceZoneType = zoneType,
+						UiZoneType = zoneType,
 						Area = new SimpleArea
-						{ 
-							HasCollision = false,
-							Width = screenWidth /4,
-							Height = screenHeight /3,
-							CollisionTypeIds = [],
+						{
+							Width = screenWidth / 4,
+							Height = screenHeight / 3,
 							Position = new Position
 							{
 								Coordinates = new Vector2(x, y)
@@ -89,9 +87,25 @@ namespace Engine.UI.Services
 						}
 					};
 
-					this.UserInterfaceZones.TryAdd(zoneType, zone);	
+					this.UserInterfaceZones.TryAdd(zoneType, zone);
 				}
 			}
+
+			var noneZone = new UiZone
+			{
+				UiZoneType = UiZoneTypes.None,
+				Area = new SimpleArea
+				{
+					Width = screenWidth / 4,
+					Height = screenHeight / 3,
+					Position = new Position
+					{
+						Coordinates = new Vector2(0, 0)
+					}
+				}
+			};
+
+			this.UserInterfaceZones.TryAdd(UiZoneTypes.None, noneZone);
 		}
 	}
 }

@@ -5,13 +5,8 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a simple area.
 	/// </summary>
-	public class SimpleArea : IAmAArea, IHaveCollisionTypes
+	public class SimpleArea : IAmAArea
 	{
-		/// <summary>
-		/// Gets a value that indicates whether the area has collision.
-		/// </summary>
-		public bool HasCollision { get; set; }
-
 		/// <summary>
 		/// Get or sets the width.
 		/// </summary>
@@ -26,10 +21,5 @@ namespace Engine.Physics.Models
 		/// Gets or sets the position.
 		/// </summary>
 		public Position Position { get; set; }
-
-		/// <summary>
-		/// Gets or sets the collision type ids.
-		/// </summary>
-		public int[] CollisionTypeIds { get; set; }
 	}
 }

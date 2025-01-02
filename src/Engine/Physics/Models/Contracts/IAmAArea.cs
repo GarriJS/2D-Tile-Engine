@@ -6,11 +6,6 @@
 	public interface IAmAArea : IHavePosition
 	{
 		/// <summary>
-		/// Gets a value that indicates whether the area has a value.
-		/// </summary>
-		public bool HasCollision { get; }
-
-		/// <summary>
 		/// Gets the width.
 		/// </summary>
 		public float Width { get; }

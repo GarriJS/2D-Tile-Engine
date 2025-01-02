@@ -15,9 +15,9 @@ namespace Engine.UI.Models
 		public int? VisibilityGroupId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface containers.
+		/// Gets or sets the user interface elements.
 		/// </summary>
-		public IList<UiZoneContainer> UiZoneContainers { get; set; }
+		public IList<UiZoneElement> UiZoneElements { get; set; }
 
 		/// <summary>
 		/// Gets the active signal subscriptions.

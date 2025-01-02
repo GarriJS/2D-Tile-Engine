@@ -40,7 +40,6 @@ namespace Engine.Physics.Services
 		{
 			var positionService = this._gameServices.GetService<IPositionService>();
 			position ??= positionService.GetPosition(areaModel.Position);
-			int[] collisionTypeIds = []; //TODO get collision type ids.
 
 			switch (areaModel)
 			{
@@ -76,7 +75,6 @@ namespace Engine.Physics.Services
 
 					var areaCollection = new AreaCollection(width, height)
 					{
-						HasCollision = areaCollectionModel.HasCollision,
 						Position = position,
 						Areas = areas
 					};
@@ -92,11 +90,9 @@ namespace Engine.Physics.Services
 
 					var offsetArea = new OffsetArea
 					{
-						HasCollision = offsetAreaModel.HasCollision,
 						Width = offsetAreaModel.Width,
 						Height = offsetAreaModel.Height,
 						Position = position,
-						CollisionTypeIds = collisionTypeIds,
 						VerticalOffset = offsetAreaModel.VerticalOffset,
 						HorizontalOffset = offsetAreaModel.HorizontalOffset
 					};
@@ -112,11 +108,9 @@ namespace Engine.Physics.Services
 
 					var simpleArea = new SimpleArea
 					{
-						HasCollision = simpleAreaModel.HasCollision,
 						Width = simpleAreaModel.Width,
 						Height = simpleAreaModel.Height,
 						Position = position,
-						CollisionTypeIds = collisionTypeIds
 					};
 
 					if (simpleArea is T resultSimpleArea)

@@ -12,6 +12,11 @@ namespace Engine.UI.Models
     public class UiRow : IDisposable
 	{
 		/// <summary>
+		/// Gets or sets the user interface row name.
+		/// </summary>
+		public string UiRowName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the width.
 		/// </summary>
 		public float Width { get; set; }

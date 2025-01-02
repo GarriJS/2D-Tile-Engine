@@ -12,7 +12,7 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets or sets the user interface zone type.
 		/// </summary>
-		public UiZoneTypes UserInterfaceZoneType { get; set; }
+		public UiZoneTypes UiZoneType { get; set; }
 
 		/// <summary>
 		/// Gets the position.

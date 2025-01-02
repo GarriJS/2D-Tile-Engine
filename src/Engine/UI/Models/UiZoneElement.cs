@@ -9,19 +9,24 @@ using System.Collections.Generic;
 namespace Engine.UI.Models
 {
 	/// <summary>
-	/// Represents a user interface zone element container.
+	/// Represents a user interface zone element.
 	/// </summary>
-	public class UiZoneContainer : IAmDrawable, IHaveArea, IDisposable
+	public class UiZoneElement : IAmDrawable, IHaveArea, IDisposable
 	{
+		/// <summary>
+		/// Gets or sets the user interface zone element name.
+		/// </summary>
+		public string UiZoneElementName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface zone container justification type. 
+		/// Gets or sets the user interface row justification type. 
 		/// </summary>
-		public UiZoneContainerJustificationTypes ZoneContainerJustificationType { get; set; }
+		public UiZoneElementJustificationTypes JustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the background.
@@ -36,12 +41,12 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets the position.
 		/// </summary>
-		public Position Position { get => this.UserInterfaceZone.Position; }
+		public Position Position { get => this.UserInterfaceZone?.Position; }
 
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public IAmAArea Area { get => this.UserInterfaceZone.Area; }
+		public IAmAArea Area { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface zone.

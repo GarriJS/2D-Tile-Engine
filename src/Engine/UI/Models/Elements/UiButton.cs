@@ -3,7 +3,7 @@ using Engine.Signals.Models;
 using Engine.Signals.Models.Contracts;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
-using System.Drawing;
+using Microsoft.Xna.Framework;
 
 namespace Engine.UI.Models.Elements
 {
@@ -12,6 +12,11 @@ namespace Engine.UI.Models.Elements
 	/// </summary>
 	public class UiButton : IAmAUiElement, IHaveASignal
 	{
+		/// <summary>
+		/// Gets or sets the user interface element name.
+		/// </summary>
+		public string UiElementName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the left padding.
 		/// </summary>
@@ -23,29 +28,9 @@ namespace Engine.UI.Models.Elements
 		public float RightPadding { get; set; }
 
 		/// <summary>
-		/// Gets or sets the right padding.
-		/// </summary>
-		public float TopPadding { get; set; }
-
-		/// <summary>
-		/// Gets or sets the bottom padding.
-		/// </summary>
-		public float BottomPadding { get; set; }
-
-		/// <summary>
-		/// Gets or sets the draw layer.
-		/// </summary>
-		public int DrawLayer { get; set; }
-
-		/// <summary>
 		/// Gets or sets the user interface element type.
 		/// </summary>
 		public UiElementTypes ElementType { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user interface element name.
-		/// </summary>
-		public string UiElementName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.

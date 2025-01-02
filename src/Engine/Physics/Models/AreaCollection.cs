@@ -6,12 +6,7 @@ namespace Engine.Physics.Models
 	/// Represents a area collection
 	/// </summary>
 	public class AreaCollection(float width, float height) : IAmAArea
-	{
-		/// <summary>
-		/// Gets a value that indicates whether the area has collision.
-		/// </summary>
-		public bool HasCollision { get; set; }
-		
+	{	
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
