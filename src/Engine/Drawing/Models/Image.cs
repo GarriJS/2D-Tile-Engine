@@ -1,34 +1,34 @@
-﻿using Engine.Drawing.Models.Contracts;
-using Engine.Physics.Models;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Drawing.Models
 {
 	/// <summary>
 	/// Represents a image.
 	/// </summary>
-	public class Image : IAmDrawable
+	public class Image
 	{
 		/// <summary>
-		/// Gets or sets the position.
+		/// Gets or sets the texture name.
 		/// </summary>
-		public Position Position { get; set; }
+		public string TextureName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the draw layer.
+		/// Gets or sets the texture box.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		public Rectangle TextureBox { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sprite.
+		/// Gets or sets the texture.
 		/// </summary>
-		public Sprite Sprite { get; set; }
+		public Texture2D Texture { get; set; }
 
 		/// <summary>
-		/// Disposes of the image.
+		/// Disposes of the draw data texture.
 		/// </summary>
 		public void Dispose()
 		{
-			this.Sprite.Dispose();
+			this.Texture?.Dispose();
 		}
 	}
 }

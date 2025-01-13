@@ -1,6 +1,4 @@
-﻿using Engine.Controls.Typing;
-using Engine.Drawing.Models;
-using Engine.Drawing.Models.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
 using Engine.Drawing.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -61,7 +59,7 @@ namespace Engine.Drawing.Services
 		/// <param name="drawable">The drawable.</param>
 		public void Draw(GameTime gameTime, IAmDrawable drawable)
 		{
-			this.SpriteBatch.Draw(drawable.Sprite.Texture, drawable.Position.Coordinates, drawable.Sprite.TextureBox, Color.White);
+			this.SpriteBatch.Draw(drawable.Image.Texture, drawable.Position.Coordinates, drawable.Image.TextureBox, Color.White);
 		}
 	}
 }

@@ -1,7 +1,7 @@
-﻿using Engine.Physics.Models.Contracts;
-using Engine.Tiling.Models.Contracts;
-using Engine.Drawing.Models;
+﻿using Engine.Drawing.Models;
 using Engine.Physics.Models;
+using Engine.Physics.Models.Contracts;
+using Engine.Tiling.Models.Contracts;
 
 namespace Engine.Tiling.Models
 {
@@ -26,9 +26,9 @@ namespace Engine.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sprite.
+		/// Gets or sets the image.
 		/// </summary>
-		public Sprite Sprite { get; set; }
+		public Image Image { get; set; }
 
 		/// <summary>
 		/// Gets the position.
@@ -45,7 +45,7 @@ namespace Engine.Tiling.Models
 		/// </summary>
 		public void Dispose()
 		{ 
-			this.Sprite.Dispose();
+			this.Image.Dispose();
 		}
 	}
 }

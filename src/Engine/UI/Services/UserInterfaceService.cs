@@ -1,5 +1,4 @@
 ﻿using DiscModels.Engine.UI;
-using DiscModels.Engine.UI.Contracts;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
@@ -25,11 +24,6 @@ namespace Engine.UI.Services
 		/// Gets the active visibility group id.
 		/// </summary>
 		public int? ActiveVisibilityGroupId { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the user interface elements.
-		/// </summary>
-		private List<IAmAUiElement> UserInterfaceElements { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the user interface groups.
@@ -88,35 +82,34 @@ namespace Engine.UI.Services
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
 			var background = spriteService.GetSprite(uiZoneElementModel.Background);
 			var elementRows = new List<UiRow>();
-			float width = 0f;
-			float height = 0f;
 
 			if (false == uiZoneService.UserInterfaceZones.TryGetValue((UiZoneTypes)uiZoneElementModel.UiZoneType, out UiZone uiZone))
 			{
 				uiZone = uiZoneService.UserInterfaceZones[UiZoneTypes.None];
 			}
 
+			var height = uiZone.Area.Height;
+			var width = 0f;
+
 			if (true == uiZoneElementModel.ElementRows?.Any())
 			{
 				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
 				{
-					var elementRow = this.GetUiRow(elementRowModel);
+					height -= elementRowModel.TopPadding + elementRowModel.BottomPadding;
+				}
+
+				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
+				{
+					var elementRow = this.GetUiRow(elementRowModel, uiZone, height);
 					elementRows.Add(elementRow);
 					height += elementRow.Height + elementRow.TopPadding + elementRow.BottomPadding;
 
 					if (elementRow.Width > width)
-					{ 
+					{
 						width = elementRow.Width;
 					}
 				}
 			}
-
-			var area = new SimpleArea
-			{
-				Position = uiZone.Position,
-				Width = width,
-				Height = height
-			};
 
 			return new UiZoneElement
 			{
@@ -124,9 +117,14 @@ namespace Engine.UI.Services
 				DrawLayer = 1,
 				JustificationType = (UiZoneElementJustificationTypes)uiZoneElementModel.JustificationType,
 				Background = background,
-				Area = area,
 				UserInterfaceZone = uiZone,
-				ElementRows = elementRows
+				ElementRows = elementRows,
+				Area = new SimpleArea
+				{
+					Position = uiZone.Position,
+					Width = width,
+					Height = height
+				}
 			};
 		}
 
@@ -134,22 +132,26 @@ namespace Engine.UI.Services
 		/// Gets the user interface row.
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
+		/// <param name="uiZone">The user interface zone.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiZone uiZone, float height)
 		{
-			var spriteService = this._gameServices.GetService<ISpriteService>();
-			var background = spriteService.GetSprite(uiRowModel.Background);
+			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var subElements = new List<IAmAUiElement>();
-			float width = 0f;
-			float height = uiRowModel.TopPadding + uiRowModel.BottomPadding;
+			float width = uiZone.Area.Width;
 
 			if (true == uiRowModel.SubElements?.Any())
 			{
 				foreach (var elementRowModel in uiRowModel.SubElements)
 				{
-					var uiElement = this.GetUiElement(elementRowModel);
-					height += uiElement.Area.Height;
-					width += uiElement.Area.Width + uiElement.LeftPadding + uiElement.RightPadding;
+					width -= (elementRowModel.RightPadding + elementRowModel.LeftPadding);
+				}
+
+				var elementWidth = width / uiRowModel.SubElements.Length;
+
+				foreach (var elementRowModel in uiRowModel.SubElements)
+				{
+					var uiElement = uiElementService.GetUiElement(elementRowModel, elementWidth, height);
 				}
 			}
 
@@ -161,33 +163,8 @@ namespace Engine.UI.Services
 				TopPadding = uiRowModel.TopPadding,
 				BottomPadding = uiRowModel.BottomPadding,
 				JustificationType = (UiRowJustificationTypes)uiRowModel.JustificationType,
-				Background = background,
 				SubElements = subElements
 			};
-		}
-
-		/// <summary>
-		/// Gets the user interface element.
-		/// </summary>
-		/// <param name="uiElementModel">The user interface element model.</param>
-		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel)
-		{
-			var uiElementType = (UiElementTypes)uiElementModel.ElementType;
-
-			switch (uiElementType)
-			{
-				case UiElementTypes.Button:
-
-					break;
-
-				case UiElementTypes.None:
-				default:
-
-					break;
-			}
-
-			return null;
 		}
 	}
 }

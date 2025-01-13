@@ -11,8 +11,10 @@ namespace Engine.Drawing.Services.Contracts
 		/// <summary>
 		/// Gets the image.
 		/// </summary>
-		/// <param name="imageModel"></param>
-		/// <returns></returns>
-		public Image GetImage(ImageModel imageModel);
+		/// <param name="imageModel">The image model.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <returns>The image.</returns>
+		public Image GetImage(ImageModel imageModel, int width, int height);
 	}
 }

@@ -1,5 +1,4 @@
-﻿using DiscModels.Engine.Drawing;
-using DiscModels.Engine.UI.Contracts;
+﻿using DiscModels.Engine.UI.Contracts;
 using System.Runtime.Serialization;
 
 namespace DiscModels.Engine.UI
@@ -19,8 +18,8 @@ namespace DiscModels.Engine.UI
 		[DataMember(Name = "justificationType", Order = 4)]
 		public int JustificationType { get; set; }
 
-		[DataMember(Name = "background", Order = 5)]
-		public SpriteModel Background { get; set; }
+		[DataMember(Name = "backgroundTextureName", Order = 5)]
+		public string BackgroundTextureName { get; set; }
 
 		[DataMember(Name = "subElements", Order = 6)]
 		public IAmAUiElementModel[] SubElements { get; set; }

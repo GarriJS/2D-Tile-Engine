@@ -35,7 +35,7 @@ namespace Engine.UI.Models.Elements
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Rectangle Area { get; set; }
+		public Vector2 Area { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sprite.

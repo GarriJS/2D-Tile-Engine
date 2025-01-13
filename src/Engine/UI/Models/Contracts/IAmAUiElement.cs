@@ -1,4 +1,5 @@
-﻿using Engine.UI.Models.Enums;
+﻿using Engine.Drawing.Models;
+using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -32,6 +33,11 @@ namespace Engine.UI.Models.Contracts
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Rectangle Area { get; set; }
+		public Vector2 Area { get; set; }
+
+		/// <summary>
+		/// Gets ors sets the sprite.
+		/// </summary>
+		public Sprite Sprite { get; set; }
 	}
 }

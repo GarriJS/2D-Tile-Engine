@@ -45,29 +45,29 @@ namespace Engine.Signals.Mangers
 		/// <summary>
 		/// Adds the subscription.
 		/// </summary>
-		/// <param name="signalType">The signal type.</param>
+		/// <param name="signalName">The signal name.</param>
 		/// <param name="subscription">The subscription.</param>
-		public void SubscribeToSignalType(string signalType, SignalSubscription subscription)
+		public void SubscribeToSignalType(string signalName, SignalSubscription subscription)
 		{
-			if (true == this.SignalSubscriptions.TryGetValue(signalType, out var subscriptionList))
+			if (true == this.SignalSubscriptions.TryGetValue(signalName, out var subscriptionList))
 			{
 				subscriptionList.Add(subscription);
 			}
 			else
 			{
 				subscriptionList = [subscription];
-				this.SignalSubscriptions.Add(signalType, subscriptionList);
+				this.SignalSubscriptions.Add(signalName, subscriptionList);
 			}
 		}
 
 		/// <summary>
 		/// Removes the subscription.
 		/// </summary>
-		/// <param name="signalType">The signal type.</param>
+		/// <param name="signalName">The signal name.</param>
 		/// <param name="subscription">The subscription.</param>
-		public void UnsubscribeToSignalType(string signalType, SignalSubscription subscription)
+		public void UnsubscribeToSignalType(string signalName, SignalSubscription subscription)
 		{
-			if (true == this.SignalSubscriptions.TryGetValue(signalType, out var subscriptionList))
+			if (true == this.SignalSubscriptions.TryGetValue(signalName, out var subscriptionList))
 			{
 				subscriptionList.Remove(subscription);
 			}
@@ -76,12 +76,12 @@ namespace Engine.Signals.Mangers
 		/// <summary>
 		/// Changes the subscription.
 		/// </summary>
-		/// <param name="signalType">The signal type.</param>
+		/// <param name="signalName">The signal name.</param>
 		/// <param name="subscription">The subscription.</param>
-		public void ChangeSubscription(string signalType, SignalSubscription subscription)
+		public void ChangeSubscription(string signalName, SignalSubscription subscription)
 		{
-			this.UnsubscribeToSignalType(signalType, subscription);
-			this.SubscribeToSignalType(signalType, subscription);
+			this.UnsubscribeToSignalType(signalName, subscription);
+			this.SubscribeToSignalType(signalName, subscription);
 		}
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace Engine.Signals.Mangers
 		{
 			while (true == this.Signals.TryDequeue(out var signal))
 			{
-				if (false == this.SignalSubscriptions.TryGetValue(signal.SignalType, out var subscriptionList))
+				if (false == this.SignalSubscriptions.TryGetValue(signal.SignalName, out var subscriptionList))
 				{
 					continue;
 				}

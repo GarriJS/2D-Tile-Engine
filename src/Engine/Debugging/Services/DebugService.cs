@@ -27,7 +27,7 @@ namespace Engine.Debugging.Services
 		/// <summary>
 		/// Gets or sets the screen area indicator images.
 		/// </summary>
-		private List<Image> ScreenAreaIndicatorImages { get; set; } = []; 
+		private List<IndependentImage> ScreenAreaIndicatorImages { get; set; } = []; 
 
 		/// <summary>
 		/// Toggles the screen area indicators.
@@ -53,46 +53,30 @@ namespace Engine.Debugging.Services
 				var widthTexture = this.GetLineTexture(false, screenWidth, Color.MonoGameOrange);
 				var heightTexture = this.GetLineTexture(false, screenHeight, Color.MonoGameOrange);
 
-				var widthSprite = new Sprite
-				{
-					TextureName = "screen width line",
-					SpritesheetName = "Generated",
-					SpritesheetCoordinate = new Point(0, 0),
-					TextureBox = new Rectangle(0, 0, screenWidth, 1),
-					SpritesheetBox = new Rectangle(0, 0, screenWidth, 1),
-					Texture = widthTexture
-				};
-
-				var heightSprite = new Sprite
-				{
-					TextureName = "screen height line",
-					SpritesheetName = "Generated",
-					SpritesheetCoordinate = new Point(0, 0),
-					TextureBox = new Rectangle(0, 0, 1, screenHeight),
-					SpritesheetBox = new Rectangle(0, 0, 1, screenHeight),
-					Texture = heightTexture
-				};
-
 				for (int i = screenHeight / 3; i < screenHeight; i += screenHeight / 3)
 				{
-					var widthImage = new Image
+					var widthImage = new IndependentImage
 					{
+						TextureName = "screen width line",
+						TextureBox = new Rectangle(0, 0, screenWidth, 1),
+						Texture = widthTexture,
 						Position = new Position
 						{
 							Coordinates = new Vector2(0, i)
 						},
 						DrawLayer = 0,
-						Sprite = widthSprite,
 					}; 
 					
-					var nextWidthImage = new Image
+					var nextWidthImage = new IndependentImage
 					{
+						TextureName = "screen width line",
+						TextureBox = new Rectangle(0, 0, screenWidth, 1),
+						Texture = widthTexture,
 						Position = new Position
 						{
 							Coordinates = new Vector2(0, i + 1)
 						},
 						DrawLayer = 0,
-						Sprite = widthSprite,
 					};
 
 					runtimeDrawingService.AddDrawable(widthImage.DrawLayer, widthImage);
@@ -103,24 +87,28 @@ namespace Engine.Debugging.Services
 
 				for (int i = screenWidth / 4; i < screenWidth; i += screenWidth / 4)
 				{
-					var heightImage = new Image
+					var heightImage = new IndependentImage
 					{
+						TextureName = "screen height line",
+						TextureBox = new Rectangle(0, 0, 1, screenHeight),
+						Texture = heightTexture,
 						Position = new Position
 						{
 							Coordinates = new Vector2(i, 0)
 						},
 						DrawLayer = 0,
-						Sprite = heightSprite,
 					};
 
-					var nextHeightImage = new Image
+					var nextHeightImage = new IndependentImage
 					{
+						TextureName = "screen height line",
+						TextureBox = new Rectangle(0, 0, 1, screenHeight),
+						Texture = heightTexture,
 						Position = new Position
 						{
 							Coordinates = new Vector2(i + 1, 0)
 						},
 						DrawLayer = 0,
-						Sprite = heightSprite,
 					};
 
 					runtimeDrawingService.AddDrawable(heightImage.DrawLayer, heightImage);

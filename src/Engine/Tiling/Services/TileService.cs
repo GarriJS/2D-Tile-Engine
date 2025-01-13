@@ -118,7 +118,7 @@ namespace Engine.Tiling.Services
 			{
 				Row = tileModel.Row,
 				Column = tileModel.Column,
-				Sprite = sprite,
+				Image = sprite,
 				Area = area,
 			};
 

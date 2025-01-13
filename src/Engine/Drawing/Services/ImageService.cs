@@ -1,7 +1,8 @@
 ﻿using DiscModels.Engine.Drawing;
+using Engine.Core.Constants;
+using Engine.Core.Textures.Contracts;
 using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;
-using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Drawing.Services
@@ -20,19 +21,29 @@ namespace Engine.Drawing.Services
 		/// <summary>
 		/// Gets the image.
 		/// </summary>
-		/// <param name="imageModel"></param>
-		/// <returns></returns>
-		public Image GetImage(ImageModel imageModel)
+		/// <param name="imageModel">The image model.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <returns>The image.</returns>
+		public Image GetImage(ImageModel imageModel, int width, int height)
 		{
-			var spriteService = this._gameServices.GetService<ISpriteService>();
-			var positionService = this._gameServices.GetService<IPositionService>();
-			var sprite = spriteService.GetSprite(imageModel.Sprite);
-			var position = positionService.GetPosition(imageModel.Position);
+			var textureService = this._gameServices.GetService<ITextureService>();
+
+			if (false == textureService.TryGetTexture(imageModel.TextureName, out var texture))
+			{
+				texture = textureService.DebugTexture;
+			}
+
+			var textureBox = new Rectangle(TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+										   TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+										   width,
+										   height);
 
 			return new Image
 			{
-				Position = position,
-				Sprite = sprite
+				TextureName = imageModel.TextureName,
+				TextureBox = textureBox,
+				Texture = texture
 			};
 		}
 	}

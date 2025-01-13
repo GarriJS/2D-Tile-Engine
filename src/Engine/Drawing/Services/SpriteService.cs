@@ -26,7 +26,7 @@ namespace Engine.Drawing.Services
 		public Sprite GetSprite(SpriteModel spriteModel)
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
-			var textureName = textureService.GetTextureName(spriteModel.SpritesheetName, spriteModel.SpritesheetBox);
+			var textureName = textureService.GetTextureName(spriteModel.TextureName, spriteModel.SpritesheetBox);
 
 			if (false == textureService.TryGetTexture(textureName, out var texture))
 			{
@@ -41,7 +41,6 @@ namespace Engine.Drawing.Services
 			return new Sprite
 			{
 				TextureName = textureName,
-				SpritesheetName = spriteModel.SpritesheetName,
 				SpritesheetCoordinate = spriteModel.SpritesheetBox.Location,
 				TextureBox = textureBox,
 				SpritesheetBox = spriteModel.SpritesheetBox,

@@ -35,12 +35,12 @@ namespace Engine.Drawing.Models
 		/// <summary>
 		/// Gets or sets the current frame.
 		/// </summary>
-		public Sprite CurrentFrame { get => Frames[this.CurrentFrameIndex]; }
+		public Image CurrentFrame { get => Frames[this.CurrentFrameIndex]; }
 
 		/// <summary>
 		/// Gets or sets the frames.
 		/// </summary>
-		public Sprite[] Frames { get; set; }
+		public Image[] Frames { get; set; }
 
 		/// <summary>
 		/// Disposes of the draw data texture.

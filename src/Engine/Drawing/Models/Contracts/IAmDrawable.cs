@@ -14,8 +14,8 @@ namespace Engine.Drawing.Models.Contracts
 		public int DrawLayer { get; }
 
 		/// <summary>
-		/// Gets the sprite.
+		/// Gets the image.
 		/// </summary>
-		public Sprite Sprite { get; }
+		public Image Image { get; }
 	}
 }

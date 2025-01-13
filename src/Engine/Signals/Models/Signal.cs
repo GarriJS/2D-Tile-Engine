@@ -8,9 +8,9 @@ namespace Engine.Signals.Models
 	public class Signal
 	{
 		/// <summary>
-		/// Gets or sets the signal type.
+		/// Gets or sets the signal name.
 		/// </summaryr>
-		public string SignalType { get; set; }
+		public string SignalName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the actor.

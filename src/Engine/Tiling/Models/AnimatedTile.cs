@@ -29,7 +29,7 @@ namespace Engine.Tiling.Models
 		/// <summary>
 		/// Get the sprite.
 		/// </summary>
-		public Sprite Sprite { get => Animation.CurrentFrame; }
+		public Image Image { get => Animation.CurrentFrame; }
 
 		/// <summary>
 		/// Gets or sets the animation.

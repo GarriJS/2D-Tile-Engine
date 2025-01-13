@@ -31,7 +31,9 @@ namespace Engine.UI.Services.Contracts
 		/// Gets the user interface row.
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
+		/// <param name="uiZone">The user interface zone.</param>
+		/// <param name="height">The height.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel);
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiZone uiZone, float height);
 	}
 }

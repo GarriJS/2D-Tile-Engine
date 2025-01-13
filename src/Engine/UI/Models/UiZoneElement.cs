@@ -31,12 +31,12 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets or sets the background.
 		/// </summary>
-		public Sprite Background { get; set; }
+		public Image Background { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sprite.
+		/// Gets or sets the image.
 		/// </summary>
-		public Sprite Sprite { get; set; }
+		public Image Image { get; set; }
 
 		/// <summary>
 		/// Gets the position.
