@@ -72,7 +72,7 @@ namespace Engine.Drawing.Services
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="uiZoneElement">The user interface zone element.</param>
-		public void Draw(GameTime gameTime, UiZoneElement uiZoneElement)
+		public void Draw(GameTime gameTime, UiZone uiZoneElement)
 		{
 			if (null != uiZoneElement.Image)
 			{
@@ -87,10 +87,10 @@ namespace Engine.Drawing.Services
 			var height = uiZoneElement.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
 			var rowVerticalOffset = uiZoneElement.JustificationType switch
 			{
-				UiZoneElementJustificationTypes.None => 0,
-				UiZoneElementJustificationTypes.Center => (uiZoneElement.Area.Height - height) / 2,
-				UiZoneElementJustificationTypes.Top => 0,
-				UiZoneElementJustificationTypes.Bottom => height,
+				UiZoneJustificationTypes.None => 0,
+				UiZoneJustificationTypes.Center => (uiZoneElement.Area.Height - height) / 2,
+				UiZoneJustificationTypes.Top => 0,
+				UiZoneJustificationTypes.Bottom => height,
 				_ => 0,
 			};
 
@@ -98,14 +98,14 @@ namespace Engine.Drawing.Services
 			{
 				switch (uiZoneElement.JustificationType)
 				{
-					case UiZoneElementJustificationTypes.Bottom:
+					case UiZoneJustificationTypes.Bottom:
 						rowVerticalOffset -= elementRow.BottomPadding;
 						this.Draw(gameTime, elementRow, uiZoneElement.Position, rowVerticalOffset);
 						rowVerticalOffset -= (elementRow.TopPadding + elementRow.Height);
 						break;
-					case UiZoneElementJustificationTypes.Center:
-					case UiZoneElementJustificationTypes.None:
-					case UiZoneElementJustificationTypes.Top:
+					case UiZoneJustificationTypes.Center:
+					case UiZoneJustificationTypes.None:
+					case UiZoneJustificationTypes.Top:
 					default:
 						rowVerticalOffset += elementRow.TopPadding;
 						this.Draw(gameTime, elementRow, uiZoneElement.Position, rowVerticalOffset);
@@ -126,7 +126,7 @@ namespace Engine.Drawing.Services
 		{
 			if (null != uiRow.Image)
 			{
-				this.SpriteBatch.Draw(uiRow.Image.Texture, position.Coordinates + new Vector2(0, heightOffset), uiRow.Image.TextureBox, Color.White);
+				this.SpriteBatch.Draw(uiRow.Image.Texture, position.Coordinates + new Vector2(0, heightOffset - uiRow.TopPadding), uiRow.Image.TextureBox, Color.White);
 			}
 
 			if (true != uiRow?.SubElements.Any())

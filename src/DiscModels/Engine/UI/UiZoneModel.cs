@@ -3,11 +3,11 @@ using System.Runtime.Serialization;
 
 namespace DiscModels.Engine.UI
 {
-	[DataContract(Name = "uiZoneElement")]
-	public class UiZoneElementModel
+	[DataContract(Name = "uiZone")]
+	public class UiZoneModel
 	{
-		[DataMember(Name = "uiZoneElementName", Order = 1)]
-		public string UiZoneElementName { get; set; }
+		[DataMember(Name = "uiZoneName", Order = 1)]
+		public string UiZoneName { get; set; }
 
 		[DataMember(Name = "justificationType", Order = 2)]
 		public int JustificationType { get; set; }

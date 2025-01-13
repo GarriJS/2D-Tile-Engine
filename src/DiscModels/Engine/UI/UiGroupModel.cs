@@ -12,6 +12,6 @@ namespace DiscModels.Engine.UI
 		public int? VisibilityGroupId { get; set; }
 
 		[DataMember(Name = "uiZoneElements", Order = 3)]
-		public IList<UiZoneElementModel> UiZoneElements { get; set; }
+		public IList<UiZoneModel> UiZoneElements { get; set; }
 	}
 }

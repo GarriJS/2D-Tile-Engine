@@ -34,6 +34,6 @@ namespace Engine.Drawing.Services.Contracts
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="uiZoneElement">The user interface zone element.</param>
-		public void Draw(GameTime gameTime, UiZoneElement uiZoneElement);
+		public void Draw(GameTime gameTime, UiZone uiZoneElement);
 	}
 }

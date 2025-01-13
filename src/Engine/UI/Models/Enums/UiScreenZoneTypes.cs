@@ -1,9 +1,9 @@
 ﻿namespace Engine.UI.Models.Enums
 {
 	/// <summary>
-	/// Represents user interface zone types.
+	/// Represents user screen interface zone types.
 	/// </summary>
-	public enum UiZoneTypes
+	public enum UiScreenZoneTypes
 	{
 		/// <summary>
 		/// The none type.

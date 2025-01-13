@@ -144,7 +144,7 @@ namespace Engine.RunTime.Managers
 				{
 					switch (drawable)
 					{
-						case UiZoneElement uiZone:
+						case UiZone uiZone:
 							drawingService.Draw(gameTime, uiZone);
 							break;
 						default:

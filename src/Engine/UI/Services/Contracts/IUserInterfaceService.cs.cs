@@ -38,7 +38,7 @@ namespace Engine.UI.Services.Contracts
 		/// </summary>
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
 		/// <returns>The user interface zone element.</returns>
-		public UiZoneElement GetUiZoneElement(UiZoneElementModel uiZoneElementModel);
+		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel);
 
 		/// <summary>
 		/// Gets the user interface row.
@@ -47,6 +47,6 @@ namespace Engine.UI.Services.Contracts
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="height">The height.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiZone uiZone, float height);
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float height);
 	}
 }

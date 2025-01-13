@@ -22,7 +22,7 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets or sets the user interface elements.
 		/// </summary>
-		public IList<UiZoneElement> UiZoneElements { get; set; }
+		public IList<UiZone> UiZoneElements { get; set; }
 
 		/// <summary>
 		/// Gets the active signal subscriptions.

@@ -99,7 +99,7 @@ namespace Engine.Core.Initialization
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
 				(typeof(IDebugService), new DebugService(game.Services)),
-				(typeof(IUserInterfaceZoneService), new UserInterfaceZoneService(game.Services)),
+				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),
 				(typeof(IUserInterfaceElementService), new UserInterfaceElementService(game.Services)),
 				(typeof(IUserInterfaceService), new UserInterfaceService(game.Services)),
 				(typeof(ITextureService), new TextureService(game.Services)),

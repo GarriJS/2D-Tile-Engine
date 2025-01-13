@@ -77,7 +77,7 @@ namespace Engine.UI.Services
 		/// <returns>The user interface group.</returns>
 		public UiGroup GetUiGroup(UiGroupModel uiGroupModel)
 		{
-			var uiZoneElements = new List<UiZoneElement>();
+			var uiZoneElements = new List<UiZone>();
 
 			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
 			{ 
@@ -103,14 +103,14 @@ namespace Engine.UI.Services
 		/// </summary>
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
 		/// <returns>The user interface zone element.</returns>
-		public UiZoneElement GetUiZoneElement(UiZoneElementModel uiZoneElementModel)
+		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel)
 		{
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var elementRows = new List<UiRow>();
 
-			if (false == uiZoneService.UserInterfaceZones.TryGetValue((UiZoneTypes)uiZoneElementModel.UiZoneType, out UiZone uiZone))
+			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneElementModel.UiZoneType, out UiScreenZone uiZone))
 			{
-				uiZone = uiZoneService.UserInterfaceZones[UiZoneTypes.None];
+				uiZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneTypes.None];
 			}
 
 			var imageService = this._gameServices.GetService<IImageService>();
@@ -132,13 +132,13 @@ namespace Engine.UI.Services
 				}
 			}
 
-			return new UiZoneElement
+			return new UiZone
 			{
-				UiZoneElementName = uiZoneElementModel.UiZoneElementName,
+				UiZoneName = uiZoneElementModel.UiZoneName,
 				DrawLayer = 1,
-				JustificationType = (UiZoneElementJustificationTypes)uiZoneElementModel.JustificationType,
+				JustificationType = (UiZoneJustificationTypes)uiZoneElementModel.JustificationType,
 				Image = background,
-				UserInterfaceZone = uiZone,
+				UserInterfaceScreenZone = uiZone,
 				ElementRows = elementRows
 			};
 		}
@@ -149,7 +149,7 @@ namespace Engine.UI.Services
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiZone uiZone, float height)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float height)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
@@ -171,7 +171,7 @@ namespace Engine.UI.Services
 				}
 			}
 
-			var image = imageService.GetImage(uiRowModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)height);
+			var image = imageService.GetImage(uiRowModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)height + uiRowModel.TopPadding + uiRowModel.BottomPadding);
 
 			return new UiRow
 			{

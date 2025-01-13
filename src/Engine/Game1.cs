@@ -1,15 +1,14 @@
-﻿using DiscModels.Engine.UI;
+﻿using DiscModels.Engine.Drawing;
+using DiscModels.Engine.UI;
 using DiscModels.Engine.UI.Elements;
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.Debugging.Services.Contracts;
-using Engine.UI.Models.Elements;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace Engine
 {
@@ -62,28 +61,31 @@ namespace Engine
 				VisibilityGroupId = 1,
 				UiZoneElements =
 				[
-					new UiZoneElementModel
+					new UiZoneModel
 					{
-						UiZoneElementName = "foo1",
+						UiZoneName = "foo1",
 						JustificationType = 1,
-						Background = null,
+						Background = new ImageModel
+						{
+							TextureName = "dark_grass_simplified"
+						},
 						UiZoneType = 1,
 						ElementRows =
 						[
 							new UiRowModel
 							{
 								UiRowName = "foo1row1",
-								TopPadding = 10,
-								BottomPadding = 10,
+								TopPadding = 30,
+								BottomPadding = 30,
 								JustificationType = 1,
-								BackgroundTextureName = null,
+								BackgroundTextureName = "tile_grid",
 								SubElements =
-								[
+								[   
 									new UiButtonModel
 									{
 										UiElementName = "foo1button1",
-										LeftPadding = 10,
-										RightPadding = 10,
+										LeftPadding = 30,
+										RightPadding = 5,
 										BackgroundTextureName = "black",
 										ButtonText = "Push Me",
 										Signal = null
@@ -91,7 +93,16 @@ namespace Engine
 									new UiButtonModel
 									{
 										UiElementName = "foo1button2",
-										LeftPadding = 10,
+										LeftPadding = 5,
+										RightPadding = 5,
+										BackgroundTextureName = "gray",
+										ButtonText = "Push Me",
+										Signal = null
+									},
+									new UiButtonModel
+									{
+										UiElementName = "foo1button3",
+										LeftPadding = 5,
 										RightPadding = 30,
 										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
@@ -103,7 +114,7 @@ namespace Engine
 							{
 								UiRowName = "foo1row2",
 								TopPadding = 30,
-								BottomPadding = 10,
+								BottomPadding = 30,
 								JustificationType = 1,
 								BackgroundTextureName = null,
 								SubElements =
