@@ -84,6 +84,44 @@ namespace Engine
 										UiElementName = "foo1button1",
 										LeftPadding = 10,
 										RightPadding = 10,
+										BackgroundTextureName = "black",
+										ButtonText = "Push Me",
+										Signal = null
+									},
+									new UiButtonModel
+									{
+										UiElementName = "foo1button2",
+										LeftPadding = 10,
+										RightPadding = 30,
+										BackgroundTextureName = "white",
+										ButtonText = "Push Me",
+										Signal = null
+									}
+								]
+							},
+							new UiRowModel
+							{
+								UiRowName = "foo1row2",
+								TopPadding = 30,
+								BottomPadding = 10,
+								JustificationType = 1,
+								BackgroundTextureName = null,
+								SubElements =
+								[
+									new UiButtonModel
+									{
+										UiElementName = "foo1button1",
+										LeftPadding = 10,
+										RightPadding = 10,
+										BackgroundTextureName = "black",
+										ButtonText = "Push Me",
+										Signal = null
+									},
+									new UiButtonModel
+									{
+										UiElementName = "foo1button2",
+										LeftPadding = 10,
+										RightPadding = 10,
 										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										Signal = null

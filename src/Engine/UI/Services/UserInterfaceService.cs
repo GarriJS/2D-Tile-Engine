@@ -154,16 +154,11 @@ namespace Engine.UI.Services
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var subElements = new List<IAmAUiElement>();
-			var width = uiZone.Area.Width;
 
 			if (true == uiRowModel.SubElements?.Any())
 			{
-				foreach (var elementRowModel in uiRowModel.SubElements)
-				{
-					width -= (elementRowModel.RightPadding + elementRowModel.LeftPadding);
-				}
-
-				var elementWidth = width / uiRowModel.SubElements.Length;
+				var totalPadding = uiRowModel.SubElements.Sum(e => e.RightPadding + e.LeftPadding);
+				var elementWidth = (uiZone.Area.Width - totalPadding) / uiRowModel.SubElements.Length;
 
 				foreach (var elementRowModel in uiRowModel.SubElements)
 				{
@@ -181,7 +176,7 @@ namespace Engine.UI.Services
 			return new UiRow
 			{
 				UiRowName = uiRowModel.UiRowName,
-				Width = width,
+				Width = uiZone.Area.Width,
 				Height = height,
 				TopPadding = uiRowModel.TopPadding,
 				BottomPadding = uiRowModel.BottomPadding,

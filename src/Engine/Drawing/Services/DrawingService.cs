@@ -88,7 +88,7 @@ namespace Engine.Drawing.Services
 			var rowVerticalOffset = uiZoneElement.JustificationType switch
 			{
 				UiZoneElementJustificationTypes.None => 0,
-				UiZoneElementJustificationTypes.Center => height / 2,
+				UiZoneElementJustificationTypes.Center => (uiZoneElement.Area.Height - height) / 2,
 				UiZoneElementJustificationTypes.Top => 0,
 				UiZoneElementJustificationTypes.Bottom => height,
 				_ => 0,
@@ -138,7 +138,7 @@ namespace Engine.Drawing.Services
 			var elementHorizontalOffset = uiRow.JustificationType switch
 			{
 				UiRowJustificationTypes.None => 0,
-				UiRowJustificationTypes.Center => width / 2,
+				UiRowJustificationTypes.Center => (uiRow.Width - width) / 2,
 				UiRowJustificationTypes.Left => 0,
 				UiRowJustificationTypes.Right => width,
 				_ => 0,
