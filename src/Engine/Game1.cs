@@ -1,10 +1,15 @@
-﻿using Engine.Controls.Services.Contracts;
+﻿using DiscModels.Engine.UI;
+using DiscModels.Engine.UI.Elements;
+using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.Debugging.Services.Contracts;
+using Engine.UI.Models.Elements;
+using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Engine
 {
@@ -50,6 +55,50 @@ namespace Engine
 
 			var debugService = this.Services.GetService<IDebugService>();
 			debugService.ToggleScreenAreaIndicators();
+
+			var foo = new UiGroupModel
+			{
+				UiGroupName = "foo",
+				VisibilityGroupId = 1,
+				UiZoneElements =
+				[
+					new UiZoneElementModel
+					{
+						UiZoneElementName = "foo1",
+						JustificationType = 1,
+						Background = null,
+						UiZoneType = 1,
+						ElementRows =
+						[
+							new UiRowModel
+							{
+								UiRowName = "foo1row1",
+								TopPadding = 10,
+								BottomPadding = 10,
+								JustificationType = 1,
+								BackgroundTextureName = null,
+								SubElements =
+								[
+									new UiButtonModel
+									{
+										UiElementName = "foo1button1",
+										LeftPadding = 10,
+										RightPadding = 10,
+										BackgroundTextureName = "white",
+										ButtonText = "Push Me",
+										Signal = null
+									}
+								]
+							}
+						]
+					}
+				]
+			};
+
+			var uiService = this.Services.GetService<IUserInterfaceService>();
+			var group = uiService.GetUiGroup(foo);
+			uiService.UserInterfaceGroups.Add(group);
+			uiService.ToggleUserInterfaceGroupVisibility(group);
 		}
 
 		protected override void Update(GameTime gameTime)

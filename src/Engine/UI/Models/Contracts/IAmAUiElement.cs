@@ -36,8 +36,8 @@ namespace Engine.UI.Models.Contracts
 		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Gets ors sets the sprite.
+		/// Gets ors sets the image.
 		/// </summary>
-		public Sprite Sprite { get; set; }
+		public Image Image { get; set; }
 	}
 }

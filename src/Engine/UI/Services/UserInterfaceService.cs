@@ -1,6 +1,5 @@
 ﻿using DiscModels.Engine.UI;
 using Engine.Drawing.Services.Contracts;
-using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
@@ -28,7 +27,7 @@ namespace Engine.UI.Services
 		/// <summary>
 		/// Gets or sets the user interface groups.
 		/// </summary>
-		private List<UiGroup> UserInterfaceGroups { get; set; } = [];
+		public List<UiGroup> UserInterfaceGroups { get; set; } = [];
 
 		/// <summary>
 		/// Toggles the user interface group visibility.
@@ -46,7 +45,7 @@ namespace Engine.UI.Services
 		/// <param name="uiGroup">The user interface group.</param>
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup)
 		{
-			if (null != uiGroup)
+			if (null == uiGroup)
 			{
 				return;
 			}
@@ -72,15 +71,41 @@ namespace Engine.UI.Services
 		}
 
 		/// <summary>
+		/// Gets the user interface group.
+		/// </summary>
+		/// <param name="uiGroupModel">The user interface group model.</param>
+		/// <returns>The user interface group.</returns>
+		public UiGroup GetUiGroup(UiGroupModel uiGroupModel)
+		{
+			var uiZoneElements = new List<UiZoneElement>();
+
+			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
+			{ 
+				var uiZoneElement = this.GetUiZoneElement(uiZoneElementModel);
+
+				if (null != uiZoneElement)
+				{ 
+					uiZoneElements.Add(uiZoneElement);
+				}
+			}
+
+			return new UiGroup
+			{ 
+				UiGroupName = uiGroupModel.UiGroupName,
+				VisibilityGroupId = uiGroupModel.VisibilityGroupId,
+				UiZoneElements = uiZoneElements,
+				ActiveSignalSubscriptions = []
+			};
+		}
+
+		/// <summary>
 		/// Gets the user interface zone element.
 		/// </summary>
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
 		/// <returns>The user interface zone element.</returns>
 		public UiZoneElement GetUiZoneElement(UiZoneElementModel uiZoneElementModel)
 		{
-			var spriteService = this._gameServices.GetService<ISpriteService>();
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
-			var background = spriteService.GetSprite(uiZoneElementModel.Background);
 			var elementRows = new List<UiRow>();
 
 			if (false == uiZoneService.UserInterfaceZones.TryGetValue((UiZoneTypes)uiZoneElementModel.UiZoneType, out UiZone uiZone))
@@ -88,25 +113,21 @@ namespace Engine.UI.Services
 				uiZone = uiZoneService.UserInterfaceZones[UiZoneTypes.None];
 			}
 
-			var height = uiZone.Area.Height;
-			var width = 0f;
+			var imageService = this._gameServices.GetService<IImageService>();
+			var background = imageService.GetImage(uiZoneElementModel.Background, (int)uiZone.Area.Width, (int)uiZone.Area.Height);
 
 			if (true == uiZoneElementModel.ElementRows?.Any())
 			{
-				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
-				{
-					height -= elementRowModel.TopPadding + elementRowModel.BottomPadding;
-				}
+				var totalRowPadding = uiZoneElementModel.ElementRows.Sum(e => e.TopPadding + e.BottomPadding);
+				var rowHeight = (uiZone.Area.Height - totalRowPadding) / uiZoneElementModel.ElementRows.Length;
 
 				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
 				{
-					var elementRow = this.GetUiRow(elementRowModel, uiZone, height);
-					elementRows.Add(elementRow);
-					height += elementRow.Height + elementRow.TopPadding + elementRow.BottomPadding;
+					var elementRow = this.GetUiRow(elementRowModel, uiZone, rowHeight);
 
-					if (elementRow.Width > width)
+					if (null != elementRow)
 					{
-						width = elementRow.Width;
+						elementRows.Add(elementRow);
 					}
 				}
 			}
@@ -116,15 +137,9 @@ namespace Engine.UI.Services
 				UiZoneElementName = uiZoneElementModel.UiZoneElementName,
 				DrawLayer = 1,
 				JustificationType = (UiZoneElementJustificationTypes)uiZoneElementModel.JustificationType,
-				Background = background,
+				Image = background,
 				UserInterfaceZone = uiZone,
-				ElementRows = elementRows,
-				Area = new SimpleArea
-				{
-					Position = uiZone.Position,
-					Width = width,
-					Height = height
-				}
+				ElementRows = elementRows
 			};
 		}
 
@@ -137,8 +152,9 @@ namespace Engine.UI.Services
 		public UiRow GetUiRow(UiRowModel uiRowModel, UiZone uiZone, float height)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
+			var imageService = this._gameServices.GetService<IImageService>();
 			var subElements = new List<IAmAUiElement>();
-			float width = uiZone.Area.Width;
+			var width = uiZone.Area.Width;
 
 			if (true == uiRowModel.SubElements?.Any())
 			{
@@ -152,8 +168,15 @@ namespace Engine.UI.Services
 				foreach (var elementRowModel in uiRowModel.SubElements)
 				{
 					var uiElement = uiElementService.GetUiElement(elementRowModel, elementWidth, height);
+
+					if (uiElement != null)
+					{
+						subElements.Add(uiElement);
+					}
 				}
 			}
+
+			var image = imageService.GetImage(uiRowModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)height);
 
 			return new UiRow
 			{
@@ -163,6 +186,7 @@ namespace Engine.UI.Services
 				TopPadding = uiRowModel.TopPadding,
 				BottomPadding = uiRowModel.BottomPadding,
 				JustificationType = (UiRowJustificationTypes)uiRowModel.JustificationType,
+				Image = image,
 				SubElements = subElements
 			};
 		}

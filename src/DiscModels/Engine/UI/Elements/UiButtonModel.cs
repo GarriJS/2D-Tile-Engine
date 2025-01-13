@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
 namespace DiscModels.Engine.UI.Elements
 {
-	[DataContract(Name = "uiButtonModel")]
+	[DataContract(Name = "uiButton")]
 	public class UiButtonModel : IAmAUiElementModel
 	{
 		[DataMember(Name = "uiElementName", Order = 1)]

@@ -16,5 +16,14 @@ namespace Engine.Drawing.Services.Contracts
 		/// <param name="height">The height.</param>
 		/// <returns>The image.</returns>
 		public Image GetImage(ImageModel imageModel, int width, int height);
+
+		/// <summary>
+		/// Gets the image.
+		/// </summary>
+		/// <param name="textureName">The texture name.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <returns>The image.</returns>
+		public Image GetImage(string textureName, int width, int height);
 	}
 }

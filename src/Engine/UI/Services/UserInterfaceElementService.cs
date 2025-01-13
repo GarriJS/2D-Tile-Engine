@@ -1,7 +1,5 @@
 ﻿using DiscModels.Engine.UI.Contracts;
 using DiscModels.Engine.UI.Elements;
-using Engine.Core.Textures.Contracts;
-using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
@@ -37,6 +35,9 @@ namespace Engine.UI.Services
 		/// <returns>The user interface element.</returns>
 		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, float width, float height)
 		{
+			var imageService = this._gameServices.GetService<IImageService>();
+			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
+
 			var uiElement = uiElementModel switch
 			{
 				UiButtonModel buttonModel => GetUiButton(buttonModel),
@@ -46,30 +47,11 @@ namespace Engine.UI.Services
 			if (null != uiElement)
 			{
 				uiElement.Area = new Vector2(width, height);
+				uiElement.Image = image;
 				this.UserInterfaceElements.Add(uiElement);
 			}
 
 			return uiElement;
-		}
-
-
-		private Sprite GetUiElementSprite(IAmAUiElementModel uiElementModel)
-		{
-			return null;
-			
-			var textureService = this._gameServices.GetService<ITextureService>();
-			var imageService = this._gameServices.GetService<ISpriteService>();
-			var sprite = new Sprite
-			{
-				
-			};
-
-
-			if (true == textureService.TryGetTexture(uiElementModel.BackgroundTextureName, out var texture))
-			{ 
-			
-			}
-		
 		}
 
 		/// <summary>
@@ -84,7 +66,7 @@ namespace Engine.UI.Services
 				UiElementName = buttonModel.UiElementName,
 				LeftPadding = buttonModel.LeftPadding,
 				RightPadding = buttonModel.RightPadding,
-				ElementType = UiElementTypes.Button,
+				ElementType = UiElementTypes.Button
 				//Signal = ?? TODO
 			};
 		}

@@ -10,6 +10,11 @@ namespace Engine.UI.Models
 	public class UiGroup : IReceiveSignals
 	{
 		/// <summary>
+		/// Gets or sets the user interface group name.
+		/// </summary>
+		public string UiGroupName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the visibility group id.
 		/// </summary>
 		public int? VisibilityGroupId { get; set; }

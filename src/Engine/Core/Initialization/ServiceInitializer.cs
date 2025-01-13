@@ -107,6 +107,7 @@ namespace Engine.Core.Initialization
 				(typeof(IFontService), new FontService(game.Services)),
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IUpdateService), new UpdateService(game.Services)),
+				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(ISpriteService), new SpriteService(game.Services)),
 				(typeof(IAnimationService), new AnimationService(game.Services)),
 				(typeof(IIndependentImageService), new IndependentImageService(game.Services)),

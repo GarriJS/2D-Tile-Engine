@@ -1,5 +1,6 @@
 ﻿using DiscModels.Engine.UI;
 using Engine.UI.Models;
+using System.Collections.Generic;
 
 namespace Engine.UI.Services.Contracts
 {
@@ -8,6 +9,11 @@ namespace Engine.UI.Services.Contracts
 	/// </summary>
 	public interface IUserInterfaceService
 	{
+		/// <summary>
+		/// Gets or sets the user interface groups.
+		/// </summary>
+		public List<UiGroup> UserInterfaceGroups { get; set; }
+
 		/// <summary>
 		/// Toggles the user interface group visibility.
 		/// </summary>
@@ -19,6 +25,13 @@ namespace Engine.UI.Services.Contracts
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
+
+		/// <summary>
+		/// Gets the user interface group.
+		/// </summary>
+		/// <param name="uiGroupModel">The user interface group model.</param>
+		/// <returns>The user interface group.</returns>
+		public UiGroup GetUiGroup(UiGroupModel uiGroupModel);
 
 		/// <summary>
 		/// Gets the user interface zone element.

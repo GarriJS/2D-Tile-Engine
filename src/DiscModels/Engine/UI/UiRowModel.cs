@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace DiscModels.Engine.UI
 {
-	[DataContract(Name = "uiRowModel")]
+	[DataContract(Name = "uiRow")]
 	public class UiRowModel
 	{
 		[DataMember(Name = "uiRowName", Order = 1)]

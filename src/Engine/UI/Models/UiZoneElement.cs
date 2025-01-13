@@ -29,11 +29,6 @@ namespace Engine.UI.Models
 		public UiZoneElementJustificationTypes JustificationType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the background.
-		/// </summary>
-		public Image Background { get; set; }
-
-		/// <summary>
 		/// Gets or sets the image.
 		/// </summary>
 		public Image Image { get; set; }
@@ -46,7 +41,7 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public IAmAArea Area { get; set; }
+		public IAmAArea Area { get => this.UserInterfaceZone?.Area; }
 
 		/// <summary>
 		/// Gets or sets the user interface zone.
@@ -63,7 +58,7 @@ namespace Engine.UI.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.Background.Dispose();
+			this.Image.Dispose();
 
 			foreach (var elementRow in this.ElementRows)
 			{ 

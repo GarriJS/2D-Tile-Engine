@@ -1,5 +1,5 @@
-﻿using Engine.Drawing.Models;
-using Engine.Drawing.Models.Contracts;
+﻿using Engine.Drawing.Models.Contracts;
+using Engine.UI.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -28,5 +28,12 @@ namespace Engine.Drawing.Services.Contracts
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
 		public void Draw(GameTime gameTime, IAmDrawable drawable);
+
+		/// <summary>
+		/// Draws the user interface zone element.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="uiZoneElement">The user interface zone element.</param>
+		public void Draw(GameTime gameTime, UiZoneElement uiZoneElement);
 	}
 }

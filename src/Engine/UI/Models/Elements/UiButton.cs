@@ -38,9 +38,9 @@ namespace Engine.UI.Models.Elements
 		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sprite.
+		/// Gets or sets the image.
 		/// </summary>
-		public Sprite Sprite { get; set; }
+		public Image Image { get; set; }
 
 		/// <summary>
 		/// Gets or set the signal.
@@ -52,7 +52,7 @@ namespace Engine.UI.Models.Elements
 		/// </summary>
 		public void Dispose()
 		{ 
-			this.Sprite.Dispose();
+			this.Image.Dispose();
 		}
 	}
 }

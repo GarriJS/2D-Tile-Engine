@@ -42,9 +42,9 @@ namespace Engine.UI.Models
 		public UiRowJustificationTypes JustificationType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the background.
+		/// Gets or sets the image.
 		/// </summary>
-		public Sprite Background { get; set; }
+		public Image Image { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sub elements.
