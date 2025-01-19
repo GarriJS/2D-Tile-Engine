@@ -30,10 +30,10 @@ namespace Engine.Drawing.Services.Contracts
 		public void Draw(GameTime gameTime, IAmDrawable drawable);
 
 		/// <summary>
-		/// Draws the user interface zone element.
+		/// Draws the user interface zone.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="uiZoneElement">The user interface zone element.</param>
-		public void Draw(GameTime gameTime, UiZone uiZoneElement);
+		/// <param name="uiZone">The user interface zone.</param>
+		public void Draw(GameTime gameTime, UiZone uiZone);
 	}
 }

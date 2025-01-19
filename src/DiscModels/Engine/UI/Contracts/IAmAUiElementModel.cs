@@ -13,7 +13,10 @@ namespace DiscModels.Engine.UI.Contracts
 		[DataMember(Name = "rightPadding", Order = 3)]
 		public float RightPadding { get; set; }
 
-		[DataMember(Name = "backgroundTextureName", Order = 4)]
+		[DataMember(Name = "sizeType", Order = 4)]
+		public int SizeType { get; set; }
+
+		[DataMember(Name = "backgroundTextureName", Order = 5)]
 		public string BackgroundTextureName { get; set; }
 	}
 }

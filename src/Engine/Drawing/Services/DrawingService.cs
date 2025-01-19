@@ -68,47 +68,43 @@ namespace Engine.Drawing.Services
 		}
 
 		/// <summary>
-		/// Draws the user interface zone element.
+		/// Draws the user interface zone.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="uiZoneElement">The user interface zone element.</param>
-		public void Draw(GameTime gameTime, UiZone uiZoneElement)
+		/// <param name="uiZone">The user interface zone.</param>
+		public void Draw(GameTime gameTime, UiZone uiZone)
 		{
-			if (null != uiZoneElement.Image)
+			if (null != uiZone.Image)
 			{
-				this.SpriteBatch.Draw(uiZoneElement.Image.Texture, uiZoneElement.Position.Coordinates, uiZoneElement.Image.TextureBox, Color.White);
+				this.SpriteBatch.Draw(uiZone.Image.Texture, uiZone.Position.Coordinates, uiZone.Image.TextureBox, Color.White);
 			}
 
-			if (true != uiZoneElement.ElementRows?.Any())
+			if (true != uiZone.ElementRows?.Any())
 			{
 				return;
 			}
 
-			var height = uiZoneElement.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
-			var rowVerticalOffset = uiZoneElement.JustificationType switch
+			var height = uiZone.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
+			var rowVerticalOffset = uiZone.JustificationType switch
 			{
 				UiZoneJustificationTypes.None => 0,
-				UiZoneJustificationTypes.Center => (uiZoneElement.Area.Height - height) / 2,
+				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
 				UiZoneJustificationTypes.Top => 0,
-				UiZoneJustificationTypes.Bottom => height,
+				UiZoneJustificationTypes.BottomReverseWrap => uiZone.Area.Height - height,
 				_ => 0,
 			};
 
-			foreach (var elementRow in uiZoneElement.ElementRows)
+			foreach (var elementRow in uiZone.ElementRows)
 			{
-				switch (uiZoneElement.JustificationType)
+				switch (uiZone.JustificationType)
 				{
-					case UiZoneJustificationTypes.Bottom:
-						rowVerticalOffset -= elementRow.BottomPadding;
-						this.Draw(gameTime, elementRow, uiZoneElement.Position, rowVerticalOffset);
-						rowVerticalOffset -= (elementRow.TopPadding + elementRow.Height);
-						break;
+					case UiZoneJustificationTypes.BottomReverseWrap:
 					case UiZoneJustificationTypes.Center:
 					case UiZoneJustificationTypes.None:
 					case UiZoneJustificationTypes.Top:
 					default:
 						rowVerticalOffset += elementRow.TopPadding;
-						this.Draw(gameTime, elementRow, uiZoneElement.Position, rowVerticalOffset);
+						this.Draw(gameTime, elementRow, uiZone.Position, rowVerticalOffset, uiZone.JustificationType);
 						rowVerticalOffset += (elementRow.BottomPadding + elementRow.Height);
 						break;
 				}
@@ -122,7 +118,8 @@ namespace Engine.Drawing.Services
 		/// <param name="uiRow">The user interface row.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="heightOffset">The height offset.</param>
-		private void Draw(GameTime gameTime, UiRow uiRow, Position position, float heightOffset)
+		/// <param name="uiZoneJustification">The user interface justification.</param>
+		private void Draw(GameTime gameTime, UiRow uiRow, Position position, float heightOffset, UiZoneJustificationTypes uiZoneJustification)
 		{
 			if (null != uiRow.Image)
 			{
@@ -140,25 +137,44 @@ namespace Engine.Drawing.Services
 				UiRowJustificationTypes.None => 0,
 				UiRowJustificationTypes.Center => (uiRow.Width - width) / 2,
 				UiRowJustificationTypes.Left => 0,
-				UiRowJustificationTypes.Right => width,
+				UiRowJustificationTypes.RightReverseWrap => uiRow.Width,
 				_ => 0,
 			};
 
+			var largestHeight = uiRow.SubElements.OrderByDescending(e => e.Area.Y)
+												 .FirstOrDefault().Area.Y;
+
 			foreach (var element in uiRow.SubElements)
 			{
+				var verticallyCenterOffset = 0f;
+
+				switch (uiZoneJustification)
+				{
+					case UiZoneJustificationTypes.BottomReverseWrap:
+						verticallyCenterOffset = (largestHeight - element.Area.Y);
+						break;
+					case UiZoneJustificationTypes.Center:
+						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
+						break;
+					case UiZoneJustificationTypes.None:
+					case UiZoneJustificationTypes.Top:
+
+						break;
+				}
+
 				switch (uiRow.JustificationType)
 				{
-					case UiRowJustificationTypes.Right:
-						elementHorizontalOffset -= element.RightPadding;
-						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset));
-						elementHorizontalOffset -= (element.LeftPadding + element.Area.X);
+					case UiRowJustificationTypes.RightReverseWrap:
+						elementHorizontalOffset -= (element.RightPadding + element.Area.X);
+						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
+						elementHorizontalOffset -= element.LeftPadding;
 						break;
 					case UiRowJustificationTypes.Center:
 					case UiRowJustificationTypes.None:
 					case UiRowJustificationTypes.Left:
 					default:
 						elementHorizontalOffset += element.LeftPadding;
-						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset));
+						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
 						elementHorizontalOffset += (element.RightPadding + element.Area.X);
 						break;
 				}

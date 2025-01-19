@@ -16,13 +16,16 @@ namespace DiscModels.Engine.UI.Elements
 		[DataMember(Name = "rightPadding", Order = 3)]
 		public float RightPadding { get; set; }
 
-		[DataMember(Name = "backgroundTextureName", Order = 4)]
+		[DataMember(Name = "sizeType", Order = 4)]
+		public int SizeType { get; set; }
+
+		[DataMember(Name = "backgroundTextureName", Order = 5)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "buttonText", Order = 5)]
+		[DataMember(Name = "buttonText", Order = 6)]
 		public string ButtonText { get; set; }
 
-		[DataMember(Name = "signal", Order = 6)]
+		[DataMember(Name = "signal", Order = 7)]
 		public SignalModel Signal { get; set; }
 	}
 }

@@ -21,8 +21,8 @@
 		Top = 2,
 
 		/// <summary>
-		/// The bottom type.
+		/// The bottom reverse wrap type.
 		/// </summary>
-		Bottom = 3,
+		BottomReverseWrap = 3,
 	}
 }

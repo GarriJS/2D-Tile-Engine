@@ -6,6 +6,7 @@ using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -80,17 +81,17 @@ namespace Engine.UI.Services
 			var uiZoneElements = new List<UiZone>();
 
 			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
-			{ 
+			{
 				var uiZoneElement = this.GetUiZoneElement(uiZoneElementModel);
 
 				if (null != uiZoneElement)
-				{ 
+				{
 					uiZoneElements.Add(uiZoneElement);
 				}
 			}
 
 			return new UiGroup
-			{ 
+			{
 				UiGroupName = uiGroupModel.UiGroupName,
 				VisibilityGroupId = uiGroupModel.VisibilityGroupId,
 				UiZoneElements = uiZoneElements,
@@ -106,6 +107,7 @@ namespace Engine.UI.Services
 		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel)
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
+			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var elementRows = new List<UiRow>();
 
 			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneElementModel.UiZoneType, out UiScreenZone uiZone))
@@ -118,11 +120,54 @@ namespace Engine.UI.Services
 
 			if (true == uiZoneElementModel.ElementRows?.Any())
 			{
-				var totalRowPadding = uiZoneElementModel.ElementRows.Sum(e => e.TopPadding + e.BottomPadding);
-				var rowHeight = (uiZone.Area.Height - totalRowPadding) / uiZoneElementModel.ElementRows.Length;
+				var availableHeight = uiZone.Area.Height;
+				var numberOfFillRows = 0;
+				var rowElementBaseHeights = new Dictionary<UiRowModel, float>();
 
 				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
 				{
+					var rowMinHeight = 0f;
+
+					if (true == elementRowModel.SubElements?.Any())
+					{
+						var rowElementsSizes = elementRowModel.SubElements.Select(
+							e => uiElementService.GetElementDimensions(uiZone,
+									true == Enum.IsDefined(typeof(UiElementSizeTypes), e.SizeType)
+									? (UiElementSizeTypes)e.SizeType
+									: UiElementSizeTypes.None)
+						);
+
+						if (true == rowElementsSizes?.Any(e => false == e.HasValue))
+						{
+							numberOfFillRows++;
+						}
+
+						rowMinHeight += rowElementsSizes.Where(e => true == e.HasValue)
+														.Select(e => e.Value.Y)
+														.OrderDescending()
+														.First();
+
+						rowElementBaseHeights.Add(elementRowModel, rowMinHeight);
+					}
+
+					availableHeight -= (rowMinHeight + elementRowModel.TopPadding + elementRowModel.BottomPadding);
+				}
+
+				var fillHeight = 0 < numberOfFillRows
+					? availableHeight / numberOfFillRows
+					: availableHeight / uiZoneElementModel.ElementRows.Length;
+
+				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
+				{
+					rowElementBaseHeights.TryGetValue(elementRowModel, out var rowBaseHeight);
+					var rowHeight = rowBaseHeight;
+
+					if (true == elementRowModel.SubElements?.Any(e => ((int)UiElementSizeTypes.None == e.SizeType) ||
+																	 ((int)UiElementSizeTypes.Fill == e.SizeType)))
+					{
+						rowHeight += fillHeight;
+					}
+
 					var elementRow = this.GetUiRow(elementRowModel, uiZone, rowHeight);
 
 					if (null != elementRow)
@@ -148,29 +193,59 @@ namespace Engine.UI.Services
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
+		/// <param name="fillHeight">The fill height.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float height)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
+			var numberOfFillElements = 0;
 			var subElements = new List<IAmAUiElement>();
+
 
 			if (true == uiRowModel.SubElements?.Any())
 			{
-				var totalPadding = uiRowModel.SubElements.Sum(e => e.RightPadding + e.LeftPadding);
-				var elementWidth = (uiZone.Area.Width - totalPadding) / uiRowModel.SubElements.Length;
+				var availableWidth = uiZone.Area.Width;
 
-				foreach (var elementRowModel in uiRowModel.SubElements)
+				foreach (var elementModel in uiRowModel.SubElements)
 				{
-					var uiElement = uiElementService.GetUiElement(elementRowModel, elementWidth, height);
+					var elementMinWidth = elementModel.LeftPadding + elementModel.RightPadding;
+					var elementSize = uiElementService.GetElementDimensions(uiZone,
+										true == Enum.IsDefined(typeof(UiElementSizeTypes), elementModel.SizeType)
+										? (UiElementSizeTypes)elementModel.SizeType
+										: UiElementSizeTypes.None);
 
-					if (uiElement != null)
+					if (true == elementSize.HasValue)
 					{
-						subElements.Add(uiElement);
+						elementMinWidth += elementSize.Value.X;
+					}
+					else
+					{
+						numberOfFillElements++;
+					}
+					
+					availableWidth -= elementMinWidth;
+				}
+
+				var fillWidth = 0 < numberOfFillElements
+					? availableWidth / numberOfFillElements
+					: availableWidth / uiRowModel.SubElements.Length;
+
+				foreach (var elementModel in uiRowModel.SubElements)
+				{
+					var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth, fillHeight);
+
+					if (null != element)
+					{
+						subElements.Add(element);
 					}
 				}
 			}
 
+			var height = subElements.Where(e => null != e)
+									.Select(e => e.Area.Y)
+									.OrderDescending()
+									.FirstOrDefault();
 			var image = imageService.GetImage(uiRowModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)height + uiRowModel.TopPadding + uiRowModel.BottomPadding);
 
 			return new UiRow

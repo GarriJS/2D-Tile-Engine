@@ -6,6 +6,7 @@ using Engine.Controls.Typing;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.Debugging.Services.Contracts;
+using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -64,48 +65,51 @@ namespace Engine
 					new UiZoneModel
 					{
 						UiZoneName = "foo1",
-						JustificationType = 1,
+						UiZoneType = (int)UiScreenZoneTypes.Col2Row2,
 						Background = new ImageModel
 						{
-							TextureName = "dark_grass_simplified"
+							TextureName = "gray"
 						},
-						UiZoneType = 1,
+						JustificationType = (int)UiZoneJustificationTypes.Center,
 						ElementRows =
 						[
 							new UiRowModel
 							{
 								UiRowName = "foo1row1",
-								TopPadding = 30,
-								BottomPadding = 30,
-								JustificationType = 1,
+								TopPadding = 5,
+								BottomPadding = 5,
+								JustificationType = (int)UiRowJustificationTypes.RightReverseWrap,
 								BackgroundTextureName = "tile_grid",
 								SubElements =
 								[   
 									new UiButtonModel
 									{
 										UiElementName = "foo1button1",
-										LeftPadding = 30,
+										LeftPadding = 5,
 										RightPadding = 5,
 										BackgroundTextureName = "black",
 										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Medium,
 										Signal = null
 									},
 									new UiButtonModel
 									{
 										UiElementName = "foo1button2",
-										LeftPadding = 5,
-										RightPadding = 5,
+										LeftPadding = 0,
+										RightPadding = 0,
 										BackgroundTextureName = "gray",
 										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Large,
 										Signal = null
 									},
 									new UiButtonModel
 									{
 										UiElementName = "foo1button3",
 										LeftPadding = 5,
-										RightPadding = 30,
+										RightPadding = 5,
 										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Medium,
 										Signal = null
 									}
 								]
@@ -113,10 +117,10 @@ namespace Engine
 							new UiRowModel
 							{
 								UiRowName = "foo1row2",
-								TopPadding = 30,
-								BottomPadding = 30,
-								JustificationType = 1,
-								BackgroundTextureName = null,
+								TopPadding = 5,
+								BottomPadding = 5,
+								JustificationType =  (int)UiRowJustificationTypes.Left,
+								BackgroundTextureName = "white",
 								SubElements =
 								[
 									new UiButtonModel
@@ -126,6 +130,7 @@ namespace Engine
 										RightPadding = 10,
 										BackgroundTextureName = "black",
 										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Medium,
 										Signal = null
 									},
 									new UiButtonModel
@@ -133,8 +138,9 @@ namespace Engine
 										UiElementName = "foo1button2",
 										LeftPadding = 10,
 										RightPadding = 10,
-										BackgroundTextureName = "white",
+										BackgroundTextureName = "debug",
 										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Fill,
 										Signal = null
 									}
 								]

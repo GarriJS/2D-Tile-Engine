@@ -33,6 +33,11 @@ namespace Engine.UI.Models.Elements
 		public UiElementTypes ElementType { get; set; }
 
 		/// <summary>
+		/// Gets or sets the user interface size type.
+		/// </summary>
+		public UiElementSizeTypes SizeType { get; set; }
+
+		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
 		public Vector2 Area { get; set; }

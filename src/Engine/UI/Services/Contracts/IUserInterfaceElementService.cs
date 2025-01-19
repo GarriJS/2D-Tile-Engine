@@ -1,5 +1,8 @@
 ﻿using DiscModels.Engine.UI.Contracts;
+using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
+using Engine.UI.Models.Enums;
+using Microsoft.Xna.Framework;
 
 namespace Engine.UI.Services.Contracts
 {
@@ -9,12 +12,21 @@ namespace Engine.UI.Services.Contracts
 	public interface IUserInterfaceElementService
 	{
 		/// <summary>
+		/// Gets the element dimensions.
+		/// </summary>
+		/// <param name="uiScreenZone">The user interface screen zone.</param>
+		/// <param name="uiElementSizeType">The user interface size type.</param>
+		/// <returns>The element dimensions.</returns>
+		public Vector2? GetElementDimensions(UiScreenZone uiScreenZone, UiElementSizeTypes uiElementSizeType);
+
+		/// <summary>
 		/// Gets the user interface element.
 		/// </summary>
 		/// <param name="uiElementModel">The user interface element model.</param>
-		/// <param name="width">The width of the user interface element.</param>
-		/// <param name="height">The height of the user interface element model.</param>
+		/// <param name="uiZone">The user interface zone.</param>
+		/// <param name="fillWidth">The fill width of the user interface element.</param>
+		/// <param name="fillHeight">The fill height of the user interface element model.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, float width, float height);
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight);
 	}
 }
