@@ -65,7 +65,7 @@ namespace Engine
 					new UiZoneModel
 					{
 						UiZoneName = "foo1",
-						UiZoneType = (int)UiScreenZoneTypes.Col1Row1,
+						UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
 						Background = new ImageModel
 						{
 							TextureName = "gray"

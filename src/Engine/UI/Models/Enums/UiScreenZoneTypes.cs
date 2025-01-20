@@ -11,63 +11,63 @@
 		None = 0,
 		
 		/// <summary>
-		/// The first col and first row.
+		/// The first row and first col.
 		/// </summary>
-		Col1Row1 = 1,
+		Row1Col1 = 1,
 
 		/// <summary>
-		/// The second col and first row.
+		/// The first row and second col.
 		/// </summary>
-		Col2Row1 = 2,
+		Row1Col2 = 2,
 
 		/// <summary>
-		/// The third col and first row.
+		/// The first row and third col.
 		/// </summary>
-		Col3Row1 = 3,
+		Row1Col3 = 3,
 
 		/// <summary>
-		/// The first col and second row.
+		/// The first row and forth col.
 		/// </summary>
-		Col1Row2 = 4,
+		Row1Col4 = 4,
 
 		/// <summary>
-		/// The second col and second row.
+		/// The second row and first col.
 		/// </summary>
-		Col2Row2 = 5,
+		Row2Col1 = 5,
 
 		/// <summary>
-		/// The third col and second row.
+		/// The second row and second col.
 		/// </summary>
-		Col3Row2 = 6,
+		Row2Col2 = 6,
 
 		/// <summary>
-		/// The first col and third row.
+		/// The second row and third col.
 		/// </summary>
-		Col1Row3 = 7,
+		Row2Col3 = 7,
 
 		/// <summary>
-		/// The second col and third row.
+		/// The second row and fourth col.
 		/// </summary>
-		Col2Row3 = 8,
+		Row2Col4 = 8,
 
 		/// <summary>
-		/// The third col and third row.
+		/// The third row and first col.
 		/// </summary>
-		Col3Row3 = 9,
+		Row3Col1 = 9,
 
 		/// <summary>
-		/// The first col and fourth row.
+		/// The third row and second col.
 		/// </summary>
-		Col1Row4 = 10,
+		Row3Col2 = 10,
 
 		/// <summary>
-		/// The second col and fourth row.
+		/// The third row and third col.
 		/// </summary>
-		Col2Row4 = 11,
+		Row3Col3 = 11,
 
 		/// <summary>
-		/// The third col and fourth row.
+		/// The third row and fourth col.
 		/// </summary>
-		Col3Row4 = 12,
+		Row3Col4 = 12,
 	}
 }

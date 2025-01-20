@@ -29,18 +29,18 @@ namespace Engine.UI.Services
 		/// </summary>
 		private Dictionary<(int row, int col), UiScreenZoneTypes> ZoneTypeMapper { get; } = new()
 		{
-			{ (1, 1), UiScreenZoneTypes.Col1Row1 },
-			{ (2, 1), UiScreenZoneTypes.Col2Row1 },
-			{ (3, 1), UiScreenZoneTypes.Col3Row1 },
-			{ (1, 2), UiScreenZoneTypes.Col1Row2 },
-			{ (2, 2), UiScreenZoneTypes.Col2Row2 },
-			{ (3, 2), UiScreenZoneTypes.Col3Row2 },
-			{ (1, 3), UiScreenZoneTypes.Col1Row3 },
-			{ (2, 3), UiScreenZoneTypes.Col2Row3 },
-			{ (3, 3), UiScreenZoneTypes.Col3Row3 },
-			{ (1, 4), UiScreenZoneTypes.Col1Row4 },
-			{ (2, 4), UiScreenZoneTypes.Col2Row4 },
-			{ (3, 4), UiScreenZoneTypes.Col3Row4 }
+			{ (1, 1), UiScreenZoneTypes.Row1Col1 },
+			{ (2, 1), UiScreenZoneTypes.Row2Col1 },
+			{ (3, 1), UiScreenZoneTypes.Row3Col1 },
+			{ (1, 2), UiScreenZoneTypes.Row1Col2 },
+			{ (2, 2), UiScreenZoneTypes.Row2Col2 },
+			{ (3, 2), UiScreenZoneTypes.Row3Col2 },
+			{ (1, 3), UiScreenZoneTypes.Row1Col3 },
+			{ (2, 3), UiScreenZoneTypes.Row2Col3 },
+			{ (3, 3), UiScreenZoneTypes.Row3Col3 },
+			{ (1, 4), UiScreenZoneTypes.Row1Col4 },
+			{ (2, 4), UiScreenZoneTypes.Row2Col4 },
+			{ (3, 4), UiScreenZoneTypes.Row3Col4 }
 		};
 
 		/// <summary>
