@@ -1,6 +1,6 @@
 ﻿using DiscModels.Engine.Signals;
 using DiscModels.Engine.UI.Contracts;
-using System.Numerics;
+using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
 namespace DiscModels.Engine.UI.Elements
@@ -18,18 +18,24 @@ namespace DiscModels.Engine.UI.Elements
 		public float RightPadding { get; set; }
 
 		[DataMember(Name = "sizeType", Order = 4)]
-		public int SizeType { get; set; }
+		public int? SizeType { get; set; }
 
-		[DataMember(Name = "backgroundTextureName", Order = 5)]
+		[DataMember(Name = "fixedSized", Order = 5)]
+		public Vector2? FixedSized { get; set; }
+
+		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "buttonText", Order = 6)]
+		[DataMember(Name = "clickableBackgroundTextureName", Order = 7)]
+		public string ClickableBackgroundTextureName { get; set; }
+
+		[DataMember(Name = "buttonText", Order = 8)]
 		public string ButtonText { get; set; }
 
-		[DataMember(Name = "clickableAreaScaler", Order = 7)]
+		[DataMember(Name = "clickableAreaScaler", Order = 9)]
 		public Vector2 ClickableAreaScaler { get; set; }
 
-		[DataMember(Name = "signal", Order = 8)]
+		[DataMember(Name = "signal", Order = 10)]
 		public SignalModel Signal { get; set; }
 	}
 }

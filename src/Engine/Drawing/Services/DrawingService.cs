@@ -189,6 +189,12 @@ namespace Engine.Drawing.Services
 
 			if (element is UiButton button)
 			{
+				if (null != button.ClickableImage)
+				{
+					var clickableOffset = new Vector2((button.Area.X - button.ClickableArea.X) / 2, (button.Area.Y - button.ClickableArea.Y) / 2);
+					this.Draw(button.ClickableImage.Texture, position.Coordinates + offset + clickableOffset, button.ClickableImage.TextureBox, Color.White);
+				}
+
 				if (false == string.IsNullOrEmpty(button.ButtonText))
 				{
 					var writingService = this._gameServices.GetService<IWritingService>();

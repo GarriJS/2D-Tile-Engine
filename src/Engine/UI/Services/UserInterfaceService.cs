@@ -267,12 +267,7 @@ namespace Engine.UI.Services
 
 					if (true == elementRowModel.SubElements?.Any())
 					{
-						var rowElementsSizes = elementRowModel.SubElements.Select(
-							e => uiElementService.GetElementDimensions(uiZone,
-									true == Enum.IsDefined(typeof(UiElementSizeTypes), e.SizeType)
-									? (UiElementSizeTypes)e.SizeType
-									: UiElementSizeTypes.None)
-						);
+						var rowElementsSizes = elementRowModel.SubElements.Select(e => uiElementService.GetElementDimensions(uiZone, e));
 
 						if (true == rowElementsSizes?.Any(e => false == e.HasValue))
 						{
@@ -339,7 +334,6 @@ namespace Engine.UI.Services
 			var numberOfFillElements = 0;
 			var subElements = new List<IAmAUiElement>();
 
-
 			if (true == uiRowModel.SubElements?.Any())
 			{
 				var availableWidth = uiZone.Area.Width;
@@ -347,10 +341,7 @@ namespace Engine.UI.Services
 				foreach (var elementModel in uiRowModel.SubElements)
 				{
 					var elementMinWidth = elementModel.LeftPadding + elementModel.RightPadding;
-					var elementSize = uiElementService.GetElementDimensions(uiZone,
-										true == Enum.IsDefined(typeof(UiElementSizeTypes), elementModel.SizeType)
-										? (UiElementSizeTypes)elementModel.SizeType
-										: UiElementSizeTypes.None);
+					var elementSize = uiElementService.GetElementDimensions(uiZone, elementModel);
 
 					if (true == elementSize.HasValue)
 					{

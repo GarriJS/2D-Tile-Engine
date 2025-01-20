@@ -1,7 +1,6 @@
 ﻿using DiscModels.Engine.UI.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
-using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 
 namespace Engine.UI.Services.Contracts
@@ -15,9 +14,9 @@ namespace Engine.UI.Services.Contracts
 		/// Gets the element dimensions.
 		/// </summary>
 		/// <param name="uiScreenZone">The user interface screen zone.</param>
-		/// <param name="uiElementSizeType">The user interface size type.</param>
+		/// <param name="elementModel">The user interface element model.</param>
 		/// <returns>The element dimensions.</returns>
-		public Vector2? GetElementDimensions(UiScreenZone uiScreenZone, UiElementSizeTypes uiElementSizeType);
+		public Vector2? GetElementDimensions(UiScreenZone uiScreenZone, IAmAUiElementModel elementModel);
 
 		/// <summary>
 		/// Gets the user interface element.

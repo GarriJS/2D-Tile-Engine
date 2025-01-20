@@ -38,6 +38,11 @@
 		/// <summary>
 		/// The extra large type.
 		/// </summary>
-		ExtraLarge = 6
+		ExtraLarge = 6,
+
+		/// <summary>
+		/// The full type.
+		/// </summary>
+		Full = 7
 	}
 }

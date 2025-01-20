@@ -65,12 +65,12 @@ namespace Engine
 					new UiZoneModel
 					{
 						UiZoneName = "foo1",
-						UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
+						UiZoneType = (int)UiScreenZoneTypes.Row1Col1,
 						Background = new ImageModel
 						{
 							TextureName = "tile_grid"
 						},
-						JustificationType = (int)UiZoneJustificationTypes.Bottom,
+						JustificationType = (int)UiZoneJustificationTypes.Center,
 						ElementRows =
 						[
 							new UiRowModel
@@ -78,18 +78,20 @@ namespace Engine
 								UiRowName = "foo1row1",
 								TopPadding = 5,
 								BottomPadding = 5,
-								HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
-								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+								HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Left,
+								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Top,
 								SubElements =
-								[   
+								[
 									new UiButtonModel
 									{
 										UiElementName = "foo1button1",
 										LeftPadding = 5,
 										RightPadding = 5,
 										BackgroundTextureName = "black",
+										ClickableBackgroundTextureName = "white",
 										ButtonText = "Push Me",
-										SizeType = (int)UiElementSizeTypes.Medium,
+										SizeType = (int)UiElementSizeTypes.ExtraSmall,
+										ClickableAreaScaler = new Vector2(.9f, .9f),
 										Signal = null
 									},
 									new UiButtonModel
@@ -98,8 +100,10 @@ namespace Engine
 										LeftPadding = 0,
 										RightPadding = 0,
 										BackgroundTextureName = "gray",
+										ClickableBackgroundTextureName = "black",
 										ButtonText = "Push Me",
-										SizeType = (int)UiElementSizeTypes.Small,
+										SizeType = (int)UiElementSizeTypes.ExtraLarge,
+										ClickableAreaScaler = new Vector2(.95f, .95f),
 										Signal = null
 									},
 									new UiButtonModel
@@ -108,8 +112,10 @@ namespace Engine
 										LeftPadding = 5,
 										RightPadding = 5,
 										BackgroundTextureName = "white",
+										ClickableBackgroundTextureName = "black",
 										ButtonText = "Push Me",
-										SizeType = (int)UiElementSizeTypes.Medium,
+										SizeType = (int)UiElementSizeTypes.Small,
+										ClickableAreaScaler = new Vector2(.9f, .9f),
 										Signal = null
 									}
 								]
@@ -120,7 +126,7 @@ namespace Engine
 								TopPadding = 5,
 								BottomPadding = 5,
 								HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Left,
-								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Top,
+								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
 								SubElements =
 								[
 									new UiButtonModel
@@ -128,7 +134,7 @@ namespace Engine
 										UiElementName = "foo1button1",
 										LeftPadding = 5,
 										RightPadding = 0,
-										BackgroundTextureName = "black",
+										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Medium,
 										Signal = null
@@ -138,9 +144,94 @@ namespace Engine
 										UiElementName = "foo1button2",
 										LeftPadding = 5,
 										RightPadding = 5,
-										BackgroundTextureName = "debug",
+										BackgroundTextureName = "black",
+										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Large,
+										Signal = null
+									}
+								]
+							}
+						]
+					},
+					new UiZoneModel
+					{
+						UiZoneName = "foo1",
+						UiZoneType = (int)UiScreenZoneTypes.Row1Col2,
+						Background = new ImageModel
+						{
+							TextureName = "tile_grid"
+						},
+						JustificationType = (int)UiZoneJustificationTypes.Center,
+						ElementRows =
+						[
+							new UiRowModel
+							{
+								UiRowName = "foo1row1",
+								TopPadding = 5,
+								BottomPadding = 5,
+								HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
+								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Top,
+								SubElements =
+								[
+									new UiButtonModel
+									{
+										UiElementName = "foo1button1",
+										LeftPadding = 5,
+										RightPadding = 5,
+										BackgroundTextureName = "black",
+										ButtonText = "Push Me",          
+										FixedSized = new Vector2(100, 100),
+										Signal = null
+									},
+									new UiButtonModel
+									{
+										UiElementName = "foo1button2",
+										LeftPadding = 0,
+										RightPadding = 0,
+										BackgroundTextureName = "gray",
+										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.ExtraLarge,
+										Signal = null
+									},
+									new UiButtonModel
+									{
+										UiElementName = "foo1button3",
+										LeftPadding = 5,
+										RightPadding = 5,
+										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Small,
+										Signal = null
+									}
+								]
+							},
+							new UiRowModel
+							{
+								UiRowName = "foo1row2",
+								TopPadding = 5,
+								BottomPadding = 5,
+								HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Right,
+								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+								SubElements =
+								[
+									new UiButtonModel
+									{
+										UiElementName = "foo1button1",
+										LeftPadding = 5,
+										RightPadding = 0,
+										BackgroundTextureName = "white",
+										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Medium,
+										Signal = null
+									},
+									new UiButtonModel
+									{
+										UiElementName = "foo1button2",
+										LeftPadding = 5,
+										RightPadding = 5,
+										BackgroundTextureName = "black",
+										ButtonText = "Push Me",
+										SizeType = (int)UiElementSizeTypes.Large,
 										Signal = null
 									}
 								]

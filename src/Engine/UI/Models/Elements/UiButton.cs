@@ -58,6 +58,11 @@ namespace Engine.UI.Models.Elements
 		public Image Image { get; set; }
 
 		/// <summary>
+		/// Gets or sets the clickable image.
+		/// </summary>
+		public Image ClickableImage { get; set; }
+
+		/// <summary>
 		/// Gets or set the signal.
 		/// </summary>
 		public Signal Signal { get; set; }
