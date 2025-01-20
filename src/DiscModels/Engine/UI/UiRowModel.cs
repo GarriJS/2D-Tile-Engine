@@ -15,13 +15,16 @@ namespace DiscModels.Engine.UI
 		[DataMember(Name = "bottomPadding", Order = 3)]
 		public int BottomPadding { get; set; }
 
-		[DataMember(Name = "justificationType", Order = 4)]
-		public int JustificationType { get; set; }
+		[DataMember(Name = "horizontalJustificationType", Order = 4)]
+		public int HorizontalJustificationType { get; set; }
 
-		[DataMember(Name = "backgroundTextureName", Order = 5)]
+		[DataMember(Name = "verticalJustificationType", Order = 5)]
+		public int VerticalJustificationType { get; set; }
+
+		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "subElements", Order = 6)]
+		[DataMember(Name = "subElements", Order = 7)]
 		public IAmAUiElementModel[] SubElements { get; set; }
 	}
 }

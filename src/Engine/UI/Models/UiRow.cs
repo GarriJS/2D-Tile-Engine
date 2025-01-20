@@ -37,9 +37,14 @@ namespace Engine.UI.Models
 		public float BottomPadding { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface row justification type. 
+		/// Gets or sets the user interface row horizontal justification type. 
 		/// </summary>
-		public UiRowJustificationTypes JustificationType { get; set; }
+		public UiRowHorizontalJustificationTypes HorizontalJustificationType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user interface row vertical justification type.
+		/// </summary>
+		public UiRowVerticalJustificationTypes VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the image.

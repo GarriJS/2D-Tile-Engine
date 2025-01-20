@@ -45,13 +45,13 @@ namespace Engine.Physics.Services
 			{
 				case AreaCollectionModel areaCollectionModel:
 
-					var areas = new SimpleArea[areaCollectionModel.Areas?.Length ?? 0];
+					var areas = new OffsetArea[areaCollectionModel.Areas?.Length ?? 0];
 					var width = 0f;
 					var height = 0f;
 
 					for (int i = 0; i < areaCollectionModel.Areas?.Length; i++)
 					{
-						areas[i] = this.GetArea<SimpleArea>(areaCollectionModel.Areas[i], position);
+						areas[i] = this.GetArea<OffsetArea>(areaCollectionModel.Areas[i], position);
 						
 						var subAreaWidth = areas[i].Width;
 						var subAreaHeight = areas[i].Height;

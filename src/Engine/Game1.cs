@@ -65,7 +65,7 @@ namespace Engine
 					new UiZoneModel
 					{
 						UiZoneName = "foo1",
-						UiZoneType = (int)UiScreenZoneTypes.Col2Row2,
+						UiZoneType = (int)UiScreenZoneTypes.Col1Row1,
 						Background = new ImageModel
 						{
 							TextureName = "gray"
@@ -78,7 +78,8 @@ namespace Engine
 								UiRowName = "foo1row1",
 								TopPadding = 5,
 								BottomPadding = 5,
-								JustificationType = (int)UiRowJustificationTypes.RightReverseWrap,
+								HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.RightReverseWrap,
+								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
 								BackgroundTextureName = "tile_grid",
 								SubElements =
 								[   
@@ -119,7 +120,8 @@ namespace Engine
 								UiRowName = "foo1row2",
 								TopPadding = 5,
 								BottomPadding = 5,
-								JustificationType =  (int)UiRowJustificationTypes.Left,
+								HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Left,
+								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Top,
 								BackgroundTextureName = "white",
 								SubElements =
 								[
@@ -170,6 +172,10 @@ namespace Engine
 			{
 
 			}
+
+			//var mouse = Mouse.GetState().Position.ToVector2();
+			//var uiService = this.Services.GetService<IUserInterfaceService>();
+			//uiService.GetUiElementAtScreenLocation(mouse);
 
 			base.Update(gameTime);
 

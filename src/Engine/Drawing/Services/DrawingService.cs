@@ -3,6 +3,7 @@ using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
+using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,7 +21,7 @@ namespace Engine.Drawing.Services
 		/// <summary>
 		/// Gets the sprite batch.
 		/// </summary>
-		private SpriteBatch SpriteBatch { get; }
+		public SpriteBatch SpriteBatch { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the drawing service.
@@ -104,7 +105,7 @@ namespace Engine.Drawing.Services
 					case UiZoneJustificationTypes.Top:
 					default:
 						rowVerticalOffset += elementRow.TopPadding;
-						this.Draw(gameTime, elementRow, uiZone.Position, rowVerticalOffset, uiZone.JustificationType);
+						this.Draw(gameTime, elementRow, uiZone.Position, rowVerticalOffset);
 						rowVerticalOffset += (elementRow.BottomPadding + elementRow.Height);
 						break;
 				}
@@ -118,8 +119,7 @@ namespace Engine.Drawing.Services
 		/// <param name="uiRow">The user interface row.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="heightOffset">The height offset.</param>
-		/// <param name="uiZoneJustification">The user interface justification.</param>
-		private void Draw(GameTime gameTime, UiRow uiRow, Position position, float heightOffset, UiZoneJustificationTypes uiZoneJustification)
+		private void Draw(GameTime gameTime, UiRow uiRow, Position position, float heightOffset)
 		{
 			if (null != uiRow.Image)
 			{
@@ -132,12 +132,12 @@ namespace Engine.Drawing.Services
 			}
 
 			var width = uiRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
-			var elementHorizontalOffset = uiRow.JustificationType switch
+			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
 			{
-				UiRowJustificationTypes.None => 0,
-				UiRowJustificationTypes.Center => (uiRow.Width - width) / 2,
-				UiRowJustificationTypes.Left => 0,
-				UiRowJustificationTypes.RightReverseWrap => uiRow.Width,
+				UiRowHorizontalJustificationTypes.None => 0,
+				UiRowHorizontalJustificationTypes.Center => (uiRow.Width - width) / 2,
+				UiRowHorizontalJustificationTypes.Left => 0,
+				UiRowHorizontalJustificationTypes.RightReverseWrap => uiRow.Width,
 				_ => 0,
 			};
 
@@ -148,30 +148,29 @@ namespace Engine.Drawing.Services
 			{
 				var verticallyCenterOffset = 0f;
 
-				switch (uiZoneJustification)
+				switch (uiRow.VerticalJustificationType)
 				{
-					case UiZoneJustificationTypes.BottomReverseWrap:
+					case UiRowVerticalJustificationTypes.Bottom:
 						verticallyCenterOffset = (largestHeight - element.Area.Y);
 						break;
-					case UiZoneJustificationTypes.Center:
+					case UiRowVerticalJustificationTypes.Center:
 						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
 						break;
-					case UiZoneJustificationTypes.None:
-					case UiZoneJustificationTypes.Top:
-
+					case UiRowVerticalJustificationTypes.None:
+					case UiRowVerticalJustificationTypes.Top:
 						break;
 				}
 
-				switch (uiRow.JustificationType)
+				switch (uiRow.HorizontalJustificationType)
 				{
-					case UiRowJustificationTypes.RightReverseWrap:
+					case UiRowHorizontalJustificationTypes.RightReverseWrap:
 						elementHorizontalOffset -= (element.RightPadding + element.Area.X);
 						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
 						elementHorizontalOffset -= element.LeftPadding;
 						break;
-					case UiRowJustificationTypes.Center:
-					case UiRowJustificationTypes.None:
-					case UiRowJustificationTypes.Left:
+					case UiRowHorizontalJustificationTypes.Center:
+					case UiRowHorizontalJustificationTypes.None:
+					case UiRowHorizontalJustificationTypes.Left:
 					default:
 						elementHorizontalOffset += element.LeftPadding;
 						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
@@ -191,6 +190,17 @@ namespace Engine.Drawing.Services
 		private void Draw(GameTime gameTime, IAmAUiElement element, Position position, Vector2 offset)
 		{
 			this.Draw(element.Image.Texture, position.Coordinates + offset, element.Image.TextureBox, Color.White);
+
+			if (element is UiButton button)
+			{
+				if (false == string.IsNullOrEmpty(button.ButtonText))
+				{
+					var writingService = this._gameServices.GetService<IWritingService>();
+					var textMeasurements = writingService.MeasureString("Monobold", button.ButtonText);
+					var textPosition = position.Coordinates + offset + (element.Area / 2) - (textMeasurements / 2);
+					writingService.Draw("Monobold", button.ButtonText, textPosition, Color.Maroon);
+				}
+			}
 		}
 	}
 }

@@ -8,6 +8,11 @@ namespace Engine.Drawing.Services.Contracts
 	public interface IDrawingService
 	{
 		/// <summary>
+		/// Gets the sprite batch.
+		/// </summary>
+		public SpriteBatch SpriteBatch { get; }
+
+		/// <summary>
 		/// Begins the draw.
 		/// </summary>
 		public void BeginDraw();

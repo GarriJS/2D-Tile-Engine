@@ -1,5 +1,6 @@
 ﻿using DiscModels.Engine.Signals;
 using DiscModels.Engine.UI.Contracts;
+using System.Numerics;
 using System.Runtime.Serialization;
 
 namespace DiscModels.Engine.UI.Elements
@@ -25,7 +26,10 @@ namespace DiscModels.Engine.UI.Elements
 		[DataMember(Name = "buttonText", Order = 6)]
 		public string ButtonText { get; set; }
 
-		[DataMember(Name = "signal", Order = 7)]
+		[DataMember(Name = "clickableAreaScaler", Order = 7)]
+		public Vector2 ClickableAreaScaler { get; set; }
+
+		[DataMember(Name = "signal", Order = 8)]
 		public SignalModel Signal { get; set; }
 	}
 }

@@ -18,6 +18,11 @@ namespace Engine.UI.Models.Elements
 		public string UiElementName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the button text.
+		/// </summary>
+		public string ButtonText { get; set; }
+
+		/// <summary>
 		/// Gets or sets the left padding.
 		/// </summary>
 		public float LeftPadding { get; set; }
@@ -41,6 +46,11 @@ namespace Engine.UI.Models.Elements
 		/// Gets or sets the area.
 		/// </summary>
 		public Vector2 Area { get; set; }
+
+		/// <summary>
+		/// Gets or sets the clickable area.
+		/// </summary>
+		public Vector2 ClickableArea { get; set; }
 
 		/// <summary>
 		/// Gets or sets the image.

@@ -1,4 +1,6 @@
 ﻿using Engine.Physics.Models.Contracts;
+using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Engine.Physics.Models
 {
@@ -25,6 +27,16 @@ namespace Engine.Physics.Models
 		/// <summary>
 		/// Gets or sets the areas.
 		/// </summary>
-		public SimpleArea[] Areas { get; set; }
+		public OffsetArea[] Areas { get; set; }
+
+		/// <summary>
+		/// Determines if a the area contains the coordinate.
+		/// </summary>
+		/// <param name="coordinate">The coordinate.</param>
+		/// <returns>A value indicating whether the area contains the coordinate.</returns>
+		public bool Contains(Vector2 coordinate)
+		{
+			return this.Areas.Any(e => e.Contains(coordinate));
+		}
 	}
 }

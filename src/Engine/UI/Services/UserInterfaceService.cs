@@ -1,5 +1,6 @@
 ﻿using DiscModels.Engine.UI;
 using Engine.Drawing.Services.Contracts;
+using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
@@ -41,6 +42,146 @@ namespace Engine.UI.Services
 		}
 
 		/// <summary>
+		/// Gets the user interface element at the screen location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns>The user interface element at the location if one is found.</returns>
+		public IAmAUiElement GetUiElementAtScreenLocation(Vector2 location)
+		{
+			if (true != this.ActiveVisibilityGroupId.HasValue)
+			{
+				return null;
+			}
+
+			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
+			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => e.Area.Contains(location));
+
+			if ((null == uiZone) ||
+				(true != uiZone.ElementRows.Any()))
+			{
+				return null;
+			}
+
+			var height = uiZone.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
+			var rowVerticalOffset = uiZone.JustificationType switch
+			{
+				UiZoneJustificationTypes.None => 0,
+				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
+				UiZoneJustificationTypes.Top => 0,
+				UiZoneJustificationTypes.BottomReverseWrap => uiZone.Area.Height - height,
+				_ => 0,
+			};
+
+			foreach (var elementRow in uiZone.ElementRows)
+			{
+				switch (uiZone.JustificationType)
+				{
+					case UiZoneJustificationTypes.BottomReverseWrap:
+					case UiZoneJustificationTypes.Center:
+					case UiZoneJustificationTypes.None:
+					case UiZoneJustificationTypes.Top:
+					default:
+						rowVerticalOffset += elementRow.TopPadding;
+						var rowTop = rowVerticalOffset + uiZone.Position.Y;
+						rowVerticalOffset += elementRow.Height;
+						var rowBottom = rowVerticalOffset + uiZone.Position.Y;
+						rowVerticalOffset += elementRow.BottomPadding;	
+
+						if ((rowTop <= location.Y) &&
+							(rowBottom >= location.Y))
+						{
+							return this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
+						}
+
+						break;
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the user interface element at the screen location in the row.
+		/// </summary>
+		/// <param name="position">The position.</param>
+		/// <param name="uiRow">The user interface row.</param>
+		/// <param name="heightOffset">The height offset.</param>
+		/// <param name="location">The location.</param>
+		/// <returns>The user interface element at the location if one is found.</returns>
+		private IAmAUiElement GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
+		{
+			var width = uiRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
+			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
+			{
+				UiRowHorizontalJustificationTypes.None => 0,
+				UiRowHorizontalJustificationTypes.Center => (uiRow.Width - width) / 2,
+				UiRowHorizontalJustificationTypes.Left => 0,
+				UiRowHorizontalJustificationTypes.RightReverseWrap => uiRow.Width,
+				_ => 0,
+			};
+
+			var largestHeight = uiRow.SubElements.OrderByDescending(e => e.Area.Y)
+												 .FirstOrDefault().Area.Y;
+
+			foreach (var element in uiRow.SubElements)
+			{
+				var verticallyCenterOffset = 0f;
+
+				switch (uiRow.VerticalJustificationType)
+				{
+					case UiRowVerticalJustificationTypes.Bottom:
+						verticallyCenterOffset = (largestHeight - element.Area.Y);
+						break;
+					case UiRowVerticalJustificationTypes.Center:
+						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
+						break;
+					case UiRowVerticalJustificationTypes.None:
+					case UiRowVerticalJustificationTypes.Top:
+						break;
+				}
+
+				var elementRight = 0f;
+				var elementLeft = 0f;
+
+				switch (uiRow.HorizontalJustificationType)
+				{
+					case UiRowHorizontalJustificationTypes.RightReverseWrap:
+						elementHorizontalOffset -= element.RightPadding;
+						elementRight = elementHorizontalOffset + position.X;
+						elementHorizontalOffset -= element.Area.X;
+						elementLeft = elementHorizontalOffset + position.X;
+						elementHorizontalOffset -= element.LeftPadding;
+						break;
+					case UiRowHorizontalJustificationTypes.Center:
+					case UiRowHorizontalJustificationTypes.None:
+					case UiRowHorizontalJustificationTypes.Left:
+					default:
+						elementHorizontalOffset += element.LeftPadding;
+						elementLeft = elementHorizontalOffset + position.X;
+						elementHorizontalOffset += element.Area.X;
+						elementRight = elementHorizontalOffset + position.X;
+						elementHorizontalOffset += element.RightPadding;
+						break;
+				}
+
+				if ((elementLeft <= location.X) &&
+					(elementRight >= location.X))
+				{
+					var elementTop = verticallyCenterOffset + heightOffset;
+					var elementBottom = elementTop + element.Area.Y;
+
+					if ((elementTop <= location.Y) &&
+						(elementBottom >= location.Y))
+					{
+						return element;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// Toggles the user interface group visibility.
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
@@ -57,13 +198,13 @@ namespace Engine.UI.Services
 			{
 				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
 
-				foreach (var uiZoneContainer in activeGroup.UiZoneElements)
+				foreach (var uiZoneContainer in activeGroup.UiZones)
 				{
 					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
 				}
 			}
 
-			foreach (var uiZoneContainer in uiGroup.UiZoneElements)
+			foreach (var uiZoneContainer in uiGroup.UiZones)
 			{
 				runtimeDrawService.AddOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
 			}
@@ -94,7 +235,7 @@ namespace Engine.UI.Services
 			{
 				UiGroupName = uiGroupModel.UiGroupName,
 				VisibilityGroupId = uiGroupModel.VisibilityGroupId,
-				UiZoneElements = uiZoneElements,
+				UiZones = uiZoneElements,
 				ActiveSignalSubscriptions = []
 			};
 		}
@@ -223,7 +364,7 @@ namespace Engine.UI.Services
 					{
 						numberOfFillElements++;
 					}
-					
+
 					availableWidth -= elementMinWidth;
 				}
 
@@ -255,7 +396,8 @@ namespace Engine.UI.Services
 				Height = height,
 				TopPadding = uiRowModel.TopPadding,
 				BottomPadding = uiRowModel.BottomPadding,
-				JustificationType = (UiRowJustificationTypes)uiRowModel.JustificationType,
+				HorizontalJustificationType = (UiRowHorizontalJustificationTypes)uiRowModel.HorizontalJustificationType,
+				VerticalJustificationType = (UiRowVerticalJustificationTypes)uiRowModel.VerticalJustificationType,
 				Image = image,
 				SubElements = subElements
 			};

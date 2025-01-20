@@ -90,16 +90,16 @@ namespace Engine.UI.Services
 
 			var imageService = this._gameServices.GetService<IImageService>();
 			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
+			var area = new Vector2(width, height);
 
 			var uiElement = uiElementModel switch
 			{
-				UiButtonModel buttonModel => GetUiButton(buttonModel),
+				UiButtonModel buttonModel => GetUiButton(buttonModel, area),
 				_ => null,
 			};
 
 			if (null != uiElement)
 			{
-				uiElement.Area = new Vector2(width, height);
 				uiElement.Image = image;
 				this.UserInterfaceElements.Add(uiElement);
 			}
@@ -111,15 +111,21 @@ namespace Engine.UI.Services
 		/// Gets the user interface button.
 		/// </summary>
 		/// <param name="buttonModel">The user interface button model.</param>
+		/// <param name="area">The area.</param>
 		/// <returns>The user interface button.</returns>
-		private static UiButton GetUiButton(UiButtonModel buttonModel)
+		private static UiButton GetUiButton(UiButtonModel buttonModel, Vector2 area)
 		{
+			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);	
+
 			return new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
+				ButtonText = buttonModel.ButtonText,
 				LeftPadding = buttonModel.LeftPadding,
 				RightPadding = buttonModel.RightPadding,
-				ElementType = UiElementTypes.Button
+				ElementType = UiElementTypes.Button,
+				Area = area,
+				ClickableArea = clickableArea
 				//Signal = ?? TODO
 			};
 		}

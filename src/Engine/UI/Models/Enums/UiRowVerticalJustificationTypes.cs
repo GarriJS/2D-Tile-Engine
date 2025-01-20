@@ -1,9 +1,9 @@
 ﻿namespace Engine.UI.Models.Enums
 {
 	/// <summary>
-	/// Represents user interface row justification types.
+	/// Represents user interface row vertical justification types.
 	/// </summary>
-	public enum UiRowJustificationTypes
+	public enum UiRowVerticalJustificationTypes
 	{
 		/// <summary>
 		/// The none type.
@@ -18,11 +18,11 @@
 		/// <summary>
 		/// The left type.
 		/// </summary>
-		Left = 2,
+		Top = 2,
 
 		/// <summary>
 		/// The right reverse wrap type.
 		/// </summary>
-		RightReverseWrap = 3,
+		Bottom = 3,
 	}
 }
