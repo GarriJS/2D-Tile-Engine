@@ -164,10 +164,6 @@ namespace Engine.Drawing.Services
 				switch (uiRow.HorizontalJustificationType)
 				{
 					case UiRowHorizontalJustificationTypes.Right:
-						//elementHorizontalOffset -= (element.RightPadding + element.Area.X);
-						//this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
-						//elementHorizontalOffset -= element.LeftPadding;
-						//break;
 					case UiRowHorizontalJustificationTypes.Center:
 					case UiRowHorizontalJustificationTypes.None:
 					case UiRowHorizontalJustificationTypes.Left:

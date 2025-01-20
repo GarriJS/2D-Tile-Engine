@@ -1,5 +1,6 @@
 ﻿using Engine.Signals.Models;
 using Engine.Signals.Models.Contracts;
+using System;
 using System.Collections.Generic;
 
 namespace Engine.UI.Models
@@ -7,7 +8,7 @@ namespace Engine.UI.Models
 	/// <summary>
 	/// Represents a user interface group.
 	/// </summary>
-	public class UiGroup : IReceiveSignals
+	public class UiGroup : IReceiveSignals, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface group name.
@@ -28,5 +29,16 @@ namespace Engine.UI.Models
 		/// Gets the active signal subscriptions.
 		/// </summary>
 		public IList<SignalSubscription> ActiveSignalSubscriptions { get; set; }
+
+		/// <summary>
+		/// Disposes of the user interface group.
+		/// </summary>
+		public void Dispose()
+		{
+			foreach (var uiZone in this.UiZones)
+			{
+				uiZone.Dispose();
+			}
+		}
 	}
 }
