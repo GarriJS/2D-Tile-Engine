@@ -68,9 +68,9 @@ namespace Engine
 						UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
 						Background = new ImageModel
 						{
-							TextureName = "gray"
+							TextureName = "tile_grid"
 						},
-						JustificationType = (int)UiZoneJustificationTypes.Center,
+						JustificationType = (int)UiZoneJustificationTypes.Bottom,
 						ElementRows =
 						[
 							new UiRowModel
@@ -78,9 +78,8 @@ namespace Engine
 								UiRowName = "foo1row1",
 								TopPadding = 5,
 								BottomPadding = 5,
-								HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.RightReverseWrap,
+								HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
 								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
-								BackgroundTextureName = "tile_grid",
 								SubElements =
 								[   
 									new UiButtonModel
@@ -100,7 +99,7 @@ namespace Engine
 										RightPadding = 0,
 										BackgroundTextureName = "gray",
 										ButtonText = "Push Me",
-										SizeType = (int)UiElementSizeTypes.Large,
+										SizeType = (int)UiElementSizeTypes.Small,
 										Signal = null
 									},
 									new UiButtonModel
@@ -122,14 +121,13 @@ namespace Engine
 								BottomPadding = 5,
 								HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Left,
 								VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Top,
-								BackgroundTextureName = "white",
 								SubElements =
 								[
 									new UiButtonModel
 									{
 										UiElementName = "foo1button1",
-										LeftPadding = 10,
-										RightPadding = 10,
+										LeftPadding = 5,
+										RightPadding = 0,
 										BackgroundTextureName = "black",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Medium,
@@ -138,11 +136,11 @@ namespace Engine
 									new UiButtonModel
 									{
 										UiElementName = "foo1button2",
-										LeftPadding = 10,
-										RightPadding = 10,
+										LeftPadding = 5,
+										RightPadding = 5,
 										BackgroundTextureName = "debug",
 										ButtonText = "Push Me",
-										SizeType = (int)UiElementSizeTypes.Fill,
+										SizeType = (int)UiElementSizeTypes.Small,
 										Signal = null
 									}
 								]
@@ -173,9 +171,9 @@ namespace Engine
 
 			}
 
-			//var mouse = Mouse.GetState().Position.ToVector2();
-			//var uiService = this.Services.GetService<IUserInterfaceService>();
-			//uiService.GetUiElementAtScreenLocation(mouse);
+			var mouse = Mouse.GetState().Position.ToVector2();
+			var uiService = this.Services.GetService<IUserInterfaceService>();
+			uiService.GetUiElementAtScreenLocation(mouse);
 
 			base.Update(gameTime);
 

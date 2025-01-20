@@ -21,8 +21,8 @@
 		Left = 2,
 
 		/// <summary>
-		/// The right reverse wrap type.
+		/// The right type.
 		/// </summary>
-		RightReverseWrap = 3,
+		Right = 3,
 	}
 }

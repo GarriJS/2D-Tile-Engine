@@ -91,7 +91,7 @@ namespace Engine.Drawing.Services
 				UiZoneJustificationTypes.None => 0,
 				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
 				UiZoneJustificationTypes.Top => 0,
-				UiZoneJustificationTypes.BottomReverseWrap => uiZone.Area.Height - height,
+				UiZoneJustificationTypes.Bottom => uiZone.Area.Height - height,
 				_ => 0,
 			};
 
@@ -99,7 +99,7 @@ namespace Engine.Drawing.Services
 			{
 				switch (uiZone.JustificationType)
 				{
-					case UiZoneJustificationTypes.BottomReverseWrap:
+					case UiZoneJustificationTypes.Bottom:
 					case UiZoneJustificationTypes.Center:
 					case UiZoneJustificationTypes.None:
 					case UiZoneJustificationTypes.Top:
@@ -137,7 +137,7 @@ namespace Engine.Drawing.Services
 				UiRowHorizontalJustificationTypes.None => 0,
 				UiRowHorizontalJustificationTypes.Center => (uiRow.Width - width) / 2,
 				UiRowHorizontalJustificationTypes.Left => 0,
-				UiRowHorizontalJustificationTypes.RightReverseWrap => uiRow.Width,
+				UiRowHorizontalJustificationTypes.Right => uiRow.Width - width,
 				_ => 0,
 			};
 
@@ -163,11 +163,11 @@ namespace Engine.Drawing.Services
 
 				switch (uiRow.HorizontalJustificationType)
 				{
-					case UiRowHorizontalJustificationTypes.RightReverseWrap:
-						elementHorizontalOffset -= (element.RightPadding + element.Area.X);
-						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
-						elementHorizontalOffset -= element.LeftPadding;
-						break;
+					case UiRowHorizontalJustificationTypes.Right:
+						//elementHorizontalOffset -= (element.RightPadding + element.Area.X);
+						//this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
+						//elementHorizontalOffset -= element.LeftPadding;
+						//break;
 					case UiRowHorizontalJustificationTypes.Center:
 					case UiRowHorizontalJustificationTypes.None:
 					case UiRowHorizontalJustificationTypes.Left:

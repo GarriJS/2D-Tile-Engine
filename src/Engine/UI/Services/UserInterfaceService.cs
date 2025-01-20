@@ -68,32 +68,34 @@ namespace Engine.UI.Services
 				UiZoneJustificationTypes.None => 0,
 				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
 				UiZoneJustificationTypes.Top => 0,
-				UiZoneJustificationTypes.BottomReverseWrap => uiZone.Area.Height - height,
+				UiZoneJustificationTypes.Bottom => uiZone.Area.Height - height,
 				_ => 0,
 			};
 
 			foreach (var elementRow in uiZone.ElementRows)
 			{
+				var rowTop = 0f;
+				var rowBottom = 0f;
+
 				switch (uiZone.JustificationType)
 				{
-					case UiZoneJustificationTypes.BottomReverseWrap:
+					case UiZoneJustificationTypes.Bottom:
 					case UiZoneJustificationTypes.Center:
 					case UiZoneJustificationTypes.None:
 					case UiZoneJustificationTypes.Top:
 					default:
 						rowVerticalOffset += elementRow.TopPadding;
-						var rowTop = rowVerticalOffset + uiZone.Position.Y;
+						rowTop = rowVerticalOffset + uiZone.Position.Y;
 						rowVerticalOffset += elementRow.Height;
-						var rowBottom = rowVerticalOffset + uiZone.Position.Y;
+						rowBottom = rowVerticalOffset + uiZone.Position.Y;
 						rowVerticalOffset += elementRow.BottomPadding;	
-
-						if ((rowTop <= location.Y) &&
-							(rowBottom >= location.Y))
-						{
-							return this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
-						}
-
 						break;
+				}
+
+				if ((rowTop <= location.Y) &&
+					(rowBottom >= location.Y))
+				{
+					return this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
 				}
 			}
 
@@ -116,7 +118,7 @@ namespace Engine.UI.Services
 				UiRowHorizontalJustificationTypes.None => 0,
 				UiRowHorizontalJustificationTypes.Center => (uiRow.Width - width) / 2,
 				UiRowHorizontalJustificationTypes.Left => 0,
-				UiRowHorizontalJustificationTypes.RightReverseWrap => uiRow.Width,
+				UiRowHorizontalJustificationTypes.Right => uiRow.Width - width,
 				_ => 0,
 			};
 
@@ -145,13 +147,7 @@ namespace Engine.UI.Services
 
 				switch (uiRow.HorizontalJustificationType)
 				{
-					case UiRowHorizontalJustificationTypes.RightReverseWrap:
-						elementHorizontalOffset -= element.RightPadding;
-						elementRight = elementHorizontalOffset + position.X;
-						elementHorizontalOffset -= element.Area.X;
-						elementLeft = elementHorizontalOffset + position.X;
-						elementHorizontalOffset -= element.LeftPadding;
-						break;
+					case UiRowHorizontalJustificationTypes.Right:
 					case UiRowHorizontalJustificationTypes.Center:
 					case UiRowHorizontalJustificationTypes.None:
 					case UiRowHorizontalJustificationTypes.Left:
