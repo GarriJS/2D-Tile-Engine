@@ -1,4 +1,5 @@
-﻿using Engine.Drawing.Models.Contracts;
+﻿using Engine.Drawing.Models;
+using Engine.Drawing.Models.Contracts;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.UI.Models;
@@ -66,6 +67,19 @@ namespace Engine.Drawing.Services
 		public void Draw(GameTime gameTime, IAmDrawable drawable)
 		{
 			this.SpriteBatch.Draw(drawable.Image.Texture, drawable.Position.Coordinates, drawable.Image.TextureBox, Color.White);
+		}
+
+		/// <summary>
+		/// Draws the animation.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="animation">The animation.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		public void Draw(GameTime gameTime, Animation animation, Vector2 coordinates)
+		{
+			this.Draw(animation.CurrentFrame.Texture, coordinates, animation.CurrentFrame.TextureBox, Color.White);
+			var animationService = this._gameServices.GetService<IAnimationService>();
+			animationService.UpdateAnimationFrame(gameTime, animation);
 		}
 
 		/// <summary>
@@ -189,10 +203,10 @@ namespace Engine.Drawing.Services
 
 			if (element is UiButton button)
 			{
-				if (null != button.ClickableImage)
+				if (null != button.ClickAnimation)
 				{
 					var clickableOffset = new Vector2((button.Area.X - button.ClickableArea.X) / 2, (button.Area.Y - button.ClickableArea.Y) / 2);
-					this.Draw(button.ClickableImage.Texture, position.Coordinates + offset + clickableOffset, button.ClickableImage.TextureBox, Color.White);
+					this.Draw(gameTime, button.ClickAnimation, position.Coordinates + offset + clickableOffset);
 				}
 
 				if (false == string.IsNullOrEmpty(button.ButtonText))

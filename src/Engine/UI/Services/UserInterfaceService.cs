@@ -7,7 +7,6 @@ using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,7 +45,7 @@ namespace Engine.UI.Services
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <returns>The user interface element at the location if one is found.</returns>
-		public IAmAUiElement GetUiElementAtScreenLocation(Vector2 location)
+		public UiElementWithLocation GetUiElementAtScreenLocation(Vector2 location)
 		{
 			if (true != this.ActiveVisibilityGroupId.HasValue)
 			{
@@ -110,7 +109,7 @@ namespace Engine.UI.Services
 		/// <param name="heightOffset">The height offset.</param>
 		/// <param name="location">The location.</param>
 		/// <returns>The user interface element at the location if one is found.</returns>
-		private IAmAUiElement GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
+		private UiElementWithLocation GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
 		{
 			var width = uiRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
 			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
@@ -169,7 +168,11 @@ namespace Engine.UI.Services
 					if ((elementTop <= location.Y) &&
 						(elementBottom >= location.Y))
 					{
-						return element;
+						return new UiElementWithLocation
+						{ 
+							Element = element,
+							Location = new Vector2(elementLeft, elementTop),
+						};
 					}
 				}
 			}

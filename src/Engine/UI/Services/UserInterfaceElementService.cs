@@ -1,5 +1,6 @@
 ﻿using DiscModels.Engine.UI.Contracts;
 using DiscModels.Engine.UI.Elements;
+using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
@@ -116,11 +117,9 @@ namespace Engine.UI.Services
 		/// <returns>The user interface button.</returns>
 		private UiButton GetUiButton(UiButtonModel buttonModel, Vector2 area)
 		{
-			var imageService = this._gameServices.GetService<IImageService>();
+			var animationService = this._gameServices.GetService<IAnimationService>();
 			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
-			var innerImage = imageService.GetImage(buttonModel.ClickableBackgroundTextureName, (int)clickableArea.X, (int)clickableArea.Y);
-
-			return new UiButton
+			var button =  new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
 				ButtonText = buttonModel.ButtonText,
@@ -128,10 +127,21 @@ namespace Engine.UI.Services
 				RightPadding = buttonModel.RightPadding,
 				ElementType = UiElementTypes.Button,
 				Area = area,
-				ClickableArea = clickableArea,
-				ClickableImage = innerImage
+				ClickableArea = clickableArea
 				//Signal = ?? TODO
 			};
+
+			if (null != buttonModel.ClickableAreaAnimation)
+			{
+				var clickAnimation = animationService.GetAnimation(buttonModel.ClickableAreaAnimation, (int)clickableArea.X, (int)clickableArea.Y);
+
+				if (clickAnimation is TriggeredAnimation triggeredAnimation)
+				{
+					button.ClickAnimation = triggeredAnimation;
+				}
+			}
+
+			return button;
 		}
 	}
 }

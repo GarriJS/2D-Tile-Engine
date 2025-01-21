@@ -1,5 +1,6 @@
 ﻿using DiscModels.Engine.Tiling;
 using DiscModels.Engine.Tiling.Contracts;
+using Engine.Core.Constants;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Engine.Tiling.Models;
@@ -100,7 +101,7 @@ namespace Engine.Tiling.Services
 			if (tileModel is AnimatedTileModel animatedTileModel)
 			{
 				var animationService = this._gameServices.GetService<IAnimationService>();
-				var animation = animationService.GetAnimation(animatedTileModel.Animation);
+				var animation = animationService.GetAnimation(animatedTileModel.Animation, TileConstants.TILE_SIZE, TileConstants.TILE_SIZE);
 				var animatedTile = new AnimatedTile
 				{
 					Row = tileModel.Row,

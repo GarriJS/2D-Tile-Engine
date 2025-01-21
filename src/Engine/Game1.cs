@@ -6,6 +6,8 @@ using Engine.Controls.Typing;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.Debugging.Services.Contracts;
+using Engine.Drawing.Services.Contracts;
+using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -88,11 +90,27 @@ namespace Engine
 										LeftPadding = 5,
 										RightPadding = 5,
 										BackgroundTextureName = "black",
-										ClickableBackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.ExtraSmall,
 										ClickableAreaScaler = new Vector2(.9f, .9f),
-										Signal = null
+										Signal = null,
+										ClickableAreaAnimation = new TriggeredAnimationModel
+										{
+											CurrentFrameIndex = 0,
+											FrameDuration = 1000,
+											RestingFrameIndex = 0,
+											Frames =
+											[
+												new ImageModel
+												{ 
+													TextureName = "white",
+												},
+												new ImageModel
+												{
+													TextureName = "black",
+												}
+											]
+										}
 									},
 									new UiButtonModel
 									{
@@ -100,11 +118,27 @@ namespace Engine
 										LeftPadding = 0,
 										RightPadding = 0,
 										BackgroundTextureName = "gray",
-										ClickableBackgroundTextureName = "black",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.ExtraLarge,
 										ClickableAreaScaler = new Vector2(.95f, .95f),
-										Signal = null
+										Signal = null,
+										ClickableAreaAnimation = new TriggeredAnimationModel
+										{
+											CurrentFrameIndex = 0,
+											FrameDuration = 1000,
+											RestingFrameIndex = 0,
+											Frames =
+											[
+												new ImageModel
+												{
+													TextureName = "white",
+												},
+												new ImageModel
+												{
+													TextureName = "gray",
+												}
+											]
+										}
 									},
 									new UiButtonModel
 									{
@@ -112,11 +146,27 @@ namespace Engine
 										LeftPadding = 5,
 										RightPadding = 5,
 										BackgroundTextureName = "white",
-										ClickableBackgroundTextureName = "black",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Small,
 										ClickableAreaScaler = new Vector2(.9f, .9f),
-										Signal = null
+										Signal = null,
+										ClickableAreaAnimation = new TriggeredAnimationModel
+										{
+											CurrentFrameIndex = 0,
+											FrameDuration = 1000,
+											RestingFrameIndex = 0,
+											Frames =
+											[
+												new ImageModel
+												{
+													TextureName = "black",
+												},
+												new ImageModel
+												{
+													TextureName = "white",
+												}
+											]
+										}
 									}
 								]
 							},
@@ -264,7 +314,16 @@ namespace Engine
 
 			var mouse = Mouse.GetState().Position.ToVector2();
 			var uiService = this.Services.GetService<IUserInterfaceService>();
-			uiService.GetUiElementAtScreenLocation(mouse);
+			var foo = uiService.GetUiElementAtScreenLocation(mouse);
+
+			if (foo?.Element is UiButton button &&
+				null != button.ClickAnimation &&
+				Mouse.GetState().LeftButton == ButtonState.Pressed)
+			{
+				var animationService = this.Services.GetService<IAnimationService>();
+
+				animationService.TriggerAnimation(button.ClickAnimation);
+			}
 
 			base.Update(gameTime);
 

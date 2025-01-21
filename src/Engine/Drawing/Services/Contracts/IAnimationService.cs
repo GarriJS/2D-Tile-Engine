@@ -13,8 +13,10 @@ namespace Engine.Drawing.Services.Contracts
 		/// Gets the animation.
 		/// </summary>
 		/// <param name="animationModel">The animation.</param>
+		/// <param name="frameWidth">The frame width.</param>
+		/// <param name="frameHeight">The frame height.</param>
 		/// <returns>The animation.</returns>
-		public Animation GetAnimation(AnimationModel animationModel);
+		public Animation GetAnimation(AnimationModel animationModel, int frameWidth, int frameHeight);
 
 		/// <summary>
 		/// Updates the animation frame.

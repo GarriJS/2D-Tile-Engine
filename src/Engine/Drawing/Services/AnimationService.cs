@@ -22,15 +22,17 @@ namespace Engine.Drawing.Services
 		/// Gets the animation.
 		/// </summary>
 		/// <param name="animationModel">The animation.</param>
+		/// <param name="frameWidth">The frame width.</param>
+		/// <param name="frameHeight">The frame height.</param>
 		/// <returns>The animation.</returns>
-		public Animation GetAnimation(AnimationModel animationModel)
+		public Animation GetAnimation(AnimationModel animationModel, int frameWidth, int frameHeight)
 		{
-			var spriteService = this._gameServices.GetService<ISpriteService>();
-			var frames = new Sprite[animationModel.Frames.Length];
+			var imageService = this._gameServices.GetService<IImageService>();
+			var frames = new Image[animationModel.Frames.Length];
 
 			for (int i = 0; i < frames.Length; i++)
 			{
-				frames[i] = spriteService.GetSprite(animationModel.Frames[i]);
+				frames[i] = imageService.GetImage(animationModel.Frames[i], frameWidth, frameHeight);
 			}
 
 			var animation = animationModel switch

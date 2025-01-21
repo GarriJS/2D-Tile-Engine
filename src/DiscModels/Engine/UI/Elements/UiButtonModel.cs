@@ -1,4 +1,5 @@
-﻿using DiscModels.Engine.Signals;
+﻿using DiscModels.Engine.Drawing;
+using DiscModels.Engine.Signals;
 using DiscModels.Engine.UI.Contracts;
 using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
@@ -26,8 +27,8 @@ namespace DiscModels.Engine.UI.Elements
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "clickableBackgroundTextureName", Order = 7)]
-		public string ClickableBackgroundTextureName { get; set; }
+		[DataMember(Name = "clickableAreaAnimation", Order = 7)]
+		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }
 
 		[DataMember(Name = "buttonText", Order = 8)]
 		public string ButtonText { get; set; }

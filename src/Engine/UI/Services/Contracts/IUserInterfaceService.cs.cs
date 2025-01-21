@@ -1,6 +1,5 @@
 ﻿using DiscModels.Engine.UI;
 using Engine.UI.Models;
-using Engine.UI.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -33,7 +32,7 @@ namespace Engine.UI.Services.Contracts
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <returns>The user interface element at the location if one is found.</returns>
-		public IAmAUiElement GetUiElementAtScreenLocation(Vector2 location);
+		public UiElementWithLocation GetUiElementAtScreenLocation(Vector2 location);
 
 		/// <summary>
 		/// Gets the user interface group.

@@ -60,7 +60,12 @@ namespace Engine.UI.Models.Elements
 		/// <summary>
 		/// Gets or sets the clickable image.
 		/// </summary>
-		public Image ClickableImage { get; set; }
+		public Image ClickableImage { get => this.ClickAnimation?.CurrentFrame; }
+
+		/// <summary>
+		/// Gets or sets the clickable animation.
+		/// </summary>
+		public TriggeredAnimation ClickAnimation { get; set; }
 
 		/// <summary>
 		/// Gets or set the signal.
