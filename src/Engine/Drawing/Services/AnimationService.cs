@@ -29,16 +29,29 @@ namespace Engine.Drawing.Services
 			var frames = new Sprite[animationModel.Frames.Length];
 
 			for (int i = 0; i < frames.Length; i++)
-			{ 
+			{
 				frames[i] = spriteService.GetSprite(animationModel.Frames[i]);
 			}
 
-			var animation = new Animation
+			var animation = animationModel switch
 			{
-				CurrentFrameIndex = animationModel.CurrentFrameIndex,
-				FrameMinDuration = animationModel.FrameMinDuration,
-				FrameMaxDuration = animationModel.FrameMaxDuration,
-				Frames = frames,
+				TriggeredAnimationModel triggeredAnimationModel => 
+				new TriggeredAnimation
+				{
+					CurrentFrameIndex = triggeredAnimationModel.CurrentFrameIndex,
+					FrameMinDuration = triggeredAnimationModel.FrameMinDuration,
+					FrameMaxDuration = triggeredAnimationModel.FrameMaxDuration,
+					Frames = frames,
+					RestingFrameIndex = triggeredAnimationModel.RestingFrameIndex,
+				},
+				_ => 
+				new Animation
+				{
+					CurrentFrameIndex = animationModel.CurrentFrameIndex,
+					FrameMinDuration = animationModel.FrameMinDuration,
+					FrameMaxDuration = animationModel.FrameMaxDuration,
+					Frames = frames
+				}
 			};
 
 			if (true == animationModel.FrameDuration.HasValue)
@@ -61,10 +74,12 @@ namespace Engine.Drawing.Services
 		/// <param name="animation">The animation.</param>
 		public void UpdateAnimationFrame(GameTime gameTime, Animation animation)
 		{
-			if (null == animation.FrameStartTime)
+			if ((null == animation.FrameStartTime) ||
+				((animation is TriggeredAnimation triggeredAnimation) &&
+				 (triggeredAnimation.CurrentFrameIndex == triggeredAnimation.RestingFrameIndex)))
 			{
 				animation.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
-				
+
 				return;
 			}
 
@@ -91,6 +106,31 @@ namespace Engine.Drawing.Services
 				}
 
 				animation.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+			}
+		}
+
+		/// <summary>
+		/// Triggers the animation.
+		/// </summary>
+		/// <param name="triggeredAnimation">The triggered animation.</param>
+		/// <param name="allowReset">A value indicating whether to allow the animation trigger to reset.</param>
+		public void TriggerAnimation(TriggeredAnimation triggeredAnimation, bool allowReset = false)
+		{
+			if ((false == allowReset) &&
+				(triggeredAnimation.RestingFrameIndex != triggeredAnimation.CurrentFrameIndex))
+			{ 
+				return;
+			}
+
+			triggeredAnimation.CurrentFrameIndex = triggeredAnimation.RestingFrameIndex;
+
+			if (triggeredAnimation.CurrentFrameIndex < triggeredAnimation.Frames.Length - 1)
+			{
+				triggeredAnimation.CurrentFrameIndex++;
+			}
+			else
+			{
+				triggeredAnimation.CurrentFrameIndex = 0;
 			}
 		}
 	}
