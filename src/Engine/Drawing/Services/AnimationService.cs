@@ -124,6 +124,7 @@ namespace Engine.Drawing.Services
 				return;
 			}
 
+			triggeredAnimation.FrameStartTime = null;
 			triggeredAnimation.CurrentFrameIndex = triggeredAnimation.RestingFrameIndex;
 
 			if (triggeredAnimation.CurrentFrameIndex < triggeredAnimation.Frames.Length - 1)

@@ -322,7 +322,7 @@ namespace Engine
 			{
 				var animationService = this.Services.GetService<IAnimationService>();
 
-				animationService.TriggerAnimation(button.ClickAnimation);
+				animationService.TriggerAnimation(button.ClickAnimation, true);
 			}
 
 			base.Update(gameTime);
