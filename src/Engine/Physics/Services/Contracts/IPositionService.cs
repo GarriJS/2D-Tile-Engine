@@ -1,4 +1,4 @@
-﻿using DiscModels.Engine.Physics;
+﻿using Engine.DiscModels.Engine.Physics;
 using Engine.Physics.Models;
 
 namespace Engine.Physics.Services.Contracts

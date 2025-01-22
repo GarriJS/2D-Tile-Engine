@@ -6,7 +6,4 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.2.*" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DiscModels\DiscModels.csproj" />
-  </ItemGroup>
 </Project>

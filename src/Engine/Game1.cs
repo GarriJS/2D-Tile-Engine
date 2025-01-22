@@ -1,12 +1,11 @@
-﻿using DiscModels.Engine.Drawing;
-using DiscModels.Engine.UI;
-using DiscModels.Engine.UI.Elements;
+﻿using Engine.DiscModels.Engine.Drawing;
+using Engine.DiscModels.Engine.UI;
+using Engine.DiscModels.Engine.UI.Elements;
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.Debugging.Services.Contracts;
-using Engine.Drawing.Services.Contracts;
 using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;

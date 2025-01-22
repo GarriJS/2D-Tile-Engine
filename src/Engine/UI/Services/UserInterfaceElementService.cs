@@ -1,5 +1,5 @@
-﻿using DiscModels.Engine.UI.Contracts;
-using DiscModels.Engine.UI.Elements;
+﻿using Engine.DiscModels.Engine.UI.Contracts;
+using Engine.DiscModels.Engine.UI.Elements;
 using Engine.Controls.Services.Contracts;
 using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;

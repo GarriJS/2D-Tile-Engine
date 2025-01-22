@@ -14,8 +14,6 @@ using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Managers;
 using Engine.RunTime.Services;
 using Engine.RunTime.Services.Contracts;
-using Engine.Tiling.Services;
-using Engine.Tiling.Services.Contracts;
 using Engine.UI.Services;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -111,7 +109,6 @@ namespace Engine.Core.Initialization
 				(typeof(IIndependentImageService), new IndependentImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
 				(typeof(IAreaService), new AreaService(game.Services)),
-				(typeof(ITileService), new TileService(game.Services)),
 				(typeof(IRandomService), new RandomService()),
 			];
 		}
