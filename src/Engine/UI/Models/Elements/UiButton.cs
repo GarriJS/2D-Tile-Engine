@@ -1,21 +1,25 @@
 ﻿using Engine.Drawing.Models;
-using Engine.Signals.Models;
-using Engine.Signals.Models.Contracts;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Engine.UI.Models.Elements
 {
 	/// <summary>
 	/// Represents a user interface button.
 	/// </summary>
-	public class UiButton : IAmAUiElement, IHaveASignal
+	public class UiButton : IAmAUiElement
 	{
 		/// <summary>
 		/// Gets or sets the user interface element name.
 		/// </summary>
 		public string UiElementName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the visibility group.
+		/// </summary>
+		public int? VisibilityGroup { get; set; }
 
 		/// <summary>
 		/// Gets or sets the button text.
@@ -68,9 +72,31 @@ namespace Engine.UI.Models.Elements
 		public TriggeredAnimation ClickAnimation { get; set; }
 
 		/// <summary>
-		/// Gets or set the signal.
+		/// Gets or set the press event.
 		/// </summary>
-		public Signal Signal { get; set; }
+		public event Action<IAmAUiElement, Vector2> PressEvent;
+
+		/// <summary>
+		/// Gets or sets the click event.
+		/// </summary>
+		public event Action<UiButton> ClickEvent;
+
+		/// <summary>
+		/// Raises the press event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaisePressEvent(Vector2 elementLocation)
+		{ 
+			this.PressEvent?.Invoke(this, elementLocation);
+		}
+
+		/// <summary>
+		/// Raises the click event.
+		/// </summary>
+		public void RaiseClickEvent()
+		{
+			this.ClickEvent?.Invoke(this);
+		}
 
 		/// <summary>
 		/// Disposes of the user interface button.

@@ -136,5 +136,15 @@ namespace Engine.Drawing.Services
 				triggeredAnimation.CurrentFrameIndex = 0;
 			}
 		}
+
+		/// <summary>
+		/// Resets the triggered animation.
+		/// </summary>
+		/// <param name="triggeredAnimation">The triggered animation.</param>
+		public void ResetTriggeredAnimation(TriggeredAnimation triggeredAnimation)
+		{
+			triggeredAnimation.FrameStartTime = null;
+			triggeredAnimation.CurrentFrameIndex = triggeredAnimation.RestingFrameIndex;
+		}
 	}
 }

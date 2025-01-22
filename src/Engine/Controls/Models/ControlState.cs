@@ -1,4 +1,5 @@
 ﻿using Engine.Controls.Models.Enums;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace Engine.Controls.Models
@@ -12,6 +13,11 @@ namespace Engine.Controls.Models
 		/// Gets or sets the direction.
 		/// </summary>
 		public float? Direction { get; set; }
+
+		/// <summary>
+		/// Gets or sets the mouse state.
+		/// </summary>
+		public MouseState MouseState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the fresh action types. 

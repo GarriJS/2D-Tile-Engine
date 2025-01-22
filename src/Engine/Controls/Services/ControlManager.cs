@@ -43,6 +43,7 @@ namespace Engine.Controls.Services
 			this.ControlState = new ControlState
 			{
 				Direction = null,
+				MouseState = default,
 				FreshActionTypes = [],
 				ActionTypes = []
 			};
@@ -69,6 +70,7 @@ namespace Engine.Controls.Services
 		private ControlState GetCurrentControlState()
 		{
 			var pressedKeys = Keyboard.GetState().GetPressedKeys();
+			var mouseState = Mouse.GetState();
 			var pressedMouseButtons = this.GetPressedMouseButtons(Mouse.GetState());
 			var activeActionTypes = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
 																   (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
@@ -87,6 +89,7 @@ namespace Engine.Controls.Services
 			return new ControlState
 			{
 				Direction = direction,
+				MouseState = mouseState,
 				FreshActionTypes = freshActionTypes,
 				ActionTypes = activeActionTypes
 			};

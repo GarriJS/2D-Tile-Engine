@@ -70,7 +70,7 @@ namespace Engine
 						UiZoneType = (int)UiScreenZoneTypes.Row1Col1,
 						Background = new ImageModel
 						{
-							TextureName = "tile_grid"
+							TextureName = "debug"
 						},
 						JustificationType = (int)UiZoneJustificationTypes.Center,
 						ElementRows =
@@ -93,7 +93,6 @@ namespace Engine
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.ExtraSmall,
 										ClickableAreaScaler = new Vector2(.9f, .9f),
-										Signal = null,
 										ClickableAreaAnimation = new TriggeredAnimationModel
 										{
 											CurrentFrameIndex = 0,
@@ -121,7 +120,6 @@ namespace Engine
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.ExtraLarge,
 										ClickableAreaScaler = new Vector2(.95f, .95f),
-										Signal = null,
 										ClickableAreaAnimation = new TriggeredAnimationModel
 										{
 											CurrentFrameIndex = 0,
@@ -149,7 +147,6 @@ namespace Engine
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Small,
 										ClickableAreaScaler = new Vector2(.9f, .9f),
-										Signal = null,
 										ClickableAreaAnimation = new TriggeredAnimationModel
 										{
 											CurrentFrameIndex = 0,
@@ -187,7 +184,24 @@ namespace Engine
 										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Medium,
-										Signal = null
+										ClickableAreaScaler = new Vector2(.9f, .9f),
+										ClickableAreaAnimation = new TriggeredAnimationModel
+										{
+											CurrentFrameIndex = 0,
+											FrameDuration = 1000,
+											RestingFrameIndex = 0,
+											Frames =
+											[
+												new ImageModel
+												{
+													TextureName = "black",
+												},
+												new ImageModel
+												{
+													TextureName = "white",
+												}
+											]
+										}
 									},
 									new UiButtonModel
 									{
@@ -196,20 +210,29 @@ namespace Engine
 										RightPadding = 5,
 										BackgroundTextureName = "black",
 										ButtonText = "Push Me",
-										SizeType = (int)UiElementSizeTypes.Large,
-										Signal = null
+										SizeType = (int)UiElementSizeTypes.Large
 									}
 								]
 							}
 						]
-					},
+					}
+				]
+			};
+
+
+			var bar = new UiGroupModel
+			{
+				UiGroupName = "bar",
+				VisibilityGroupId = 2,
+				UiZoneElements =
+				[
 					new UiZoneModel
 					{
 						UiZoneName = "foo1",
-						UiZoneType = (int)UiScreenZoneTypes.Row1Col2,
+						UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 						Background = new ImageModel
 						{
-							TextureName = "tile_grid"
+							TextureName = "debug"
 						},
 						JustificationType = (int)UiZoneJustificationTypes.Center,
 						ElementRows =
@@ -229,9 +252,8 @@ namespace Engine
 										LeftPadding = 5,
 										RightPadding = 5,
 										BackgroundTextureName = "black",
-										ButtonText = "Push Me",          
-										FixedSized = new Vector2(100, 100),
-										Signal = null
+										ButtonText = "Push Me",
+										FixedSized = new Vector2(100, 100)
 									},
 									new UiButtonModel
 									{
@@ -241,7 +263,24 @@ namespace Engine
 										BackgroundTextureName = "gray",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.ExtraLarge,
-										Signal = null
+										ClickableAreaScaler = new Vector2(.9f, .9f),
+										ClickableAreaAnimation = new TriggeredAnimationModel
+										{
+											CurrentFrameIndex = 0,
+											FrameDuration = 1000,
+											RestingFrameIndex = 0,
+											Frames =
+											[
+												new ImageModel
+												{
+													TextureName = "black",
+												},
+												new ImageModel
+												{
+													TextureName = "white",
+												}
+											]
+										}
 									},
 									new UiButtonModel
 									{
@@ -251,7 +290,7 @@ namespace Engine
 										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Small,
-										Signal = null
+										ClickableAreaScaler = new Vector2(1f, 1f),
 									}
 								]
 							},
@@ -272,7 +311,7 @@ namespace Engine
 										BackgroundTextureName = "white",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Medium,
-										Signal = null
+										ClickableAreaScaler = new Vector2(1f, 1f),
 									},
 									new UiButtonModel
 									{
@@ -282,7 +321,7 @@ namespace Engine
 										BackgroundTextureName = "black",
 										ButtonText = "Push Me",
 										SizeType = (int)UiElementSizeTypes.Large,
-										Signal = null
+										ClickableAreaScaler = new Vector2(1f, 1f),
 									}
 								]
 							}
@@ -293,7 +332,9 @@ namespace Engine
 
 			var uiService = this.Services.GetService<IUserInterfaceService>();
 			var group = uiService.GetUiGroup(foo);
+			var group2 = uiService.GetUiGroup(bar);
 			uiService.UserInterfaceGroups.Add(group);
+			uiService.UserInterfaceGroups.Add(group2);
 			uiService.ToggleUserInterfaceGroupVisibility(group);
 		}
 
@@ -317,12 +358,9 @@ namespace Engine
 			var foo = uiService.GetUiElementAtScreenLocation(mouse);
 
 			if (foo?.Element is UiButton button &&
-				null != button.ClickAnimation &&
 				Mouse.GetState().LeftButton == ButtonState.Pressed)
 			{
-				var animationService = this.Services.GetService<IAnimationService>();
-
-				animationService.TriggerAnimation(button.ClickAnimation, true);
+				button.RaisePressEvent(foo.Location);
 			}
 
 			base.Update(gameTime);

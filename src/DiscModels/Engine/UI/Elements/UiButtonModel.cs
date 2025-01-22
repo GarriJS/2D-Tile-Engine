@@ -1,5 +1,4 @@
 ﻿using DiscModels.Engine.Drawing;
-using DiscModels.Engine.Signals;
 using DiscModels.Engine.UI.Contracts;
 using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
@@ -35,8 +34,5 @@ namespace DiscModels.Engine.UI.Elements
 
 		[DataMember(Name = "clickableAreaScaler", Order = 9)]
 		public Vector2 ClickableAreaScaler { get; set; }
-
-		[DataMember(Name = "signal", Order = 10)]
-		public SignalModel Signal { get; set; }
 	}
 }

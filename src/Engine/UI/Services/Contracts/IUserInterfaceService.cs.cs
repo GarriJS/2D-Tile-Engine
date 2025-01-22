@@ -22,6 +22,13 @@ namespace Engine.UI.Services.Contracts
 		public void ToggleUserInterfaceGroupVisibility(int visibilityGroupId);
 
 		/// <summary>
+		/// Gets the user interface group.
+		/// </summary>
+		/// <param name="uiGroupModel">The user interface group model.</param>
+		/// <returns>The user interface group.</returns>
+		public UiGroup GetUiGroup(UiGroupModel uiGroupModel);
+
+		/// <summary>
 		/// Toggles the user interface group visibility.
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
@@ -35,18 +42,12 @@ namespace Engine.UI.Services.Contracts
 		public UiElementWithLocation GetUiElementAtScreenLocation(Vector2 location);
 
 		/// <summary>
-		/// Gets the user interface group.
-		/// </summary>
-		/// <param name="uiGroupModel">The user interface group model.</param>
-		/// <returns>The user interface group.</returns>
-		public UiGroup GetUiGroup(UiGroupModel uiGroupModel);
-
-		/// <summary>
 		/// Gets the user interface zone element.
 		/// </summary>
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
+		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
 		/// <returns>The user interface zone element.</returns>
-		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel);
+		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int? visibilityGroup);
 
 		/// <summary>
 		/// Gets the user interface row.
@@ -54,7 +55,8 @@ namespace Engine.UI.Services.Contracts
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="fillHeight">The fill height.</param>
+		/// <param name="visibilityGroup">The visibility group of the user interface row.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight);
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int? visibilityGroup);
 	}
 }

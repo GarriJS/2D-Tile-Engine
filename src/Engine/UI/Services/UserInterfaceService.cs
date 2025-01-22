@@ -4,6 +4,7 @@ using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
+using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -38,6 +39,64 @@ namespace Engine.UI.Services
 		{
 			var userInterfaceGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == visibilityGroupId);
 			this.ToggleUserInterfaceGroupVisibility(userInterfaceGroup);
+		}
+
+		/// <summary>
+		/// Toggles the user interface group visibility.
+		/// </summary>
+		/// <param name="uiGroup">The user interface group.</param>
+		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup)
+		{
+			if (null == uiGroup)
+			{
+				return;
+			}
+
+			var runtimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+
+			if (true == this.ActiveVisibilityGroupId.HasValue)
+			{
+				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
+
+				foreach (var uiZoneContainer in activeGroup.UiZones)
+				{
+					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
+				}
+			}
+
+			if (true == uiGroup.UiZones?.Any())
+			{
+				var animationService = this._gameServices.GetService<IAnimationService>();
+
+				foreach (var uiZoneContainer in uiGroup.UiZones)
+				{
+					runtimeDrawService.AddOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
+
+					if (true != uiZoneContainer.ElementRows?.Any())
+					{
+						continue;
+					}
+
+					foreach (var uiRow in uiZoneContainer.ElementRows)
+					{
+						if (true != uiRow.SubElements?.Any())
+						{
+							continue;
+						}
+
+						foreach (var element in uiRow.SubElements)
+						{
+							if ((element is UiButton button) &&
+								(null != button?.ClickAnimation))
+							{
+								animationService.ResetTriggeredAnimation(button.ClickAnimation);
+							}
+						}
+					}
+				}
+			}
+
+			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
 		}
 
 		/// <summary>
@@ -87,7 +146,7 @@ namespace Engine.UI.Services
 						rowTop = rowVerticalOffset + uiZone.Position.Y;
 						rowVerticalOffset += elementRow.Height;
 						rowBottom = rowVerticalOffset + uiZone.Position.Y;
-						rowVerticalOffset += elementRow.BottomPadding;	
+						rowVerticalOffset += elementRow.BottomPadding;
 						break;
 				}
 
@@ -169,7 +228,7 @@ namespace Engine.UI.Services
 						(elementBottom >= location.Y))
 					{
 						return new UiElementWithLocation
-						{ 
+						{
 							Element = element,
 							Location = new Vector2(elementLeft, elementTop),
 						};
@@ -181,52 +240,21 @@ namespace Engine.UI.Services
 		}
 
 		/// <summary>
-		/// Toggles the user interface group visibility.
-		/// </summary>
-		/// <param name="uiGroup">The user interface group.</param>
-		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup)
-		{
-			if (null == uiGroup)
-			{
-				return;
-			}
-
-			var runtimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
-
-			if (true == this.ActiveVisibilityGroupId.HasValue)
-			{
-				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
-
-				foreach (var uiZoneContainer in activeGroup.UiZones)
-				{
-					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
-				}
-			}
-
-			foreach (var uiZoneContainer in uiGroup.UiZones)
-			{
-				runtimeDrawService.AddOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
-			}
-
-			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
-		}
-
-		/// <summary>
 		/// Gets the user interface group.
 		/// </summary>
 		/// <param name="uiGroupModel">The user interface group model.</param>
 		/// <returns>The user interface group.</returns>
 		public UiGroup GetUiGroup(UiGroupModel uiGroupModel)
 		{
-			var uiZoneElements = new List<UiZone>();
+			var uiZones = new List<UiZone>();
 
 			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
 			{
-				var uiZoneElement = this.GetUiZoneElement(uiZoneElementModel);
+				var uiZoneElement = this.GetUiZoneElement(uiZoneElementModel, uiGroupModel.VisibilityGroupId);
 
 				if (null != uiZoneElement)
 				{
-					uiZoneElements.Add(uiZoneElement);
+					uiZones.Add(uiZoneElement);
 				}
 			}
 
@@ -234,8 +262,7 @@ namespace Engine.UI.Services
 			{
 				UiGroupName = uiGroupModel.UiGroupName,
 				VisibilityGroupId = uiGroupModel.VisibilityGroupId,
-				UiZones = uiZoneElements,
-				ActiveSignalSubscriptions = []
+				UiZones = uiZones
 			};
 		}
 
@@ -243,8 +270,9 @@ namespace Engine.UI.Services
 		/// Gets the user interface zone element.
 		/// </summary>
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
+		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
 		/// <returns>The user interface zone element.</returns>
-		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel)
+		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int? visibilityGroup)
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
@@ -303,7 +331,7 @@ namespace Engine.UI.Services
 						rowHeight += fillHeight;
 					}
 
-					var elementRow = this.GetUiRow(elementRowModel, uiZone, rowHeight);
+					var elementRow = this.GetUiRow(elementRowModel, uiZone, rowHeight, visibilityGroup);
 
 					if (null != elementRow)
 					{
@@ -329,8 +357,9 @@ namespace Engine.UI.Services
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="fillHeight">The fill height.</param>
+		/// <param name="visibilityGroup">The visibility group of the user interface row.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int? visibilityGroup)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
@@ -364,7 +393,7 @@ namespace Engine.UI.Services
 
 				foreach (var elementModel in uiRowModel.SubElements)
 				{
-					var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth, fillHeight);
+					var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth, fillHeight, visibilityGroup);
 
 					if (null != element)
 					{

@@ -31,5 +31,11 @@ namespace Engine.Drawing.Services.Contracts
 		/// <param name="triggeredAnimation">The triggered animation.</param>
 		/// <param name="allowReset">A value indicating whether to allow the animation trigger to reset.</param>
 		public void TriggerAnimation(TriggeredAnimation triggeredAnimation, bool allowReset = false);
+
+		/// <summary>
+		/// Resets the triggered animation.
+		/// </summary>
+		/// <param name="triggeredAnimation">The triggered animation.</param>
+		public void ResetTriggeredAnimation(TriggeredAnimation triggeredAnimation);
 	}
 }
