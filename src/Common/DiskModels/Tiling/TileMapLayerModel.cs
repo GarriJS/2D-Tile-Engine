@@ -1,4 +1,5 @@
 ﻿using Common.DiscModels.Common.Tiling.Contracts;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Common.DiscModels.Common.Tiling

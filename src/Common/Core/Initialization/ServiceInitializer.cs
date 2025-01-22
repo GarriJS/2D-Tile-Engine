@@ -3,20 +3,16 @@ using Common.Tiling.Services.Contracts;
 using Engine;
 using Engine.Core.Contracts;
 using Microsoft.Xna.Framework;
+using System;
 using System.Diagnostics;
 
-namespace LevelEditor.Core.Initialization
+namespace Common.Core.Initialization
 {
 	/// <summary>
 	/// Represents a service initializer
 	/// </summary>
 	public static class ServiceInitializer
 	{
-		/// <summary>
-		/// Gets the loadables.
-		/// </summary>
-		public static List<ILoadContent> Loadables { get; } = [];
-
 		/// <summary>
 		/// Initializes the game services.
 		/// </summary>
@@ -38,9 +34,14 @@ namespace LevelEditor.Core.Initialization
 						game.Components.Add(gameComponent);
 					}
 
+					if (provider is INeedInitialization initializations)
+					{
+						game.Initializations.Add(initializations);
+					}
+
 					if (provider is ILoadContent loadable)
 					{
-						Loadables.Add(loadable);
+						game.Loadables.Add(loadable);
 					}
 				}
 				catch (Exception ex)

@@ -19,7 +19,6 @@ using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Engine.Core.Initialization
@@ -29,16 +28,6 @@ namespace Engine.Core.Initialization
 	/// </summary>
 	internal static class ServiceInitializer
 	{
-		/// <summary>
-		/// Gets the initializations. 
-		/// </summary>
-		internal static List<INeedInitialization> Initializations { get; } = [];
-
-		/// <summary>
-		/// Gets the loadables.
-		/// </summary>
-		internal static List<ILoadContent> Loadables { get; } = [];
-
 		/// <summary>
 		/// Starts the game services.
 		/// </summary>
@@ -62,12 +51,12 @@ namespace Engine.Core.Initialization
 
 					if (provider is INeedInitialization initializations)
 					{
-						Initializations.Add(initializations);
+						game.Initializations.Add(initializations);
 					}
 
 					if (provider is ILoadContent loadable)
 					{
-						Loadables.Add(loadable);
+						game.Loadables.Add(loadable);
 					}
 				}
 				catch (Exception ex)

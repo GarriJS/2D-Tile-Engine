@@ -11,12 +11,24 @@ using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Engine.Core.Contracts;
+using System.Collections.Generic;
 
 namespace Engine
 {
 	public class Game1: Game
 	{
 		public GraphicsDeviceManager _graphics;
+
+		/// <summary>
+		/// Gets the loadables.
+		/// </summary>
+		public List<ILoadContent> Loadables { get; } = [];
+
+		/// <summary>
+		/// Gets the initializations. 
+		/// </summary>
+		public List<INeedInitialization> Initializations { get; } = [];
 
 		public Game1()
 		{
@@ -44,12 +56,12 @@ namespace Engine
 
 		protected override void LoadContent()
 		{
-			foreach (var initialization in ServiceInitializer.Initializations)
+			foreach (var initialization in this.Initializations)
 			{
 				initialization.Initialize();
 			}
 
-			foreach (var loadable in ServiceInitializer.Loadables)
+			foreach (var loadable in this.Loadables)
 			{ 
 				loadable.LoadContent();
 			}

@@ -13,11 +13,6 @@ namespace LevelEditor.Core.Initialization
 	public static class ServiceInitializer
 	{
 		/// <summary>
-		/// Gets the loadables.
-		/// </summary>
-		public static List<ILoadContent> Loadables { get; } = [];
-
-		/// <summary>
 		/// Initializes the game services.
 		/// </summary>
 		/// <param name="game">The game.</param>
@@ -38,9 +33,14 @@ namespace LevelEditor.Core.Initialization
 						game.Components.Add(gameComponent);
 					}
 
+					if (provider is INeedInitialization initializations)
+					{
+						game.Initializations.Add(initializations);
+					}
+
 					if (provider is ILoadContent loadable)
 					{
-						Loadables.Add(loadable);
+						game.Loadables.Add(loadable);
 					}
 				}
 				catch (Exception ex)
