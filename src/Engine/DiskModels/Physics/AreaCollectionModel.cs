@@ -1,7 +1,7 @@
-﻿using Engine.DiscModels.Engine.Physics.Contracts;
+﻿using Engine.DiskModels.Engine.Physics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.Physics
+namespace Engine.DiskModels.Engine.Physics
 {
 	public class AreaCollectionModel : IAmAAreaModel
 	{

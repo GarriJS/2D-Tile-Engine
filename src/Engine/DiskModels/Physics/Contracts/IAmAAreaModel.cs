@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.Physics.Contracts
+namespace Engine.DiskModels.Engine.Physics.Contracts
 {
 	public interface IAmAAreaModel
 	{

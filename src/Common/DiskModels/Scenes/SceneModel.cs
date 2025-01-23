@@ -1,7 +1,7 @@
-﻿using Common.DiscModels.Common.Tiling;
+﻿using Common.DiskModels.Common.Tiling;
 using System.Runtime.Serialization;
 
-namespace Common.DiscModels.Engine.Scenes
+namespace Common.DiskModels.Scenes
 {
     [DataContract(Name = "scene")]
 	public class SceneModel

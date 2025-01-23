@@ -20,23 +20,40 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Engine.Core.Initialization
 {
 	/// <summary>
-	/// Represents a service initializer
+	/// Represents a service initializer.
 	/// </summary>
 	internal static class ServiceInitializer
 	{
 		/// <summary>
-		/// Starts the game services.
+		/// Starts the engine services.
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>A value indicating whether if all services were started.</returns>
-		internal static bool StartServices(Game1 game)
+		internal static bool StartEngineServices(Game1 game)
 		{
-			var serviceContractPairs = GetServiceContractPairs(game);
+			return StartServices(game, GetEngineServiceContractPairs);
+		}
+
+		/// <summary>
+		/// Starts the game services.
+		/// </summary>
+		/// <param name="game">The game.</param>
+		/// <param name="serviceProvider">The service provider.</param>
+		/// <returns>A value indicating whether if all services were started.</returns>
+		internal static bool StartServices(Game1 game, Func<Game, (Type type, object provider)[]> serviceProvider)
+		{
 			var success = true;
+			var serviceContractPairs = serviceProvider?.Invoke(game);
+
+			if (true != serviceContractPairs?.Any())
+			{ 
+				return success;
+			}
 
 			foreach (var (type, provider) in serviceContractPairs)
 			{
@@ -74,7 +91,7 @@ namespace Engine.Core.Initialization
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>The service contract pairs.</returns>
-		internal static (Type type, object provider)[] GetServiceContractPairs(Game1 game)
+		private static (Type type, object provider)[] GetEngineServiceContractPairs(Game game)
 		{
 			return
 			[

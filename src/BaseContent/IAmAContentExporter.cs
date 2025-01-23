@@ -15,6 +15,11 @@ namespace BaseContent
 		public string ContentManagerName { get; }
 
 		/// <summary>
+		/// Gets or sets the initial disc models.
+		/// </summary>
+		public List<object> InitialDiscModels { get; set; }
+
+		/// <summary>
 		/// Gets the control names.
 		/// </summary>
 		/// <returns>The control names.</returns>

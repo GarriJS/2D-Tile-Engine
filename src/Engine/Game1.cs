@@ -1,24 +1,44 @@
-﻿using Engine.DiscModels.Engine.Drawing;
-using Engine.DiscModels.Engine.UI;
-using Engine.DiscModels.Engine.UI.Elements;
-using Engine.Controls.Services.Contracts;
+﻿using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
+using Engine.Core.Contracts;
 using Engine.Core.Initialization;
-using Engine.Core.Initialization.Models;
 using Engine.Debugging.Services.Contracts;
+using Engine.DiskModels;
+using Engine.DiskModels.Engine.Drawing;
+using Engine.DiskModels.Engine.UI;
+using Engine.DiskModels.Engine.UI.Elements;
 using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Engine.Core.Contracts;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine
 {
-	public class Game1: Game
+	/// <summary>
+	/// Represents a game1.
+	/// </summary>
+	public partial class Game1: Game
 	{
 		public GraphicsDeviceManager _graphics;
+
+		/// <summary>
+		/// Gets the external services.
+		/// </summary>
+		private List<Func<Game, (Type type, object provider)[]>> ExternalServiceProviders { get; } = [];
+
+		/// <summary>
+		/// Gets the external model type map providers.
+		/// </summary>
+		private List<Func<(Type typeIn, Type typeOut)[]>> ExternalModelTypeMapProviders { get; } = [];
+
+		/// <summary>
+		/// Gets the external model processor map providers.
+		/// </summary>
+		private List<Func<GameServiceContainer, (Type typeIn, Delegate)[]>> ExternalModelProcessorMapProviders { get; } = [];
 
 		/// <summary>
 		/// Gets the loadables.
@@ -30,22 +50,53 @@ namespace Engine
 		/// </summary>
 		public List<INeedInitialization> Initializations { get; } = [];
 
+		/// <summary>
+		/// Initializes a new instance of the game1.
+		/// </summary>
 		public Game1()
 		{
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
 			this.Window.AllowUserResizing = true;
-			this.IsMouseVisible = true;
-		}
-
-		public void SetLoadingInstructions(LoadingInstructions loadingInstructions)
-		{
-			LoadingInstructionsContainer.LoadingInstructions = loadingInstructions;
+			this.IsMouseVisible = true; 
 		}
 
 		protected override void Initialize()
 		{
-			_ = ServiceInitializer.StartServices(this);
+			// Start services
+			_ = ServiceInitializer.StartEngineServices(this);
+
+			if (true == this.ExternalServiceProviders?.Any())
+			{
+				foreach (var externalServiceProvider in this.ExternalServiceProviders)
+				{
+					_ = ServiceInitializer.StartServices(this, externalServiceProvider);
+				}
+			}
+
+			// Load model type mappings
+			ModelMapper.LoadEngineModelTypeMappings();
+
+			if (true == this.ExternalModelTypeMapProviders?.Any())
+			{
+				foreach (var externalModelTypeMapProvider in this.ExternalModelTypeMapProviders)
+				{ 
+					ModelMapper.LoadModelTypeMappings(externalModelTypeMapProvider);
+				}
+			}
+
+			// Load model processors
+			ModelMapper.LoadEngineModelProcessingMappings(this.Services);
+
+			if (true == this.ExternalModelProcessorMapProviders?.Any())
+			{
+				foreach (var externalModelProcessorMapProvider in this.ExternalModelProcessorMapProviders)
+				{
+					ModelMapper.LoadModelProcessingMappings(this.Services, externalModelProcessorMapProvider);
+				}
+			}
+
+			// Other
 
 			this._graphics.PreferredBackBufferWidth = 1920;
 			this._graphics.PreferredBackBufferHeight = 1080;

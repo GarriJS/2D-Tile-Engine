@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.UI.Contracts
+namespace Engine.DiskModels.Engine.UI.Contracts
 {
 	public interface IAmAUiElementModel
 	{

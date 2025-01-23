@@ -1,5 +1,5 @@
-﻿using Engine.DiscModels.Engine.Physics;
-using Engine.DiscModels.Engine.Physics.Contracts;
+﻿using Engine.DiskModels.Engine.Physics;
+using Engine.DiskModels.Engine.Physics.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Services.Contracts;

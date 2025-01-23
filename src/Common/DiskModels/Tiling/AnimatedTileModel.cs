@@ -1,9 +1,9 @@
-﻿using Common.DiscModels.Common.Tiling.Contracts;
-using Engine.DiscModels.Engine.Drawing;
-using Engine.DiscModels.Engine.Physics.Contracts;
+﻿using Common.DiskModels.Common.Tiling.Contracts;
+using Engine.DiskModels.Engine.Drawing;
+using Engine.DiskModels.Engine.Physics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Common.DiscModels.Common.Tiling
+namespace Common.DiskModels.Common.Tiling
 {
 	[DataContract(Name = "animatedTile")]
     public class AnimatedTileModel : IAmATileModel

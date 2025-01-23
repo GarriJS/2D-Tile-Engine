@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.Controls
+namespace Engine.DiskModels.Engine.Controls
 {
 	[DataContract(Name = "actionControl")]
 	public class ActionControlModel

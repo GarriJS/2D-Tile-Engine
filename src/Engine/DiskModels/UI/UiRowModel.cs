@@ -1,7 +1,7 @@
-﻿using Engine.DiscModels.Engine.UI.Contracts;
+﻿using Engine.DiskModels.Engine.UI.Contracts;
 using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.UI
+namespace Engine.DiskModels.Engine.UI
 {
 	[DataContract(Name = "uiRow")]
 	public class UiRowModel

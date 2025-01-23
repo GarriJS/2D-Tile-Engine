@@ -1,8 +1,8 @@
 ﻿using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
-using Common.DiscModels.Common.Tiling;
-using Common.DiscModels.Common.Tiling.Contracts;
+using Common.DiskModels.Common.Tiling;
+using Common.DiskModels.Common.Tiling.Contracts;
 using Engine.Core.Constants;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Services.Contracts;

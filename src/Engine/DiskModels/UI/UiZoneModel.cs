@@ -1,7 +1,7 @@
-﻿using Engine.DiscModels.Engine.Drawing;
+﻿using Engine.DiskModels.Engine.Drawing;
 using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.UI
+namespace Engine.DiskModels.Engine.UI
 {
 	[DataContract(Name = "uiZone")]
 	public class UiZoneModel

@@ -1,7 +1,7 @@
-﻿using Engine.DiscModels.Engine.Physics.Contracts;
+﻿using Engine.DiskModels.Engine.Physics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Common.DiscModels.Common.Tiling.Contracts
+namespace Common.DiskModels.Common.Tiling.Contracts
 {
 	public interface IAmATileModel
     {

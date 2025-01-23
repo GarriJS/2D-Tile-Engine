@@ -1,8 +1,8 @@
-﻿using Common.DiscModels.Common.Tiling.Contracts;
+﻿using Common.DiskModels.Common.Tiling.Contracts;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Common.DiscModels.Common.Tiling
+namespace Common.DiskModels.Common.Tiling
 {
     [DataContract(Name = "tileMapLayer")]
     public class TileMapLayerModel

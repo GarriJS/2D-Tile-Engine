@@ -1,9 +1,9 @@
-﻿using Engine.DiscModels.Engine.Drawing;
-using Engine.DiscModels.Engine.UI.Contracts;
+﻿using Engine.DiskModels.Engine.Drawing;
+using Engine.DiskModels.Engine.UI.Contracts;
 using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.UI.Elements
+namespace Engine.DiskModels.Engine.UI.Elements
 {
 	[DataContract(Name = "uiButton")]
 	public class UiButtonModel : IAmAUiElementModel

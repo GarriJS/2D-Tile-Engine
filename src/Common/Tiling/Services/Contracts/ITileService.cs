@@ -1,5 +1,5 @@
-﻿using Common.DiscModels.Common.Tiling;
-using Common.DiscModels.Common.Tiling.Contracts;
+﻿using Common.DiskModels.Common.Tiling;
+using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 

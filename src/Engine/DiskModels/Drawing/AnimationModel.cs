@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Engine.DiscModels.Engine.Drawing
+namespace Engine.DiskModels.Engine.Drawing
 {
 	[DataContract(Name = "animation")]
 	public class AnimationModel
