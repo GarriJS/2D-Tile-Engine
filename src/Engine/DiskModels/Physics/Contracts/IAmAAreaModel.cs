@@ -14,6 +14,6 @@ namespace Engine.DiskModels.Engine.Physics.Contracts
 		public float Height { get; set; }
 
 		[DataMember(Name = "position", Order = 4)]
-		public PositionModel? Position { get; set; }
+		public PositionModel Position { get; set; }
 	}
 }

@@ -19,9 +19,9 @@ using System.Linq;
 namespace Engine
 {
 	/// <summary>
-	/// Represents a game1.
+	/// Represents a engine.
 	/// </summary>
-	public partial class Game1: Game
+	public partial class Engine : Game
 	{
 		public GraphicsDeviceManager _graphics;
 
@@ -31,34 +31,34 @@ namespace Engine
 		private List<Func<Game, (Type type, object provider)[]>> ExternalServiceProviders { get; } = [];
 
 		/// <summary>
-		/// Gets the external model type map providers.
-		/// </summary>
-		private List<Func<(Type typeIn, Type typeOut)[]>> ExternalModelTypeMapProviders { get; } = [];
-
-		/// <summary>
 		/// Gets the external model processor map providers.
 		/// </summary>
 		private List<Func<GameServiceContainer, (Type typeIn, Delegate)[]>> ExternalModelProcessorMapProviders { get; } = [];
 
 		/// <summary>
+		/// Gets the initial models.
+		/// </summary>
+		private List<object> InitialModels { get; } = [];
+
+		/// <summary>
 		/// Gets the loadables.
 		/// </summary>
-		public List<ILoadContent> Loadables { get; } = [];
+		internal List<ILoadContent> Loadables { get; } = [];
 
 		/// <summary>
 		/// Gets the initializations. 
 		/// </summary>
-		public List<INeedInitialization> Initializations { get; } = [];
+		internal List<INeedInitialization> Initializations { get; } = [];
 
 		/// <summary>
 		/// Initializes a new instance of the game1.
 		/// </summary>
-		public Game1()
+		public Engine()
 		{
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
 			this.Window.AllowUserResizing = true;
-			this.IsMouseVisible = true; 
+			this.IsMouseVisible = true;
 		}
 
 		protected override void Initialize()
@@ -66,35 +66,28 @@ namespace Engine
 			// Start services
 			_ = ServiceInitializer.StartEngineServices(this);
 
-			if (true == this.ExternalServiceProviders?.Any())
+			foreach (var externalServiceProvider in this.ExternalServiceProviders)
 			{
-				foreach (var externalServiceProvider in this.ExternalServiceProviders)
-				{
-					_ = ServiceInitializer.StartServices(this, externalServiceProvider);
-				}
+				_ = ServiceInitializer.StartServices(this, externalServiceProvider);
 			}
 
-			// Load model type mappings
-			ModelMapper.LoadEngineModelTypeMappings();
+			this.ExternalServiceProviders.Clear();
 
-			if (true == this.ExternalModelTypeMapProviders?.Any())
+			// Do service initializations
+			foreach (var initialization in this.Initializations)
 			{
-				foreach (var externalModelTypeMapProvider in this.ExternalModelTypeMapProviders)
-				{ 
-					ModelMapper.LoadModelTypeMappings(externalModelTypeMapProvider);
-				}
+				initialization.Initialize();
 			}
 
 			// Load model processors
 			ModelMapper.LoadEngineModelProcessingMappings(this.Services);
 
-			if (true == this.ExternalModelProcessorMapProviders?.Any())
+			foreach (var externalModelProcessorMapProvider in this.ExternalModelProcessorMapProviders)
 			{
-				foreach (var externalModelProcessorMapProvider in this.ExternalModelProcessorMapProviders)
-				{
-					ModelMapper.LoadModelProcessingMappings(this.Services, externalModelProcessorMapProvider);
-				}
+				ModelMapper.LoadModelProcessingMappings(this.Services, externalModelProcessorMapProvider);
 			}
+
+			this.ExternalModelProcessorMapProviders.Clear();
 
 			// Other
 
@@ -107,15 +100,17 @@ namespace Engine
 
 		protected override void LoadContent()
 		{
-			foreach (var initialization in this.Initializations)
-			{
-				initialization.Initialize();
-			}
-
+			// Do any content loading
 			foreach (var loadable in this.Loadables)
-			{ 
+			{
 				loadable.LoadContent();
 			}
+
+			// Load the initial models
+			ModelProcessor.ProcessInitialModels(this.InitialModels);
+			this.InitialModels.Clear();
+
+			// Other
 
 			var debugService = this.Services.GetService<IDebugService>();
 			debugService.ToggleScreenAreaIndicators();
@@ -163,7 +158,7 @@ namespace Engine
 											Frames =
 											[
 												new ImageModel
-												{ 
+												{
 													TextureName = "white",
 												},
 												new ImageModel

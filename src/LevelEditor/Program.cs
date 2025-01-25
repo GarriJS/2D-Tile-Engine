@@ -1,8 +1,9 @@
 ﻿
 using LevelEditor;
+using LevelEditor.Core.Initialization;
 
 // Create the game object
-using var game = new Engine.Game1();
+using var game = new Engine.Engine();
 
 // Set the loading instructions
 var loadingInstructions = GameContainer.GetLoadingInstructions(game._graphics);
@@ -12,11 +13,11 @@ game.SetLoadingInstructions(loadingInstructions);
 game.AddExternalServiceProvider(LevelEditor.Core.Initialization.ServiceExporter.GetServiceContractPairs);
 game.AddExternalServiceProvider(Common.Core.Initialization.ServiceExporter.GetServiceContractPairs);
 
-// Add the external model type mappings
-game.AddExternalModelTypeMapProvider(Common.DiskModels.ModelMappingsExporter.GetModelTypeMappings);
-
 // Add the external model processor mappings
-game.AddModelProcessingMapProvider(Common.DiskModels.ModelMappingsExporter.GetModelProcessingMappings);
+game.AddModelProcessingMapProvider(Common.DiskModels.ModelProcessorExporter.GetModelProcessingMappings);
+
+// Add the initial models
+game.AddInitialModels(LevelEditorInitializer.GetInitialDiscModels());
 
 // Run the game
 GameContainer.Game = game;

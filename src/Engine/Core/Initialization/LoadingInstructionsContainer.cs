@@ -57,8 +57,8 @@ namespace Engine.Core.Initialization
 		internal static IList<string> GetFontNamesForContentManager(string contentManagerName)
 		{
 			var fontList = LoadingInstructions?.FontLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
-																.Select(e => e.ContentName)?
-																.ToList();
+															 .Select(e => e.ContentName)?
+															 .ToList();
 
 			return fontList ?? [];
 		}

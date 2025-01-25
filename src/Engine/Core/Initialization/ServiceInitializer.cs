@@ -34,7 +34,7 @@ namespace Engine.Core.Initialization
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>A value indicating whether if all services were started.</returns>
-		internal static bool StartEngineServices(Game1 game)
+		internal static bool StartEngineServices(Engine game)
 		{
 			return StartServices(game, GetEngineServiceContractPairs);
 		}
@@ -45,7 +45,7 @@ namespace Engine.Core.Initialization
 		/// <param name="game">The game.</param>
 		/// <param name="serviceProvider">The service provider.</param>
 		/// <returns>A value indicating whether if all services were started.</returns>
-		internal static bool StartServices(Game1 game, Func<Game, (Type type, object provider)[]> serviceProvider)
+		internal static bool StartServices(Engine game, Func<Game, (Type type, object provider)[]> serviceProvider)
 		{
 			var success = true;
 			var serviceContractPairs = serviceProvider?.Invoke(game);

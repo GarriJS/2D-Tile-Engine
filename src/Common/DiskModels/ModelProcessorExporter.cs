@@ -1,5 +1,4 @@
 ﻿using Common.DiskModels.Common.Tiling;
-using Common.Tiling.Models;
 using Common.Tiling.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -7,25 +6,10 @@ using System;
 namespace Common.DiskModels
 {
 	/// <summary>
-	/// Represents a model mappings exporter.
+	/// Represents a model processor exporter.
 	/// </summary>
-	public static class ModelMappingsExporter
+	public static class ModelProcessorExporter
 	{
-		/// <summary>
-		/// Gets the model type mappings.
-		/// </summary>
-		/// <returns>The model type mappings.</returns>
-		public static (Type typeIn, Type typeOut)[] GetModelTypeMappings()
-		{
-			return
-			[
-				(typeof(AnimatedTileModel), typeof(AnimatedTile)),
-				(typeof(TileMapLayerModel), typeof(TileMapLayer)),
-				(typeof(TileMapModel), typeof(TileMap)),
-				(typeof(TileModel), typeof(Tile))
-			];
-		}
-
 		/// <summary>
 		/// Gets the model processing mappings.
 		/// </summary>

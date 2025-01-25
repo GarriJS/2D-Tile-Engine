@@ -2,15 +2,12 @@
 using Engine.DiskModels.Engine.Drawing;
 using Engine.DiskModels.Engine.Physics;
 using Engine.DiskModels.Engine.UI;
-using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
-using Engine.UI.Models;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
-using System.Linq;
 
 namespace Engine.DiskModels
 {
@@ -19,32 +16,6 @@ namespace Engine.DiskModels
 	/// </summary>
 	internal static class ModelMapper
 	{
-		/// <summary>
-		/// Loads the engine model type mappings.
-		/// </summary>
-		internal static void LoadEngineModelTypeMappings()
-		{
-			LoadModelTypeMappings(GetModelTypeMappings);
-		}
-
-		/// <summary>
-		/// Loads the model type mappings.
-		/// </summary>
-		internal static void LoadModelTypeMappings(Func<(Type typeIn, Type typeOut)[]> modelTypeMapProvider)
-		{
-			var modelTypeMappings = modelTypeMapProvider?.Invoke();
-
-			if (true != modelTypeMappings?.Any())
-			{
-				return;
-			}
-
-			foreach (var (typeIn, typeOut) in modelTypeMappings)
-			{
-				ModelsProcessor.ModelTypeMappings.Add(typeIn, typeOut);
-			}
-		}
-
 		/// <summary>
 		/// Loads the engine model type mappings.
 		/// </summary>
@@ -64,25 +35,8 @@ namespace Engine.DiskModels
 
 			foreach (var (typeIn, processor) in modelProcessingMappings)
 			{ 
-				ModelsProcessor.ModelProcessingMappings.Add(typeIn, processor);
+				ModelProcessor.ModelProcessingMappings.Add(typeIn, processor);
 			}
-		}
-
-		/// <summary>
-		/// Gets the model type mappings.
-		/// </summary>
-		/// <returns>The model type mappings.</returns>
-		private static (Type typeIn, Type typeOut)[] GetModelTypeMappings()
-		{
-			return
-			[
-				(typeof(SpriteModel), typeof(Sprite)),
-				(typeof(AreaCollectionModel), typeof(AreaCollection)),
-				(typeof(OffsetAreaModel), typeof(OffsetArea)),
-				(typeof(SimpleAreaModel), typeof(SimpleArea)),
-				(typeof(PositionModel), typeof(Position)),
-				(typeof(UiGroupModel), typeof(UiGroup)),
-			];
 		}
 
 		/// <summary>

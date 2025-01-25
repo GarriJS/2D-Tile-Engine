@@ -15,7 +15,7 @@ namespace LevelEditor
 		/// <summary>
 		/// Gets or sets the game.
 		/// </summary>
-		internal static Game1 Game { get; set; }
+		internal static Engine.Engine Game { get; set; }
 
 		/// <summary>
 		/// Gets the game services.

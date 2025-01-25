@@ -7,6 +7,7 @@ using Engine.Core.Constants;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Engine.Physics.Models;
 
 namespace Common.Tiling.Services
 {
@@ -96,7 +97,12 @@ namespace Common.Tiling.Services
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
 			var spriteService = this._gameServices.GetService<ISpriteService>();
-			var area = areaService.GetArea(tileModel.Area);
+			var tilePosition = new Position
+			{
+				Coordinates = new Vector2(tileModel.Column * TileConstants.TILE_SIZE, tileModel.Row * TileConstants.TILE_SIZE)
+			};
+
+			var area = areaService.GetArea(tileModel.Area, tilePosition);
 
 			if (tileModel is AnimatedTileModel animatedTileModel)
 			{
