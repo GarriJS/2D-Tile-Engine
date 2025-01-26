@@ -3,7 +3,6 @@ using Engine.DiskModels.Engine.Drawing;
 using Engine.DiskModels.Engine.Physics;
 using Engine.DiskModels.Engine.UI;
 using Engine.Drawing.Services.Contracts;
-using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -46,18 +45,13 @@ namespace Engine.DiskModels
 		/// <returns>The model processing mappings.</returns>
 		private static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
-			var animationService = gameServices.GetService<IAnimationService>();
 			var spriteService = gameServices.GetService<ISpriteService>();
-			var areaService = gameServices.GetService<IAreaService>();
 			var positionService = gameServices.GetService<IPositionService>();
 			var uiService = gameServices.GetService<IUserInterfaceService>();
 
 			return
 			[
 				(typeof(SpriteModel), spriteService.GetSprite),
-				(typeof(AreaCollectionModel), areaService.GetArea<AreaCollection>),
-				(typeof(OffsetAreaModel), areaService.GetArea<OffsetArea>),
-				(typeof(SimpleAreaModel), areaService.GetArea<SimpleArea>),
 				(typeof(PositionModel), positionService.GetPosition),
 				(typeof(UiGroupModel), uiService.GetUiGroup)
 			];

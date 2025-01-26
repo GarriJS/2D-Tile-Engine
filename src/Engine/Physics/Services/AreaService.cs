@@ -25,7 +25,7 @@ namespace Engine.Physics.Services
 		/// <param name="areaModel">The area model.</param>
 		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
-		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position = null)
+		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position)
 		{ 
 			return this.GetArea<IAmAArea>(areaModel, position);
 		}
@@ -36,11 +36,8 @@ namespace Engine.Physics.Services
 		/// <param name="areaModel">The area model.</param>
 		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
-		public T GetArea<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea 
+		public T GetArea<T>(IAmAAreaModel areaModel, Position position) where T : IAmAArea 
 		{
-			var positionService = this._gameServices.GetService<IPositionService>();
-			position ??= positionService.GetPosition(areaModel.Position);
-
 			switch (areaModel)
 			{
 				case AreaCollectionModel areaCollectionModel:

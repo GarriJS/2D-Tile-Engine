@@ -5,10 +5,10 @@ namespace Engine.DiskModels.Engine.Physics
 	[DataContract(Name = "offsetArea")]
 	public class OffsetAreaModel : SimpleAreaModel
 	{
-		[DataMember(Name = "horizontalOffset", Order = 6)]
+		[DataMember(Name = "horizontalOffset", Order = 3)]
 		public float HorizontalOffset { get; set; }
 
-		[DataMember(Name = "verticalOffset", Order = 7)]
+		[DataMember(Name = "verticalOffset", Order = 4)]
 		public float VerticalOffset { get; set; }
 	}
 }

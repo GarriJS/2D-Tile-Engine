@@ -15,7 +15,7 @@ namespace Engine.Physics.Services.Contracts
 		/// <param name="areaModel">The area model.</param>
 		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
-		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position = null);
+		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position);
 
 		/// <summary>
 		/// Gets the area.
@@ -23,6 +23,6 @@ namespace Engine.Physics.Services.Contracts
 		/// <param name="areaModel">The area model.</param>
 		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
-		public T GetArea<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea;
+		public T GetArea<T>(IAmAAreaModel areaModel, Position position) where T : IAmAArea;
 	}
 }

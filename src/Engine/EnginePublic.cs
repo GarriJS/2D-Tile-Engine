@@ -1,5 +1,7 @@
 ﻿using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
+using Engine.DiskModels.Engine.UI;
+using Engine.UI.Models;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,7 @@ using System.Collections.Generic;
 namespace Engine
 {
 	/// <summary>
-	/// Represent a game 1.
+	/// Represent a engine.
 	/// </summary>
 	public partial class Engine
 	{
@@ -45,6 +47,15 @@ namespace Engine
 		public void AddInitialModels(IList<object> initialModels)
 		{ 
 			this.InitialModels.AddRange(initialModels);
+		}
+
+		/// <summary>
+		/// Sets the initial user interface.
+		/// </summary>
+		/// <param name="initialUiModels">The initial user interface models.</param>
+		public void AddInitialUserInterface(IList<UiGroupModel> initialUiModels)
+		{ 
+			this.InitialUiModels.AddRange(initialUiModels);
 		}
 	}
 }

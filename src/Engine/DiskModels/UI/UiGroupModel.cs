@@ -10,9 +10,12 @@ namespace Engine.DiskModels.Engine.UI
 		public string UiGroupName { get; set; }
 
 		[DataMember(Name = "visibilityGroupId", Order = 2)]
-		public int? VisibilityGroupId { get; set; }
+		public int VisibilityGroupId { get; set; }
 
-		[DataMember(Name = "uiZoneElements", Order = 3)]
+		[DataMember(Name = "isVisible", Order = 3)]
+		public bool IsVisible { get; set; }
+
+		[DataMember(Name = "uiZoneElements", Order = 4)]
 		public IList<UiZoneModel> UiZoneElements { get; set; }
 	}
 }

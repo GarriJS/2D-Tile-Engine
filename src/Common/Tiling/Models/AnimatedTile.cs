@@ -27,9 +27,9 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Get the sprite.
+		/// Get the image.
 		/// </summary>
-		public Image Image { get => Animation.CurrentFrame; }
+		public Image Image { get => this.Animation.CurrentFrame; }
 
 		/// <summary>
 		/// Gets or sets the animation.

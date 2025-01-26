@@ -16,7 +16,7 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets or sets the visibility group id.
 		/// </summary>
-		public int? VisibilityGroupId { get; set; }
+		public int VisibilityGroupId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface zones.

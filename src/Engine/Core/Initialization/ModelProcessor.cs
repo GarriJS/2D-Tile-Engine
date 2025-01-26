@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Engine.DiskModels.Engine.UI;
+using Engine.UI.Services.Contracts;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,12 +10,12 @@ namespace Engine.Core.Initialization
 	/// <summary>
 	/// Represents a model processor
 	/// </summary>
-	public static class ModelProcessor
+	internal static class ModelProcessor
 	{
 		/// <summary>
 		/// Gets or sets the model processing mappings.
 		/// </summary>
-		public static Dictionary<Type, Delegate> ModelProcessingMappings { get; set; } = [];
+		internal static Dictionary<Type, Delegate> ModelProcessingMappings { get; set; } = [];
 
 		/// <summary>
 		/// Processes the initial models.
@@ -38,6 +41,31 @@ namespace Engine.Core.Initialization
 				}
 
 				var result = func.DynamicInvoke(model);
+			}
+		}
+
+		internal static void ProcessInitialUiModels(IList<UiGroupModel> initialUiModels, GameServiceContainer gameServices)
+		{
+			if (true != initialUiModels?.Any())
+			{
+				return;
+			}
+
+			var uiService = gameServices.GetService<IUserInterfaceService>();
+
+			foreach (var model in initialUiModels)
+			{ 
+				var uiGroup = uiService.GetUiGroup(model);
+
+				if (null != uiGroup)
+				{ 
+					uiService.UserInterfaceGroups.Add(uiGroup);
+				}
+
+				if (true == model.IsVisible)
+				{
+					uiService.ToggleUserInterfaceGroupVisibility(uiGroup.VisibilityGroupId);	
+				}
 			}
 		}
 	}
