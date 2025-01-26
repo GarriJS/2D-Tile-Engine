@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.Drawing
+namespace Engine.DiskModels.Drawing
 {
 	[DataContract(Name = "triggeredAnimationModel")]
 	public class TriggeredAnimationModel : AnimationModel

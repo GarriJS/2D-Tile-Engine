@@ -1,9 +1,9 @@
-﻿using Engine.DiskModels.Engine.Drawing;
-using Engine.DiskModels.Engine.UI.Contracts;
+﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.UI.Contracts;
 using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.UI.Elements
+namespace Engine.DiskModels.UI.Elements
 {
 	[DataContract(Name = "uiButton")]
 	public class UiButtonModel : IAmAUiElementModel
@@ -26,11 +26,11 @@ namespace Engine.DiskModels.Engine.UI.Elements
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "clickableAreaAnimation", Order = 7)]
-		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }
+		[DataMember(Name = "text", Order = 7)]
+		public string Text { get; set; }
 
-		[DataMember(Name = "buttonText", Order = 8)]
-		public string ButtonText { get; set; }
+		[DataMember(Name = "clickableAreaAnimation", Order = 8)]
+		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }
 
 		[DataMember(Name = "clickableAreaScaler", Order = 9)]
 		public Vector2 ClickableAreaScaler { get; set; }

@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.Drawing;
+﻿using Engine.DiskModels.Drawing;
 using Engine.Drawing.Models;
 
 namespace Engine.Drawing.Services.Contracts

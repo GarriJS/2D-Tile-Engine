@@ -1,7 +1,6 @@
 ﻿using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
-using Engine.DiskModels.Engine.UI;
-using Engine.UI.Models;
+using Engine.DiskModels.UI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
-﻿using Engine.DiskModels.Engine.Physics;
+﻿using Engine.DiskModels.Physics;
 using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.Drawing
+namespace Engine.DiskModels.Drawing
 {
 	[DataContract(Name = "independentImage")]
 	public class IndependentImageModel : ImageModel

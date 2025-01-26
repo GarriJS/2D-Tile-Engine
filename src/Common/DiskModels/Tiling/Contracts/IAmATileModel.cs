@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.Physics.Contracts;
+﻿using Engine.DiskModels.Physics.Contracts;
 using System.Runtime.Serialization;
 
 namespace Common.DiskModels.Common.Tiling.Contracts

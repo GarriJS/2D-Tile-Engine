@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.UI
+namespace Engine.DiskModels.UI
 {
 	[DataContract(Name = "uiGroup")]
 	public class UiGroupModel

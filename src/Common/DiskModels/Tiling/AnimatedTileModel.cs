@@ -1,6 +1,6 @@
 ﻿using Common.DiskModels.Common.Tiling.Contracts;
-using Engine.DiskModels.Engine.Drawing;
-using Engine.DiskModels.Engine.Physics.Contracts;
+using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics.Contracts;
 using System.Runtime.Serialization;
 
 namespace Common.DiskModels.Common.Tiling

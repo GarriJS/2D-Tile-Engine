@@ -16,9 +16,9 @@ namespace Engine.Drawing.Services
 	/// Represents a drawing service.
 	/// </summary>
 	public class DrawingService : IDrawingService
-    {
+	{
 		private readonly GameServiceContainer _gameServices;
-        
+
 		/// <summary>
 		/// Gets the sprite batch.
 		/// </summary>
@@ -28,7 +28,7 @@ namespace Engine.Drawing.Services
 		/// Initializes a new instance of the drawing service.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
-        public DrawingService(GameServiceContainer gameServices)
+		public DrawingService(GameServiceContainer gameServices)
 		{
 			this._gameServices = gameServices;
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
@@ -39,7 +39,7 @@ namespace Engine.Drawing.Services
 		/// Begins the draw.
 		/// </summary>
 		public void BeginDraw()
-		{ 
+		{
 			this.SpriteBatch.Begin();
 		}
 
@@ -47,7 +47,7 @@ namespace Engine.Drawing.Services
 		/// Ends the draw.
 		/// </summary>
 		public void EndDraw()
-		{ 
+		{
 			this.SpriteBatch.End();
 		}
 
@@ -208,14 +208,15 @@ namespace Engine.Drawing.Services
 					var clickableOffset = new Vector2((button.Area.X - button.ClickableArea.X) / 2, (button.Area.Y - button.ClickableArea.Y) / 2);
 					this.Draw(gameTime, button.ClickAnimation, position.Coordinates + offset + clickableOffset);
 				}
+			}
 
-				if (false == string.IsNullOrEmpty(button.ButtonText))
-				{
-					var writingService = this._gameServices.GetService<IWritingService>();
-					var textMeasurements = writingService.MeasureString("Monobold", button.ButtonText);
-					var textPosition = position.Coordinates + offset + (element.Area / 2) - (textMeasurements / 2);
-					writingService.Draw("Monobold", button.ButtonText, textPosition, Color.Maroon);
-				}
+			if ((element is IAmAUiElementWithText elementWithText) &&
+				(false == string.IsNullOrEmpty(elementWithText.Text)))
+			{
+				var writingService = this._gameServices.GetService<IWritingService>();
+				var textMeasurements = writingService.MeasureString("Monobold", elementWithText.Text);
+				var textPosition = position.Coordinates + offset + (element.Area / 2) - (textMeasurements / 2);
+				writingService.Draw("Monobold", elementWithText.Text, textPosition, Color.Maroon);
 			}
 		}
 	}

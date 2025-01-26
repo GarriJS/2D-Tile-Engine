@@ -1,7 +1,7 @@
-﻿using Engine.DiskModels.Engine.Physics.Contracts;
+﻿using Engine.DiskModels.Physics.Contracts;
 using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.Physics
+namespace Engine.DiskModels.Physics
 {
 	[DataContract(Name = "simpleArea")]
 	public class SimpleAreaModel : IAmAAreaModel

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.Drawing
+namespace Engine.DiskModels.Drawing
 {
 	[DataContract(Name = "sprite")]
 	public class SpriteModel : ImageModel

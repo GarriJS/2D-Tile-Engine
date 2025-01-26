@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.Physics;
+﻿using Engine.DiskModels.Physics;
 using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;

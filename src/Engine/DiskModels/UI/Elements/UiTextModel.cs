@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.DiskModels.UI.Contracts;
+using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.UI.Contracts
+namespace Engine.DiskModels.UI.Elements
 {
-	public interface IAmAUiElementModel
+	[DataContract(Name = "uiText")]
+	public class UiTextModel : IAmAUiElementModel
 	{
 		[DataMember(Name = "uiElementName", Order = 1)]
 		public string UiElementName { get; set; }
@@ -22,5 +24,8 @@ namespace Engine.DiskModels.UI.Contracts
 
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
+
+		[DataMember(Name = "text", Order = 7)]
+		public string Text { get; set; }
 	}
 }

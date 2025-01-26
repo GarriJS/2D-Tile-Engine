@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.UI;
+﻿using Engine.DiskModels.UI;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
@@ -272,7 +272,7 @@ namespace Engine.UI.Services
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
 		/// <returns>The user interface zone element.</returns>
-		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int? visibilityGroup)
+		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int visibilityGroup)
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
@@ -359,7 +359,7 @@ namespace Engine.UI.Services
 		/// <param name="fillHeight">The fill height.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface row.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int? visibilityGroup)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int visibilityGroup)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();

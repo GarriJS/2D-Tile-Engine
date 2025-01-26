@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Engine.DiskModels.Engine.Physics
+namespace Engine.DiskModels.Physics
 {
 	[DataContract(Name = "position")]
 	public class PositionModel

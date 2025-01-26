@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.UI;
+﻿using Engine.DiskModels.UI;
 using Engine.UI.Models;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace Engine.UI.Services.Contracts
 		/// <param name="uiZoneElementModel">The user interface element model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
 		/// <returns>The user interface zone element.</returns>
-		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int? visibilityGroup);
+		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int visibilityGroup);
 
 		/// <summary>
 		/// Gets the user interface row.
@@ -57,6 +57,6 @@ namespace Engine.UI.Services.Contracts
 		/// <param name="fillHeight">The fill height.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface row.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int? visibilityGroup);
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int visibilityGroup);
 	}
 }

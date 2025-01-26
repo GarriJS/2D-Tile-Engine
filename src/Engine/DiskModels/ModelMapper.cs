@@ -1,7 +1,7 @@
 ﻿using Engine.Core.Initialization;
-using Engine.DiskModels.Engine.Drawing;
-using Engine.DiskModels.Engine.Physics;
-using Engine.DiskModels.Engine.UI;
+using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
+using Engine.DiskModels.UI;
 using Engine.Drawing.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Engine.UI.Services.Contracts;

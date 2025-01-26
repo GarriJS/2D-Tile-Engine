@@ -9,7 +9,7 @@ namespace Engine.UI.Models.Elements
 	/// <summary>
 	/// Represents a user interface button.
 	/// </summary>
-	public class UiButton : IAmAUiElement
+	public class UiButton : IAmAUiElementWithText
 	{
 		/// <summary>
 		/// Gets or sets the user interface element name.
@@ -19,12 +19,12 @@ namespace Engine.UI.Models.Elements
 		/// <summary>
 		/// Gets or sets the visibility group.
 		/// </summary>
-		public int? VisibilityGroup { get; set; }
+		public int VisibilityGroup { get; set; }
 
 		/// <summary>
-		/// Gets or sets the button text.
+		/// Gets or sets the text.
 		/// </summary>
-		public string ButtonText { get; set; }
+		public string Text { get; set; }
 
 		/// <summary>
 		/// Gets or sets the left padding.

@@ -1,6 +1,6 @@
-﻿using Engine.DiskModels.Engine.UI.Contracts;
-using Engine.DiskModels.Engine.UI.Elements;
-using Engine.Controls.Services.Contracts;
+﻿using Engine.Controls.Services.Contracts;
+using Engine.DiskModels.UI.Contracts;
+using Engine.DiskModels.UI.Elements;
 using Engine.Drawing.Models;
 using Engine.Drawing.Services.Contracts;
 using Engine.UI.Models;
@@ -11,7 +11,6 @@ using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace Engine.UI.Services
 {
@@ -125,7 +124,7 @@ namespace Engine.UI.Services
 		/// <param name="fillHeight">The fill height of the user interface element model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface element.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight, int? visibilityGroup)
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight, int visibilityGroup)
 		{
 			var elementSize = this.GetElementDimensions(uiZone, uiElementModel);
 			var width = true == elementSize.HasValue
@@ -168,7 +167,7 @@ namespace Engine.UI.Services
 			var button =  new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
-				ButtonText = buttonModel.ButtonText,
+				Text = buttonModel.Text,
 				LeftPadding = buttonModel.LeftPadding,
 				RightPadding = buttonModel.RightPadding,
 				ElementType = UiElementTypes.Button,

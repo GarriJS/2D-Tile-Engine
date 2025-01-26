@@ -1,9 +1,8 @@
 ﻿using Common.DiskModels.Common.Tiling;
-using Engine.DiskModels.Engine.Drawing;
-using Engine.DiskModels.Engine.Physics;
-using Engine.DiskModels.Engine.UI;
-using Engine.DiskModels.Engine.UI.Elements;
-using Engine.UI.Models;
+using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
+using Engine.DiskModels.UI;
+using Engine.DiskModels.UI.Elements;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -82,7 +81,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 5,
 											BackgroundTextureName = "black",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.ExtraSmall,
 											ClickableAreaScaler = new Vector2(.9f, .9f),
 											ClickableAreaAnimation = new TriggeredAnimationModel
@@ -109,7 +108,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 0,
 											RightPadding = 0,
 											BackgroundTextureName = "gray",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.ExtraLarge,
 											ClickableAreaScaler = new Vector2(.95f, .95f),
 											ClickableAreaAnimation = new TriggeredAnimationModel
@@ -136,7 +135,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 5,
 											BackgroundTextureName = "white",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.Small,
 											ClickableAreaScaler = new Vector2(.9f, .9f),
 											ClickableAreaAnimation = new TriggeredAnimationModel
@@ -174,7 +173,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 0,
 											BackgroundTextureName = "white",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.Medium,
 											ClickableAreaScaler = new Vector2(.9f, .9f),
 											ClickableAreaAnimation = new TriggeredAnimationModel
@@ -201,7 +200,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 5,
 											BackgroundTextureName = "black",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.Large
 										}
 									]
@@ -243,7 +242,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 5,
 											BackgroundTextureName = "black",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											FixedSized = new Vector2(100, 100)
 										},
 										new UiButtonModel
@@ -252,7 +251,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 0,
 											RightPadding = 0,
 											BackgroundTextureName = "gray",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.ExtraLarge,
 											ClickableAreaScaler = new Vector2(.9f, .9f),
 											ClickableAreaAnimation = new TriggeredAnimationModel
@@ -279,7 +278,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 5,
 											BackgroundTextureName = "white",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.Small,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										}
@@ -300,7 +299,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 0,
 											BackgroundTextureName = "white",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.Medium,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										},
@@ -310,7 +309,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 5,
 											RightPadding = 5,
 											BackgroundTextureName = "black",
-											ButtonText = "Push Me",
+											Text = "Push Me",
 											SizeType = (int)UiElementSizeTypes.Large,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										}

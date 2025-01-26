@@ -1,24 +1,30 @@
 ﻿using Engine.Drawing.Models;
+using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Engine.UI.Models.Contracts
+namespace Engine.UI.Models.Elements
 {
 	/// <summary>
-	/// Represents a user interface element.
+	/// Represents a user interface text.
 	/// </summary>
-	public interface IAmAUiElement : IDisposable
-    {
-        /// <summary>
-        /// Gets or sets the user interface element name.
-        /// </summary>
-        public string UiElementName { get; set; }
+	public class UiText : IAmAUiElementWithText
+	{
+		/// <summary>
+		/// Gets or sets the user interface element name.
+		/// </summary>
+		public string UiElementName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the visibility group.
 		/// </summary>
 		public int VisibilityGroup { get; set; }
+
+		/// <summary>
+		/// Gets or sets the text.
+		/// </summary>
+		public string Text { get; set; }
 
 		/// <summary>
 		/// Gets or sets the left padding.
@@ -46,7 +52,12 @@ namespace Engine.UI.Models.Contracts
 		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Gets ors sets the image.
+		/// Gets or sets the clickable area.
+		/// </summary>
+		public Vector2 ClickableArea { get; set; }
+
+		/// <summary>
+		/// Gets or sets the image.
 		/// </summary>
 		public Image Image { get; set; }
 
@@ -59,6 +70,17 @@ namespace Engine.UI.Models.Contracts
 		/// Raises the press event.
 		/// </summary>
 		/// <param name="elementLocation">The element location.</param>
-		public void RaisePressEvent(Vector2 elementLocation);
+		public void RaisePressEvent(Vector2 elementLocation)
+		{
+			this.PressEvent?.Invoke(this, elementLocation);
+		}
+
+		/// <summary>
+		/// Disposes of the user interface button.
+		/// </summary>
+		public void Dispose()
+		{
+			this.Image.Dispose();
+		}
 	}
 }

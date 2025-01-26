@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.Physics.Contracts;
+﻿using Engine.DiskModels.Physics.Contracts;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models;
 

@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Engine.UI.Contracts;
+﻿using Engine.DiskModels.UI.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
@@ -41,6 +41,6 @@ namespace Engine.UI.Services.Contracts
 		/// <param name="fillHeight">The fill height of the user interface element model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface element.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight, int? visibilityGroup);
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight, int visibilityGroup);
 	}
 }
