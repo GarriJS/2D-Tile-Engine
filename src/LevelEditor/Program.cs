@@ -17,10 +17,10 @@ game.AddExternalServiceProvider(Common.Core.Initialization.ServiceExporter.GetSe
 game.AddModelProcessingMapProvider(Common.DiskModels.ModelProcessorExporter.GetModelProcessingMappings);
 
 // Add the initial models
-game.AddInitialModels(LevelEditorInitializer.GetInitialDiskModels());
+game.AddInitialModels(LevelEditorInitializer.GetInitialDiskModels);
 
 // Add the initial user interface models
-game.AddInitialUserInterface(LevelEditorInitializer.GetInitialUiModels());
+game.AddInitialUserInterface(LevelEditorInitializer.GetInitialUiModels);
 
 // Run the game
 GameContainer.Game = game;

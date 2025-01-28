@@ -34,12 +34,12 @@ namespace Engine
 		/// <summary>
 		/// Gets the initial models.
 		/// </summary>
-		private List<object> InitialModels { get; } = [];
+		private List<Func<GameServiceContainer, IList<object>>> InitialModelsProviders { get; } = [];
 
 		/// <summary>
 		/// Gets the initial models.
 		/// </summary>
-		private List<UiGroupModel> InitialUiModels { get; } = [];
+		private List<Func<GameServiceContainer, IList<UiGroupModel>>> InitialUiModelsProviders { get; } = [];
 
 		/// <summary>
 		/// Gets the loadables.
@@ -108,12 +108,21 @@ namespace Engine
 			}
 
 			// Load the initial models
-			ModelProcessor.ProcessInitialModels(this.InitialModels);
-			this.InitialModels.Clear();
+			foreach (var initialModelsProvider in this.InitialModelsProviders)
+			{
+				ModelProcessor.ProcessInitialModels(initialModelsProvider, this.Services);
+			}
+
+			this.InitialModelsProviders.Clear();
 
 			// Load the initial user interface models.
-			ModelProcessor.ProcessInitialUiModels(this.InitialUiModels, this.Services);
-			this.InitialUiModels.Clear();
+
+			foreach (var initialUiModelsProvider in this.InitialUiModelsProviders)
+			{
+				ModelProcessor.ProcessInitialUiModels(initialUiModelsProvider, this.Services);
+			}
+
+			this.InitialUiModelsProviders.Clear();
 
 			// Other
 

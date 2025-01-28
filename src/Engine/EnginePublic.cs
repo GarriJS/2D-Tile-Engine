@@ -42,19 +42,19 @@ namespace Engine
 		/// <summary>
 		/// Adds the initial models.
 		/// </summary>
-		/// <param name="initialModels">The initial models.</param>
-		public void AddInitialModels(IList<object> initialModels)
+		/// <param name="initialModelsProvider">The initial models provider.</param>
+		public void AddInitialModels(Func<GameServiceContainer, IList<object>> initialModelsProvider)
 		{ 
-			this.InitialModels.AddRange(initialModels);
+			this.InitialModelsProviders.Add(initialModelsProvider);
 		}
 
 		/// <summary>
 		/// Sets the initial user interface.
 		/// </summary>
-		/// <param name="initialUiModels">The initial user interface models.</param>
-		public void AddInitialUserInterface(IList<UiGroupModel> initialUiModels)
+		/// <param name="initialUiModelsProvider">The initial user interface models provider.</param>
+		public void AddInitialUserInterface(Func<GameServiceContainer, IList<UiGroupModel>> initialUiModelsProvider)
 		{ 
-			this.InitialUiModels.AddRange(initialUiModels);
+			this.InitialUiModelsProviders.Add(initialUiModelsProvider);
 		}
 	}
 }

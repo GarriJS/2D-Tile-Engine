@@ -20,9 +20,12 @@ namespace Engine.Core.Initialization
 		/// <summary>
 		/// Processes the initial models.
 		/// </summary>
-		/// <param name="initialModels">The initial models.</param>
-		internal static void ProcessInitialModels(IList<object> initialModels)
+		/// <param name="initialModelsProvider">The initial models provider.</param>
+		/// <param name="gameService">The game services.</param>
+		internal static void ProcessInitialModels(Func<GameServiceContainer, IList<object>> initialModelsProvider, GameServiceContainer gameService)
 		{
+			var initialModels = initialModelsProvider?.Invoke(gameService);
+
 			if (true != initialModels?.Any())
 			{
 				return;
@@ -44,8 +47,15 @@ namespace Engine.Core.Initialization
 			}
 		}
 
-		internal static void ProcessInitialUiModels(IList<UiGroupModel> initialUiModels, GameServiceContainer gameServices)
+		/// <summary>
+		/// Processes the initial user interface models.
+		/// </summary>
+		/// <param name="initialUiModelsProvider">The initial user interface models provider.</param>
+		/// <param name="gameServices">The game services.</param>
+		internal static void ProcessInitialUiModels(Func<GameServiceContainer, IList<UiGroupModel>> initialUiModelsProvider, GameServiceContainer gameServices)
 		{
+			var initialUiModels = initialUiModelsProvider?.Invoke(gameServices);
+
 			if (true != initialUiModels?.Any())
 			{
 				return;

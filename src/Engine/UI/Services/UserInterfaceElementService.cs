@@ -59,15 +59,15 @@ namespace Engine.UI.Services
 				case UiElementSizeTypes.Fill:
 					return null;
 				case UiElementSizeTypes.ExtraSmall:
-					return new Vector2(uiScreenZone.Area.Width / 6, uiScreenZone.Area.Height / 6);
+					return new Vector2(uiScreenZone.Area.Width / 5, uiScreenZone.Area.Height / 6);
 				case UiElementSizeTypes.Small:
-					return new Vector2(uiScreenZone.Area.Width / 5, uiScreenZone.Area.Height / 5);
+					return new Vector2(uiScreenZone.Area.Width / 4, uiScreenZone.Area.Height / 5);
 				case UiElementSizeTypes.Medium:
-					return new Vector2(uiScreenZone.Area.Width / 4, uiScreenZone.Area.Height / 4);
+					return new Vector2(uiScreenZone.Area.Width / 3, uiScreenZone.Area.Height / 4);
 				case UiElementSizeTypes.Large:
-					return new Vector2(uiScreenZone.Area.Width / 3, uiScreenZone.Area.Height / 3);
+					return new Vector2(uiScreenZone.Area.Width / 2, uiScreenZone.Area.Height / 3);
 				case UiElementSizeTypes.ExtraLarge:
-					return new Vector2(uiScreenZone.Area.Width / 2, uiScreenZone.Area.Height / 2);
+					return new Vector2(uiScreenZone.Area.Width / 1, uiScreenZone.Area.Height / 2);
 				case UiElementSizeTypes.Full:
 					return new Vector2(uiScreenZone.Area.Width, uiScreenZone.Area.Height);
 			}
@@ -137,9 +137,10 @@ namespace Engine.UI.Services
 			var imageService = this._gameServices.GetService<IImageService>();
 			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
 			var area = new Vector2(width, height);
-			var uiElement = uiElementModel switch
+			IAmAUiElement uiElement = uiElementModel switch
 			{
-				UiButtonModel buttonModel => GetUiButton(buttonModel, area),
+				UiTextModel textModel => this.GetUiText(textModel, area),
+				UiButtonModel buttonModel => this.GetUiButton(buttonModel, area),
 				_ => null,
 			};
 
@@ -152,6 +153,25 @@ namespace Engine.UI.Services
 			}
 
 			return uiElement;
+		}
+
+		/// <summary>
+		/// Gets the user interface text.
+		/// </summary>
+		/// <param name="textModel">The text model.</param>
+		/// <param name="area">The area.</param>
+		/// <returns>The user interface text.</returns>
+		private UiText GetUiText(UiTextModel textModel, Vector2 area)
+		{
+			return new UiText
+			{
+				UiElementName = textModel.UiElementName,
+				Text = textModel.Text,
+				LeftPadding = textModel.LeftPadding,
+				RightPadding = textModel.RightPadding,
+				ElementType = UiElementTypes.Button,
+				Area = area,
+			};
 		}
 
 		/// <summary>

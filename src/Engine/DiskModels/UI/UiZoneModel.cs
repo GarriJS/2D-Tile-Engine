@@ -1,5 +1,4 @@
-﻿using Engine.DiskModels.Drawing;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Engine.DiskModels.UI
 {
@@ -12,8 +11,8 @@ namespace Engine.DiskModels.UI
 		[DataMember(Name = "justificationType", Order = 2)]
 		public int JustificationType { get; set; }
 
-		[DataMember(Name = "background", Order = 3)]
-		public ImageModel Background { get; set; }
+		[DataMember(Name = "backgroundTextureName", Order = 3)]
+		public string BackgroundTextureName { get; set; }
 
 		[DataMember(Name = "uiZoneType", Order = 4)]
 		public int UiZoneType { get; set; }

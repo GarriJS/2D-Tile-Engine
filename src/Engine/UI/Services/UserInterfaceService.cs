@@ -16,6 +16,9 @@ namespace Engine.UI.Services
 	/// <summary>
 	/// Represents a user interface service.
 	/// </summary>
+	/// <remarks>
+	/// Initialize the user interface service.
+	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class UserInterfaceService(GameServiceContainer gameServices) : IUserInterfaceService
 	{
@@ -284,7 +287,7 @@ namespace Engine.UI.Services
 			}
 
 			var imageService = this._gameServices.GetService<IImageService>();
-			var background = imageService.GetImage(uiZoneElementModel.Background, (int)uiZone.Area.Width, (int)uiZone.Area.Height);
+			var background = imageService.GetImage(uiZoneElementModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)uiZone.Area.Height);
 
 			if (true == uiZoneElementModel.ElementRows?.Any())
 			{
@@ -308,7 +311,7 @@ namespace Engine.UI.Services
 						rowMinHeight += rowElementsSizes.Where(e => true == e.HasValue)
 														.Select(e => e.Value.Y)
 														.OrderDescending()
-														.First();
+														.FirstOrDefault();
 
 						rowElementBaseHeights.Add(elementRowModel, rowMinHeight);
 					}
