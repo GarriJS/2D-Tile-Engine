@@ -1,6 +1,7 @@
 ﻿using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.DiskModels.UI;
+using Engine.UI.Models.Elements;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -43,17 +44,26 @@ namespace Engine
 		/// Adds the initial models.
 		/// </summary>
 		/// <param name="initialModelsProvider">The initial models provider.</param>
-		public void AddInitialModels(Func<GameServiceContainer, IList<object>> initialModelsProvider)
-		{ 
+		public void AddInitialModelsProvider(Func<GameServiceContainer, IList<object>> initialModelsProvider)
+		{
 			this.InitialModelsProviders.Add(initialModelsProvider);
 		}
 
 		/// <summary>
-		/// Sets the initial user interface.
+		/// Adds the user interface button click events.
+		/// </summary>
+		/// <param name="buttonClickEventProcessors">The button click event processors provider.</param>
+		public void AddUiButtonClickEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<UiButton>>> buttonClickEventProcessors)
+		{
+			this.ButtonClickEventProcessorsProviders.Add(buttonClickEventProcessors);
+		}
+
+		/// <summary>
+		/// Adds the initial user interface.
 		/// </summary>
 		/// <param name="initialUiModelsProvider">The initial user interface models provider.</param>
-		public void AddInitialUserInterface(Func<GameServiceContainer, IList<UiGroupModel>> initialUiModelsProvider)
-		{ 
+		public void AddInitialUserInterfaceProvider(Func<GameServiceContainer, IList<UiGroupModel>> initialUiModelsProvider)
+		{
 			this.InitialUiModelsProviders.Add(initialUiModelsProvider);
 		}
 	}

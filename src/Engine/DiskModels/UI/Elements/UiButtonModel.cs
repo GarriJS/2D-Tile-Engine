@@ -34,5 +34,8 @@ namespace Engine.DiskModels.UI.Elements
 
 		[DataMember(Name = "clickableAreaScaler", Order = 9)]
 		public Vector2 ClickableAreaScaler { get; set; }
+
+		[DataMember(Name = "buttonClickEventName", Order = 10)]
+		public string ButtonClickEventName { get; set; }
 	}
 }

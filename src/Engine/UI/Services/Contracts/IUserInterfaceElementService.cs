@@ -3,6 +3,8 @@ using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace Engine.UI.Services.Contracts
 {
@@ -11,6 +13,11 @@ namespace Engine.UI.Services.Contracts
 	/// </summary>
 	public interface IUserInterfaceElementService
 	{
+		/// <summary>
+		/// Gets or sets the button click event processors.
+		/// </summary>
+		public Dictionary<string, Action<UiButton>> ButtonClickEventProcessors { get; set; } 
+
 		/// <summary>
 		/// Gets the element dimensions.
 		/// </summary>

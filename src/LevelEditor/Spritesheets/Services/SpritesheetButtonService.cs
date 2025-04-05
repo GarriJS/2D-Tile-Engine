@@ -1,5 +1,7 @@
 ﻿using Engine.Core.Textures.Contracts;
 using Engine.DiskModels.UI.Elements;
+using Engine.UI.Models.Elements;
+using LevelEditor.Spritesheets.Models.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -15,6 +17,15 @@ namespace LevelEditor.Spritesheets.Services
 	public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// The spritesheet button click event processor.
+		/// </summary>
+		/// <param name="button">The button.</param>
+		public void SpritesheetButtonClickEventProcessor(UiButton button)
+		{
+
+		}
 
 		/// <summary>
 		/// Gets the user interface buttons for the spritesheet.
@@ -62,7 +73,8 @@ namespace LevelEditor.Spritesheets.Services
 						FixedSized = new Vector2(spriteDimensions.X, spriteDimensions.Y),
 						BackgroundTextureName = textureName,
 						Text = string.Empty,
-						ClickableAreaScaler = new Vector2(1, 1)
+						ClickableAreaScaler = new Vector2(1, 1),
+						ButtonClickEventName = ButtonClickEventNameConstants.Spritesheet
 					};
 				}
 			}

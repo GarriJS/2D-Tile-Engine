@@ -26,6 +26,11 @@ namespace Engine.UI.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
+		/// Gets or sets the button click event processors.
+		/// </summary>
+		public Dictionary<string, Action<UiButton>> ButtonClickEventProcessors { get; set; } = [];
+
+		/// <summary>
 		/// Gets or sets the user interface elements.
 		/// </summary>
 		private List<IAmAUiElement> UserInterfaceElements { get; set; } = [];
@@ -196,6 +201,12 @@ namespace Engine.UI.Services
 			};
 
 			button.ClickEvent += this.ProcessUiButtonClick;
+
+			if ((false == string.IsNullOrEmpty(buttonModel.ButtonClickEventName)) &&
+				(true == this.ButtonClickEventProcessors.TryGetValue(buttonModel.ButtonClickEventName, out var action)))
+			{
+				button.ClickEvent += action;
+			}
 
 			if (null != buttonModel.ClickableAreaAnimation)
 			{

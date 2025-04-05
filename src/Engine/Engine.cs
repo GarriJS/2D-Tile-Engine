@@ -22,24 +22,29 @@ namespace Engine
 		public GraphicsDeviceManager _graphics;
 
 		/// <summary>
-		/// Gets the external services.
+		/// Gets and sets the external services.
 		/// </summary>
 		private List<Func<Game, (Type type, object provider)[]>> ExternalServiceProviders { get; } = [];
 
 		/// <summary>
-		/// Gets the external model processor map providers.
+		/// Gets and sets the external model processor map providers.
 		/// </summary>
 		private List<Func<GameServiceContainer, (Type typeIn, Delegate)[]>> ExternalModelProcessorMapProviders { get; } = [];
 
 		/// <summary>
-		/// Gets the initial models.
+		/// Gets and sets the initial models.
 		/// </summary>
 		private List<Func<GameServiceContainer, IList<object>>> InitialModelsProviders { get; } = [];
 
 		/// <summary>
-		/// Gets the initial models.
+		/// Gets and sets the initial models.
 		/// </summary>
 		private List<Func<GameServiceContainer, IList<UiGroupModel>>> InitialUiModelsProviders { get; } = [];
+
+		/// <summary>
+		/// Gets and sets the button click event processors.
+		/// </summary>
+		private List<Func<GameServiceContainer, Dictionary<string, Action<UiButton>>>> ButtonClickEventProcessorsProviders { get; } = [];
 
 		/// <summary>
 		/// Gets the loadables.
@@ -115,8 +120,22 @@ namespace Engine
 
 			this.InitialModelsProviders.Clear();
 
-			// Load the initial user interface models.
+			// Load the initial user interface click events
+			var uiElementService = this.Services.GetService<IUserInterfaceElementService>();
 
+			foreach (var buttonClickEventProcessorProvider in this.ButtonClickEventProcessorsProviders)
+			{
+				var buttonClickEventProcessors = buttonClickEventProcessorProvider.Invoke(this.Services);
+
+				foreach (var buttonClickEventProcessor in buttonClickEventProcessors)
+				{
+					uiElementService.ButtonClickEventProcessors.Add(buttonClickEventProcessor.Key, buttonClickEventProcessor.Value);
+				}
+			}
+
+			this.ButtonClickEventProcessorsProviders.Clear();
+
+			// Load the initial user interface models
 			foreach (var initialUiModelsProvider in this.InitialUiModelsProviders)
 			{
 				ModelProcessor.ProcessInitialUiModels(initialUiModelsProvider, this.Services);

@@ -1,11 +1,12 @@
-﻿using Common.DiskModels.Common.Tiling;
-using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Physics;
+﻿using Engine.DiskModels.Drawing;
 using Engine.DiskModels.UI;
 using Engine.DiskModels.UI.Elements;
+using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
+using LevelEditor.Spritesheets.Models.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +20,7 @@ namespace LevelEditor.Core.Initialization
 		/// <summary>
 		/// Gets the initial disk models.
 		/// </summary>
+		/// <param name="gameServices">The game services.</param>
 		/// <returns>The disk models.</returns>
 		public static IList<object> GetInitialDiskModels(GameServiceContainer gameServices)
 		{
@@ -29,15 +31,30 @@ namespace LevelEditor.Core.Initialization
 		}
 
 		/// <summary>
+		/// Gets the initial click event processors.
+		/// </summary>
+		/// <param name="gameServices">The game services.</param>
+		/// <returns>A dictionary of the click event processors.</returns>
+		public static Dictionary<string, Action<UiButton>> GetInitialClickEventProcessors(GameServiceContainer gameServices)
+		{
+			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
+
+			return new Dictionary<string, Action<UiButton>>
+			{
+				[ButtonClickEventNameConstants.Spritesheet] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
+			};
+		}
+
+		/// <summary>
 		/// Gets the initial user interface models.
 		/// </summary>
+		/// <param name="gameServices">The game services.</param>
 		/// <returns>The user interface models.</returns>
 		public static IList<UiGroupModel> GetInitialUiModels(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var spritesheetButtons = spritesheetButtonService.GetUiButtonsForSpritesheet("dark_grass_simplified", new Point(32, 32));
-			var flattened = spritesheetButtons?.SelectMany(row => row).ToArray();
-
+			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();
 
 			return
 			[
@@ -173,7 +190,7 @@ namespace LevelEditor.Core.Initialization
 									BottomPadding = 4,
 									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Right,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
-									SubElements = flattened
+									SubElements = flattenedButtons
 								}
 							]
 						}

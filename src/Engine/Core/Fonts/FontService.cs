@@ -21,7 +21,7 @@ namespace Engine.Core.Fonts
 		/// <summary>
 		/// Gets or sets the sprite fonts.
 		/// </summary>
-		private Dictionary<string, SpriteFont> SpriteFonts { get; set; } = new Dictionary<string, SpriteFont>();
+		private Dictionary<string, SpriteFont> SpriteFonts { get; set; } = [];
 
 		/// <summary>
 		/// Loads the font content.
