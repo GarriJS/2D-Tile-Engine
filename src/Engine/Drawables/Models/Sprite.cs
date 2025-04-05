@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Engine.Drawing.Models
+namespace Engine.Drawables.Models
 {
 	/// <summary>
 	/// Represents a sprite.

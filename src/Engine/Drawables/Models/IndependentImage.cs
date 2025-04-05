@@ -1,7 +1,7 @@
-﻿using Engine.Drawing.Models.Contracts;
+﻿using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
 
-namespace Engine.Drawing.Models
+namespace Engine.Drawables.Models
 {
 	/// <summary>
 	/// Represents a independent image.

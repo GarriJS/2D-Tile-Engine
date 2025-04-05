@@ -1,6 +1,6 @@
 ﻿using Engine.RunTime.Models.Contracts;
 
-namespace Engine.Drawing.Models.Contracts
+namespace Engine.Drawables.Models.Contracts
 {
     /// <summary>
     /// Represents something animated.

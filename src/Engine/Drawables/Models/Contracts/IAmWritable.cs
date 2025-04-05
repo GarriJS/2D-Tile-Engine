@@ -1,7 +1,7 @@
 ﻿using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawing.Models.Contracts
+namespace Engine.Drawables.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that is writable.

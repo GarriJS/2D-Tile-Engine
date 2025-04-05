@@ -1,7 +1,7 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.Drawing.Models;
+using Engine.Drawables.Models;
 
-namespace Engine.Drawing.Services.Contracts
+namespace Engine.Drawables.Services.Contracts
 {
 	/// <summary>
 	/// Represents a independent image service.

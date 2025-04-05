@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawing.Services.Contracts
+namespace Engine.Drawables.Services.Contracts
 {
 	/// <summary>
 	/// Represents a writing service.

@@ -1,9 +1,10 @@
 ﻿using Engine.Core.Fonts.Contracts;
-using Engine.Drawing.Services.Contracts;
+using Engine.Drawables.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawing.Services
+namespace Engine.Drawables.Services
 
 {   /// <summary>
 	/// Represents a writing service.

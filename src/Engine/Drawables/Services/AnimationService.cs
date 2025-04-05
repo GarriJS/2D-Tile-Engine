@@ -1,11 +1,11 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.Drawing.Models;
-using Engine.Drawing.Services.Contracts;
+using Engine.Drawables.Models;
+using Engine.Drawables.Services.Contracts;
 using Engine.RunTime.Services;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Drawing.Services
+namespace Engine.Drawables.Services
 {
 	/// <summary>
 	/// Represents a animation service.

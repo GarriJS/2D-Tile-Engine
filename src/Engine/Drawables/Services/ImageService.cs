@@ -1,11 +1,11 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
-using Engine.Drawing.Models;
-using Engine.Drawing.Services.Contracts;
+using Engine.Drawables.Models;
+using Engine.Drawables.Services.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Drawing.Services
+namespace Engine.Drawables.Services
 {
 	/// <summary>
 	/// Represents a image service.

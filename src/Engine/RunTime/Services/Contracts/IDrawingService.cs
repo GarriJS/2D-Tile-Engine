@@ -1,10 +1,10 @@
-﻿using Engine.Drawing.Models;
-using Engine.Drawing.Models.Contracts;
+﻿using Engine.Drawables.Models;
+using Engine.Drawables.Models.Contracts;
 using Engine.UI.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawing.Services.Contracts
+namespace Engine.RunTime.Services.Contracts
 {
 	public interface IDrawingService
 	{

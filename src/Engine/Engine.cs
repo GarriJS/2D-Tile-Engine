@@ -1,10 +1,13 @@
 ﻿using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
+using Engine.Core.Constants;
 using Engine.Core.Contracts;
 using Engine.Core.Initialization;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
 using Engine.DiskModels.UI;
+using Engine.Drawables.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models.Elements;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -37,14 +40,14 @@ namespace Engine
 		private List<Func<GameServiceContainer, IList<object>>> InitialModelsProviders { get; } = [];
 
 		/// <summary>
-		/// Gets and sets the initial models.
-		/// </summary>
-		private List<Func<GameServiceContainer, IList<UiGroupModel>>> InitialUiModelsProviders { get; } = [];
-
-		/// <summary>
 		/// Gets and sets the button click event processors.
 		/// </summary>
 		private List<Func<GameServiceContainer, Dictionary<string, Action<UiButton>>>> ButtonClickEventProcessorsProviders { get; } = [];
+
+		/// <summary>
+		/// Gets and sets the initial models.
+		/// </summary>
+		private List<Func<GameServiceContainer, IList<UiGroupModel>>> InitialUiModelsProviders { get; } = [];
 
 		/// <summary>
 		/// Gets the loadables.
@@ -183,13 +186,34 @@ namespace Engine
 		protected override void Draw(GameTime gameTime)
 		{
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
-			//var drawService = this.Services.GetService<IDrawingService>();
-
-			//drawService.BeginDraw();
-
-			//drawService.EndDraw();
+			var drawService = this.Services.GetService<IDrawingService>();
+			var imageService = this.Services.GetService<IImageService>();
+			var controlService = this.Services.GetService<IControlService>();
+			var image = imageService.GetImage("tile_grid", 160, 160);
+			var mouse = controlService.ControlState.MouseState.Position.ToVector2();
 
 			base.Draw(gameTime);
+
+			drawService.BeginDraw();
+
+			drawService.Draw(image.Texture, this.GetLocalTileCoordinates(mouse, -2), new Rectangle(0, 0, 160, 160), Color.White);
+
+			drawService.EndDraw();
+
+		}
+
+		/// <summary>
+		/// Gets the local tile coordinates.
+		/// </summary>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="gridOffset">The grid offset.</param>
+		/// <returns>The local tile coordinates.</returns>
+		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0)
+		{
+			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
+			var row = (int)coordinates.Y / TileConstants.TILE_SIZE;
+
+			return new Vector2((col + gridOffset) * TileConstants.TILE_SIZE, (row + gridOffset) * TileConstants.TILE_SIZE);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Drawing.Models
+namespace Engine.Drawables.Models
 {
 	/// <summary>
 	/// Represents the animation.

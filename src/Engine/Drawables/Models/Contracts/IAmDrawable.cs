@@ -1,7 +1,7 @@
 ﻿using Engine.Physics.Models.Contracts;
 using System;
 
-namespace Engine.Drawing.Models.Contracts
+namespace Engine.Drawables.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that can be drawn.

@@ -1,7 +1,8 @@
-﻿using Engine.Drawing.Models;
-using Engine.Drawing.Models.Contracts;
-using Engine.Drawing.Services.Contracts;
+﻿using Engine.Drawables.Models;
+using Engine.Drawables.Models.Contracts;
+using Engine.Drawables.Services.Contracts;
 using Engine.Physics.Models;
+using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
@@ -10,7 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
-namespace Engine.Drawing.Services
+namespace Engine.RunTime.Services
 {
 	/// <summary>
 	/// Represents a drawing service.

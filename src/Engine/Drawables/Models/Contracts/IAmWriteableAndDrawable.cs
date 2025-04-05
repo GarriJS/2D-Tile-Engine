@@ -1,4 +1,4 @@
-﻿namespace Engine.Drawing.Models.Contracts
+﻿namespace Engine.Drawables.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that is writable and drawable.

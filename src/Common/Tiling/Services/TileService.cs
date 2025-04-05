@@ -4,7 +4,7 @@ using Common.Tiling.Services.Contracts;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Engine.Core.Constants;
-using Engine.Drawing.Services.Contracts;
+using Engine.Drawables.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Engine.Physics.Models;
@@ -21,6 +21,20 @@ namespace Common.Tiling.Services
 	public class TileService(GameServiceContainer gameServices) : ITileService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// Gets the local tile coordinates.
+		/// </summary>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="gridOffset">The grid offset.</param>
+		/// <returns>The local tile coordinates.</returns>
+		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0)
+		{
+			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
+			var row = (int)coordinates.Y / TileConstants.TILE_SIZE;
+
+			return new Vector2((col + gridOffset) * TileConstants.TILE_SIZE, (row + gridOffset) * TileConstants.TILE_SIZE);
+		}
 
 		/// <summary>
 		/// Gets the tile map.

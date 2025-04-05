@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawing.Models
+namespace Engine.Drawables.Models
 {
 	/// <summary>
 	/// Represents a image.

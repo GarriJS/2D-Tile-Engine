@@ -2,6 +2,7 @@
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
+using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Services.Contracts
 {
@@ -10,6 +11,14 @@ namespace Common.Tiling.Services.Contracts
 	/// </summary>
 	public interface ITileService
 	{
+		/// <summary>
+		/// Gets the local tile coordinates.
+		/// </summary>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="gridOffset">The grid offset.</param>
+		/// <returns>The local tile coordinates.</returns>
+		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0);
+
 		/// <summary>
 		/// Gets the tile map.
 		/// </summary>
