@@ -3,13 +3,10 @@ using Engine.Drawables.Models.Contracts;
 using Engine.Drawables.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
-using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
-using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 
 namespace Engine.RunTime.Services
 {
@@ -55,7 +52,11 @@ namespace Engine.RunTime.Services
 		/// <summary>
 		/// Draws the drawable. 
 		/// </summary>
-		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color)
+		/// <param name="texture">The texture.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="sourceRectangle">The source rectangle.</param>
+		/// <param name="color">The color.</param>
+		private void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color)
 		{
 			this.SpriteBatch.Draw(texture, coordinates, sourceRectangle, color);
 		}
@@ -65,9 +66,22 @@ namespace Engine.RunTime.Services
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void Draw(GameTime gameTime, IAmDrawable drawable)
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, IAmDrawable drawable, Vector2 offset = default)
 		{
-			this.SpriteBatch.Draw(drawable.Image.Texture, drawable.Position.Coordinates, drawable.Image.TextureBox, Color.White);
+			this.SpriteBatch.Draw(drawable.Image.Texture, drawable.Position.Coordinates + offset, drawable.Image.TextureBox, Color.White);
+		}
+
+		/// <summary>
+		/// Draws the sub drawable. 
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="subDrawable">The sub drawable.</param>
+		/// <param name="position">The position.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, IAmSubDrawable subDrawable, Position position, Vector2 offset)
+		{
+			this.SpriteBatch.Draw(subDrawable.Image.Texture, position.Coordinates + offset, subDrawable.Image.TextureBox, Color.White);
 		}
 
 		/// <summary>
@@ -84,122 +98,16 @@ namespace Engine.RunTime.Services
 		}
 
 		/// <summary>
-		/// Draws the user interface zone.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="uiZone">The user interface zone.</param>
-		public void Draw(GameTime gameTime, UiZone uiZone)
-		{
-			if (null != uiZone.Image)
-			{
-				this.SpriteBatch.Draw(uiZone.Image.Texture, uiZone.Position.Coordinates, uiZone.Image.TextureBox, Color.White);
-			}
-
-			if (true != uiZone.ElementRows?.Any())
-			{
-				return;
-			}
-
-			var height = uiZone.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
-			var rowVerticalOffset = uiZone.JustificationType switch
-			{
-				UiZoneJustificationTypes.None => 0,
-				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
-				UiZoneJustificationTypes.Top => 0,
-				UiZoneJustificationTypes.Bottom => uiZone.Area.Height - height,
-				_ => 0,
-			};
-
-			foreach (var elementRow in uiZone.ElementRows)
-			{
-				switch (uiZone.JustificationType)
-				{
-					case UiZoneJustificationTypes.Bottom:
-					case UiZoneJustificationTypes.Center:
-					case UiZoneJustificationTypes.None:
-					case UiZoneJustificationTypes.Top:
-					default:
-						rowVerticalOffset += elementRow.TopPadding;
-						this.Draw(gameTime, elementRow, uiZone.Position, rowVerticalOffset);
-						rowVerticalOffset += (elementRow.BottomPadding + elementRow.Height);
-						break;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Draws the user interface row.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="uiRow">The user interface row.</param>
-		/// <param name="position">The position.</param>
-		/// <param name="heightOffset">The height offset.</param>
-		private void Draw(GameTime gameTime, UiRow uiRow, Position position, float heightOffset)
-		{
-			if (null != uiRow.Image)
-			{
-				this.SpriteBatch.Draw(uiRow.Image.Texture, position.Coordinates + new Vector2(0, heightOffset - uiRow.TopPadding), uiRow.Image.TextureBox, Color.White);
-			}
-
-			if (true != uiRow?.SubElements.Any())
-			{
-				return;
-			}
-
-			var width = uiRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
-			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
-			{
-				UiRowHorizontalJustificationTypes.None => 0,
-				UiRowHorizontalJustificationTypes.Center => (uiRow.Width - width) / 2,
-				UiRowHorizontalJustificationTypes.Left => 0,
-				UiRowHorizontalJustificationTypes.Right => uiRow.Width - width,
-				_ => 0,
-			};
-
-			var largestHeight = uiRow.SubElements.OrderByDescending(e => e.Area.Y)
-												 .FirstOrDefault().Area.Y;
-
-			foreach (var element in uiRow.SubElements)
-			{
-				var verticallyCenterOffset = 0f;
-
-				switch (uiRow.VerticalJustificationType)
-				{
-					case UiRowVerticalJustificationTypes.Bottom:
-						verticallyCenterOffset = (largestHeight - element.Area.Y);
-						break;
-					case UiRowVerticalJustificationTypes.Center:
-						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
-						break;
-					case UiRowVerticalJustificationTypes.None:
-					case UiRowVerticalJustificationTypes.Top:
-						break;
-				}
-
-				switch (uiRow.HorizontalJustificationType)
-				{
-					case UiRowHorizontalJustificationTypes.Right:
-					case UiRowHorizontalJustificationTypes.Center:
-					case UiRowHorizontalJustificationTypes.None:
-					case UiRowHorizontalJustificationTypes.Left:
-					default:
-						elementHorizontalOffset += element.LeftPadding;
-						this.Draw(gameTime, element, position, new Vector2(elementHorizontalOffset, heightOffset + verticallyCenterOffset));
-						elementHorizontalOffset += (element.RightPadding + element.Area.X);
-						break;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Draws the user interface element.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="element">The element.</param>
 		/// <param name="position">The position.</param>
-		/// <param name="offset">The offset.</param>
-		private void Draw(GameTime gameTime, IAmAUiElement element, Position position, Vector2 offset)
+		/// <param name="verticalOffset">The vertical offset.</param>
+		/// <param name="horizontalOffset">The horizontal offset.</param>
+		public void Draw(GameTime gameTime, IAmAUiElement element, Position position, float verticalOffset = 0, float horizontalOffset = 0)
 		{
+			var offset = new Vector2(horizontalOffset, verticalOffset);
 			this.Draw(element.Image.Texture, position.Coordinates + offset, element.Image.TextureBox, Color.White);
 
 			if (element is UiButton button)

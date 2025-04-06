@@ -1,6 +1,5 @@
 ﻿using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
-using Engine.Core.Constants;
 using Engine.Core.Contracts;
 using Engine.Core.Initialization;
 using Engine.Debugging.Services.Contracts;
@@ -67,7 +66,7 @@ namespace Engine
 			this._graphics = new GraphicsDeviceManager(this);
 			this.Content.RootDirectory = "Content";
 			this.Window.AllowUserResizing = true;
-			this.IsMouseVisible = true;
+			this.IsMouseVisible = false;
 		}
 
 		protected override void Initialize()
@@ -194,26 +193,12 @@ namespace Engine
 
 			base.Draw(gameTime);
 
-			drawService.BeginDraw();
+			//drawService.BeginDraw();
 
-			drawService.Draw(image.Texture, this.GetLocalTileCoordinates(mouse, -2), new Rectangle(0, 0, 160, 160), Color.White);
+			//drawService.Draw(image.Texture, this.GetLocalTileCoordinates(mouse, -2), new Rectangle(0, 0, 160, 160), Color.White);
 
-			drawService.EndDraw();
+			//drawService.EndDraw();
 
-		}
-
-		/// <summary>
-		/// Gets the local tile coordinates.
-		/// </summary>
-		/// <param name="coordinates">The coordinates.</param>
-		/// <param name="gridOffset">The grid offset.</param>
-		/// <returns>The local tile coordinates.</returns>
-		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0)
-		{
-			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
-			var row = (int)coordinates.Y / TileConstants.TILE_SIZE;
-
-			return new Vector2((col + gridOffset) * TileConstants.TILE_SIZE, (row + gridOffset) * TileConstants.TILE_SIZE);
 		}
 	}
 }

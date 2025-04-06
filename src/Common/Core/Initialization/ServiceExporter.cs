@@ -1,4 +1,6 @@
-﻿using Common.Tiling.Services;
+﻿using Common.Controls.Services;
+using Common.Controls.Services.Contracts;
+using Common.Tiling.Services;
 using Common.Tiling.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -19,6 +21,7 @@ namespace Common.Core.Initialization
 		{
 			return
 			[
+				(typeof(ICursorService), new CursorService(game.Services)),
 				(typeof(ITileService), new TileService(game.Services))
 			];
 		}

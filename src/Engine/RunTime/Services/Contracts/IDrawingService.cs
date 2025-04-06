@@ -1,6 +1,7 @@
 ﻿using Engine.Drawables.Models;
 using Engine.Drawables.Models.Contracts;
-using Engine.UI.Models;
+using Engine.Physics.Models;
+using Engine.UI.Models.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,14 +27,19 @@ namespace Engine.RunTime.Services.Contracts
 		/// <summary>
 		/// Draws the drawable. 
 		/// </summary>
-		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color);
-
-		/// <summary>
-		/// Draws the drawable. 
-		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void Draw(GameTime gameTime, IAmDrawable drawable);
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, IAmDrawable drawable, Vector2 offset = default);
+
+		/// <summary>
+		/// Draws the sub drawable. 
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="subDrawable">The sub drawable.</param>
+		/// <param name="position">The position.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, IAmSubDrawable subDrawable, Position position, Vector2 offset);
 
 		/// <summary>
 		/// Draws the animation.
@@ -44,10 +50,13 @@ namespace Engine.RunTime.Services.Contracts
 		public void Draw(GameTime gameTime, Animation animation, Vector2 coordinates);
 
 		/// <summary>
-		/// Draws the user interface zone.
+		/// Draws the user interface element.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="uiZone">The user interface zone.</param>
-		public void Draw(GameTime gameTime, UiZone uiZone);
+		/// <param name="element">The element.</param>
+		/// <param name="position">The position.</param>
+		/// <param name="verticalOffset">The vertical offset.</param>
+		/// <param name="horizontalOffset">The horizontal offset.</param>
+		public void Draw(GameTime gameTime, IAmAUiElement element, Position position, float verticalOffset = 0, float horizontalOffset = 0);
 	}
 }

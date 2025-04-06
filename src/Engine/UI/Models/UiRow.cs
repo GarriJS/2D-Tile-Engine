@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Engine.Drawables.Models;
+using Engine.Drawables.Models.Contracts;
+using Engine.Physics.Models;
+using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
+using Microsoft.Xna.Framework;
 
 namespace Engine.UI.Models
 {
     /// <summary>
     /// Represents a user interface row.
     /// </summary>
-    public class UiRow : IDisposable
+    public class UiRow : IAmSubDrawable, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface row name.
@@ -55,6 +60,73 @@ namespace Engine.UI.Models
 		/// Gets or sets the sub elements.
 		/// </summary>
 		public List<IAmAUiElement> SubElements { get; set; }
+
+		/// <summary>
+		/// Draws the sub drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="position">The position.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		{
+			var drawingService = gameServices.GetService<IDrawingService>();
+			var spritebatch = drawingService.SpriteBatch;
+
+			if (null != this.Image)
+			{
+				spritebatch.Draw(this.Image.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Image.TextureBox, Color.White);
+			}
+
+			if (true != this?.SubElements.Any())
+			{
+				return;
+			}
+
+			var width = this.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
+			var elementHorizontalOffset = this.HorizontalJustificationType switch
+			{
+				UiRowHorizontalJustificationTypes.None => 0,
+				UiRowHorizontalJustificationTypes.Center => (this.Width - width) / 2,
+				UiRowHorizontalJustificationTypes.Left => 0,
+				UiRowHorizontalJustificationTypes.Right => this.Width - width,
+				_ => 0,
+			};
+
+			var largestHeight = this.SubElements.OrderByDescending(e => e.Area.Y)
+												 .FirstOrDefault().Area.Y;
+
+			foreach (var element in this.SubElements)
+			{
+				var verticallyCenterOffset = 0f;
+
+				switch (this.VerticalJustificationType)
+				{
+					case UiRowVerticalJustificationTypes.Bottom:
+						verticallyCenterOffset = (largestHeight - element.Area.Y);
+						break;
+					case UiRowVerticalJustificationTypes.Center:
+						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
+						break;
+					case UiRowVerticalJustificationTypes.None:
+					case UiRowVerticalJustificationTypes.Top:
+						break;
+				}
+
+				switch (this.HorizontalJustificationType)
+				{
+					case UiRowHorizontalJustificationTypes.Right:
+					case UiRowHorizontalJustificationTypes.Center:
+					case UiRowHorizontalJustificationTypes.None:
+					case UiRowHorizontalJustificationTypes.Left:
+					default:
+						elementHorizontalOffset += element.LeftPadding;
+						drawingService.Draw(gameTime, element, position, offset.Y + verticallyCenterOffset, elementHorizontalOffset);
+						elementHorizontalOffset += (element.RightPadding + element.Area.X);
+						break;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Disposes of the user interface row.

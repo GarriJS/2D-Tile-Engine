@@ -1,5 +1,4 @@
 ﻿using Engine.Drawables.Models.Contracts;
-using Engine.Drawables.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
 using Microsoft.Xna.Framework;
@@ -130,8 +129,8 @@ namespace Engine.RunTime.Managers
 			foreach (var layer in this.ActiveDrawables.Values)
 			{
 				foreach (var drawable in layer)
-				{ 
-					drawingService.Draw(gameTime, drawable);
+				{
+					drawable.Draw(gameTime, this.Game.Services);
 				}
 			}
 
@@ -142,15 +141,7 @@ namespace Engine.RunTime.Managers
 			{
 				foreach (var drawable in layer)
 				{
-					switch (drawable)
-					{
-						case UiZone uiZone:
-							drawingService.Draw(gameTime, uiZone);
-							break;
-						default:
-							drawingService.Draw(gameTime, drawable);
-							break;
-					}
+					drawable.Draw(gameTime, this.Game.Services);
 				}
 			}
 

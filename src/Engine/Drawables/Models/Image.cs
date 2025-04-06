@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Engine.Drawables.Models
 {
 	/// <summary>
 	/// Represents a image.
 	/// </summary>
-	public class Image
+	public class Image : IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the texture name.

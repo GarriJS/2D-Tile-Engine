@@ -346,7 +346,7 @@ namespace Engine.UI.Services
 			return new UiZone
 			{
 				UiZoneName = uiZoneElementModel.UiZoneName,
-				DrawLayer = 1,
+				DrawLayer = 0,
 				JustificationType = (UiZoneJustificationTypes)uiZoneElementModel.JustificationType,
 				Image = background,
 				UserInterfaceScreenZone = uiZone,

@@ -3,6 +3,7 @@ using Engine.Drawables.Models;
 using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Models
 {
@@ -45,6 +46,26 @@ namespace Common.Tiling.Models
 		/// Gets or sets the area.
 		/// </summary>
 		public IAmAArea Area { get; set; }
+
+		/// <summary>
+		/// Draws the drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
+		{
+
+		}
+
+		/// <summary>
+		/// Updates the updateable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="updateable">The updateable.</param>
+		public void Update(GameTime gameTime, GameServiceContainer gameServices)
+		{
+
+		}
 
 		/// <summary>
 		/// Disposes of the animated tile.
