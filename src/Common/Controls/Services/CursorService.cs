@@ -104,6 +104,11 @@ namespace Common.Controls.Services
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 
+			if (null == controlService.ControlState)
+			{
+				return;
+			}
+
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
 
 			if ((true == this.TileGridCursorIsActive) &&

@@ -23,6 +23,6 @@
 		/// <summary>
 		/// The right type.
 		/// </summary>
-		Right = 3,
+		Right = 3
 	}
 }

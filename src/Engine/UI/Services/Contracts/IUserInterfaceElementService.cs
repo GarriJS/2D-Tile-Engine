@@ -27,6 +27,13 @@ namespace Engine.UI.Services.Contracts
 		public Vector2? GetElementDimensions(UiScreenZone uiScreenZone, IAmAUiElementModel elementModel);
 
 		/// <summary>
+		/// Updates the element height.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="height">The height.</param>
+		public void UpdateElementHeight(IAmAUiElement element, float height);
+
+		/// <summary>
 		/// Processes the user interface element being pressed.
 		/// </summary>
 		/// <param name="element">The element.</param>
@@ -45,9 +52,8 @@ namespace Engine.UI.Services.Contracts
 		/// <param name="uiElementModel">The user interface element model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="fillWidth">The fill width of the user interface element.</param>
-		/// <param name="fillHeight">The fill height of the user interface element model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface element.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight, int visibilityGroup);
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, int visibilityGroup);
 	}
 }

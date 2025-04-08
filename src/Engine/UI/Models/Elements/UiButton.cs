@@ -57,6 +57,11 @@ namespace Engine.UI.Models.Elements
 		public Vector2 ClickableArea { get; set; }
 
 		/// <summary>
+		/// Gets or sets the clickable area scaler.
+		/// </summary>
+		public Vector2 ClickableAreaScaler { get; set; }
+
+		/// <summary>
 		/// Gets or sets the image.
 		/// </summary>
 		public Image Image { get; set; }

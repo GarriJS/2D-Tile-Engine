@@ -3,6 +3,7 @@ using Engine.Drawables.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models;
+using Engine.UI.Models.Constants;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
@@ -253,7 +254,7 @@ namespace Engine.UI.Services
 
 			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
 			{
-				var uiZoneElement = this.GetUiZoneElement(uiZoneElementModel, uiGroupModel.VisibilityGroupId);
+				var uiZoneElement = this.GetUiZone(uiZoneElementModel, uiGroupModel.VisibilityGroupId);
 
 				if (null != uiZoneElement)
 				{
@@ -270,88 +271,106 @@ namespace Engine.UI.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface zone element.
+		/// Gets the user interface zone.
 		/// </summary>
-		/// <param name="uiZoneElementModel">The user interface element model.</param>
+		/// <param name="uiZoneModel">The user interface model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
-		/// <returns>The user interface zone element.</returns>
-		public UiZone GetUiZoneElement(UiZoneModel uiZoneElementModel, int visibilityGroup)
+		/// <returns>The user interface zone.</returns>
+		public UiZone GetUiZone(UiZoneModel uiZoneModel, int visibilityGroup)
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
-			var elementRows = new List<UiRow>();
 
-			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneElementModel.UiZoneType, out UiScreenZone uiZone))
+			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
 			{
-				uiZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneTypes.None];
+				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneTypes.None];
 			}
 
 			var imageService = this._gameServices.GetService<IImageService>();
-			var background = imageService.GetImage(uiZoneElementModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)uiZone.Area.Height);
-
-			if (true == uiZoneElementModel.ElementRows?.Any())
+			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
+			var uiZone = new UiZone
 			{
-				var availableHeight = uiZone.Area.Height;
-				var numberOfFillRows = 0;
-				var rowElementBaseHeights = new Dictionary<UiRowModel, float>();
+				UiZoneName = uiZoneModel.UiZoneName,
+				DrawLayer = 0,
+				JustificationType = (UiZoneJustificationTypes)uiZoneModel.JustificationType,
+				Image = background,
+				UserInterfaceScreenZone = uiScreenZone,
+				ElementRows = []
+			};
 
-				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
+			if (true != uiZoneModel.ElementRows?.Any())
+			{
+				return uiZone;
+			}
+
+			var elementRowsFirstPass = new List<UiRow>();
+
+			foreach (var elementRowModel in uiZoneModel.ElementRows)
+			{
+				var elementRow = this.GetUiRow(elementRowModel, uiScreenZone, visibilityGroup);
+
+				if (null != elementRow)
 				{
-					var rowMinHeight = 0f;
-
-					if (true == elementRowModel.SubElements?.Any())
-					{
-						var rowElementsSizes = elementRowModel.SubElements.Select(e => uiElementService.GetElementDimensions(uiZone, e));
-
-						if (true == rowElementsSizes?.Any(e => false == e.HasValue))
-						{
-							numberOfFillRows++;
-						}
-
-						rowMinHeight += rowElementsSizes.Where(e => true == e.HasValue)
-														.Select(e => e.Value.Y)
-														.OrderDescending()
-														.FirstOrDefault();
-
-						rowElementBaseHeights.Add(elementRowModel, rowMinHeight);
-					}
-
-					availableHeight -= (rowMinHeight + elementRowModel.TopPadding + elementRowModel.BottomPadding);
-				}
-
-				var fillHeight = 0 < numberOfFillRows
-					? availableHeight / numberOfFillRows
-					: availableHeight / uiZoneElementModel.ElementRows.Length;
-
-				foreach (var elementRowModel in uiZoneElementModel.ElementRows)
-				{
-					rowElementBaseHeights.TryGetValue(elementRowModel, out var rowBaseHeight);
-					var rowHeight = rowBaseHeight;
-
-					if (true == elementRowModel.SubElements?.Any(e => ((int)UiElementSizeTypes.None == e.SizeType) ||
-																	 ((int)UiElementSizeTypes.Fill == e.SizeType)))
-					{
-						rowHeight += fillHeight;
-					}
-
-					var elementRow = this.GetUiRow(elementRowModel, uiZone, rowHeight, visibilityGroup);
-
-					if (null != elementRow)
-					{
-						elementRows.Add(elementRow);
-					}
+					elementRowsFirstPass.Add(elementRow);
 				}
 			}
 
-			return new UiZone
+			var currentTotalHeight = elementRowsFirstPass.Sum(e => e.Height);
+			var elementRowsSecondPass = new List<UiRow>();
+
+			foreach (var elementRow in elementRowsFirstPass)
 			{
-				UiZoneName = uiZoneElementModel.UiZoneName,
-				DrawLayer = 0,
-				JustificationType = (UiZoneJustificationTypes)uiZoneElementModel.JustificationType,
-				Image = background,
-				UserInterfaceScreenZone = uiZone,
-				ElementRows = elementRows
-			};
+				var rowRealWidth = elementRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
+
+				if ((true == elementRow.Flex) &&
+					(currentTotalHeight < uiScreenZone.Area.Height) &&
+					(elementRow.Width < rowRealWidth))
+				{
+					var flexedElementRows = this.GetFlexedUiRows(elementRow);
+					var newHeight = (currentTotalHeight - elementRow.Height) + flexedElementRows.Sum(e => e.Height);
+
+					if (newHeight < uiScreenZone.Area.Height)
+					{
+						currentTotalHeight = newHeight;
+						elementRowsSecondPass.AddRange(flexedElementRows?.Where(e => null != e));
+						
+						continue;
+					}
+				}
+
+				elementRowsSecondPass.Add(elementRow);
+			}
+
+			var fillRows = elementRowsSecondPass.Where(e => e.SubElements.Any(s => s.Area.Y == 0))
+												.ToList();
+
+			if (true == fillRows?.Any())
+			{
+				var fillHeight = (uiScreenZone.Area.Height - currentTotalHeight) / fillRows.Count();
+
+				if (fillHeight < ElementSizesScalars.ExtraSmall.Y / 2)
+				{ 
+					fillHeight = ElementSizesScalars.ExtraSmall.Y / 2;
+				}
+
+				var fillElements = fillRows.SelectMany(e => e.SubElements)
+										   .Where(e => e.Area.Y == 0);
+
+				foreach (var fillElement in fillElements)
+                {
+					uiElementService.UpdateElementHeight(fillElement, fillHeight);
+                }
+
+				foreach (var fillRow in fillRows)
+				{ 
+					fillRow.Height = fillRow.SubElements.OrderByDescending(e => e.Area.Y)
+														.FirstOrDefault().Area.Y;
+				}
+            }
+
+			uiZone.ElementRows = elementRowsSecondPass;
+
+			return uiZone;
 		}
 
 		/// <summary>
@@ -359,49 +378,50 @@ namespace Engine.UI.Services
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
-		/// <param name="fillHeight">The fill height.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface row.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, float fillHeight, int visibilityGroup)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, int visibilityGroup)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var numberOfFillElements = 0;
 			var subElements = new List<IAmAUiElement>();
 
-			if (true == uiRowModel.SubElements?.Any())
+			if (true != uiRowModel.SubElements?.Any())
 			{
-				var availableWidth = uiZone.Area.Width;
+				return null;
+			}
 
-				foreach (var elementModel in uiRowModel.SubElements)
+			var availableWidth = uiZone.Area.Width;
+
+			foreach (var elementModel in uiRowModel.SubElements)
+			{
+				var elementMinWidth = elementModel.LeftPadding + elementModel.RightPadding;
+				var elementSize = uiElementService.GetElementDimensions(uiZone, elementModel);
+
+				if (true == elementSize.HasValue)
 				{
-					var elementMinWidth = elementModel.LeftPadding + elementModel.RightPadding;
-					var elementSize = uiElementService.GetElementDimensions(uiZone, elementModel);
-
-					if (true == elementSize.HasValue)
-					{
-						elementMinWidth += elementSize.Value.X;
-					}
-					else
-					{
-						numberOfFillElements++;
-					}
-
-					availableWidth -= elementMinWidth;
+					elementMinWidth += elementSize.Value.X;
+				}
+				else
+				{
+					numberOfFillElements++;
 				}
 
-				var fillWidth = 0 < numberOfFillElements
-					? availableWidth / numberOfFillElements
-					: availableWidth / uiRowModel.SubElements.Length;
+				availableWidth -= elementMinWidth;
+			}
 
-				foreach (var elementModel in uiRowModel.SubElements)
+			var fillWidth = 0 < numberOfFillElements
+				? availableWidth / numberOfFillElements
+				: availableWidth / uiRowModel.SubElements.Length;
+
+			foreach (var elementModel in uiRowModel.SubElements)
+			{
+				var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth, visibilityGroup);
+
+				if (null != element)
 				{
-					var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth, fillHeight, visibilityGroup);
-
-					if (null != element)
-					{
-						subElements.Add(element);
-					}
+					subElements.Add(element);
 				}
 			}
 
@@ -423,6 +443,74 @@ namespace Engine.UI.Services
 				Image = image,
 				SubElements = subElements
 			};
+		}
+
+		/// <summary>
+		/// Gets the flexed user interface rows.
+		/// </summary>
+		/// <param name="uiRow">The user interface rows.</param>
+		/// <returns>The flexed user interface rows.</returns>
+		private IList<UiRow> GetFlexedUiRows(UiRow uiRow)
+		{
+			if (true != uiRow?.SubElements.Any())
+			{
+				return [];
+			}
+
+			var flexedRows = new List<UiRow>();
+			var currentWidth = 0f;
+			var currentRow = new UiRow
+			{
+				UiRowName = uiRow.UiRowName,
+				Flex = true,
+				Width = uiRow.Width,
+				TopPadding = 0,
+				BottomPadding = 0,
+				HorizontalJustificationType = uiRow.HorizontalJustificationType,
+				VerticalJustificationType = uiRow.VerticalJustificationType,
+				Image = uiRow.Image,
+				SubElements = []
+			};
+
+			foreach (var element in uiRow.SubElements)
+			{
+				var elementWidth = element.Area.X + element.LeftPadding + element.RightPadding;
+
+				if (currentWidth + elementWidth > uiRow.Width)
+				{
+					currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
+															  .FirstOrDefault().Area.Y;
+					currentWidth = 0;
+					flexedRows.Add(currentRow);
+					currentRow = new UiRow
+					{
+						UiRowName = uiRow.UiRowName,
+						Flex = true,
+						Width = uiRow.Width,
+						TopPadding = uiRow.TopPadding > uiRow.BottomPadding ?
+									 uiRow.BottomPadding :
+									 uiRow.TopPadding,
+						BottomPadding = 0,
+						HorizontalJustificationType = uiRow.HorizontalJustificationType,
+						VerticalJustificationType = uiRow.VerticalJustificationType,
+						Image = uiRow.Image,
+						SubElements = []
+					};
+				}
+
+				currentRow.SubElements.Add(element);
+				currentWidth += elementWidth;
+			}
+
+			if (true == currentRow.SubElements.Any())
+			{
+				currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
+														  .FirstOrDefault().Area.Y;
+
+				flexedRows.Add(currentRow);
+			}
+
+			return flexedRows;
 		}
 	}
 }

@@ -86,6 +86,11 @@ namespace Engine.UI.Models
 				_ => 0,
 			};
 
+			if (0 > rowVerticalOffset)
+			{ 
+				rowVerticalOffset = 0;
+			}
+
 			foreach (var elementRow in this.ElementRows)
 			{
 				switch (this.JustificationType)

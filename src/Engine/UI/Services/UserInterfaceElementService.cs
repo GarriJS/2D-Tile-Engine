@@ -4,6 +4,7 @@ using Engine.DiskModels.UI.Elements;
 using Engine.Drawables.Models;
 using Engine.Drawables.Services.Contracts;
 using Engine.UI.Models;
+using Engine.UI.Models.Constants;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
 using Engine.UI.Models.Enums;
@@ -11,6 +12,7 @@ using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.UI.Services
 {
@@ -57,24 +59,39 @@ namespace Engine.UI.Services
 									? (UiElementSizeTypes)elementModel.SizeType
 									: UiElementSizeTypes.None;
 
-			switch (uiElementSizeType)
+			return uiElementSizeType switch
 			{
-				default:
-				case UiElementSizeTypes.None:
-				case UiElementSizeTypes.Fill:
-					return null;
-				case UiElementSizeTypes.ExtraSmall:
-					return new Vector2(uiScreenZone.Area.Width / 5, uiScreenZone.Area.Height / 6);
-				case UiElementSizeTypes.Small:
-					return new Vector2(uiScreenZone.Area.Width / 4, uiScreenZone.Area.Height / 5);
-				case UiElementSizeTypes.Medium:
-					return new Vector2(uiScreenZone.Area.Width / 3, uiScreenZone.Area.Height / 4);
-				case UiElementSizeTypes.Large:
-					return new Vector2(uiScreenZone.Area.Width / 2, uiScreenZone.Area.Height / 3);
-				case UiElementSizeTypes.ExtraLarge:
-					return new Vector2(uiScreenZone.Area.Width / 1, uiScreenZone.Area.Height / 2);
-				case UiElementSizeTypes.Full:
-					return new Vector2(uiScreenZone.Area.Width, uiScreenZone.Area.Height);
+				UiElementSizeTypes.ExtraSmall => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.ExtraSmall.X, uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y),
+				UiElementSizeTypes.Small => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.Small.X, uiScreenZone.Area.Height * ElementSizesScalars.Small.Y),
+				UiElementSizeTypes.Medium => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.Medium.X, uiScreenZone.Area.Height * ElementSizesScalars.Medium.Y),
+				UiElementSizeTypes.Large => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.Large.X, uiScreenZone.Area.Height * ElementSizesScalars.Large.Y),
+				UiElementSizeTypes.ExtraLarge => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.ExtraLarge.X, uiScreenZone.Area.Height * ElementSizesScalars.ExtraLarge.Y),
+				UiElementSizeTypes.Full => new Vector2(uiScreenZone.Area.Width, uiScreenZone.Area.Height),
+				_ => null,
+			};
+		}
+
+		/// <summary>
+		/// Updates the element height.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="height">The height.</param>
+		public void UpdateElementHeight(IAmAUiElement element, float height)
+		{
+			element.Area = new Vector2(element.Area.X, height);
+			element.Image.TextureBox = new Rectangle(element.Image.TextureBox.X, element.Image.TextureBox.Y, element.Image.TextureBox.Width, (int)height);
+
+			if (element is UiButton uiButton)
+			{
+				uiButton.ClickableArea = new Vector2(uiButton.ClickableArea.X, (int)(element.Image.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
+
+				if (true == uiButton.ClickAnimation?.Frames?.Any())
+				{
+					foreach (var frame in uiButton.ClickAnimation.Frames)
+					{
+						frame.TextureBox = new Rectangle(frame.TextureBox.X, frame.TextureBox.Y, frame.TextureBox.Width, (int)(element.Image.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
+					}
+				}
 			}
 		}
 
@@ -126,10 +143,9 @@ namespace Engine.UI.Services
 		/// <param name="uiElementModel">The user interface element model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="fillWidth">The fill width of the user interface element.</param>
-		/// <param name="fillHeight">The fill height of the user interface element model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface element.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, float fillHeight, int visibilityGroup)
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, int visibilityGroup)
 		{
 			var elementSize = this.GetElementDimensions(uiZone, uiElementModel);
 			var width = true == elementSize.HasValue
@@ -137,7 +153,7 @@ namespace Engine.UI.Services
 						: fillWidth;
 			var height = true == elementSize.HasValue
 						 ? elementSize.Value.Y
-						 : fillHeight;
+						 : 0;
 
 			var imageService = this._gameServices.GetService<IImageService>();
 			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
@@ -197,7 +213,8 @@ namespace Engine.UI.Services
 				RightPadding = buttonModel.RightPadding,
 				ElementType = UiElementTypes.Button,
 				Area = area,
-				ClickableArea = clickableArea
+				ClickableArea = clickableArea,
+				ClickableAreaScaler = buttonModel.ClickableAreaScaler
 			};
 
 			button.ClickEvent += this.ProcessUiButtonClick;

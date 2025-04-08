@@ -22,6 +22,11 @@ namespace Engine.UI.Models
 		public string UiRowName { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the user interface row should flex.
+		/// </summary>
+		public bool Flex { get; set; } = true;
+
+		/// <summary>
 		/// Gets or sets the width.
 		/// </summary>
 		public float Width { get; set; }
@@ -92,6 +97,11 @@ namespace Engine.UI.Models
 				UiRowHorizontalJustificationTypes.Right => this.Width - width,
 				_ => 0,
 			};
+
+			if (0 > elementHorizontalOffset)
+			{
+				elementHorizontalOffset = 0;
+			}
 
 			var largestHeight = this.SubElements.OrderByDescending(e => e.Area.Y)
 												 .FirstOrDefault().Area.Y;

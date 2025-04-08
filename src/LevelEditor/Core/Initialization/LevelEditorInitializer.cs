@@ -120,7 +120,7 @@ namespace LevelEditor.Core.Initialization
 											RightPadding = 0,
 											BackgroundTextureName = "gray",
 											Text = "Push Me",
-											SizeType = (int)UiElementSizeTypes.ExtraLarge,
+											SizeType = (int)UiElementSizeTypes.Fill,
 											ClickableAreaScaler = new Vector2(.9f, .9f),
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
@@ -147,7 +147,7 @@ namespace LevelEditor.Core.Initialization
 									UiRowName = "foo1row2",
 									TopPadding = 4,
 									BottomPadding = 4,
-									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Right,
+									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
 									SubElements =
 									[
@@ -157,8 +157,8 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 4,
 											RightPadding = 2,
 											BackgroundTextureName = "white",
-											Text = "Push Me",
-											SizeType = (int)UiElementSizeTypes.Large,
+											Text = "Push Me 1",
+											SizeType = (int)UiElementSizeTypes.Fill,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										},
 										new UiButtonModel
@@ -167,7 +167,7 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 2,
 											RightPadding = 4,
 											BackgroundTextureName = "black",
-											Text = "Push Me",
+											Text = "Push Me 2",
 											SizeType = (int)UiElementSizeTypes.Large,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										}
@@ -180,7 +180,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneName = "foo1",
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 							BackgroundTextureName = "gray_transparent",
-							JustificationType = (int)UiZoneJustificationTypes.Center,
+							JustificationType = (int)UiZoneJustificationTypes.Top,
 							ElementRows =
 							[
 								new UiRowModel
@@ -188,8 +188,8 @@ namespace LevelEditor.Core.Initialization
 									UiRowName = "foo1row3",
 									TopPadding = 4,
 									BottomPadding = 4,
-									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Right,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
 									SubElements = flattenedButtons
 								}
 							]
