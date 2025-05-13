@@ -168,7 +168,7 @@ namespace LevelEditor.Core.Initialization
 											RightPadding = 4,
 											BackgroundTextureName = "black",
 											Text = "Push Me 2",
-											SizeType = (int)UiElementSizeTypes.Large,
+											SizeType = (int)UiElementSizeTypes.ExtraLarge,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										}
 									]
@@ -186,10 +186,10 @@ namespace LevelEditor.Core.Initialization
 								new UiRowModel
 								{
 									UiRowName = "foo1row3",
-									TopPadding = 4,
+									TopPadding = 40,
 									BottomPadding = 4,
 									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.None,
 									SubElements = flattenedButtons
 								}
 							]

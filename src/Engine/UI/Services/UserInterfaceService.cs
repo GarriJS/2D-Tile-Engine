@@ -464,8 +464,8 @@ namespace Engine.UI.Services
 				UiRowName = uiRow.UiRowName,
 				Flex = true,
 				Width = uiRow.Width,
-				TopPadding = 0,
-				BottomPadding = 0,
+				TopPadding = uiRow.TopPadding,
+				BottomPadding = 1,
 				HorizontalJustificationType = uiRow.HorizontalJustificationType,
 				VerticalJustificationType = uiRow.VerticalJustificationType,
 				Image = uiRow.Image,
@@ -487,9 +487,7 @@ namespace Engine.UI.Services
 						UiRowName = uiRow.UiRowName,
 						Flex = true,
 						Width = uiRow.Width,
-						TopPadding = uiRow.TopPadding > uiRow.BottomPadding ?
-									 uiRow.BottomPadding :
-									 uiRow.TopPadding,
+						TopPadding = 1,
 						BottomPadding = 0,
 						HorizontalJustificationType = uiRow.HorizontalJustificationType,
 						VerticalJustificationType = uiRow.VerticalJustificationType,
@@ -502,6 +500,7 @@ namespace Engine.UI.Services
 				currentWidth += elementWidth;
 			}
 
+			currentRow.BottomPadding = uiRow.BottomPadding;
 			if (true == currentRow.SubElements.Any())
 			{
 				currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
