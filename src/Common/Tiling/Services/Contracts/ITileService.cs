@@ -1,7 +1,9 @@
-﻿using Common.DiskModels.Common.Tiling;
+﻿using Common.Controls.Models;
+using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
+using Engine.Core.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Services.Contracts
@@ -9,7 +11,7 @@ namespace Common.Tiling.Services.Contracts
 	/// <summary>
 	/// Represents a tile service.
 	/// </summary>
-	public interface ITileService
+	public interface ITileService : ILoadContent
 	{
 		/// <summary>
 		/// Gets the local tile coordinates.
@@ -18,6 +20,14 @@ namespace Common.Tiling.Services.Contracts
 		/// <param name="gridOffset">The grid offset.</param>
 		/// <returns>The local tile coordinates.</returns>
 		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0);
+
+		/// <summary>
+		/// Updates the tile grid cursor position.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		public void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices);
 
 		/// <summary>
 		/// Gets the tile map.

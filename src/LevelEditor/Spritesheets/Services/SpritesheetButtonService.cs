@@ -24,7 +24,7 @@ namespace LevelEditor.Spritesheets.Services
 		/// <param name="button">The button.</param>
 		public void SpritesheetButtonClickEventProcessor(UiButton button)
 		{
-
+			
 		}
 
 		/// <summary>

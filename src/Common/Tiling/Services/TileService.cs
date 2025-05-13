@@ -1,13 +1,18 @@
-﻿using Common.Tiling.Models;
-using Common.Tiling.Models.Contracts;
-using Common.Tiling.Services.Contracts;
+﻿using Common.Controls.Models;
+using Common.Controls.Services.Contracts;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
+using Common.Tiling.Models;
+using Common.Tiling.Models.Contracts;
+using Common.Tiling.Services.Contracts;
+using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
+using Engine.Core.Textures.Contracts;
 using Engine.Drawables.Services.Contracts;
-using Engine.Physics.Services.Contracts;
-using Microsoft.Xna.Framework;
 using Engine.Physics.Models;
+using Engine.Physics.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
+using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Services
 {
@@ -21,6 +26,65 @@ namespace Common.Tiling.Services
 	public class TileService(GameServiceContainer gameServices) : ITileService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// Loads the content.
+		/// </summary>
+		public void LoadContent()
+		{
+			var textureService = this._gameServices.GetService<ITextureService>();
+			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+			var cursorService = this._gameServices.GetService<ICursorService>();
+
+			if (false == textureService.TryGetTexture("tile_grid", out var tileGridTexture))
+			{
+				tileGridTexture = textureService.DebugTexture;
+			}
+
+			var position = new Position
+			{
+				Coordinates = default
+			};
+
+			var cursor = new Cursor
+			{
+				IsActive = true,
+				TextureName = tileGridTexture.Name,
+				Offset = new Vector2(-80, -80),
+				CursorUpdater = this.UpdateTileGridCursorPosition,
+				TextureBox = new Rectangle(0, 0, 160, 160),
+				Texture = tileGridTexture,
+				Position = position,
+				DrawLayer = 1,
+				TrailingCursors = []
+			};
+
+			runTimeDrawService.AddOverlaidDrawable(cursor.DrawLayer, cursor);
+			runTimeUpdateService.AddUpdateable(cursor.DrawLayer, cursor);
+			cursorService.Cursors.Add(cursor);
+		}
+
+		/// <summary>
+		/// Updates the tile grid cursor position.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		public void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices)
+		{
+			var controlService = this._gameServices.GetService<IControlService>();
+
+			if (null == controlService.ControlState)
+			{
+				return;
+			}
+
+			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
+			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
+			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
+										localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
+		}
 
 		/// <summary>
 		/// Gets the local tile coordinates.

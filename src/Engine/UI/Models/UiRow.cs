@@ -24,7 +24,7 @@ namespace Engine.UI.Models
 		/// <summary>
 		/// Gets or sets a value indicating whether the user interface row should flex.
 		/// </summary>
-		public bool Flex { get; set; } = true;
+		public bool Flex { get; set; }
 
 		/// <summary>
 		/// Gets or sets the width.

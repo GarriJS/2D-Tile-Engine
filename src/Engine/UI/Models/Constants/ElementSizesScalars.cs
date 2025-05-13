@@ -11,7 +11,7 @@ namespace Engine.UI.Models.Constants
 		/// <summary>
 		/// The none element size scalars.
 		/// </summary>
-		public static Vector2 None { get; } = new Vector2(0, 0);
+		public static Vector2 None { get; } = default;
 
 		/// <summary>
 		/// The extra small element size scalars.

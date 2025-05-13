@@ -1,13 +1,12 @@
 ﻿using Common.Controls.Models;
 using Common.Controls.Services.Contracts;
-using Common.Tiling.Services.Contracts;
 using Engine.Controls.Services.Contracts;
-using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
-using Engine.Drawables.Models;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Controls.Services
 {
@@ -23,24 +22,9 @@ namespace Common.Controls.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets a value indicating whether the cursor is active.
+		/// Gets the cursor.
 		/// </summary>
-		public bool CursorIsActive { get; private set; }
-
-		/// <summary>
-		/// Gets a value indicating whether the tile grid cursor is active.
-		/// </summary>
-		public bool TileGridCursorIsActive { get; private set; }
-
-		/// <summary>
-		/// Gets the primary cursor.
-		/// </summary>
-		public Cursor PrimaryCursor { get; private set; }
-
-		/// <summary>
-		/// Gets the tile grid cursor. 
-		/// </summary>
-		public TrailingCursor TileGridCursor { get; private set; }
+		public IList<Cursor> Cursors { get; private set; } = [];
 
 		/// <summary>
 		/// Loads the content.
@@ -56,19 +40,17 @@ namespace Common.Controls.Services
 				cursorTexture = textureService.DebugTexture;
 			}
 
-			if (false == textureService.TryGetTexture("tile_grid", out var tileGridTexture))
-			{
-				tileGridTexture = textureService.DebugTexture;
-			}
-
 			var position = new Position
 			{
-				Coordinates = new Vector2(0, 0)
+				Coordinates = default
 			};
 
-			this.PrimaryCursor = new Cursor
+			var cursor = new Cursor
 			{
+				IsActive = false,
 				TextureName = cursorTexture.Name,
+				Offset = default,
+				CursorUpdater = this.UpdateCursorPosition,
 				TextureBox = new Rectangle(0, 0, 18, 28),
 				Texture = cursorTexture,
 				Position = position,
@@ -76,31 +58,18 @@ namespace Common.Controls.Services
 				TrailingCursors = []
 			};
 
-			var trailingCursorImage = new Image
-			{
-				TextureName = tileGridTexture.Name,
-				TextureBox = new Rectangle(0, 0, 160, 160),
-				Texture = tileGridTexture,
-			};
-
-			this.TileGridCursor = new TrailingCursor
-			{
-				Image = trailingCursorImage,
-			};
-
-			this.PrimaryCursor.TrailingCursors.Add(this.TileGridCursor);
-			runTimeDrawService.AddOverlaidDrawable(this.PrimaryCursor.DrawLayer, PrimaryCursor);
-			runTimeUpdateService.AddUpdateable(this.PrimaryCursor.DrawLayer, PrimaryCursor);
-			
-			this.CursorIsActive = true;
-			this.TileGridCursorIsActive = true;
+			runTimeDrawService.AddOverlaidDrawable(cursor.DrawLayer, cursor);
+			runTimeUpdateService.AddUpdateable(cursor.DrawLayer, cursor);
+			this.Cursors.Add(cursor);
 		}
 
 		/// <summary>
 		/// Updates the cursor position.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
-		public void UpdateCursorPosition(Cursor cursor)
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 
@@ -111,15 +80,25 @@ namespace Common.Controls.Services
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
 
-			if ((true == this.TileGridCursorIsActive) &&
-				(true == cursor.TrailingCursors.Contains(this.TileGridCursor)))
-			{ 
-				var tileService = this._gameServices.GetService<ITileService>();
-
-				var localTileLocation = tileService.GetLocalTileCoordinates(cursor.Position.Coordinates);
-				this.TileGridCursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((this.TileGridCursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
-														 localTileLocation.Y - cursor.Position.Y - ((this.TileGridCursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
+			if (true != cursor.TrailingCursors?.Any())
+			{
+				return;
 			}
+
+			foreach (var trailingCursor in cursor.TrailingCursors)
+			{
+				trailingCursor.CursorUpdater.Invoke(cursor, trailingCursor, gameTime, gameServices);
+			}
+		}
+
+		/// <summary>
+		/// Adds a trailing cursor.
+		/// </summary>
+		/// <param name="primaryCursor">The primary cursor to add the trailing cursor to.</param>
+		/// <param name="trailingCursor">The trailing cursor.</param>
+		public void AddTrailingCursor(Cursor primaryCursor, TrailingCursor trailingCursor)
+		{
+			primaryCursor.TrailingCursors.Add(trailingCursor);
 		}
 	}
 }

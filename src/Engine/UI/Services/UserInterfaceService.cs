@@ -434,6 +434,7 @@ namespace Engine.UI.Services
 			return new UiRow
 			{
 				UiRowName = uiRowModel.UiRowName,
+				Flex = true,
 				Width = uiZone.Area.Width,
 				Height = height,
 				TopPadding = uiRowModel.TopPadding,

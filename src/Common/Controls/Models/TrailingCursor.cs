@@ -3,6 +3,7 @@ using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Common.Controls.Models
 {
@@ -12,6 +13,16 @@ namespace Common.Controls.Models
 	public class TrailingCursor : IAmSubDrawable
 	{
 		/// <summary>
+		/// Gets or sets a value describing if the trailing cursor is active or not.
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		/// Gets or sets the cursor name.
+		/// </summary>
+		public string CursorName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the offset.
 		/// </summary>
 		public Vector2 Offset { get; set; }
@@ -20,6 +31,11 @@ namespace Common.Controls.Models
 		/// Gets the image.
 		/// </summary>
 		public Image Image { get; init; }
+
+		/// <summary>
+		/// Gets or sets the cursor updater.
+		/// </summary>
+		public Action<Cursor, TrailingCursor, GameTime, GameServiceContainer> CursorUpdater { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.

@@ -100,7 +100,7 @@ namespace Engine.UI.Services
 					Height = screenHeight / 3,
 					Position = new Position
 					{
-						Coordinates = new Vector2(0, 0)
+						Coordinates = default
 					}
 				}
 			};
