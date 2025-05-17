@@ -30,7 +30,7 @@ namespace Engine.UI.Services
 		/// <summary>
 		/// Gets or sets the button click event processors.
 		/// </summary>
-		public Dictionary<string, Action<UiButton>> ButtonClickEventProcessors { get; set; } = [];
+		public Dictionary<string, Action<UiButton, Vector2>> ButtonClickEventProcessors { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the user interface elements.
@@ -114,7 +114,7 @@ namespace Engine.UI.Services
 						clickableLocation.Y <= mouseLocation.Y &&
 						clickableLocation.Y + button.ClickableArea.Y >= mouseLocation.Y)
 					{
-						button.RaiseClickEvent();
+						button.RaiseClickEvent(elementLocation);
 					}
 
 					break;
@@ -125,7 +125,8 @@ namespace Engine.UI.Services
 		/// Process the user interface button being clicked.
 		/// </summary>
 		/// <param name="button">The button.</param>
-		public void ProcessUiButtonClick(UiButton button)
+		/// <param name="elementLocation">The element location.</param>
+		public void ProcessUiButtonClick(UiButton button, Vector2 elementLocation)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			uiService.ToggleUserInterfaceGroupVisibility(button.VisibilityGroup == 1 ? 2 : 1);

@@ -1,4 +1,5 @@
 ﻿using Common.Controls.Models;
+using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
@@ -49,20 +50,21 @@ namespace Common.Tiling.Services
 
 			var cursor = new Cursor
 			{
-				IsActive = true,
+				IsActive = false,
+				CursorName = CommonCursorNames.TileGridCursorName,
 				TextureName = tileGridTexture.Name,
 				Offset = new Vector2(-80, -80),
 				CursorUpdater = this.UpdateTileGridCursorPosition,
 				TextureBox = new Rectangle(0, 0, 160, 160),
 				Texture = tileGridTexture,
 				Position = position,
-				DrawLayer = 1,
+				DrawLayer = 0,
 				TrailingCursors = []
 			};
 
 			runTimeDrawService.AddOverlaidDrawable(cursor.DrawLayer, cursor);
 			runTimeUpdateService.AddUpdateable(cursor.DrawLayer, cursor);
-			cursorService.Cursors.Add(cursor);
+			cursorService.Cursors.Add(cursor.CursorName, cursor);
 		}
 
 		/// <summary>
@@ -70,8 +72,7 @@ namespace Common.Tiling.Services
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices)
+		private void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 

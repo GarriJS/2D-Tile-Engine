@@ -143,9 +143,14 @@ namespace Engine.UI.Models
 		/// </summary>
 		public void Dispose()
 		{
+			if (true != this.SubElements?.Any())
+			{ 
+				return;
+			}
+
 			foreach (var subElement in this.SubElements)
 			{ 
-				subElement.Dispose();
+				subElement?.Dispose();
 			}
 		}
 	}

@@ -18,9 +18,9 @@ namespace Common.Controls.Models
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets the cursor name.
+		/// Gets or sets the trailing cursor name.
 		/// </summary>
-		public string CursorName { get; set; }
+		public string TrailingCursorName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the offset.
@@ -35,7 +35,7 @@ namespace Common.Controls.Models
 		/// <summary>
 		/// Gets or sets the cursor updater.
 		/// </summary>
-		public Action<Cursor, TrailingCursor, GameTime, GameServiceContainer> CursorUpdater { get; set; }
+		public Action<Cursor, TrailingCursor, GameTime> CursorUpdater { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.

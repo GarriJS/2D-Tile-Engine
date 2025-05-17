@@ -57,8 +57,12 @@ namespace Engine.Controls.Services
 		/// <param name="gameTime">The game time.</param>
 		public override void Update(GameTime gameTime)
 		{
+			var mouseService = this.Game.Services.GetService<IMouseService>();
+			
 			this.OldControlState = this.ControlState;
 			this.ControlState = this.GetCurrentControlState();
+
+			mouseService.ProcessMouseState(this.ControlState);
 
 			base.Update(gameTime);
 		}

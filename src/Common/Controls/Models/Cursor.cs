@@ -1,5 +1,4 @@
-﻿using Common.Controls.Services.Contracts;
-using Engine.Drawables.Models;
+﻿using Engine.Drawables.Models;
 using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
@@ -20,6 +19,11 @@ namespace Common.Controls.Models
 		/// A value describing if the cursor is active or not.
 		/// </summary>
 		public bool IsActive { get; set; }
+
+		/// <summary>
+		/// Gets or sets the cursor name.
+		/// </summary>
+		public string CursorName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -44,7 +48,7 @@ namespace Common.Controls.Models
 		/// <summary>
 		/// Gets or sets the cursor updater.
 		/// </summary>
-		public Action<Cursor, GameTime, GameServiceContainer> CursorUpdater { get; set; }
+		public Action<Cursor, GameTime> CursorUpdater { get; set; }
 
 		/// <summary>
 		/// Gets or sets the trailing cursors.
@@ -58,22 +62,24 @@ namespace Common.Controls.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
+			var drawingService = gameServices.GetService<IDrawingService>();
+
 			if (false == this.IsActive)
 			{
 				return;
 			}
 
-			var drawingService = gameServices.GetService<IDrawingService>();
+			drawingService.Draw(gameTime, this, this.Offset);
 
-			if (true == this.TrailingCursors?.Any())
+			if (true != this.TrailingCursors?.Any())
 			{
-				foreach (var trailingCursor in this.TrailingCursors)
-				{
-					trailingCursor.Draw(gameTime, gameServices, this.Position, trailingCursor.Offset);
-				}
+				return;
 			}
 
-			drawingService.Draw(gameTime, this, this.Offset);
+			foreach (var trailingCursor in this.TrailingCursors)
+			{
+				trailingCursor.Draw(gameTime, gameServices, this.Position, trailingCursor.Offset);
+			}
 		}
 
 		/// <summary>
@@ -88,7 +94,17 @@ namespace Common.Controls.Models
 				return;
 			}
 
-			this.CursorUpdater?.Invoke(this, gameTime, gameServices);
+			this.CursorUpdater?.Invoke(this, gameTime);
+
+			if (true != this.TrailingCursors?.Any())
+			{
+				return;
+			}
+
+			foreach (var trailingCursor in this.TrailingCursors)
+			{
+				trailingCursor.CursorUpdater.Invoke(this, trailingCursor, gameTime);
+			}
 		}
 	}
 }

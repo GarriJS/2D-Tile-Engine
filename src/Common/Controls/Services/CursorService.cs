@@ -1,4 +1,5 @@
 ﻿using Common.Controls.Models;
+using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;
@@ -22,9 +23,9 @@ namespace Common.Controls.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the cursor.
+		/// Gets the cursors.
 		/// </summary>
-		public IList<Cursor> Cursors { get; private set; } = [];
+		public Dictionary<string, Cursor> Cursors { get; private set; } = [];
 
 		/// <summary>
 		/// Loads the content.
@@ -47,7 +48,8 @@ namespace Common.Controls.Services
 
 			var cursor = new Cursor
 			{
-				IsActive = false,
+				IsActive = true,
+				CursorName = CommonCursorNames.PrimaryCursorName,
 				TextureName = cursorTexture.Name,
 				Offset = default,
 				CursorUpdater = this.UpdateCursorPosition,
@@ -60,7 +62,7 @@ namespace Common.Controls.Services
 
 			runTimeDrawService.AddOverlaidDrawable(cursor.DrawLayer, cursor);
 			runTimeUpdateService.AddUpdateable(cursor.DrawLayer, cursor);
-			this.Cursors.Add(cursor);
+			this.Cursors.Add(cursor.CursorName, cursor);
 		}
 
 		/// <summary>
@@ -68,8 +70,7 @@ namespace Common.Controls.Services
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices)
+		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 
@@ -79,16 +80,6 @@ namespace Common.Controls.Services
 			}
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
-
-			if (true != cursor.TrailingCursors?.Any())
-			{
-				return;
-			}
-
-			foreach (var trailingCursor in cursor.TrailingCursors)
-			{
-				trailingCursor.CursorUpdater.Invoke(cursor, trailingCursor, gameTime, gameServices);
-			}
 		}
 
 		/// <summary>

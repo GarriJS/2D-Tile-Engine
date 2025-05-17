@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Engine.Drawables.Models
 {
@@ -47,6 +48,11 @@ namespace Engine.Drawables.Models
 		/// </summary>
 		public void Dispose()
 		{
+			if (true != this.Frames?.Any())
+			{
+				return;
+			}
+
 			foreach (var frame in this.Frames)
 			{ 
 				frame?.Dispose();

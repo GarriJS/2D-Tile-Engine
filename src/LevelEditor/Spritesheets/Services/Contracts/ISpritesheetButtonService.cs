@@ -13,7 +13,8 @@ namespace LevelEditor.Spritesheets.Services.Contracts
 		/// The spritesheet button click event processor.
 		/// </summary>
 		/// <param name="button">The button.</param>
-		public void SpritesheetButtonClickEventProcessor(UiButton button);
+		/// <param name="buttonLocation">The button location.</param>
+		public void SpritesheetButtonClickEventProcessor(UiButton button, Vector2 buttonLocation);
 
 		/// <summary>
 		/// Gets the user interface buttons for the spritesheet.

@@ -41,7 +41,7 @@ namespace Engine
 		/// <summary>
 		/// Gets and sets the button click event processors.
 		/// </summary>
-		private List<Func<GameServiceContainer, Dictionary<string, Action<UiButton>>>> ButtonClickEventProcessorsProviders { get; } = [];
+		private List<Func<GameServiceContainer, Dictionary<string, Action<UiButton, Vector2>>>> ButtonClickEventProcessorsProviders { get; } = [];
 
 		/// <summary>
 		/// Gets and sets the initial models.
@@ -82,7 +82,7 @@ namespace Engine
 			this.ExternalServiceProviders.Clear();
 
 			// Do initializations
-			this._graphics.PreferredBackBufferWidth = 1080;
+			this._graphics.PreferredBackBufferWidth = 1920;
 			this._graphics.PreferredBackBufferHeight = 1080;
 			this._graphics.ApplyChanges();
 
@@ -165,16 +165,6 @@ namespace Engine
 			if (Keyboard.GetState().IsKeyDown(Keys.G))
 			{
 
-			}
-
-			var mouse = Mouse.GetState().Position.ToVector2();
-			var uiService = this.Services.GetService<IUserInterfaceService>();
-			var foo = uiService.GetUiElementAtScreenLocation(mouse);
-
-			if (foo?.Element is UiButton button &&
-				Mouse.GetState().LeftButton == ButtonState.Pressed)
-			{
-				button.RaisePressEvent(foo.Location);
 			}
 
 			base.Update(gameTime);

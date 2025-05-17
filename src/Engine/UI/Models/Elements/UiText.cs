@@ -64,7 +64,21 @@ namespace Engine.UI.Models.Elements
 		/// <summary>
 		/// Gets or set the press event.
 		/// </summary>
+		public event Action<IAmAUiElement, Vector2> HoverEvent;
+
+		/// <summary>
+		/// Gets or set the press event.
+		/// </summary>
 		public event Action<IAmAUiElement, Vector2> PressEvent;
+
+		/// <summary>
+		/// Raises the hover event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaiseHoverEvent(Vector2 elementLocation)
+		{
+			this.HoverEvent?.Invoke(this, elementLocation);
+		}
 
 		/// <summary>
 		/// Raises the press event.
@@ -80,7 +94,7 @@ namespace Engine.UI.Models.Elements
 		/// </summary>
 		public void Dispose()
 		{
-			this.Image.Dispose();
+			this.Image?.Dispose();
 		}
 	}
 }

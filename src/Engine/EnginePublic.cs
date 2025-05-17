@@ -53,7 +53,7 @@ namespace Engine
 		/// Adds the user interface button click events.
 		/// </summary>
 		/// <param name="buttonClickEventProcessors">The button click event processors provider.</param>
-		public void AddUiButtonClickEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<UiButton>>> buttonClickEventProcessors)
+		public void AddUiButtonClickEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<UiButton, Vector2>>> buttonClickEventProcessors)
 		{
 			this.ButtonClickEventProcessorsProviders.Add(buttonClickEventProcessors);
 		}

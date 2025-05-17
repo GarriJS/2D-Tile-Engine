@@ -22,14 +22,6 @@ namespace Common.Tiling.Services.Contracts
 		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0);
 
 		/// <summary>
-		/// Updates the tile grid cursor position.
-		/// </summary>
-		/// <param name="cursor">The cursor.</param>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices);
-
-		/// <summary>
 		/// Gets the tile map.
 		/// </summary>
 		/// <param name="tileMapModel">The tile map model.</param>

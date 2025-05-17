@@ -115,6 +115,7 @@ namespace Engine.Core.Initialization
 				(typeof(IIndependentImageService), new IndependentImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
 				(typeof(IAreaService), new AreaService(game.Services)),
+				(typeof(IMouseService), new MouseService(game.Services)),
 				(typeof(IRandomService), new RandomService()),
 			];
 		}

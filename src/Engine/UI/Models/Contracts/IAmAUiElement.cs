@@ -8,8 +8,8 @@ namespace Engine.UI.Models.Contracts
 	/// <summary>
 	/// Represents a user interface element.
 	/// </summary>
-	public interface IAmAUiElement : IDisposable
-    {
+	public interface IAmAUiElement : ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
+	{
         /// <summary>
         /// Gets or sets the user interface element name.
         /// </summary>
@@ -46,19 +46,8 @@ namespace Engine.UI.Models.Contracts
 		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Gets ors sets the image.
+		/// Gets or sets the image.
 		/// </summary>
 		public Image Image { get; set; }
-
-		/// <summary>
-		/// Gets or set the press event.
-		/// </summary>
-		public event Action<IAmAUiElement, Vector2> PressEvent;
-
-		/// <summary>
-		/// Raises the press event.
-		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaisePressEvent(Vector2 elementLocation);
 	}
 }

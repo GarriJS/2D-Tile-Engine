@@ -11,17 +11,16 @@ namespace Common.Controls.Services.Contracts
 	public interface ICursorService : ILoadContent
     {
 		/// <summary>
-		/// Gets the cursor.
+		/// Gets the cursors.
 		/// </summary>
-		public IList<Cursor> Cursors { get; }
+		public Dictionary<string, Cursor> Cursors { get; }
 
 		/// <summary>
 		/// Updates the cursor position.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime, GameServiceContainer gameServices);
+		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime);
 
 		/// <summary>
 		/// Adds a trailing cursor.

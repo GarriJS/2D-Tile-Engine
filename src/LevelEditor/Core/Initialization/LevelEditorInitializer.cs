@@ -35,11 +35,11 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the click event processors.</returns>
-		public static Dictionary<string, Action<UiButton>> GetInitialClickEventProcessors(GameServiceContainer gameServices)
+		public static Dictionary<string, Action<UiButton, Vector2>> GetInitialClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 
-			return new Dictionary<string, Action<UiButton>>
+			return new Dictionary<string, Action<UiButton, Vector2>>
 			{
 				[ButtonClickEventNameConstants.Spritesheet] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
 			};

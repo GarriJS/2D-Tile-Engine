@@ -56,7 +56,7 @@ namespace Common.Tiling.Models
 		/// </summary>
 		public void Dispose()
 		{ 
-			this.Image.Dispose();
+			this.Image?.Dispose();
 		}
 	}
 }

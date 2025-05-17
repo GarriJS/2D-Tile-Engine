@@ -113,11 +113,16 @@ namespace Engine.UI.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.Image.Dispose();
+			this.Image?.Dispose();
+
+			if (true != this.ElementRows?.Any())
+			{ 
+				return;
+			}
 
 			foreach (var elementRow in this.ElementRows)
 			{ 
-				elementRow.Dispose();
+				elementRow?.Dispose();
 			}
 		}
 	}
