@@ -1,4 +1,5 @@
 ﻿using Engine.Drawables.Models;
+using Engine.Drawables.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
 using System;
@@ -8,7 +9,7 @@ namespace Engine.UI.Models.Contracts
 	/// <summary>
 	/// Represents a user interface element.
 	/// </summary>
-	public interface IAmAUiElement : ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
+	public interface IAmAUiElement : IAmSubDrawable, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
 	{
         /// <summary>
         /// Gets or sets the user interface element name.
@@ -48,6 +49,6 @@ namespace Engine.UI.Models.Contracts
 		/// <summary>
 		/// Gets or sets the image.
 		/// </summary>
-		public Image Image { get; set; }
+		public new Image Image { get; set; }
 	}
 }

@@ -13,7 +13,7 @@ namespace Common.Controls.Models
 	/// <summary>
 	/// Represents a cursor.
 	/// </summary>
-	public class Cursor : Image, IHaveAnImage, IAmUpdateable
+	public class Cursor : Image, IHaveAnImage, ICanBeUpdated
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.
@@ -29,6 +29,11 @@ namespace Common.Controls.Models
 		/// Gets or sets the draw layer.
 		/// </summary>
 		public int DrawLayer { get; set; }
+
+		/// <summary>
+		/// Gets or sets the update order.
+		/// </summary>
+		public int UpdateOrder { get; set; }
 
 		/// <summary>
 		/// Gets or sets the offset.

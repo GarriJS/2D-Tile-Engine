@@ -17,7 +17,7 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Gets or sets the active sorted updateable.
 		/// </summary>
-		private SortedDictionary<int, List<IAmUpdateable>> ActiveSortedUpdateables { get; set; } = [];
+		private SortedDictionary<int, List<ICanBeUpdated>> ActiveSortedUpdateables { get; set; } = [];
 
 		/// <summary>
 		/// Initializes the runtime update manager.
@@ -30,43 +30,42 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Adds the updateable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="updateable">The updateable.</param>
-		public void AddUpdateable(int layer, IAmUpdateable updateable)
+		public void AddUpdateable(ICanBeUpdated updateable)
 		{
-			if (true == this.ActiveSortedUpdateables.TryGetValue(layer, out var layerList))
+			if (true == this.ActiveSortedUpdateables.TryGetValue(updateable.UpdateOrder, out var orderList))
 			{
-				layerList.Add(updateable);
+				orderList.Add(updateable);
 			}
 			else
 			{
-				layerList = [updateable];
-				this.ActiveSortedUpdateables.Add(layer, layerList);
+				orderList = [updateable];
+				this.ActiveSortedUpdateables.Add(updateable.UpdateOrder, orderList);
 			}
 		}
 
 		/// <summary>
 		/// Removes the updateable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="updateable">The updateable.</param>
-		public void RemoveUpdateable(int layer, IAmUpdateable updateable)
+		public void RemoveUpdateable(ICanBeUpdated updateable)
 		{
-			if (true == this.ActiveSortedUpdateables.TryGetValue(layer, out var layerList))
+			if (true == this.ActiveSortedUpdateables.TryGetValue(updateable.UpdateOrder, out var orderList))
 			{
-				layerList.Remove(updateable);
+				orderList.Remove(updateable);
 			}
 		}
 
 		/// <summary>
-		/// Changes the updateable layer.
+		/// Changes the updateable update order.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
+		/// <param name="updateOrder">The update order.</param>
 		/// <param name="updateable">The updateable.</param>
-		public void ChangeUpdateableLayer(int layer, IAmUpdateable updateable)
+		public void ChangeUpdateableLayer(int updateOrder, ICanBeUpdated updateable)
 		{
-			this.RemoveUpdateable(layer, updateable);
-			this.AddUpdateable(layer, updateable);
+			this.RemoveUpdateable(updateable);
+			updateable.UpdateOrder = updateOrder;
+			this.AddUpdateable(updateable);
 		}
 
 		/// <summary>

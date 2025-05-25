@@ -134,7 +134,7 @@ namespace Engine.UI.Services
 			if (null != button.ClickAnimation)
 			{
 				var animationService = this._gameServices.GetService<IAnimationService>();
-				animationService.TriggerAnimation(button.ClickAnimation, true);
+				button.ClickAnimation.TriggerAnimation(true);
 			}
 		}
 

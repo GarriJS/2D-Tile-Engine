@@ -11,7 +11,7 @@ namespace Engine.Drawables.Models.Contracts
 		/// <summary>
 		/// Gets the text.
 		/// </summary>
-		public string FpsText { get; }
+		public string Text { get; }
 
 		/// <summary>
 		/// Gets the font.

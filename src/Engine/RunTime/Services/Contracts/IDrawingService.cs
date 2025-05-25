@@ -1,12 +1,13 @@
-﻿using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+﻿using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
-using Engine.UI.Models.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.RunTime.Services.Contracts
 {
+	/// <summary>
+	/// Represents a drawing service.
+	/// </summary>
 	public interface IDrawingService
 	{
 		/// <summary>
@@ -25,7 +26,16 @@ namespace Engine.RunTime.Services.Contracts
 		public void EndDraw();
 
 		/// <summary>
-		/// Draws the drawable. 
+		/// Draws the texture. 
+		/// </summary>
+		/// <param name="texture">The texture.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="sourceRectangle">The source rectangle.</param>
+		/// <param name="color">The color.</param>
+		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color);
+
+		/// <summary>
+		/// Draws the texture. 
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
@@ -40,23 +50,5 @@ namespace Engine.RunTime.Services.Contracts
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, IAmSubDrawable subDrawable, Position position, Vector2 offset);
-
-		/// <summary>
-		/// Draws the animation.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="animation">The animation.</param>
-		/// <param name="coordinates">The coordinates.</param>
-		public void Draw(GameTime gameTime, Animation animation, Vector2 coordinates);
-
-		/// <summary>
-		/// Draws the user interface element.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="element">The element.</param>
-		/// <param name="position">The position.</param>
-		/// <param name="verticalOffset">The vertical offset.</param>
-		/// <param name="horizontalOffset">The horizontal offset.</param>
-		public void Draw(GameTime gameTime, IAmAUiElement element, Position position, float verticalOffset = 0, float horizontalOffset = 0);
 	}
 }

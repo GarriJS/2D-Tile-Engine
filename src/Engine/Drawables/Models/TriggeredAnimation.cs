@@ -1,4 +1,7 @@
-﻿namespace Engine.Drawables.Models
+﻿using Engine.RunTime.Services.Contracts;
+using Microsoft.Xna.Framework;
+
+namespace Engine.Drawables.Models
 {
 	/// <summary>
 	/// Represents a triggered animation.
@@ -17,5 +20,76 @@
 		/// Gets or sets the resting frame index.
 		/// </summary>
 		public int RestingFrameIndex { get; set; }
+
+		/// <summary>
+		/// Triggers the animation.
+		/// </summary>
+		/// <param name="allowReset">A value indicating whether to allow the animation trigger to reset.</param>
+		public void TriggerAnimation(bool allowReset = false)
+		{
+			if ((false == allowReset) &&
+				(this.RestingFrameIndex != this.CurrentFrameIndex))
+			{
+				return;
+			}
+
+			this.FrameStartTime = null;
+			this.CurrentFrameIndex = this.RestingFrameIndex;
+
+			if (this.CurrentFrameIndex < this.Frames.Length - 1)
+			{
+				this.CurrentFrameIndex++;
+			}
+			else
+			{
+				this.CurrentFrameIndex = 0;
+			}
+		}
+
+		/// <summary>
+		/// Resets the triggered animation.
+		/// </summary>>
+		public void ResetTriggeredAnimation()
+		{
+			this.FrameStartTime = null;
+			this.CurrentFrameIndex = this.RestingFrameIndex;
+		}
+
+		/// <summary>
+		/// Updates the updateable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		public new void Update(GameTime gameTime, GameServiceContainer gameServices)
+		{
+			if ((null == this.FrameStartTime) ||
+				(this.CurrentFrameIndex == this.RestingFrameIndex))
+			{
+				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+
+				return;
+			}
+
+			if (gameTime.TotalGameTime.TotalMilliseconds >= this.FrameStartTime + this.FrameDuration)
+			{
+				if ((true == this.FrameMinDuration.HasValue) &&
+					(true == this.FrameMaxDuration.HasValue))
+				{
+					var randomService = gameServices.GetService<IRandomService>();
+					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
+				}
+
+				if (this.CurrentFrameIndex < this.Frames.Length - 1)
+				{
+					this.CurrentFrameIndex++;
+				}
+				else
+				{
+					this.CurrentFrameIndex = 0;
+				}
+
+				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+			}
+		}
 	}
 }

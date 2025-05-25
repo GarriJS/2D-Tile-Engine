@@ -20,13 +20,6 @@ namespace Common.Controls.Services.Contracts
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime);
-
-		/// <summary>
-		/// Adds a trailing cursor.
-		/// </summary>
-		/// <param name="primaryCursor">The primary cursor to add the trailing cursor to.</param>
-		/// <param name="trailingCursor">The trailing cursor.</param>
-		public void AddTrailingCursor(Cursor primaryCursor, TrailingCursor trailingCursor);
+		public void BasicCursorPositionUpdater(Cursor cursor, GameTime gameTime);
 	}
 }

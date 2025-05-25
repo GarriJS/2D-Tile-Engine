@@ -35,47 +35,44 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Adds the drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddDrawable(int layer, ICanBeDrawn drawable)
+		public void AddDrawable(ICanBeDrawn drawable)
 		{
-			if (true == this.ActiveDrawables.TryGetValue(layer, out var layerList))
+			if (true == this.ActiveDrawables.TryGetValue(drawable.DrawLayer, out var layerList))
 			{
 				layerList.Add(drawable);
 			}
 			else
 			{
 				layerList = [drawable];
-				this.ActiveDrawables.Add(layer, layerList);
+				this.ActiveDrawables.Add(drawable.DrawLayer, layerList);
 			}
 		}
 
 		/// <summary>
 		/// Adds the overlaid drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddOverlaidDrawable(int layer, ICanBeDrawn drawable)
+		public void AddOverlaidDrawable(ICanBeDrawn drawable)
 		{
-			if (true == this.OverlaidActiveDrawables.TryGetValue(layer, out var layerList))
+			if (true == this.OverlaidActiveDrawables.TryGetValue(drawable.DrawLayer, out var layerList))
 			{
 				layerList.Add(drawable);
 			}
 			else
 			{
 				layerList = [drawable];
-				this.OverlaidActiveDrawables.Add(layer, layerList);
+				this.OverlaidActiveDrawables.Add(drawable.DrawLayer, layerList);
 			}
 		}
 
 		/// <summary>
 		/// Removes the drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveDrawable(int layer, ICanBeDrawn drawable)
+		public void RemoveDrawable(ICanBeDrawn drawable)
 		{
-			if (true == this.ActiveDrawables.TryGetValue(layer, out var layerList))
+			if (true == this.ActiveDrawables.TryGetValue(drawable.DrawLayer, out var layerList))
 			{
 				layerList.Remove(drawable);
 			}
@@ -84,11 +81,10 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Removes the overlaid drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveOverlaidDrawable(int layer, ICanBeDrawn drawable)
+		public void RemoveOverlaidDrawable(ICanBeDrawn drawable)
 		{
-			if (true == this.OverlaidActiveDrawables.TryGetValue(layer, out var layerList))
+			if (true == this.OverlaidActiveDrawables.TryGetValue(drawable.DrawLayer, out var layerList))
 			{
 				layerList.Remove(drawable);
 			}
@@ -101,8 +97,9 @@ namespace Engine.RunTime.Managers
 		/// <param name="drawable">The drawable.</param>
 		public void ChangeDrawableLayer(int layer, ICanBeDrawn drawable)
 		{ 
-			this.RemoveDrawable(layer, drawable);
-			this.AddDrawable(layer, drawable);
+			this.RemoveDrawable(drawable);
+			drawable.DrawLayer = layer;
+			this.AddDrawable(drawable);
 		}
 
 		/// <summary>
@@ -112,8 +109,9 @@ namespace Engine.RunTime.Managers
 		/// <param name="drawable">The drawable.</param>
 		public void ChangeOverlaidDrawableLayer(int layer, ICanBeDrawn drawable)
 		{
-			this.RemoveOverlaidDrawable(layer, drawable);
-			this.AddOverlaidDrawable(layer, drawable);
+			this.RemoveOverlaidDrawable(drawable);
+			drawable.DrawLayer = layer;
+			this.AddOverlaidDrawable(drawable);
 		}
 
 		/// <summary>

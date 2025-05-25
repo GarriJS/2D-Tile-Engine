@@ -62,8 +62,8 @@ namespace Common.Tiling.Services
 				TrailingCursors = []
 			};
 
-			runTimeDrawService.AddOverlaidDrawable(cursor.DrawLayer, cursor);
-			runTimeUpdateService.AddUpdateable(cursor.DrawLayer, cursor);
+			runTimeDrawService.AddOverlaidDrawable(cursor);
+			runTimeUpdateService.AddUpdateable(cursor);
 			cursorService.Cursors.Add(cursor.CursorName, cursor);
 		}
 

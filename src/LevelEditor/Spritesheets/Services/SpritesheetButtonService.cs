@@ -3,6 +3,7 @@ using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
 using Common.Tiling.Services.Contracts;
 using Engine.Controls.Services.Contracts;
+using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
 using Engine.DiskModels.UI.Elements;
 using Engine.UI.Models.Elements;
@@ -56,7 +57,9 @@ namespace LevelEditor.Spritesheets.Services
 				CursorUpdater = this.UpdateSpritesheetButtonCursor,
 			};
 
-			cursorService.AddTrailingCursor(tileGridCursor, trailingCursor);
+			tileGridCursor.TrailingCursors.Add(trailingCursor);
+			tileGridCursor.Offset = new Vector2(localTileLocation.X - tileGridCursor.Position.X - ((tileGridCursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
+												localTileLocation.Y - tileGridCursor.Position.Y - ((tileGridCursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
 		}
 
 		/// <summary>

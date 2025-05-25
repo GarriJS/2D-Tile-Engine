@@ -131,7 +131,8 @@ namespace Engine.UI.Models
 					case UiRowHorizontalJustificationTypes.Left:
 					default:
 						elementHorizontalOffset += element.LeftPadding;
-						drawingService.Draw(gameTime, element, position, offset.Y + verticallyCenterOffset, elementHorizontalOffset);
+						var elementOffset = new Vector2(elementHorizontalOffset, offset.Y + verticallyCenterOffset);
+						element.Draw(gameTime, gameServices, position, elementOffset);
 						elementHorizontalOffset += (element.RightPadding + element.Area.X);
 						break;
 				}

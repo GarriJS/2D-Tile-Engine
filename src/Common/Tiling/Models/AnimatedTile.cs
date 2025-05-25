@@ -28,9 +28,14 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
+		/// Gets or sets the update order.
+		/// </summary>
+		public int UpdateOrder { get; set; }
+
+		/// <summary>
 		/// Get the image.
 		/// </summary>
-		public Image Image { get => this.Animation.CurrentFrame; }
+		public Image Image { get => this.Animation.Image; }
 
 		/// <summary>
 		/// Gets or sets the animation.

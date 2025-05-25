@@ -8,9 +8,9 @@ namespace Engine.Drawables.Models.Contracts
 	public interface ICanBeDrawn
 	{
 		/// <summary>
-		/// Gets the draw layer.
+		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; }
+		public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Draws the drawable.

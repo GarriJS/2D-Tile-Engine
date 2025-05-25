@@ -1,4 +1,7 @@
 ﻿using Engine.Drawables.Models;
+using Engine.Drawables.Services.Contracts;
+using Engine.Physics.Models;
+using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
@@ -69,7 +72,7 @@ namespace Engine.UI.Models.Elements
 		/// <summary>
 		/// Gets or sets the clickable image.
 		/// </summary>
-		public Image ClickableImage { get => this.ClickAnimation?.CurrentFrame; }
+		public Image ClickableImage { get => this.ClickAnimation?.Image; }
 
 		/// <summary>
 		/// Gets or sets the clickable animation.
@@ -92,11 +95,40 @@ namespace Engine.UI.Models.Elements
 		public event Action<UiButton, Vector2> ClickEvent;
 
 		/// <summary>
+		/// Draws the sub drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="position">The position.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		{
+			var drawingService = gameServices.GetService<IDrawingService>();
+			var writingService = gameServices.GetService<IWritingService>();
+
+			drawingService.Draw(this.Image.Texture, position.Coordinates + offset, this.Image.TextureBox, Color.White);
+
+			if (null != this.ClickAnimation)
+			{
+				var clickableOffset = new Vector2((this.Area.X - this.ClickableArea.X) / 2, (this.Area.Y - this.ClickableArea.Y) / 2);
+				this.ClickAnimation.Draw(gameTime, gameServices, position, offset + clickableOffset);
+				this.ClickAnimation.Update(gameTime, gameServices);
+			}
+
+			if (false == string.IsNullOrEmpty(this.Text))
+			{
+				var textMeasurements = writingService.MeasureString("Monobold", this.Text);
+				var textPosition = position.Coordinates + offset + (this.Area / 2) - (textMeasurements / 2);
+				writingService.Draw("Monobold", this.Text, textPosition, Color.Maroon);
+			}
+		}
+
+		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
 		/// <param name="elementLocation">The element location.</param>
 		public void RaiseHoverEvent(Vector2 elementLocation)
-		{ 
+		{
 			this.HoverEvent?.Invoke(this, elementLocation);
 		}
 
@@ -105,7 +137,7 @@ namespace Engine.UI.Models.Elements
 		/// </summary>
 		/// <param name="elementLocation">The element location.</param>
 		public void RaisePressEvent(Vector2 elementLocation)
-		{ 
+		{
 			this.PressEvent?.Invoke(this, elementLocation);
 		}
 
@@ -121,7 +153,7 @@ namespace Engine.UI.Models.Elements
 		/// Disposes of the user interface button.
 		/// </summary>
 		public void Dispose()
-		{ 
+		{
 			this.Image?.Dispose();
 		}
 	}

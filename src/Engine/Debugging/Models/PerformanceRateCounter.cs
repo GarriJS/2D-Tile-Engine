@@ -11,7 +11,7 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a performance rate counter.
 	/// </summary>
-	public class PerformanceRateCounter : ICanBeWritten, IAmUpdateable
+	public class PerformanceRateCounter : ICanBeDrawn, ICanBeUpdated
 	{
 		/// <summary>
 		/// A value describing whether the performance rate counter is enabled.
@@ -22,6 +22,11 @@ namespace Engine.Debugging.Models
 		/// Gets or sets the draw layer.
 		/// </summary>
 		public int DrawLayer { get; set; }
+
+		/// <summary>
+		/// Gets or sets the update order.
+		/// </summary>
+		public int UpdateOrder { get; set; }
 
 		/// <summary>
 		/// Gets or sets the FPS text.

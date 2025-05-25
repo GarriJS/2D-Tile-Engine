@@ -47,7 +47,7 @@ namespace Engine.Debugging.Services
 			{
 				foreach (var screenAreaIndicatorImage in this.ScreenAreaIndicatorImages)
 				{
-					runtimeDrawingService.RemoveDrawable(screenAreaIndicatorImage.DrawLayer, screenAreaIndicatorImage);
+					runtimeDrawingService.RemoveDrawable(screenAreaIndicatorImage);
 				}
 
 				this.ScreenAreaIndicatorImages = [];
@@ -86,8 +86,8 @@ namespace Engine.Debugging.Services
 						DrawLayer = 0,
 					};
 
-					runtimeDrawingService.AddDrawable(widthImage.DrawLayer, widthImage);
-					runtimeDrawingService.AddDrawable(nextWidthImage.DrawLayer, nextWidthImage);
+					runtimeDrawingService.AddDrawable(widthImage);
+					runtimeDrawingService.AddDrawable(nextWidthImage);
 					this.ScreenAreaIndicatorImages.Add(widthImage);
 					this.ScreenAreaIndicatorImages.Add(nextWidthImage);
 				}
@@ -118,8 +118,8 @@ namespace Engine.Debugging.Services
 						DrawLayer = 0,
 					};
 
-					runtimeDrawingService.AddDrawable(heightImage.DrawLayer, heightImage);
-					runtimeDrawingService.AddDrawable(nextHeightImage.DrawLayer, nextHeightImage);
+					runtimeDrawingService.AddDrawable(heightImage);
+					runtimeDrawingService.AddDrawable(nextHeightImage);
 					this.ScreenAreaIndicatorImages.Add(heightImage);
 					this.ScreenAreaIndicatorImages.Add(nextHeightImage);
 				}
@@ -182,6 +182,7 @@ namespace Engine.Debugging.Services
 				{
 					IsActive = true,
 					DrawLayer = 0,
+					UpdateOrder = 0,
 					FpsText = "0",
 					LastFrameTime = null,
 					Font = spriteFont,
@@ -194,13 +195,13 @@ namespace Engine.Debugging.Services
 
 			if (true == this.PerformanceRateCounter.IsActive)
 			{
-				runtimeDrawingService.AddOverlaidDrawable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
-				runtimeUpdateService.AddUpdateable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
+				runtimeDrawingService.AddOverlaidDrawable(this.PerformanceRateCounter);
+				runtimeUpdateService.AddUpdateable(this.PerformanceRateCounter);
 			}
 			else
 			{
-				runtimeDrawingService.RemoveOverlaidDrawable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
-				runtimeUpdateService.RemoveUpdateable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
+				runtimeDrawingService.RemoveOverlaidDrawable(this.PerformanceRateCounter);
+				runtimeUpdateService.RemoveUpdateable(this.PerformanceRateCounter);
 			}
 		}
 	}

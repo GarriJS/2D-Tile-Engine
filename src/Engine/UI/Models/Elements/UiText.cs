@@ -1,4 +1,7 @@
 ﻿using Engine.Drawables.Models;
+using Engine.Drawables.Services.Contracts;
+using Engine.Physics.Models;
+using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using Microsoft.Xna.Framework;
@@ -70,6 +73,28 @@ namespace Engine.UI.Models.Elements
 		/// Gets or set the press event.
 		/// </summary>
 		public event Action<IAmAUiElement, Vector2> PressEvent;
+
+		/// <summary>
+		/// Draws the sub drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="position">The position.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		{
+			var drawingService = gameServices.GetService<IDrawingService>();
+			var writingService = gameServices.GetService<IWritingService>();
+
+			drawingService.Draw(this.Image.Texture, position.Coordinates + offset, this.Image.TextureBox, Color.White);
+
+			if (false == string.IsNullOrEmpty(this.Text))
+			{
+				var textMeasurements = writingService.MeasureString("Monobold", this.Text);
+				var textPosition = position.Coordinates + offset + (this.Area / 2) - (textMeasurements / 2);
+				writingService.Draw("Monobold", this.Text, textPosition, Color.Maroon);
+			}
+		}
 
 		/// <summary>
 		/// Raises the hover event.

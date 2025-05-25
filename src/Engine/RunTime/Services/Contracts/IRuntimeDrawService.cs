@@ -10,30 +10,26 @@ namespace Engine.RunTime.Services.Contracts
 		/// <summary>
 		/// Adds the drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddDrawable(int layer, ICanBeDrawn drawable);
+		public void AddDrawable(ICanBeDrawn drawable);
 
 		/// <summary>
 		/// Adds the overlaid drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddOverlaidDrawable(int layer, ICanBeDrawn drawable);
+		public void AddOverlaidDrawable(ICanBeDrawn drawable);
 
 		/// <summary>
 		/// Removes the drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveDrawable(int layer, ICanBeDrawn drawable);
+		public void RemoveDrawable(ICanBeDrawn drawable);
 
 		/// <summary>
 		/// Removes the overlaid drawable.
 		/// </summary>
-		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveOverlaidDrawable(int layer, ICanBeDrawn drawable);
+		public void RemoveOverlaidDrawable(ICanBeDrawn drawable);
 
 		/// <summary>
 		/// Changes the drawable layer.

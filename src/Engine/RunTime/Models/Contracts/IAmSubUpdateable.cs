@@ -3,15 +3,15 @@
 namespace Engine.RunTime.Models.Contracts
 {
 	/// <summary>
-	/// Represents something that can be updated.
+	/// Represents something that is updated by another updateable.
 	/// </summary>
-	public interface IAmUpdateable
-    {
+	public interface IAmSubUpdateable
+	{
 		/// <summary>
 		/// Updates the updateable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
 		public void Update(GameTime gameTime, GameServiceContainer gameServices);
-    }
+	}
 }

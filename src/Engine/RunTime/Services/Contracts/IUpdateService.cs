@@ -13,6 +13,6 @@ namespace Engine.RunTime.Services.Contracts
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         /// <param name="updateable">The updateable.</param>
-        public void Update(GameTime gameTime, IAmUpdateable updateable);
+        public void Update(GameTime gameTime, ICanBeUpdated updateable);
     }
 }

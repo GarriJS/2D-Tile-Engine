@@ -64,7 +64,7 @@ namespace Engine.UI.Services
 
 				foreach (var uiZoneContainer in activeGroup.UiZones)
 				{
-					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
+					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer);
 				}
 			}
 
@@ -74,7 +74,7 @@ namespace Engine.UI.Services
 
 				foreach (var uiZoneContainer in uiGroup.UiZones)
 				{
-					runtimeDrawService.AddOverlaidDrawable(uiZoneContainer.DrawLayer, uiZoneContainer);
+					runtimeDrawService.AddOverlaidDrawable(uiZoneContainer);
 
 					if (true != uiZoneContainer.ElementRows?.Any())
 					{
@@ -93,7 +93,7 @@ namespace Engine.UI.Services
 							if ((element is UiButton button) &&
 								(null != button?.ClickAnimation))
 							{
-								animationService.ResetTriggeredAnimation(button.ClickAnimation);
+								button.ClickAnimation.ResetTriggeredAnimation();
 							}
 						}
 					}

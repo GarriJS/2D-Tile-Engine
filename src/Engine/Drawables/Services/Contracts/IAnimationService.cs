@@ -1,6 +1,5 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.Drawables.Models;
-using Microsoft.Xna.Framework;
 
 namespace Engine.Drawables.Services.Contracts
 {
@@ -17,25 +16,5 @@ namespace Engine.Drawables.Services.Contracts
 		/// <param name="frameHeight">The frame height.</param>
 		/// <returns>The animation.</returns>
 		public Animation GetAnimation(AnimationModel animationModel, int frameWidth, int frameHeight);
-
-		/// <summary>
-		/// Updates the animation frame.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="animation">The animation.</param>
-		public void UpdateAnimationFrame(GameTime gameTime, Animation animation);
-
-		/// <summary>
-		/// Triggers the animation.
-		/// </summary>
-		/// <param name="triggeredAnimation">The triggered animation.</param>
-		/// <param name="allowReset">A value indicating whether to allow the animation trigger to reset.</param>
-		public void TriggerAnimation(TriggeredAnimation triggeredAnimation, bool allowReset = false);
-
-		/// <summary>
-		/// Resets the triggered animation.
-		/// </summary>
-		/// <param name="triggeredAnimation">The triggered animation.</param>
-		public void ResetTriggeredAnimation(TriggeredAnimation triggeredAnimation);
 	}
 }

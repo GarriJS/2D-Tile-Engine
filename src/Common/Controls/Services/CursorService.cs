@@ -52,7 +52,7 @@ namespace Common.Controls.Services
 				CursorName = CommonCursorNames.PrimaryCursorName,
 				TextureName = cursorTexture.Name,
 				Offset = default,
-				CursorUpdater = this.UpdateCursorPosition,
+				CursorUpdater = this.BasicCursorPositionUpdater,
 				TextureBox = new Rectangle(0, 0, 18, 28),
 				Texture = cursorTexture,
 				Position = position,
@@ -60,8 +60,8 @@ namespace Common.Controls.Services
 				TrailingCursors = []
 			};
 
-			runTimeDrawService.AddOverlaidDrawable(cursor.DrawLayer, cursor);
-			runTimeUpdateService.AddUpdateable(cursor.DrawLayer, cursor);
+			runTimeDrawService.AddOverlaidDrawable(cursor);
+			runTimeUpdateService.AddUpdateable(cursor);
 			this.Cursors.Add(cursor.CursorName, cursor);
 		}
 
@@ -70,7 +70,7 @@ namespace Common.Controls.Services
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		public void UpdateCursorPosition(Cursor cursor, GameTime gameTime)
+		public void BasicCursorPositionUpdater(Cursor cursor, GameTime gameTime)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 
@@ -80,16 +80,6 @@ namespace Common.Controls.Services
 			}
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
-		}
-
-		/// <summary>
-		/// Adds a trailing cursor.
-		/// </summary>
-		/// <param name="primaryCursor">The primary cursor to add the trailing cursor to.</param>
-		/// <param name="trailingCursor">The trailing cursor.</param>
-		public void AddTrailingCursor(Cursor primaryCursor, TrailingCursor trailingCursor)
-		{
-			primaryCursor.TrailingCursors.Add(trailingCursor);
 		}
 	}
 }
