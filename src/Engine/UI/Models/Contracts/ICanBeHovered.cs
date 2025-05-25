@@ -13,5 +13,11 @@ namespace Engine.UI.Models.Contracts
 		/// Gets or set the press event.
 		/// </summary>
 		public event Action<TDerived, Vector2> HoverEvent;
+
+		/// <summary>
+		/// Raises the hover event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaiseHoverEvent(Vector2 elementLocation);
 	}
 }

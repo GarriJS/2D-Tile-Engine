@@ -24,6 +24,11 @@ namespace Engine.Core.Fonts
 		private Dictionary<string, SpriteFont> SpriteFonts { get; set; } = [];
 
 		/// <summary>
+		/// Gets or sets the debug sprite font.
+		/// </summary>
+		public SpriteFont DebugSpriteFont { get; set; }
+
+		/// <summary>
 		/// Loads the font content.
 		/// </summary>
 		public void LoadContent()
@@ -61,6 +66,15 @@ namespace Engine.Core.Fonts
 
 			Debug.WriteLine($"Sprite font {spriteFontName} was not found.");
 			return null;
+		}
+
+		/// <summary>
+		/// Sets the debug sprite front.
+		/// </summary>
+		/// <param name="spriteFontName">The sprite font name.</param>
+		public void SetDebugSpriteFont(string spriteFontName)
+		{ 
+			this.DebugSpriteFont = this.GetSpriteFont(spriteFontName);
 		}
 	}
 }

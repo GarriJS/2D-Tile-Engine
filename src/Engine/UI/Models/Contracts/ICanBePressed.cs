@@ -13,5 +13,11 @@ namespace Engine.UI.Models.Contracts
 		/// Gets or set the press event.
 		/// </summary>
 		public event Action<IAmAUiElement, Vector2> PressEvent;
+
+		/// <summary>
+		/// Raises the press event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaisePressEvent(Vector2 elementLocation);
 	}
 }

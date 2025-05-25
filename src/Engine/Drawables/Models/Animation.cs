@@ -29,7 +29,7 @@ namespace Engine.Drawables.Models
 		public int? FrameMaxDuration { get; set; }
 
 		/// <summary>
-		/// Gets or sets current frame start time in milliseconds.
+		/// Gets or sets the current frame start time in milliseconds.
 		/// </summary>
 		public double? FrameStartTime { get; set; }
 

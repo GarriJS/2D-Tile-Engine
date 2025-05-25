@@ -1,6 +1,7 @@
 ﻿using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Contracts;
+using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
@@ -114,6 +115,17 @@ namespace Engine
 				loadable.LoadContent();
 			}
 
+			// Debug
+			if (true == this.LaunchDebugMode)
+			{ 
+				var debugService = this.Services.GetService<IDebugService>();
+				var fontService = this.Services.GetService<IFontService>();
+
+				fontService.SetDebugSpriteFont(this.DebugSpriteFontName);
+				debugService.ToggleScreenAreaIndicators();
+				debugService.TogglePerformanceRateCounter();
+			}
+
 			// Load the initial models
 			foreach (var initialModelsProvider in this.InitialModelsProviders)
 			{
@@ -146,9 +158,6 @@ namespace Engine
 			this.InitialUiModelsProviders.Clear();
 
 			// Other
-
-			var debugService = this.Services.GetService<IDebugService>();
-			debugService.ToggleScreenAreaIndicators();
 			var uiService = this.Services.GetService<IUserInterfaceService>();
 		}
 

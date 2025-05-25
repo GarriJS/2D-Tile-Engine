@@ -21,5 +21,11 @@ namespace Engine.Debugging.Services.Contracts
 		/// <param name="color">The color.</param>
 		/// <returns>The line texture.</returns>
 		public Texture2D GetLineTexture(bool verticalLine, int length, Color color);
+
+		/// <summary>
+		/// Toggles the performance rate counter.
+		/// </summary>
+		public void TogglePerformanceRateCounter();
+
 	}
 }

@@ -1,4 +1,6 @@
-﻿using Engine.Debugging.Services.Contracts;
+﻿using Engine.Core.Fonts.Contracts;
+using Engine.Debugging.Models;
+using Engine.Debugging.Services.Contracts;
 using Engine.Drawables.Models;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
@@ -25,9 +27,14 @@ namespace Engine.Debugging.Services
 		private bool ScreenAreaIndicatorsEnabled { get => this.ScreenAreaIndicatorImages.Count != 0; }
 
 		/// <summary>
+		/// Gets or sets the performance rate counter.
+		/// </summary>
+		private PerformanceRateCounter PerformanceRateCounter { get; set; }
+
+		/// <summary>
 		/// Gets or sets the screen area indicator images.
 		/// </summary>
-		private List<IndependentImage> ScreenAreaIndicatorImages { get; set; } = []; 
+		private List<IndependentImage> ScreenAreaIndicatorImages { get; set; } = [];
 
 		/// <summary>
 		/// Toggles the screen area indicators.
@@ -65,8 +72,8 @@ namespace Engine.Debugging.Services
 							Coordinates = new Vector2(0, i)
 						},
 						DrawLayer = 0,
-					}; 
-					
+					};
+
 					var nextWidthImage = new IndependentImage
 					{
 						TextureName = "screen width line",
@@ -151,6 +158,50 @@ namespace Engine.Debugging.Services
 			texture.SetData(colorData);
 
 			return texture;
+		}
+
+		/// <summary>
+		/// Toggles the performance rate counter.
+		/// </summary>
+		public void TogglePerformanceRateCounter()
+		{
+			var runtimeDrawingService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runtimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+			var fontService = this._gameServices.GetService<IFontService>();
+
+			if (null == this.PerformanceRateCounter)
+			{
+				var spriteFont = fontService.DebugSpriteFont;
+
+				if (null == spriteFont)
+				{
+					return;
+				}
+
+				this.PerformanceRateCounter = new PerformanceRateCounter
+				{
+					IsActive = true,
+					DrawLayer = 0,
+					FpsText = "0",
+					LastFrameTime = null,
+					Font = spriteFont,
+					Position = new Position
+					{
+						Coordinates = new Vector2(5, 0)
+					}
+				};
+			}
+
+			if (true == this.PerformanceRateCounter.IsActive)
+			{
+				runtimeDrawingService.AddOverlaidDrawable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
+				runtimeUpdateService.AddUpdateable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
+			}
+			else
+			{
+				runtimeDrawingService.RemoveOverlaidDrawable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
+				runtimeUpdateService.RemoveUpdateable(this.PerformanceRateCounter.DrawLayer, this.PerformanceRateCounter);
+			}
 		}
 	}
 }

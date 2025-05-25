@@ -1,23 +1,16 @@
-﻿using Engine.Physics.Models.Contracts;
-using Microsoft.Xna.Framework;
-using System;
+﻿using Microsoft.Xna.Framework;
 
 namespace Engine.Drawables.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that can be drawn.
 	/// </summary>
-	public interface IAmDrawable : IHavePosition, IDisposable
-	{    
+	public interface ICanBeDrawn
+	{
 		/// <summary>
 		/// Gets the draw layer.
 		/// </summary>
 		public int DrawLayer { get; }
-
-		/// <summary>
-		/// Gets the image.
-		/// </summary>
-		public Image Image { get; }
 
 		/// <summary>
 		/// Draws the drawable.

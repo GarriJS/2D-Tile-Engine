@@ -4,14 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Engine.Drawables.Models.Contracts
 {
 	/// <summary>
-	/// Represents something that is writable.
+	/// Represents something that can be written.
 	/// </summary>
-	public interface IAmWritable : IHavePosition
+	public interface ICanBeWritten : ICanBeDrawn, IHavePosition
 	{
 		/// <summary>
 		/// Gets the text.
 		/// </summary>
-		public string Text { get; }
+		public string FpsText { get; }
 
 		/// <summary>
 		/// Gets the font.

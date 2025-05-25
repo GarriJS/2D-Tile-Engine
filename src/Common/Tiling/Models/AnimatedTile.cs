@@ -10,7 +10,7 @@ namespace Common.Tiling.Models
 	/// <summary>
 	/// Represents a animated tile.
 	/// </summary>
-	public class AnimatedTile : IAmATile, IAmAnimated
+	public class AnimatedTile : IAmATile, IHaveAnAnimation
 	{
 		/// <summary>
 		/// Gets or sets the row.

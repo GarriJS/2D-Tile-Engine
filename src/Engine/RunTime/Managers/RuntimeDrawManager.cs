@@ -1,6 +1,5 @@
 ﻿using Engine.Drawables.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
-using Engine.UI.Models;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -18,12 +17,12 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Gets or sets the active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> ActiveDrawables { get; set; } = [];
+		private SortedDictionary<int, List<ICanBeDrawn>> ActiveDrawables { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the overlaid active drawables.
 		/// </summary>
-		private SortedDictionary<int, List<IAmDrawable>> OverlaidActiveDrawables { get; set; } = [];
+		private SortedDictionary<int, List<ICanBeDrawn>> OverlaidActiveDrawables { get; set; } = [];
 
 		/// <summary>
 		/// Initializes the runtime draw manager.
@@ -38,7 +37,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddDrawable(int layer, IAmDrawable drawable)
+		public void AddDrawable(int layer, ICanBeDrawn drawable)
 		{
 			if (true == this.ActiveDrawables.TryGetValue(layer, out var layerList))
 			{
@@ -56,7 +55,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void AddOverlaidDrawable(int layer, IAmDrawable drawable)
+		public void AddOverlaidDrawable(int layer, ICanBeDrawn drawable)
 		{
 			if (true == this.OverlaidActiveDrawables.TryGetValue(layer, out var layerList))
 			{
@@ -74,7 +73,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveDrawable(int layer, IAmDrawable drawable)
+		public void RemoveDrawable(int layer, ICanBeDrawn drawable)
 		{
 			if (true == this.ActiveDrawables.TryGetValue(layer, out var layerList))
 			{
@@ -87,7 +86,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void RemoveOverlaidDrawable(int layer, IAmDrawable drawable)
+		public void RemoveOverlaidDrawable(int layer, ICanBeDrawn drawable)
 		{
 			if (true == this.OverlaidActiveDrawables.TryGetValue(layer, out var layerList))
 			{
@@ -100,7 +99,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void ChangeDrawableLayer(int layer, IAmDrawable drawable)
+		public void ChangeDrawableLayer(int layer, ICanBeDrawn drawable)
 		{ 
 			this.RemoveDrawable(layer, drawable);
 			this.AddDrawable(layer, drawable);
@@ -111,7 +110,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="layer">The layer.</param>
 		/// <param name="drawable">The drawable.</param>
-		public void ChangeOverlaidDrawableLayer(int layer, IAmDrawable drawable)
+		public void ChangeOverlaidDrawableLayer(int layer, ICanBeDrawn drawable)
 		{
 			this.RemoveOverlaidDrawable(layer, drawable);
 			this.AddOverlaidDrawable(layer, drawable);

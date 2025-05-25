@@ -5,6 +5,10 @@ using LevelEditor.Core.Initialization;
 // Create the game object
 using var game = new Engine.Engine();
 
+// Debug
+game.LaunchDebugMode = true;
+game.DebugSpriteFontName = "Monolight";
+
 // Set the loading instructions
 var loadingInstructions = GameContainer.GetLoadingInstructions(game._graphics);
 game.SetLoadingInstructions(loadingInstructions);

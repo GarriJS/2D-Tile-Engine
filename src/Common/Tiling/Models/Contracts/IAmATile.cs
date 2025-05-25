@@ -6,7 +6,7 @@ namespace Common.Tiling.Models.Contracts
 	/// <summary>
 	/// Represents a tile.
 	/// </summary>
-	public interface IAmATile : IAmDrawable, IHaveArea
+	public interface IAmATile : IHaveAnImage, IHaveArea
 	{
 		/// <summary>
 		/// Gets the row.

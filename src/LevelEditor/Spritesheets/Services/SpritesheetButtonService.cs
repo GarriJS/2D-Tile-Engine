@@ -33,6 +33,7 @@ namespace LevelEditor.Spritesheets.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var tileService = this._gameServices.GetService<ITileService>();
+			var controlService = this._gameServices.GetService<IControlService>();
 
 			if ((false == cursorService.Cursors.TryGetValue(CommonCursorNames.TileGridCursorName, out var tileGridCursor)) ||
 				(false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor)))
@@ -42,12 +43,15 @@ namespace LevelEditor.Spritesheets.Services
 
 			tileGridCursor.IsActive = true;
 			primaryCursor.IsActive = false;
+			var position = controlService.ControlState.MouseState.Position.ToVector2();
+			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 
 			var trailingCursor = new TrailingCursor
 			{
 				IsActive = true,
 				TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
-				Offset = default,
+				Offset = new Vector2(localTileLocation.X - position.X,
+									 localTileLocation.Y - position.Y),
 				Image = button.Image,
 				CursorUpdater = this.UpdateSpritesheetButtonCursor,
 			};

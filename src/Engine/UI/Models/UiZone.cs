@@ -14,7 +14,7 @@ namespace Engine.UI.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IHaveArea, IDisposable
+	public class UiZone : IHaveAnImage, IHaveArea, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.

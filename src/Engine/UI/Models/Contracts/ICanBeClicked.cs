@@ -13,5 +13,10 @@ namespace Engine.UI.Models.Contracts
 		/// Gets or sets the click event.
 		/// </summary>
 		public event Action<TDerived, Vector2> ClickEvent;
+
+		/// <summary>
+		/// Raises the click event.
+		/// </summary>
+		public void RaiseClickEvent(Vector2 elementLocation);
 	}
 }

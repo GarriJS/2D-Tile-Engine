@@ -14,6 +14,16 @@ namespace Engine
 	public partial class Engine
 	{
 		/// <summary>
+		/// Gets or sets a value describing whether the engine should launch in debug mode.
+		/// </summary>
+		public bool LaunchDebugMode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the debug sprite font name.
+		/// </summary>
+		public string DebugSpriteFontName { get; set; }
+
+		/// <summary>
 		/// Sets the loading instructions.
 		/// </summary>
 		/// <param name="loadingInstructions">The loading instructions.</param>

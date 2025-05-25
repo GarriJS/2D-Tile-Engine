@@ -8,7 +8,7 @@ namespace Engine.Drawables.Models
 	/// <summary>
 	/// Represents a independent image.
 	/// </summary>
-	public class IndependentImage : Image, IAmDrawable
+	public class IndependentImage : Image, IHaveAnImage
 	{
 		/// <summary>
 		/// Gets or sets the position.

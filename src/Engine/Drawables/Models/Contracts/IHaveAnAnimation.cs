@@ -3,9 +3,9 @@
 namespace Engine.Drawables.Models.Contracts
 {
     /// <summary>
-    /// Represents something animated.
+    /// Represents something with an animation.
     /// </summary>
-    public interface IAmAnimated : IAmDrawable, IAmUpdateable
+    public interface IHaveAnAnimation : IHaveAnImage, IAmUpdateable
 	{
 		/// <summary>
 		/// Gets the image.

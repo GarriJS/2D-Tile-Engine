@@ -13,7 +13,7 @@ namespace Common.Controls.Models
 	/// <summary>
 	/// Represents a cursor.
 	/// </summary>
-	public class Cursor : Image, IAmDrawable, IAmUpdateable
+	public class Cursor : Image, IHaveAnImage, IAmUpdateable
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.

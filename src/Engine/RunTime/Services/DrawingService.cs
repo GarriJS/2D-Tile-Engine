@@ -67,7 +67,7 @@ namespace Engine.RunTime.Services
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="drawable">The drawable.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, IAmDrawable drawable, Vector2 offset = default)
+		public void Draw(GameTime gameTime, IHaveAnImage drawable, Vector2 offset = default)
 		{
 			this.SpriteBatch.Draw(drawable.Image.Texture, drawable.Position.Coordinates + offset, drawable.Image.TextureBox, Color.White);
 		}
