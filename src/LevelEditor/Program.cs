@@ -23,8 +23,9 @@ game.AddModelProcessingMapProvider(Common.DiskModels.ModelProcessorExporter.GetM
 // Add the initial models
 game.AddInitialModelsProvider(LevelEditorInitializer.GetInitialDiskModels);
 
-// Add the user interface button click event processors
-game.AddUiButtonClickEventProcessorsProvider(LevelEditorInitializer.GetInitialClickEventProcessors);
+// Add the user interface event processors
+game.AddUiElementHoverEventProcessorsProvider(LevelEditorInitializer.GetInitialHoverEventProcessors);
+game.AddUiElementClickEventProcessorsProvider(LevelEditorInitializer.GetInitialClickEventProcessors);
 
 // Add the initial user interface models
 game.AddInitialUserInterfaceProvider(LevelEditorInitializer.GetInitialUiModels);

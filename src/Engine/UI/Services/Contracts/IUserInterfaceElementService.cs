@@ -1,7 +1,6 @@
 ﻿using Engine.DiskModels.UI.Contracts;
 using Engine.UI.Models;
 using Engine.UI.Models.Contracts;
-using Engine.UI.Models.Elements;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -14,9 +13,19 @@ namespace Engine.UI.Services.Contracts
 	public interface IUserInterfaceElementService
 	{
 		/// <summary>
-		/// Gets or sets the button click event processors.
+		/// Gets or sets the element hover event processors.
 		/// </summary>
-		public Dictionary<string, Action<UiButton, Vector2>> ButtonClickEventProcessors { get; set; } 
+		public Dictionary<string, Action<IAmAUiElement, Vector2>> ElementHoverEventProcessors { get; set; }
+
+		/// <summary>
+		/// Gets or sets the element press event processors.
+		/// </summary>
+		public Dictionary<string, Action<IAmAUiElement, Vector2>> ElementPressEventProcessors { get; set; }
+
+		/// <summary>
+		/// Gets or sets the element click event processors.
+		/// </summary>
+		public Dictionary<string, Action<IAmAUiElement, Vector2>> ElementClickEventProcessors { get; set; }
 
 		/// <summary>
 		/// Gets the element dimensions.
@@ -34,18 +43,11 @@ namespace Engine.UI.Services.Contracts
 		public void UpdateElementHeight(IAmAUiElement element, float height);
 
 		/// <summary>
-		/// Processes the user interface element being pressed.
+		/// Checks the user interface element for a click.
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
-		public void ProcessUiElementPress(IAmAUiElement element, Vector2 elementLocation);
-
-		/// <summary>
-		/// Process the user interface button being clicked.
-		/// </summary>
-		/// <param name="button">The button.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void ProcessUiButtonClick(UiButton button, Vector2 elementLocation);
+		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation);
 
 		/// <summary>
 		/// Gets the user interface element.

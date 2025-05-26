@@ -8,6 +8,7 @@ using Engine.DiskModels;
 using Engine.DiskModels.UI;
 using Engine.Drawables.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
+using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -40,9 +41,19 @@ namespace Engine
 		private List<Func<GameServiceContainer, IList<object>>> InitialModelsProviders { get; } = [];
 
 		/// <summary>
+		/// Gets and sets the button hover event processors.
+		/// </summary>
+		private List<Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>>> UiElementHoverEventProcessorsProviders { get; } = [];
+
+		/// <summary>
+		/// Gets and sets the button press event processors.
+		/// </summary>
+		private List<Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>>> UiElementPressEventProcessorsProviders { get; } = [];
+
+		/// <summary>
 		/// Gets and sets the button click event processors.
 		/// </summary>
-		private List<Func<GameServiceContainer, Dictionary<string, Action<UiButton, Vector2>>>> ButtonClickEventProcessorsProviders { get; } = [];
+		private List<Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>>> UiElementClickEventProcessorsProviders { get; } = [];
 
 		/// <summary>
 		/// Gets and sets the initial models.
@@ -137,17 +148,27 @@ namespace Engine
 			// Load the initial user interface click events
 			var uiElementService = this.Services.GetService<IUserInterfaceElementService>();
 
-			foreach (var buttonClickEventProcessorProvider in this.ButtonClickEventProcessorsProviders)
+			foreach (var uiElementHoverEventProcessorsProviders in this.UiElementHoverEventProcessorsProviders)
 			{
-				var buttonClickEventProcessors = buttonClickEventProcessorProvider.Invoke(this.Services);
+				var uiElementHoverEventProcessors = uiElementHoverEventProcessorsProviders.Invoke(this.Services);
 
-				foreach (var buttonClickEventProcessor in buttonClickEventProcessors)
+				foreach (var uiElementHoverEventProcessor in uiElementHoverEventProcessors)
 				{
-					uiElementService.ButtonClickEventProcessors.Add(buttonClickEventProcessor.Key, buttonClickEventProcessor.Value);
+					uiElementService.ElementHoverEventProcessors.Add(uiElementHoverEventProcessor.Key, uiElementHoverEventProcessor.Value);
 				}
 			}
 
-			this.ButtonClickEventProcessorsProviders.Clear();
+			foreach (var uiElementClickEventProcessorProvider in this.UiElementClickEventProcessorsProviders)
+			{
+				var uiElementClickEventProcessors = uiElementClickEventProcessorProvider.Invoke(this.Services);
+
+				foreach (var uiElementClickEventProcessor in uiElementClickEventProcessors)
+				{
+					uiElementService.ElementClickEventProcessors.Add(uiElementClickEventProcessor.Key, uiElementClickEventProcessor.Value);
+				}
+			}
+
+			this.UiElementClickEventProcessorsProviders.Clear();
 
 			// Load the initial user interface models
 			foreach (var initialUiModelsProvider in this.InitialUiModelsProviders)

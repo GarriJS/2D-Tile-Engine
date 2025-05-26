@@ -9,7 +9,7 @@ namespace Engine.UI.Models.Contracts
 	/// <summary>
 	/// Represents a user interface element.
 	/// </summary>
-	public interface IAmAUiElement : IAmSubDrawable, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
+	public interface IAmAUiElement : IAmSubDrawable, ICanBeHovered, ICanBePressed, IDisposable
 	{
         /// <summary>
         /// Gets or sets the user interface element name.

@@ -22,5 +22,11 @@ namespace Engine.DiskModels.UI.Contracts
 
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
+
+		[DataMember(Name = "buttonHoverEventName", Order = 7)]
+		public string ButtonHoverEventName { get; set; }
+
+		[DataMember(Name = "buttonPressEventName", Order = 8)]
+		public string ButtonPressEventName { get; set; }
 	}
 }

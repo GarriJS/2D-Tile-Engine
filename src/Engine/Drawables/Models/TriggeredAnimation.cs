@@ -60,7 +60,7 @@ namespace Engine.Drawables.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public new void Update(GameTime gameTime, GameServiceContainer gameServices)
+		protected override void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
 			if ((null == this.FrameStartTime) ||
 				(this.CurrentFrameIndex == this.RestingFrameIndex))

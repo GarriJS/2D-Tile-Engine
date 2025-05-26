@@ -1,6 +1,7 @@
 ﻿using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Engine.DiskModels.UI;
+using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Elements;
 using Microsoft.Xna.Framework;
 using System;
@@ -60,12 +61,30 @@ namespace Engine
 		}
 
 		/// <summary>
+		/// Adds the user interface button hover events.
+		/// </summary>
+		/// <param name="hoverEventProcessors">The button hover event processors provider.</param>
+		public void AddUiElementHoverEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>> hoverEventProcessors)
+		{
+			this.UiElementHoverEventProcessorsProviders.Add(hoverEventProcessors);
+		}
+
+		/// <summary>
+		/// Adds the user interface button press events.
+		/// </summary>
+		/// <param name="pressEventProcessors">The button press event processors provider.</param>
+		public void AddUiElementPressEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>> pressEventProcessors)
+		{
+			this.UiElementPressEventProcessorsProviders.Add(pressEventProcessors);
+		}
+
+		/// <summary>
 		/// Adds the user interface button click events.
 		/// </summary>
-		/// <param name="buttonClickEventProcessors">The button click event processors provider.</param>
-		public void AddUiButtonClickEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<UiButton, Vector2>>> buttonClickEventProcessors)
+		/// <param name="clickEventProcessors">The button click event processors provider.</param>
+		public void AddUiElementClickEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>> clickEventProcessors)
 		{
-			this.ButtonClickEventProcessorsProviders.Add(buttonClickEventProcessors);
+			this.UiElementClickEventProcessorsProviders.Add(clickEventProcessors);
 		}
 
 		/// <summary>

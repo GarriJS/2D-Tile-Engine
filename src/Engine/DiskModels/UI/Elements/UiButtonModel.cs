@@ -26,16 +26,22 @@ namespace Engine.DiskModels.UI.Elements
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "text", Order = 7)]
+		[DataMember(Name = "buttonHoverEventName", Order = 7)]
+		public string ButtonHoverEventName { get; set; }
+
+		[DataMember(Name = "buttonPressEventName", Order = 8)]
+		public string ButtonPressEventName { get; set; }
+
+		[DataMember(Name = "text", Order = 9)]
 		public string Text { get; set; }
 
-		[DataMember(Name = "clickableAreaAnimation", Order = 8)]
+		[DataMember(Name = "clickableAreaAnimation", Order = 10)]
 		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }
 
-		[DataMember(Name = "clickableAreaScaler", Order = 9)]
+		[DataMember(Name = "clickableAreaScaler", Order = 11)]
 		public Vector2 ClickableAreaScaler { get; set; }
 
-		[DataMember(Name = "buttonClickEventName", Order = 10)]
+		[DataMember(Name = "buttonClickEventName", Order = 12)]
 		public string ButtonClickEventName { get; set; }
 	}
 }

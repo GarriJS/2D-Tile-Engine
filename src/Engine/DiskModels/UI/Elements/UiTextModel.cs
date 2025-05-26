@@ -25,7 +25,13 @@ namespace Engine.DiskModels.UI.Elements
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "text", Order = 7)]
+		[DataMember(Name = "buttonHoverEventName", Order = 7)]
+		public string ButtonHoverEventName { get; set; }
+
+		[DataMember(Name = "buttonPressEventName", Order = 8)]
+		public string ButtonPressEventName { get; set; }
+
+		[DataMember(Name = "text", Order = 9)]
 		public string Text { get; set; }
 	}
 }

@@ -66,6 +66,25 @@ namespace Common.Controls.Services
 		}
 
 		/// <summary>
+		/// Disables all cursors.
+		/// </summary>
+		public void DisableAllCursors()
+		{
+			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+
+			if (true != this.Cursors?.Any())
+			{
+				return;
+			}
+
+			foreach (var cursor in this.Cursors.Values)
+			{
+				cursor.IsActive = false;
+			}
+		}
+
+		/// <summary>
 		/// Updates the cursor position.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>

@@ -6,7 +6,7 @@ using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
 using Engine.DiskModels.UI.Elements;
-using Engine.UI.Models.Elements;
+using Engine.UI.Models.Contracts;
 using LevelEditor.Controls.Models.Constants;
 using LevelEditor.Spritesheets.Models.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
@@ -24,13 +24,31 @@ namespace LevelEditor.Spritesheets.Services
 	public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
-		
+
+		/// <summary>
+		/// The spritesheet button hover event processor.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="elementLocation">The element location.</param>
+		public void SpritesheetButtonHoverEventProcessor(IAmAUiElement element, Vector2 elementLocation)
+		{
+			var cursorService = this._gameServices.GetService<ICursorService>();
+
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
+			{
+				return;
+			}
+
+			cursorService.DisableAllCursors();
+			primaryCursor.IsActive = true;
+		}
+
 		/// <summary>
 		/// The spritesheet button click event processor.
 		/// </summary>
-		/// <param name="button">The button.</param>
-		/// <param name="buttonLocation">The button location.</param>
-		public void SpritesheetButtonClickEventProcessor(UiButton button, Vector2 buttonLocation)
+		/// <param name="element">The element.</param>
+		/// <param name="elementLocation">The element location.</param>
+		public void SpritesheetButtonClickEventProcessor(IAmAUiElement element, Vector2 elementLocation)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var tileService = this._gameServices.GetService<ITileService>();
@@ -42,8 +60,8 @@ namespace LevelEditor.Spritesheets.Services
 				return;
 			}
 
+			cursorService.DisableAllCursors();
 			tileGridCursor.IsActive = true;
-			primaryCursor.IsActive = false;
 			var position = controlService.ControlState.MouseState.Position.ToVector2();
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 
@@ -53,7 +71,7 @@ namespace LevelEditor.Spritesheets.Services
 				TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
 				Offset = new Vector2(localTileLocation.X - position.X,
 									 localTileLocation.Y - position.Y),
-				Image = button.Image,
+				Image = element.Image,
 				CursorUpdater = this.UpdateSpritesheetButtonCursor,
 			};
 
@@ -92,12 +110,12 @@ namespace LevelEditor.Spritesheets.Services
 		/// <returns></returns>
 		public UiButtonModel[][] GetUiButtonsForSpritesheet(string spritesheetName, Point spriteDimensions)
 		{
+			var textureService = this._gameServices.GetService<ITextureService>();
+			
 			if (true == string.IsNullOrEmpty(spritesheetName))
 			{
 				return null;
 			}
-
-			var textureService = this._gameServices.GetService<ITextureService>();
 
 			if (false == textureService.TryGetTexture(spritesheetName, out var texture))
 			{
@@ -106,7 +124,6 @@ namespace LevelEditor.Spritesheets.Services
 
 			var horizontalSize = texture.Width / spriteDimensions.X;
 			var verticalSize = texture.Height / spriteDimensions.Y;
-
 			var buttons = new UiButtonModel[horizontalSize][];
 
 			for (var i = 0; i < horizontalSize; i++)
@@ -131,7 +148,8 @@ namespace LevelEditor.Spritesheets.Services
 						BackgroundTextureName = textureName,
 						Text = string.Empty,
 						ClickableAreaScaler = new Vector2(1, 1),
-						ButtonClickEventName = ButtonClickEventNameConstants.Spritesheet
+						ButtonHoverEventName = UiEventNameConstants.SpritesheetButtonHover,
+						ButtonClickEventName = UiEventNameConstants.SpritesheetButtonClick
 					};
 				}
 			}

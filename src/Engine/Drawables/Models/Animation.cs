@@ -1,6 +1,5 @@
 ﻿using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
-using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -11,7 +10,7 @@ namespace Engine.Drawables.Models
 	/// <summary>
 	/// Represents the animation.
 	/// </summary>
-	public class Animation : IAmSubDrawable, IAmSubUpdateable, IDisposable
+	public class Animation : IAmSubDrawable, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the current frame index.
@@ -59,6 +58,7 @@ namespace Engine.Drawables.Models
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
+			this.UpdateFrame(gameTime, gameServices);
 			drawingService.Draw(gameTime, this, position, offset);
 		}
 
@@ -67,7 +67,7 @@ namespace Engine.Drawables.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public void Update(GameTime gameTime, GameServiceContainer gameServices)
+		protected virtual void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
 			if (null == this.FrameStartTime)
 			{

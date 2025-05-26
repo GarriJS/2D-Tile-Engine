@@ -1,7 +1,7 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.DiskModels.UI;
 using Engine.DiskModels.UI.Elements;
-using Engine.UI.Models.Elements;
+using Engine.UI.Models.Contracts;
 using Engine.UI.Models.Enums;
 using LevelEditor.Spritesheets.Models.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
@@ -31,17 +31,32 @@ namespace LevelEditor.Core.Initialization
 		}
 
 		/// <summary>
+		/// Gets the initial hover event processors.
+		/// </summary>
+		/// <param name="gameServices">The game services.</param>
+		/// <returns>A dictionary of the hover event processors.</returns>
+		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetInitialHoverEventProcessors(GameServiceContainer gameServices)
+		{
+			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
+
+			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
+			{
+				[UiEventNameConstants.SpritesheetButtonHover] = spritesheetButtonService.SpritesheetButtonHoverEventProcessor
+			};
+		}
+
+		/// <summary>
 		/// Gets the initial click event processors.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the click event processors.</returns>
-		public static Dictionary<string, Action<UiButton, Vector2>> GetInitialClickEventProcessors(GameServiceContainer gameServices)
+		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetInitialClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 
-			return new Dictionary<string, Action<UiButton, Vector2>>
+			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
 			{
-				[ButtonClickEventNameConstants.Spritesheet] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
+				[UiEventNameConstants.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
 			};
 		}
 

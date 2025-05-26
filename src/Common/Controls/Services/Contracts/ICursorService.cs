@@ -16,6 +16,11 @@ namespace Common.Controls.Services.Contracts
 		public Dictionary<string, Cursor> Cursors { get; }
 
 		/// <summary>
+		/// Disables all cursors.
+		/// </summary>
+		public void DisableAllCursors();
+
+		/// <summary>
 		/// Updates the cursor position.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>

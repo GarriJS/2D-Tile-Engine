@@ -75,6 +75,24 @@ namespace Engine.UI.Models.Elements
 		public event Action<IAmAUiElement, Vector2> PressEvent;
 
 		/// <summary>
+		/// Raises the hover event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaiseHoverEvent(Vector2 elementLocation)
+		{
+			this.HoverEvent?.Invoke(this, elementLocation);
+		}
+
+		/// <summary>
+		/// Raises the press event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaisePressEvent(Vector2 elementLocation)
+		{
+			this.PressEvent?.Invoke(this, elementLocation);
+		}
+
+		/// <summary>
 		/// Draws the sub drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
@@ -94,24 +112,6 @@ namespace Engine.UI.Models.Elements
 				var textPosition = position.Coordinates + offset + (this.Area / 2) - (textMeasurements / 2);
 				writingService.Draw("Monobold", this.Text, textPosition, Color.Maroon);
 			}
-		}
-
-		/// <summary>
-		/// Raises the hover event.
-		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaiseHoverEvent(Vector2 elementLocation)
-		{
-			this.HoverEvent?.Invoke(this, elementLocation);
-		}
-
-		/// <summary>
-		/// Raises the press event.
-		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaisePressEvent(Vector2 elementLocation)
-		{
-			this.PressEvent?.Invoke(this, elementLocation);
 		}
 
 		/// <summary>

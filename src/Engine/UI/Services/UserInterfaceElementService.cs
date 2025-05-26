@@ -28,14 +28,19 @@ namespace Engine.UI.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets or sets the button click event processors.
+		/// Gets or sets the element hover event processors.
 		/// </summary>
-		public Dictionary<string, Action<UiButton, Vector2>> ButtonClickEventProcessors { get; set; } = [];
+		public Dictionary<string, Action<IAmAUiElement, Vector2>> ElementHoverEventProcessors { get; set; } = [];
 
 		/// <summary>
-		/// Gets or sets the user interface elements.
+		/// Gets or sets the element press event processors.
 		/// </summary>
-		private List<IAmAUiElement> UserInterfaceElements { get; set; } = [];
+		public Dictionary<string, Action<IAmAUiElement, Vector2>> ElementPressEventProcessors { get; set; } = [];
+
+		/// <summary>
+		/// Gets or sets the element click event processors.
+		/// </summary>
+		public Dictionary<string, Action<IAmAUiElement, Vector2>> ElementClickEventProcessors { get; set; } = [];
 
 		/// <summary>
 		/// Gets the element dimensions.
@@ -96,45 +101,29 @@ namespace Engine.UI.Services
 		}
 
 		/// <summary>
-		/// Processes the user interface element being pressed.
+		/// Checks the user interface element for a click.
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
-		public void ProcessUiElementPress(IAmAUiElement element, Vector2 elementLocation)
+		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation)
 		{
+			var controlService = this._gameServices.GetService<IControlService>();
+
 			switch (element)
 			{ 
 				case UiButton button:
-					var controlService = this._gameServices.GetService<IControlService>();
 					var mouseLocation = controlService.ControlState.MouseState.Position;
 					var clickableLocation = new Vector2(elementLocation.X + ((element.Area.X - button.ClickableArea.X) / 2), elementLocation.Y + ((element.Area.Y - button.ClickableArea.Y) / 2));
 
-					if (clickableLocation.X <= mouseLocation.X &&
-						clickableLocation.X + button.ClickableArea.X >= mouseLocation.X &&
-						clickableLocation.Y <= mouseLocation.Y &&
-						clickableLocation.Y + button.ClickableArea.Y >= mouseLocation.Y)
+					if ((clickableLocation.X <= mouseLocation.X) &&
+						(clickableLocation.X + button.ClickableArea.X >= mouseLocation.X) &&
+						(clickableLocation.Y <= mouseLocation.Y) &&
+						(clickableLocation.Y + button.ClickableArea.Y >= mouseLocation.Y))
 					{
 						button.RaiseClickEvent(elementLocation);
 					}
 
 					break;
-			}
-		}
-
-		/// <summary>
-		/// Process the user interface button being clicked.
-		/// </summary>
-		/// <param name="button">The button.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void ProcessUiButtonClick(UiButton button, Vector2 elementLocation)
-		{
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-			uiService.ToggleUserInterfaceGroupVisibility(button.VisibilityGroup == 1 ? 2 : 1);
-
-			if (null != button.ClickAnimation)
-			{
-				var animationService = this._gameServices.GetService<IAnimationService>();
-				button.ClickAnimation.TriggerAnimation(true);
 			}
 		}
 
@@ -148,6 +137,8 @@ namespace Engine.UI.Services
 		/// <returns>The user interface element.</returns>
 		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, int visibilityGroup)
 		{
+			var imageService = this._gameServices.GetService<IImageService>();
+
 			var elementSize = this.GetElementDimensions(uiZone, uiElementModel);
 			var width = true == elementSize.HasValue
 						? elementSize.Value.X
@@ -156,7 +147,6 @@ namespace Engine.UI.Services
 						 ? elementSize.Value.Y
 						 : 0;
 
-			var imageService = this._gameServices.GetService<IImageService>();
 			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
 			var area = new Vector2(width, height);
 			IAmAUiElement uiElement = uiElementModel switch
@@ -170,8 +160,20 @@ namespace Engine.UI.Services
 			{
 				uiElement.VisibilityGroup = visibilityGroup;
 				uiElement.Image = image;
-				uiElement.PressEvent += this.ProcessUiElementPress;
-				this.UserInterfaceElements.Add(uiElement);
+				//uiElement.HoverEvent += this.ho
+				uiElement.PressEvent += this.CheckForUiElementClick;
+
+				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonHoverEventName)) &&
+					(true == this.ElementHoverEventProcessors.TryGetValue(uiElementModel.ButtonHoverEventName, out var hoverAction)))
+				{
+					uiElement.HoverEvent += hoverAction;
+				}
+
+				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonPressEventName)) &&
+					(true == this.ElementPressEventProcessors.TryGetValue(uiElementModel.ButtonPressEventName, out var pressAction)))
+				{
+					uiElement.PressEvent += pressAction;
+				}
 			}
 
 			return uiElement;
@@ -205,6 +207,7 @@ namespace Engine.UI.Services
 		private UiButton GetUiButton(UiButtonModel buttonModel, Vector2 area)
 		{
 			var animationService = this._gameServices.GetService<IAnimationService>();
+
 			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
 			var button =  new UiButton
 			{
@@ -218,10 +221,10 @@ namespace Engine.UI.Services
 				ClickableAreaScaler = buttonModel.ClickableAreaScaler
 			};
 
-			button.ClickEvent += this.ProcessUiButtonClick;
+			button.ClickEvent += this.TriggerUiButtonClickAnimation;
 
 			if ((false == string.IsNullOrEmpty(buttonModel.ButtonClickEventName)) &&
-				(true == this.ButtonClickEventProcessors.TryGetValue(buttonModel.ButtonClickEventName, out var action)))
+				(true == this.ElementClickEventProcessors.TryGetValue(buttonModel.ButtonClickEventName, out var action)))
 			{
 				button.ClickEvent += action;
 			}
@@ -237,6 +240,26 @@ namespace Engine.UI.Services
 			}
 
 			return button;
+		}
+
+
+		/// <summary>
+		/// Triggers the user interface elements click animation.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="elementLocation">The element location.</param>
+		private void TriggerUiButtonClickAnimation(IAmAUiElement element, Vector2 elementLocation)
+		{
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var animationService = this._gameServices.GetService<IAnimationService>();
+
+			uiService.ToggleUserInterfaceGroupVisibility(element.VisibilityGroup == 1 ? 2 : 1);
+
+			if ((element is UiButton button) &&
+				(null != button.ClickAnimation))
+			{
+				button.ClickAnimation.TriggerAnimation(true);
+			}
 		}
 	}
 }
