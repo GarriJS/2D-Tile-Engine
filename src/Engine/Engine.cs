@@ -9,7 +9,6 @@ using Engine.DiskModels.UI;
 using Engine.Drawables.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Engine.UI.Models.Contracts;
-using Engine.UI.Models.Elements;
 using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -158,6 +157,16 @@ namespace Engine
 				}
 			}
 
+			foreach (var uiElementPressEventProcessorsProviders in this.UiElementPressEventProcessorsProviders)
+			{
+				var uiElementPressEventProcessors = uiElementPressEventProcessorsProviders.Invoke(this.Services);
+
+				foreach (var uiElementPressEventProcessor in uiElementPressEventProcessors)
+				{
+					uiElementService.ElementHoverEventProcessors.Add(uiElementPressEventProcessor.Key, uiElementPressEventProcessor.Value);
+				}
+			}
+
 			foreach (var uiElementClickEventProcessorProvider in this.UiElementClickEventProcessorsProviders)
 			{
 				var uiElementClickEventProcessors = uiElementClickEventProcessorProvider.Invoke(this.Services);
@@ -168,6 +177,8 @@ namespace Engine
 				}
 			}
 
+			this.UiElementHoverEventProcessorsProviders.Clear();
+			this.UiElementPressEventProcessorsProviders.Clear();
 			this.UiElementClickEventProcessorsProviders.Clear();
 
 			// Load the initial user interface models

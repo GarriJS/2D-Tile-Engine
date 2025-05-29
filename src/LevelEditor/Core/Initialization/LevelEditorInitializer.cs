@@ -46,6 +46,19 @@ namespace LevelEditor.Core.Initialization
 		}
 
 		/// <summary>
+		/// Gets the initial press event processors.
+		/// </summary>
+		/// <param name="gameServices">The game services.</param>
+		/// <returns>A dictionary of the press event processors.</returns>
+		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetInitialPressEventProcessors(GameServiceContainer gameServices)
+		{
+			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
+			{
+
+			};
+		}
+
+		/// <summary>
 		/// Gets the initial click event processors.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>

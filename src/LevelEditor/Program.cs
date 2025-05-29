@@ -25,6 +25,7 @@ game.AddInitialModelsProvider(LevelEditorInitializer.GetInitialDiskModels);
 
 // Add the user interface event processors
 game.AddUiElementHoverEventProcessorsProvider(LevelEditorInitializer.GetInitialHoverEventProcessors);
+game.AddUiElementPressEventProcessorsProvider(LevelEditorInitializer.GetInitialPressEventProcessors);
 game.AddUiElementClickEventProcessorsProvider(LevelEditorInitializer.GetInitialClickEventProcessors);
 
 // Add the initial user interface models

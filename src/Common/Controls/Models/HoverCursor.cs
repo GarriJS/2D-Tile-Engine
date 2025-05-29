@@ -1,19 +1,19 @@
-﻿using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
-using Engine.Physics.Models;
-using Engine.RunTime.Models.Contracts;
+﻿using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
+using System;
+using Engine.Drawables.Models;
+using Engine.Drawables.Models.Contracts;
+using Engine.RunTime.Models.Contracts;
 using System.Linq;
 
 namespace Common.Controls.Models
 {
 	/// <summary>
-	/// Represents a cursor.
+	/// Represents a hover cursor.
 	/// </summary>
-	public class Cursor : Image, IHaveAnImage, ICanBeUpdated
+	public class HoverCursor : Image, IHaveAnImage, ICanBeUpdated
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.
@@ -49,11 +49,6 @@ namespace Common.Controls.Models
 		/// Gets or sets the image.
 		/// </summary>
 		public Image Image { get => this; }
-
-		/// <summary>
-		/// Gets or sets the hover cursor.
-		/// </summary>
-		public HoverCursor HoverCursor { get; set; }
 
 		/// <summary>
 		/// Gets or sets the cursor updater.
@@ -99,22 +94,7 @@ namespace Common.Controls.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Update(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (false == this.IsActive)
-			{
-				return;
-			}
 
-			this.CursorUpdater?.Invoke(this, gameTime);
-
-			if (true != this.TrailingCursors?.Any())
-			{
-				return;
-			}
-
-			foreach (var trailingCursor in this.TrailingCursors)
-			{
-				trailingCursor.CursorUpdater.Invoke(this, trailingCursor, gameTime);
-			}
 		}
 	}
 }
