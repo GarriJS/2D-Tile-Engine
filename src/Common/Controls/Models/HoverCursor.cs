@@ -1,16 +1,17 @@
 ﻿using Engine.Drawables.Models;
 using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
-using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Controls.Models
 {
 	/// <summary>
 	/// Represents a hover cursor.
 	/// </summary>
-	public class HoverCursor : Image, IAmSubDrawable, IAmSubUpdateable
+	public class HoverCursor : Image, IAmSubDrawable
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.
@@ -33,6 +34,11 @@ namespace Common.Controls.Models
 		public Image Image { get => this; }
 
 		/// <summary>
+		/// Gets or sets the trailing cursors.
+		/// </summary>
+		public IList<TrailingCursor> TrailingCursors { get; set; }
+
+		/// <summary>
 		/// Draws the sub drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
@@ -49,16 +55,34 @@ namespace Common.Controls.Models
 			}
 
 			drawingService.Draw(gameTime, this, position, this.Offset + offset);
+			
+			if (true != this.TrailingCursors?.Any())
+			{
+				return;
+			}
+
+			foreach (var trailingCursor in this.TrailingCursors)
+			{
+				trailingCursor.Draw(gameTime, gameServices, position, trailingCursor.Offset);
+			}
 		}
 
 		/// <summary>
-		/// Updates the updateable.
+		/// Disposes of the draw data texture.
 		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void Update(GameTime gameTime, GameServiceContainer gameServices)
+		new public void Dispose()
 		{
+			this.Image?.Dispose();
 
+			if (true != this.TrailingCursors?.Any())
+			{
+				return;
+			}
+
+			foreach (var trailingCursor in this.TrailingCursors)
+			{ 
+				trailingCursor.Dispose();
+			}
 		}
 	}
 }

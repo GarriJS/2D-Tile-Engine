@@ -1,12 +1,13 @@
 ﻿using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Engine.Drawables.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that can be drawn from another drawable.
 	/// </summary>
-	public interface IAmSubDrawable
+	public interface IAmSubDrawable : IDisposable
 	{
 		/// <summary>
 		/// Gets the image.

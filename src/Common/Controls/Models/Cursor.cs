@@ -90,7 +90,7 @@ namespace Common.Controls.Models
 
 			if (true == this.HoverCursor?.IsActive)
 			{
-				drawingService.Draw(gameTime, this.HoverCursor, this.Position, this.HoverCursor.Offset);
+				this.HoverCursor.Draw(gameTime, gameServices, this.Position);
 				this.HoverCursor.IsActive = false;
 
 				return;
@@ -139,8 +139,18 @@ namespace Common.Controls.Models
 		/// </summary>
 		new public void Dispose()
 		{
-			this.Texture?.Dispose();
 			ControlManager.ControlStateUpdated -= this.Update;
+			this.Texture?.Dispose();
+
+			if (true != this.TrailingCursors?.Any())
+			{
+				return;
+			}
+
+			foreach (var trailingCursor in this.TrailingCursors)
+			{
+				trailingCursor.Dispose();
+			}
 		}
 	}
 }

@@ -44,8 +44,7 @@ namespace Common.Tiling.Services
 				tileGridTexture = textureService.DebugTexture;
 			}
 
-			var hoverCursor = cursorService.GetHoverCursor();
-
+			var hoverCursor = cursorService.GetHoverCursor(true);
 			var position = new Position
 			{
 				Coordinates = default
@@ -97,7 +96,8 @@ namespace Common.Tiling.Services
 				return;
 			}
 
-			if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+			if (controlService.ControlState.MouseState.LeftButton == ButtonState.Pressed &&
+				controlService.PriorControlState.MouseState.LeftButton != ButtonState.Pressed)
 			{
 				uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
 			}

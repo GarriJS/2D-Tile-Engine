@@ -7,6 +7,7 @@ using Common.UI.Models.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
+using Engine.Drawables.Models;
 using LevelEditor.Controls.Models.Constants;
 using LevelEditor.Spritesheets.Models.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
@@ -77,21 +78,37 @@ namespace LevelEditor.Spritesheets.Services
 				Offset = new Vector2(localTileLocation.X - position.X,
 									 localTileLocation.Y - position.Y),
 				Image = element.Image,
-				CursorUpdater = this.UpdateSpritesheetButtonCursor,
+				CursorUpdater = this.SpritesheetButtonTrailingCursorUpdater,
 			};
 
 			tileGridCursor.TrailingCursors.Add(trailingCursor);
 			tileGridCursor.Offset = new Vector2(localTileLocation.X - tileGridCursor.Position.X - ((tileGridCursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
 												localTileLocation.Y - tileGridCursor.Position.Y - ((tileGridCursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
+
+			if (null != tileGridCursor.HoverCursor)
+			{
+				tileGridCursor.HoverCursor.IsActive = true;
+
+				var trailingHoverCursor = new TrailingCursor
+				{
+					IsActive = true,
+					TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
+					Offset = new Vector2(tileGridCursor.HoverCursor.Image.Texture.Width,
+										tileGridCursor.HoverCursor.Image.Texture.Height),
+					Image = element.Image
+				};
+
+				tileGridCursor.HoverCursor.TrailingCursors.Add(trailingHoverCursor);
+			}
 		}
 
 		/// <summary>
-		/// Updates the spritesheet button cursor.
+		/// Updates the spritesheet button trailing cursor.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="trailingCursor">The trailing cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		private void UpdateSpritesheetButtonCursor(Cursor cursor, TrailingCursor trailingCursor, GameTime gameTime)
+		private void SpritesheetButtonTrailingCursorUpdater(Cursor cursor, TrailingCursor trailingCursor, GameTime gameTime)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 			var tileService = this._gameServices.GetService<ITileService>();

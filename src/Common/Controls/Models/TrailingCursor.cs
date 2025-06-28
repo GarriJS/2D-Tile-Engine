@@ -10,7 +10,7 @@ namespace Common.Controls.Models
 	/// <summary>
 	/// Represents a trailing cursor.
 	/// </summary>
-	public class TrailingCursor : IAmSubDrawable
+	public class TrailingCursor : IAmSubDrawable, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets a value describing if the trailing cursor is active or not.
@@ -49,6 +49,14 @@ namespace Common.Controls.Models
 			var drawingService = gameServices.GetService<IDrawingService>();
 
 			drawingService.Draw(gameTime, this, position, offset);
+		}
+
+		/// <summary>
+		/// Disposes of the draw data texture.
+		/// </summary>
+		public void Dispose()
+		{
+			this.Image?.Dispose();
 		}
 	}
 }

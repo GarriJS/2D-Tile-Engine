@@ -98,7 +98,8 @@ namespace Common.Controls.Services
 				TextureName = cursorTexture.Name,
 				Offset = default,
 				TextureBox = new Rectangle(0, 0, 18, 28),
-				Texture = cursorTexture
+				Texture = cursorTexture,
+				TrailingCursors = []
 			};
 		}
 
@@ -127,6 +128,7 @@ namespace Common.Controls.Services
 			{
 				cursor.IsActive = false;
 				cursor.TrailingCursors.Clear();
+				cursor.HoverCursor?.TrailingCursors?.Clear();
 			}
 		}
 
@@ -153,7 +155,8 @@ namespace Common.Controls.Services
 				return;
 			}
 
-			if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+			if (controlService.ControlState.MouseState.LeftButton == ButtonState.Pressed &&
+				controlService.PriorControlState.MouseState.LeftButton != ButtonState.Pressed)
 			{
 				uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
 			}
@@ -162,5 +165,16 @@ namespace Common.Controls.Services
 				uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
 			}
 		}
+
+		/// <summary>
+		/// Updates the spritesheet button trailing cursor.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="trailingCursor">The trailing cursor.</param>
+		/// <param name="gameTime">The game time.</param>
+		//public void BasicTrailingCursorUpdater(Cursor cursor, TrailingCursor trailingCursor, GameTime gameTime)
+		//{
+
+		//}
 	}
 }
