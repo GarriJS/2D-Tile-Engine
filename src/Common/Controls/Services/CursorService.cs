@@ -1,11 +1,14 @@
 ﻿using Common.Controls.Models;
 using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
+using Common.UI.Services.Contracts;
+using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,7 +55,7 @@ namespace Common.Controls.Services
 				CursorName = CommonCursorNames.PrimaryCursorName,
 				TextureName = cursorTexture.Name,
 				Offset = default,
-				CursorUpdater = this.BasicCursorPositionUpdater,
+				CursorUpdater = this.BasicCursorUpdater,
 				TextureBox = new Rectangle(0, 0, 18, 28),
 				Texture = cursorTexture,
 				Position = position,
@@ -61,7 +64,6 @@ namespace Common.Controls.Services
 			};
 
 			runTimeDrawService.AddOverlaidDrawable(cursor);
-			runTimeUpdateService.AddUpdateable(cursor);
 			this.Cursors.Add(cursor.CursorName, cursor);
 		}
 
@@ -70,9 +72,6 @@ namespace Common.Controls.Services
 		/// </summary>
 		public void DisableAllCursors()
 		{
-			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
-			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
-
 			if (true != this.Cursors?.Any())
 			{
 				return;
@@ -85,13 +84,14 @@ namespace Common.Controls.Services
 		}
 
 		/// <summary>
-		/// Updates the cursor position.
+		/// Updates the cursor.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		public void BasicCursorPositionUpdater(Cursor cursor, GameTime gameTime)
+		public void BasicCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 
 			if (null == controlService.ControlState)
 			{
@@ -99,6 +99,21 @@ namespace Common.Controls.Services
 			}
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
+			var uiElementWithLocation = uiService.GetUiElementAtScreenLocation(cursor.Position.Coordinates);
+
+			if (null == uiElementWithLocation)
+			{
+				return;
+			}
+
+			if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+			{
+				uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
+			}
+			else
+			{
+				uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
+			}
 		}
 	}
 }

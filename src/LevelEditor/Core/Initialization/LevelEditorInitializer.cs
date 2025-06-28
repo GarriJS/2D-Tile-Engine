@@ -1,8 +1,8 @@
-﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.UI;
-using Engine.DiskModels.UI.Elements;
-using Engine.UI.Models.Contracts;
-using Engine.UI.Models.Enums;
+﻿using Common.DiskModels.UI;
+using Common.DiskModels.UI.Elements;
+using Common.UI.Models.Contracts;
+using Common.UI.Models.Enums;
+using Engine.DiskModels.Drawing;
 using LevelEditor.Spritesheets.Models.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -17,19 +17,6 @@ namespace LevelEditor.Core.Initialization
 	/// </summary>
 	public static class LevelEditorInitializer
 	{
-		/// <summary>
-		/// Gets the initial disk models.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		/// <returns>The disk models.</returns>
-		public static IList<object> GetInitialDiskModels(GameServiceContainer gameServices)
-		{
-			return
-			[
-
-			];
-		}
-
 		/// <summary>
 		/// Gets the initial hover event processors.
 		/// </summary>
@@ -78,7 +65,7 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>The user interface models.</returns>
-		public static IList<UiGroupModel> GetInitialUiModels(GameServiceContainer gameServices)
+		public static IList<object> GetInitialUiModels(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var spritesheetButtons = spritesheetButtonService.GetUiButtonsForSpritesheet("dark_grass_simplified", new Point(32, 32));

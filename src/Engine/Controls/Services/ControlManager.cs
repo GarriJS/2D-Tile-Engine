@@ -24,14 +24,19 @@ namespace Engine.Controls.Services
 		private List<ActionControl> ActionControls { get; set; }
 
 		/// <summary>
-		/// Gets or sets the old control state.
+		/// Gets or sets the prior control state.
 		/// </summary>
-		private ControlState OldControlState { get; set; }
+		public ControlState PriorControlState { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the control state.
 		/// </summary>
 		public ControlState ControlState { get; private set; }
+
+		/// <summary>
+		/// Event for when the control state is updated.
+		/// </summary>
+		public static event Action<GameTime, GameServiceContainer> ControlStateUpdated;
 
 		/// <summary>
 		/// Initializes the control manager.
@@ -57,12 +62,9 @@ namespace Engine.Controls.Services
 		/// <param name="gameTime">The game time.</param>
 		public override void Update(GameTime gameTime)
 		{
-			var mouseService = this.Game.Services.GetService<IMouseService>();
-			
-			this.OldControlState = this.ControlState;
+			this.PriorControlState = this.ControlState;
 			this.ControlState = this.GetCurrentControlState();
-
-			mouseService.ProcessMouseState(this.ControlState);
+			ControlStateUpdated?.Invoke(gameTime, this.Game.Services);
 
 			base.Update(gameTime);
 		}
@@ -84,9 +86,9 @@ namespace Engine.Controls.Services
 			var direction = this.GetMovementDirection(activeActionTypes);
 			var freshActionTypes = activeActionTypes;
 
-			if (null != this.OldControlState?.ActionTypes)
+			if (null != this.PriorControlState?.ActionTypes)
 			{
-				freshActionTypes = activeActionTypes.Where(e => false == this.OldControlState.ActionTypes.Contains(e))
+				freshActionTypes = activeActionTypes.Where(e => false == this.PriorControlState.ActionTypes.Contains(e))
 												    .ToList();
 			}
 

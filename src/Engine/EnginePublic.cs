@@ -1,10 +1,9 @@
 ﻿using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
-using Engine.DiskModels.UI;
-using Engine.UI.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine
 {
@@ -16,12 +15,23 @@ namespace Engine
 		/// <summary>
 		/// Gets or sets a value describing whether the engine should launch in debug mode.
 		/// </summary>
-		public bool LaunchDebugMode { get; set; }
+		public bool LaunchInDebugMode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the debug sprite font name.
 		/// </summary>
 		public string DebugSpriteFontName { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the engine.
+		/// </summary>
+		public Engine()
+		{
+			this._graphics = new GraphicsDeviceManager(this);
+			this.Content.RootDirectory = "Content";
+			this.Window.AllowUserResizing = true;
+			this.IsMouseVisible = false;
+		}
 
 		/// <summary>
 		/// Sets the loading instructions.
@@ -60,39 +70,15 @@ namespace Engine
 		}
 
 		/// <summary>
-		/// Adds the user interface button hover events.
+		/// Adds the function provider.
 		/// </summary>
-		/// <param name="hoverEventProcessors">The button hover event processors provider.</param>
-		public void AddUiElementHoverEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>> hoverEventProcessors)
+		/// <param name="functionProvider">The function provider.</param>
+		public void AddFunctionProvider<TDelegate>(Func<GameServiceContainer, Dictionary<string, TDelegate>> functionProvider)
+			where TDelegate : Delegate
 		{
-			this.UiElementHoverEventProcessorsProviders.Add(hoverEventProcessors);
-		}
-
-		/// <summary>
-		/// Adds the user interface button press events.
-		/// </summary>
-		/// <param name="pressEventProcessors">The button press event processors provider.</param>
-		public void AddUiElementPressEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>> pressEventProcessors)
-		{
-			this.UiElementPressEventProcessorsProviders.Add(pressEventProcessors);
-		}
-
-		/// <summary>
-		/// Adds the user interface button click events.
-		/// </summary>
-		/// <param name="clickEventProcessors">The button click event processors provider.</param>
-		public void AddUiElementClickEventProcessorsProvider(Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>> clickEventProcessors)
-		{
-			this.UiElementClickEventProcessorsProviders.Add(clickEventProcessors);
-		}
-
-		/// <summary>
-		/// Adds the initial user interface.
-		/// </summary>
-		/// <param name="initialUiModelsProvider">The initial user interface models provider.</param>
-		public void AddInitialUserInterfaceProvider(Func<GameServiceContainer, IList<UiGroupModel>> initialUiModelsProvider)
-		{
-			this.InitialUiModelsProviders.Add(initialUiModelsProvider);
+			this.FunctionProviders.Add(services =>
+				functionProvider(services).ToDictionary(kvp => kvp.Key, kvp => (Delegate)kvp.Value)
+			);
 		}
 	}
 }

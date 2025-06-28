@@ -1,10 +1,8 @@
 ﻿using Engine.Core.Initialization;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
-using Engine.DiskModels.UI;
 using Engine.Drawables.Services.Contracts;
 using Engine.Physics.Services.Contracts;
-using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -47,13 +45,11 @@ namespace Engine.DiskModels
 		{
 			var spriteService = gameServices.GetService<ISpriteService>();
 			var positionService = gameServices.GetService<IPositionService>();
-			var uiService = gameServices.GetService<IUserInterfaceService>();
 
 			return
 			[
 				(typeof(SpriteModel), spriteService.GetSprite),
 				(typeof(PositionModel), positionService.GetPosition),
-				(typeof(UiGroupModel), uiService.GetUiGroup)
 			];
 		}
 	}

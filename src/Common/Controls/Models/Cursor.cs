@@ -1,4 +1,5 @@
-﻿using Engine.Drawables.Models;
+﻿using Engine.Controls.Services;
+using Engine.Drawables.Models;
 using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
@@ -13,7 +14,7 @@ namespace Common.Controls.Models
 	/// <summary>
 	/// Represents a cursor.
 	/// </summary>
-	public class Cursor : Image, IHaveAnImage, ICanBeUpdated
+	public class Cursor : Image, IHaveAnImage, IAmSubUpdateable
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.
@@ -66,6 +67,14 @@ namespace Common.Controls.Models
 		public IList<TrailingCursor> TrailingCursors { get; set; }
 
 		/// <summary>
+		/// Initializes a new cursor.
+		/// </summary>
+		public Cursor()
+		{
+			ControlManager.ControlStateUpdated += this.Update;
+		}
+
+		/// <summary>
 		/// Draws the drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
@@ -115,6 +124,15 @@ namespace Common.Controls.Models
 			{
 				trailingCursor.CursorUpdater.Invoke(this, trailingCursor, gameTime);
 			}
+		}
+
+		/// <summary>
+		/// Disposes of the draw data texture.
+		/// </summary>
+		new public void Dispose()
+		{
+			this.Texture?.Dispose();
+			ControlManager.ControlStateUpdated -= this.Update;
 		}
 	}
 }

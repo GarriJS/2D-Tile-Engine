@@ -6,7 +6,7 @@ using LevelEditor.Core.Initialization;
 using var game = new Engine.Engine();
 
 // Debug
-game.LaunchDebugMode = true;
+game.LaunchInDebugMode = true;
 game.DebugSpriteFontName = "Monolight";
 
 // Set the loading instructions
@@ -21,15 +21,15 @@ game.AddExternalServiceProvider(Common.Core.Initialization.ServiceExporter.GetSe
 game.AddModelProcessingMapProvider(Common.DiskModels.ModelProcessorExporter.GetModelProcessingMappings);
 
 // Add the initial models
-game.AddInitialModelsProvider(LevelEditorInitializer.GetInitialDiskModels);
+game.AddInitialModelsProvider(LevelEditorInitializer.GetInitialUiModels);
 
 // Add the user interface event processors
-game.AddUiElementHoverEventProcessorsProvider(LevelEditorInitializer.GetInitialHoverEventProcessors);
-game.AddUiElementPressEventProcessorsProvider(LevelEditorInitializer.GetInitialPressEventProcessors);
-game.AddUiElementClickEventProcessorsProvider(LevelEditorInitializer.GetInitialClickEventProcessors);
+game.AddFunctionProvider(LevelEditorInitializer.GetInitialHoverEventProcessors);
+game.AddFunctionProvider(LevelEditorInitializer.GetInitialPressEventProcessors);
+game.AddFunctionProvider(LevelEditorInitializer.GetInitialClickEventProcessors);
 
 // Add the initial user interface models
-game.AddInitialUserInterfaceProvider(LevelEditorInitializer.GetInitialUiModels);
+//game.AddInitialUserInterfaceProvider(LevelEditorInitializer.GetInitialUiModels);
 
 // Run the game
 GameContainer.Game = game;

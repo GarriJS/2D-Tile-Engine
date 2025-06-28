@@ -1,5 +1,7 @@
 ﻿using Common.DiskModels.Common.Tiling;
+using Common.DiskModels.UI;
 using Common.Tiling.Services.Contracts;
+using Common.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -18,13 +20,15 @@ namespace Common.DiskModels
 		public static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var tileService = gameServices.GetService<ITileService>();
+			var uiService = gameServices.GetService<IUserInterfaceService>();
 
 			return
 			[
 				(typeof(AnimatedTileModel), tileService.GetTile),
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayer),
 				(typeof(TileMapModel), tileService.GetTileMap),
-				(typeof(TileModel), tileService.GetTile)
+				(typeof(TileModel), tileService.GetTile),
+				(typeof(UiGroupModel), uiService.GetUiGroup)
 			];
 		}
 	}

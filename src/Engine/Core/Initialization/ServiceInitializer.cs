@@ -3,6 +3,7 @@ using Engine.Controls.Services.Contracts;
 using Engine.Core.Contracts;
 using Engine.Core.Fonts;
 using Engine.Core.Fonts.Contracts;
+using Engine.Core.Initialization.Contracts;
 using Engine.Core.Textures;
 using Engine.Core.Textures.Contracts;
 using Engine.Debugging.Services;
@@ -14,8 +15,6 @@ using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Managers;
 using Engine.RunTime.Services;
 using Engine.RunTime.Services.Contracts;
-using Engine.UI.Services;
-using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -99,10 +98,8 @@ namespace Engine.Core.Initialization
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
+				(typeof(IFunctionService), new FunctionService(game.Services)),
 				(typeof(IDebugService), new DebugService(game.Services)),
-				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),
-				(typeof(IUserInterfaceElementService), new UserInterfaceElementService(game.Services)),
-				(typeof(IUserInterfaceService), new UserInterfaceService(game.Services)),
 				(typeof(ITextureService), new TextureService(game.Services)),
 				(typeof(IActionControlServices), new ActionControlService(game.Services)),
 				(typeof(IFontService), new FontService(game.Services)),
@@ -115,7 +112,6 @@ namespace Engine.Core.Initialization
 				(typeof(IIndependentImageService), new IndependentImageService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
 				(typeof(IAreaService), new AreaService(game.Services)),
-				(typeof(IMouseService), new MouseService(game.Services)),
 				(typeof(IRandomService), new RandomService()),
 			];
 		}

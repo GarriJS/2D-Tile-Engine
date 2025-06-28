@@ -6,6 +6,7 @@ using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
+using Common.UI.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
@@ -14,6 +15,7 @@ using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Common.Tiling.Services
 {
@@ -35,7 +37,6 @@ namespace Common.Tiling.Services
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
-			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
 			if (false == textureService.TryGetTexture("tile_grid", out var tileGridTexture))
@@ -63,7 +64,6 @@ namespace Common.Tiling.Services
 			};
 
 			runTimeDrawService.AddOverlaidDrawable(cursor);
-			runTimeUpdateService.AddUpdateable(cursor);
 			cursorService.Cursors.Add(cursor.CursorName, cursor);
 		}
 
@@ -75,6 +75,7 @@ namespace Common.Tiling.Services
 		private void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime)
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 
 			if (null == controlService.ControlState)
 			{
@@ -85,6 +86,22 @@ namespace Common.Tiling.Services
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
 										localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
+
+			var uiElementWithLocation = uiService.GetUiElementAtScreenLocation(cursor.Position.Coordinates);
+
+			if (null == uiElementWithLocation)
+			{
+				return;
+			}
+
+			if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+			{
+				uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
+			}
+			else
+			{
+				uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
+			}
 		}
 
 		/// <summary>

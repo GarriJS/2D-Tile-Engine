@@ -21,10 +21,10 @@ namespace Common.Controls.Services.Contracts
 		public void DisableAllCursors();
 
 		/// <summary>
-		/// Updates the cursor position.
+		/// Updates the cursor.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		public void BasicCursorPositionUpdater(Cursor cursor, GameTime gameTime);
+		public void BasicCursorUpdater(Cursor cursor, GameTime gameTime);
 	}
 }

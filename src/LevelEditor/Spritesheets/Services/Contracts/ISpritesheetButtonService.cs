@@ -1,5 +1,5 @@
-﻿using Engine.DiskModels.UI.Elements;
-using Engine.UI.Models.Contracts;
+﻿using Common.DiskModels.UI.Elements;
+using Common.UI.Models.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Spritesheets.Services.Contracts

@@ -3,13 +3,11 @@ using Engine.Controls.Typing;
 using Engine.Core.Contracts;
 using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization;
+using Engine.Core.Initialization.Contracts;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
-using Engine.DiskModels.UI;
 using Engine.Drawables.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
-using Engine.UI.Models.Contracts;
-using Engine.UI.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -25,39 +23,24 @@ namespace Engine
 		public GraphicsDeviceManager _graphics;
 
 		/// <summary>
-		/// Gets and sets the external services.
+		/// Gets the external services.
 		/// </summary>
 		private List<Func<Game, (Type type, object provider)[]>> ExternalServiceProviders { get; } = [];
 
 		/// <summary>
-		/// Gets and sets the external model processor map providers.
+		/// Gets the external model processor map providers.
 		/// </summary>
 		private List<Func<GameServiceContainer, (Type typeIn, Delegate)[]>> ExternalModelProcessorMapProviders { get; } = [];
 
 		/// <summary>
-		/// Gets and sets the initial models.
+		/// Gets the initial models.
 		/// </summary>
 		private List<Func<GameServiceContainer, IList<object>>> InitialModelsProviders { get; } = [];
 
 		/// <summary>
-		/// Gets and sets the button hover event processors.
+		/// Get the function providers
 		/// </summary>
-		private List<Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>>> UiElementHoverEventProcessorsProviders { get; } = [];
-
-		/// <summary>
-		/// Gets and sets the button press event processors.
-		/// </summary>
-		private List<Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>>> UiElementPressEventProcessorsProviders { get; } = [];
-
-		/// <summary>
-		/// Gets and sets the button click event processors.
-		/// </summary>
-		private List<Func<GameServiceContainer, Dictionary<string, Action<IAmAUiElement, Vector2>>>> UiElementClickEventProcessorsProviders { get; } = [];
-
-		/// <summary>
-		/// Gets and sets the initial models.
-		/// </summary>
-		private List<Func<GameServiceContainer, IList<UiGroupModel>>> InitialUiModelsProviders { get; } = [];
+		private List<Func<GameServiceContainer, Dictionary<string, Delegate>>> FunctionProviders { get; } = [];
 
 		/// <summary>
 		/// Gets the loadables.
@@ -68,17 +51,6 @@ namespace Engine
 		/// Gets the initializations. 
 		/// </summary>
 		internal List<INeedInitialization> Initializations { get; } = [];
-
-		/// <summary>
-		/// Initializes a new instance of the engine.
-		/// </summary>
-		public Engine()
-		{
-			this._graphics = new GraphicsDeviceManager(this);
-			this.Content.RootDirectory = "Content";
-			this.Window.AllowUserResizing = true;
-			this.IsMouseVisible = false;
-		}
 
 		protected override void Initialize()
 		{
@@ -125,8 +97,10 @@ namespace Engine
 				loadable.LoadContent();
 			}
 
+			this.Loadables.Clear();
+
 			// Debug
-			if (true == this.LaunchDebugMode)
+			if (true == this.LaunchInDebugMode)
 			{ 
 				var debugService = this.Services.GetService<IDebugService>();
 				var fontService = this.Services.GetService<IFontService>();
@@ -136,6 +110,21 @@ namespace Engine
 				debugService.TogglePerformanceRateCounter();
 			}
 
+			// Loads the game functions
+			var functionService = this.Services.GetService<IFunctionService>();
+
+			foreach (var functionProvider in this.FunctionProviders)
+			{
+				var functionKpvs = functionProvider.Invoke(this.Services);
+
+				foreach (var functionKpv in functionKpvs)
+				{
+					functionService.TryAddFunction(functionKpv.Key, functionKpv.Value);
+				}
+			}
+
+			this.FunctionProviders.Clear();
+
 			// Load the initial models
 			foreach (var initialModelsProvider in this.InitialModelsProviders)
 			{
@@ -143,54 +132,6 @@ namespace Engine
 			}
 
 			this.InitialModelsProviders.Clear();
-
-			// Load the initial user interface click events
-			var uiElementService = this.Services.GetService<IUserInterfaceElementService>();
-
-			foreach (var uiElementHoverEventProcessorsProviders in this.UiElementHoverEventProcessorsProviders)
-			{
-				var uiElementHoverEventProcessors = uiElementHoverEventProcessorsProviders.Invoke(this.Services);
-
-				foreach (var uiElementHoverEventProcessor in uiElementHoverEventProcessors)
-				{
-					uiElementService.ElementHoverEventProcessors.Add(uiElementHoverEventProcessor.Key, uiElementHoverEventProcessor.Value);
-				}
-			}
-
-			foreach (var uiElementPressEventProcessorsProviders in this.UiElementPressEventProcessorsProviders)
-			{
-				var uiElementPressEventProcessors = uiElementPressEventProcessorsProviders.Invoke(this.Services);
-
-				foreach (var uiElementPressEventProcessor in uiElementPressEventProcessors)
-				{
-					uiElementService.ElementHoverEventProcessors.Add(uiElementPressEventProcessor.Key, uiElementPressEventProcessor.Value);
-				}
-			}
-
-			foreach (var uiElementClickEventProcessorProvider in this.UiElementClickEventProcessorsProviders)
-			{
-				var uiElementClickEventProcessors = uiElementClickEventProcessorProvider.Invoke(this.Services);
-
-				foreach (var uiElementClickEventProcessor in uiElementClickEventProcessors)
-				{
-					uiElementService.ElementClickEventProcessors.Add(uiElementClickEventProcessor.Key, uiElementClickEventProcessor.Value);
-				}
-			}
-
-			this.UiElementHoverEventProcessorsProviders.Clear();
-			this.UiElementPressEventProcessorsProviders.Clear();
-			this.UiElementClickEventProcessorsProviders.Clear();
-
-			// Load the initial user interface models
-			foreach (var initialUiModelsProvider in this.InitialUiModelsProviders)
-			{
-				ModelProcessor.ProcessInitialUiModels(initialUiModelsProvider, this.Services);
-			}
-
-			this.InitialUiModelsProviders.Clear();
-
-			// Other
-			var uiService = this.Services.GetService<IUserInterfaceService>();
 		}
 
 		protected override void Update(GameTime gameTime)
