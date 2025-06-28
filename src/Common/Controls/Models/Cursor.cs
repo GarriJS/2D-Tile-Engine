@@ -88,6 +88,14 @@ namespace Common.Controls.Models
 				return;
 			}
 
+			if (true == this.HoverCursor?.IsActive)
+			{
+				drawingService.Draw(gameTime, this.HoverCursor, this.Position, this.HoverCursor.Offset);
+				this.HoverCursor.IsActive = false;
+
+				return;
+			}
+
 			drawingService.Draw(gameTime, this, this.Offset);
 
 			if (true != this.TrailingCursors?.Any())

@@ -34,13 +34,19 @@ namespace LevelEditor.Spritesheets.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
+			if (null != cursorService.ActiveCursor?.HoverCursor)
+			{ 
+				cursorService.ActiveCursor.HoverCursor.IsActive = true;
+
+				return;
+			}
+
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
 			{
 				return;
 			}
 
-			cursorService.DisableAllCursors();
-			primaryCursor.IsActive = true;
+			cursorService.SetActiveCursor(primaryCursor);
 		}
 
 		/// <summary>
@@ -59,9 +65,8 @@ namespace LevelEditor.Spritesheets.Services
 			{
 				return;
 			}
-
-			cursorService.DisableAllCursors();
-			tileGridCursor.IsActive = true;
+			
+			cursorService.SetActiveCursor(tileGridCursor);
 			var position = controlService.ControlState.MouseState.Position.ToVector2();
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 

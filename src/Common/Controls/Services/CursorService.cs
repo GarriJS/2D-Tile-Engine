@@ -2,7 +2,6 @@
 using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
 using Common.UI.Services.Contracts;
-using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
@@ -24,6 +23,11 @@ namespace Common.Controls.Services
 	public class CursorService(GameServiceContainer gameServices) : ICursorService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// Gets the active cursor.
+		/// </summary>
+		public Cursor ActiveCursor { get; private set; }
 
 		/// <summary>
 		/// Gets the cursors.
@@ -65,6 +69,48 @@ namespace Common.Controls.Services
 
 			runTimeDrawService.AddOverlaidDrawable(cursor);
 			this.Cursors.Add(cursor.CursorName, cursor);
+			this.SetActiveCursor(cursor);
+		}
+
+		/// <summary>
+		/// Gets the hover cursor.
+		/// </summary>
+		/// <param name="textureName">The texture name.</param>
+		/// <returns>The hover cursor.</returns>
+		public HoverCursor GetHoverCursor(string textureName = "mouse")
+		{
+			var textureService = this._gameServices.GetService<ITextureService>();
+
+			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
+			{
+				cursorTexture = textureService.DebugTexture;
+			}
+
+			var position = new Position
+			{
+				Coordinates = default
+			};
+
+			return new HoverCursor
+			{
+				IsActive = false,
+				CursorName = CommonCursorNames.PrimaryCursorName,
+				TextureName = cursorTexture.Name,
+				Offset = default,
+				TextureBox = new Rectangle(0, 0, 18, 28),
+				Texture = cursorTexture
+			};
+		}
+
+		/// <summary>
+		/// Sets the active cursor.
+		/// </summary>
+		/// <param name="cursor"></param>
+		public void SetActiveCursor(Cursor cursor)
+		{
+			this.DisableAllCursors();
+			cursor.IsActive = true;
+			this.ActiveCursor = cursor;
 		}
 
 		/// <summary>
@@ -80,6 +126,7 @@ namespace Common.Controls.Services
 			foreach (var cursor in this.Cursors.Values)
 			{
 				cursor.IsActive = false;
+				cursor.TrailingCursors.Clear();
 			}
 		}
 

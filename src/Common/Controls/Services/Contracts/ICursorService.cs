@@ -11,9 +11,27 @@ namespace Common.Controls.Services.Contracts
 	public interface ICursorService : ILoadContent
     {
 		/// <summary>
+		/// Gets the active cursor.
+		/// </summary>
+		public Cursor ActiveCursor { get; }
+
+		/// <summary>
 		/// Gets the cursors.
 		/// </summary>
 		public Dictionary<string, Cursor> Cursors { get; }
+
+		/// <summary>
+		/// Gets the hover cursor.
+		/// </summary>
+		/// <param name="textureName">The texture name.</param>
+		/// <returns>The hover cursor.</returns>
+		public HoverCursor GetHoverCursor(string textureName = "mouse");
+
+		/// <summary>
+		/// Sets the active cursor.
+		/// </summary>
+		/// <param name="cursor"></param>
+		public void SetActiveCursor(Cursor cursor);
 
 		/// <summary>
 		/// Disables all cursors.
