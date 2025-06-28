@@ -7,22 +7,21 @@ using Common.UI.Models.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
-using Engine.Drawables.Models;
 using LevelEditor.Controls.Models.Constants;
-using LevelEditor.Spritesheets.Models.Constants;
+using LevelEditor.Core.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Spritesheets.Services
 {
-	/// <summary>
-	/// Represents a user interface service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the spritesheet button service.
-	/// </remarks>
-	/// <param name="gameServices">The game services.</param>
-	public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
+    /// <summary>
+    /// Represents a user interface service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the spritesheet button service.
+    /// </remarks>
+    /// <param name="gameServices">The game services.</param>
+    public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

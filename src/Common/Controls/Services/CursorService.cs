@@ -2,6 +2,7 @@
 using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
 using Common.UI.Services.Contracts;
+using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
@@ -133,6 +134,44 @@ namespace Common.Controls.Services
 		}
 
 		/// <summary>
+		/// Process the cursor and control state.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="controlState">The control state.</param>
+		/// <param name="priorControlState">The prior control state.</param>
+		public void ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
+		{
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var uiElementWithLocation = uiService.GetUiElementAtScreenLocation(cursor.Position.Coordinates);
+
+			if (null != uiElementWithLocation)
+			{
+				if (controlState.MouseState.LeftButton == ButtonState.Pressed &&
+					priorControlState.MouseState.LeftButton != ButtonState.Pressed)
+				{
+					uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
+
+					return;
+				}
+				else
+				{
+					uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
+
+					return;
+				}
+			}
+
+			var uiZone = uiService.GetUiZoneAtScreenLocation(cursor.Position.Coordinates);
+
+			if (null != uiZone)
+			{
+				uiZone.RaiseHoverEvent(uiZone.Position.Coordinates);
+
+				return;
+			}
+		}
+
+		/// <summary>
 		/// Updates the cursor.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
@@ -148,22 +187,7 @@ namespace Common.Controls.Services
 			}
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
-			var uiElementWithLocation = uiService.GetUiElementAtScreenLocation(cursor.Position.Coordinates);
-
-			if (null == uiElementWithLocation)
-			{
-				return;
-			}
-
-			if (controlService.ControlState.MouseState.LeftButton == ButtonState.Pressed &&
-				controlService.PriorControlState.MouseState.LeftButton != ButtonState.Pressed)
-			{
-				uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
-			}
-			else
-			{
-				uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
-			}
+			this.ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
 		}
 
 		/// <summary>

@@ -29,21 +29,43 @@ namespace Engine.Core.Initialization
 		/// <returns>A value indicating whether the function was added.</returns>
 		public bool TryAddFunction(string functionName, Delegate function)
 		{
-			var added = this.Functions.TryAdd(functionName, function);
-
-			return added;
+			return this.Functions.TryAdd(functionName, function);
 		}
 
 		/// <summary>
 		/// Tries to get the function.
 		/// </summary>
 		/// <param name="functionName">The function name.</param>
+		/// <param name="function">The function.</param>
 		/// <returns>A value indicating whether the function was found.</returns>
 		public bool TryGetFunction(string functionName, out Delegate function)
 		{ 
-			var found = this.Functions.TryGetValue(functionName, out function);
+			return this.Functions.TryGetValue(functionName, out function);
+		}
 
-			return found;
+		/// <summary>
+		/// Tries to get the typed function.
+		/// </summary>
+		/// <typeparam name="T">The type of the function.</typeparam>
+		/// <param name="functionName">The function name.</param>
+		/// <param name="typedFunction">The typed function .</param>
+		/// <returns>A value indicating whether the typed function was found.</returns>
+		public bool TryGetFunction<T>(string functionName, out T typedFunction)
+			where T : Delegate
+		{
+			var found = this.Functions.TryGetValue(functionName, out var function);
+
+			if (true == found &&
+				function is T)
+			{
+				typedFunction = function as T;
+
+				return true;	
+			}
+
+			typedFunction = null;
+
+			return false;
 		}
 	}
 }

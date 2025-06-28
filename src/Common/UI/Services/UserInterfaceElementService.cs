@@ -149,17 +149,15 @@ namespace Common.UI.Services
 				uiElement.PressEvent += this.CheckForUiElementClick;
 
 				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonHoverEventName)) &&
-					(true == functionService.TryGetFunction(uiElementModel.ButtonHoverEventName, out var hoverAction)) &&
-					(hoverAction is Action<IAmAUiElement, Vector2> typedHoverAction)) // LOGGING
+					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ButtonHoverEventName, out var hoverAction))) // LOGGING
 				{
-					uiElement.HoverEvent += typedHoverAction;
+					uiElement.HoverEvent += hoverAction;
 				}
 
 				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonPressEventName)) &&
-					(true == functionService.TryGetFunction(uiElementModel.ButtonPressEventName, out var pressAction)) &&
-					(pressAction is Action<IAmAUiElement, Vector2> typedPressAction)) // LOGGING
+					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ButtonPressEventName, out var pressAction))) // LOGGING
 				{
-					uiElement.PressEvent += typedPressAction;
+					uiElement.PressEvent += pressAction;
 				}
 			}
 
@@ -212,10 +210,9 @@ namespace Common.UI.Services
 			button.ClickEvent += this.TriggerUiButtonClickAnimation;
 
 			if ((false == string.IsNullOrEmpty(buttonModel.ButtonClickEventName)) &&
-				(true == functionService.TryGetFunction(buttonModel.ButtonClickEventName, out var clickAction)) &&
-				(clickAction is Action<IAmAUiElement, Vector2> typedClickAction)) // LOGGING
+				(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ButtonClickEventName, out var clickAction))) // LOGGING
 			{
-				button.ClickEvent += typedClickAction;
+				button.ClickEvent += clickAction;
 			}
 
 			if (null != buttonModel.ClickableAreaAnimation)

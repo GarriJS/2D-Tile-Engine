@@ -22,6 +22,13 @@ namespace Common.UI.Services.Contracts
 		public void ToggleUserInterfaceGroupVisibility(int visibilityGroupId);
 
 		/// <summary>
+		/// The basic user interface zone hover event processor.
+		/// </summary>
+		/// <param name="uiZone">The user interface zone..</param>
+		/// <param name="zoneLocation">The zone location.</param>
+		public void BasicUiZoneHoverEventProcessor(UiZone uiZone, Vector2 zoneLocation);
+
+		/// <summary>
 		/// Gets the user interface group.
 		/// </summary>
 		/// <param name="uiGroupModel">The user interface group model.</param>
@@ -33,6 +40,13 @@ namespace Common.UI.Services.Contracts
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
+
+		/// <summary>
+		/// Gets the user interface zone at the screen location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns>The user interface zone at the screen location is one is found.</returns>
+		public UiZone GetUiZoneAtScreenLocation(Vector2 location);
 
 		/// <summary>
 		/// Gets the user interface element at the screen location.

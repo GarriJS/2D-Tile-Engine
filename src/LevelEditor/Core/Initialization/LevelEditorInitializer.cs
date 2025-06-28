@@ -3,7 +3,7 @@ using Common.DiskModels.UI.Elements;
 using Common.UI.Models.Contracts;
 using Common.UI.Models.Enums;
 using Engine.DiskModels.Drawing;
-using LevelEditor.Spritesheets.Models.Constants;
+using LevelEditor.Core.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -12,11 +12,32 @@ using System.Linq;
 
 namespace LevelEditor.Core.Initialization
 {
-	/// <summary>
-	/// Represents a level editor initializer.
-	/// </summary>
-	public static class LevelEditorInitializer
+    /// <summary>
+    /// Represents a level editor initializer.
+    /// </summary>
+    public static class LevelEditorInitializer
 	{
+		/// <summary>
+		/// Gets the function providers. 
+		/// </summary>
+		/// <param name="gameServices">The game service.</param>
+		/// <returns>The function providers.</returns>
+		public static Dictionary<string, Delegate> GetFunctionProviders(GameServiceContainer gameServices)
+		{
+			var result = new Dictionary<string, Delegate>();
+
+			foreach (var kv in GetInitialHoverEventProcessors(gameServices))
+				result[kv.Key] = kv.Value;
+
+			foreach (var kv in GetInitialPressEventProcessors(gameServices))
+				result[kv.Key] = kv.Value;
+
+			foreach (var kv in GetInitialClickEventProcessors(gameServices))
+				result[kv.Key] = kv.Value;
+
+			return result;
+		}
+
 		/// <summary>
 		/// Gets the initial hover event processors.
 		/// </summary>
@@ -86,6 +107,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row2Col1,
 							BackgroundTextureName = string.Empty,
 							JustificationType = (int)UiZoneJustificationTypes.Bottom,
+							ZoneHoverEventName = Common.Core.Constants.UiEventNameConstants.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -117,6 +139,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Center,
+							ZoneHoverEventName = Common.Core.Constants.UiEventNameConstants.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -196,6 +219,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Top,
+							ZoneHoverEventName = Common.Core.Constants.UiEventNameConstants.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel

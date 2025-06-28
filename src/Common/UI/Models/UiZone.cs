@@ -1,4 +1,5 @@
-﻿using Common.UI.Models.Enums;
+﻿using Common.UI.Models.Contracts;
+using Common.UI.Models.Enums;
 using Engine.Drawables.Models;
 using Engine.Drawables.Models.Contracts;
 using Engine.Physics.Models;
@@ -14,7 +15,7 @@ namespace Common.UI.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IHaveAnImage, IHaveArea, IDisposable
+	public class UiZone : IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -55,6 +56,20 @@ namespace Common.UI.Models
 		/// Gets or sets the element rows.
 		/// </summary>
 		public List<UiRow> ElementRows { get; set; }
+
+		/// <summary>
+		/// Gets or set the hover event.
+		/// </summary>
+		public event Action<UiZone, Vector2> HoverEvent;
+
+		/// <summary>
+		/// Raises the hover event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaiseHoverEvent(Vector2 elementLocation)
+		{
+			this.HoverEvent?.Invoke(this, elementLocation);
+		}
 
 		/// <summary>
 		/// Draws the drawable.

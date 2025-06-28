@@ -1,4 +1,5 @@
 ﻿using Common.Controls.Models;
+using Engine.Controls.Models;
 using Engine.Core.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -38,6 +39,14 @@ namespace Common.Controls.Services.Contracts
 		/// Disables all cursors.
 		/// </summary>
 		public void DisableAllCursors();
+
+		/// <summary>
+		/// Process the cursor and control state.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="controlState">The control state.</param>
+		/// <param name="priorControlState">The prior control state.</param>
+		public void ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState);
 
 		/// <summary>
 		/// Updates the cursor.

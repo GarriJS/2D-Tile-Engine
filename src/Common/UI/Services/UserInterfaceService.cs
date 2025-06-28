@@ -1,14 +1,18 @@
-﻿using Common.DiskModels.UI;
+﻿using Common.Controls.Models.Constants;
+using Common.Controls.Services.Contracts;
+using Common.DiskModels.UI;
 using Common.UI.Models;
 using Common.UI.Models.Constants;
 using Common.UI.Models.Contracts;
 using Common.UI.Models.Elements;
 using Common.UI.Models.Enums;
 using Common.UI.Services.Contracts;
+using Engine.Core.Initialization.Contracts;
 using Engine.Drawables.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -68,39 +72,83 @@ namespace Common.UI.Services
 				}
 			}
 
-			if (true == uiGroup.UiZones?.Any())
+			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
+
+			if (true != uiGroup.UiZones?.Any())
 			{
-				var animationService = this._gameServices.GetService<IAnimationService>();
+				return;
+			}
 
-				foreach (var uiZoneContainer in uiGroup.UiZones)
+			var animationService = this._gameServices.GetService<IAnimationService>();
+
+			foreach (var uiZoneContainer in uiGroup.UiZones)
+			{
+				runtimeDrawService.AddOverlaidDrawable(uiZoneContainer);
+
+				if (true != uiZoneContainer.ElementRows?.Any())
 				{
-					runtimeDrawService.AddOverlaidDrawable(uiZoneContainer);
+					continue;
+				}
 
-					if (true != uiZoneContainer.ElementRows?.Any())
+				foreach (var uiRow in uiZoneContainer.ElementRows)
+				{
+					if (true != uiRow.SubElements?.Any())
 					{
 						continue;
 					}
 
-					foreach (var uiRow in uiZoneContainer.ElementRows)
+					foreach (var element in uiRow.SubElements)
 					{
-						if (true != uiRow.SubElements?.Any())
+						if ((element is UiButton button) &&
+							(null != button?.ClickAnimation))
 						{
-							continue;
-						}
-
-						foreach (var element in uiRow.SubElements)
-						{
-							if ((element is UiButton button) &&
-								(null != button?.ClickAnimation))
-							{
-								button.ClickAnimation.ResetTriggeredAnimation();
-							}
+							button.ClickAnimation.ResetTriggeredAnimation();
 						}
 					}
 				}
 			}
+		}
 
-			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
+		/// <summary>
+		/// The basic user interface zone hover event processor.
+		/// </summary>
+		/// <param name="uiZone">The user interface zone..</param>
+		/// <param name="zoneLocation">The zone location.</param>
+		public void BasicUiZoneHoverEventProcessor(UiZone uiZone, Vector2 zoneLocation)
+		{
+			var cursorService = this._gameServices.GetService<ICursorService>();
+
+			if (null != cursorService.ActiveCursor?.HoverCursor)
+			{
+				cursorService.ActiveCursor.HoverCursor.IsActive = true;
+
+				return;
+			}
+
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
+			{
+				return;
+			}
+
+			cursorService.SetActiveCursor(primaryCursor);
+		}
+
+		/// <summary>
+		/// Gets the user interface zone at the screen location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <returns>The user interface zone at the screen location is one is found.</returns>
+		public UiZone GetUiZoneAtScreenLocation(Vector2 location)
+		{
+			if (true != this.ActiveVisibilityGroupId.HasValue)
+			{
+				return null;
+			}
+
+			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
+			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => e.Area.Contains(location));
+
+			return uiZone;
 		}
 
 		/// <summary>
@@ -289,6 +337,7 @@ namespace Common.UI.Services
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
+			var functionService = this._gameServices.GetService<IFunctionService>();
 
 			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
 			{
@@ -306,6 +355,12 @@ namespace Common.UI.Services
 				UserInterfaceScreenZone = uiScreenZone,
 				ElementRows = []
 			};
+
+			if ((false == string.IsNullOrEmpty(uiZoneModel.ZoneHoverEventName)) &&
+				(true == functionService.TryGetFunction<Action<UiZone, Vector2>>(uiZoneModel.ZoneHoverEventName, out var hoverAction))) // LOGGING
+			{
+				uiZone.HoverEvent += hoverAction;
+			}
 
 			if (true != uiZoneModel.ElementRows?.Any())
 			{
@@ -511,6 +566,7 @@ namespace Common.UI.Services
 			}
 
 			currentRow.BottomPadding = uiRow.BottomPadding;
+
 			if (true == currentRow.SubElements.Any())
 			{
 				currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)

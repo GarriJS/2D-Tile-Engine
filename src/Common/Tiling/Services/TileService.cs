@@ -44,7 +44,7 @@ namespace Common.Tiling.Services
 				tileGridTexture = textureService.DebugTexture;
 			}
 
-			var hoverCursor = cursorService.GetHoverCursor(true);
+			var hoverCursor = cursorService.GetHoverCursor();
 			var position = new Position
 			{
 				Coordinates = default
@@ -78,6 +78,7 @@ namespace Common.Tiling.Services
 		{
 			var controlService = this._gameServices.GetService<IControlService>();
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var cursorService = this._gameServices.GetService<ICursorService>();
 
 			if (null == controlService.ControlState)
 			{
@@ -88,23 +89,7 @@ namespace Common.Tiling.Services
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
 										localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
-
-			var uiElementWithLocation = uiService.GetUiElementAtScreenLocation(cursor.Position.Coordinates);
-
-			if (null == uiElementWithLocation)
-			{
-				return;
-			}
-
-			if (controlService.ControlState.MouseState.LeftButton == ButtonState.Pressed &&
-				controlService.PriorControlState.MouseState.LeftButton != ButtonState.Pressed)
-			{
-				uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
-			}
-			else
-			{
-				uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
-			}
+			cursorService.ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
 		}
 
 		/// <summary>
