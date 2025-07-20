@@ -1,16 +1,16 @@
 ﻿using Engine.RunTime.Models.Contracts;
 
-namespace Engine.Drawables.Models.Contracts
+namespace Engine.Graphics.Models.Contracts
 {
     /// <summary>
     /// Represents something with an animation.
     /// </summary>
-    public interface IHaveAnAnimation : IHaveAnImage, ICanBeUpdated
+    public interface IHaveAnAnimation : IHaveAGraphic, IAmUpdateable
 	{
 		/// <summary>
-		/// Gets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public new Image Image { get => Animation.Image; }
+		public new IAmAGraphic Graphic { get => this.Animation; }
 
 		/// <summary>
 		/// Gets the animation.

@@ -1,5 +1,4 @@
-﻿using Engine.Drawables.Models.Contracts;
-using Engine.Drawables.Services.Contracts;
+﻿using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -8,10 +7,10 @@ using System;
 
 namespace Engine.Debugging.Models
 {
-	/// <summary>
-	/// Represents a performance rate counter.
-	/// </summary>
-	public class PerformanceRateCounter : ICanBeDrawn, ICanBeUpdated
+    /// <summary>
+    /// Represents a performance rate counter.
+    /// </summary>
+    public class PerformanceRateCounter : IAmDrawable, IAmUpdateable
 	{
 		/// <summary>
 		/// A value describing whether the performance rate counter is enabled.

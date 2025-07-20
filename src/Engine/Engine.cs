@@ -6,7 +6,7 @@ using Engine.Core.Initialization;
 using Engine.Core.Initialization.Contracts;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -84,6 +84,19 @@ namespace Engine
 
 			this.ExternalModelProcessorMapProviders.Clear();
 
+			// Loads the game functions
+			var functionService = this.Services.GetService<IFunctionService>();
+
+			foreach (var functionProvider in this.FunctionProviders)
+			{
+				var functionKpvs = functionProvider.Invoke(this.Services);
+
+				foreach (var functionKpv in functionKpvs)
+				{
+					functionService.TryAddFunction(functionKpv.Key, functionKpv.Value);
+				}
+			}
+
 			// Other
 
 			base.Initialize();
@@ -108,19 +121,6 @@ namespace Engine
 				fontService.SetDebugSpriteFont(this.DebugSpriteFontName);
 				debugService.ToggleScreenAreaIndicators();
 				debugService.TogglePerformanceRateCounter();
-			}
-
-			// Loads the game functions
-			var functionService = this.Services.GetService<IFunctionService>();
-
-			foreach (var functionProvider in this.FunctionProviders)
-			{
-				var functionKpvs = functionProvider.Invoke(this.Services);
-
-				foreach (var functionKpv in functionKpvs)
-				{
-					functionService.TryAddFunction(functionKpv.Key, functionKpv.Value);
-				}
 			}
 
 			this.FunctionProviders.Clear();

@@ -1,7 +1,7 @@
 ﻿using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Drawables.Models
+namespace Engine.Graphics.Models
 {
 	/// <summary>
 	/// Represents a triggered animation.

@@ -10,7 +10,7 @@ using Common.UI.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
@@ -61,7 +61,7 @@ namespace Common.Tiling.Services
 				TextureBox = new Rectangle(0, 0, 160, 160),
 				Texture = tileGridTexture,
 				Position = position,
-				DrawLayer = 1,
+				DrawLayer = 0,
 				TrailingCursors = []
 			};
 

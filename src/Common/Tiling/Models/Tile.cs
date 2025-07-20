@@ -1,5 +1,6 @@
 ﻿using Common.Tiling.Models.Contracts;
-using Engine.Drawables.Models;
+using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -27,7 +28,12 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
+		/// </summary>
+		public IAmAGraphic Graphic { get => this.Image; }
+
+		/// <summary>
+		/// Gets the image.
 		/// </summary>
 		public Image Image { get; set; }
 

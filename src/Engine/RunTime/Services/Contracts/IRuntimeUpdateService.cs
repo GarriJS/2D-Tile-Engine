@@ -11,19 +11,19 @@ namespace Engine.RunTime.Services.Contracts
 		/// Adds the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>
-		public void AddUpdateable(ICanBeUpdated updateable);
+		public void AddUpdateable(IAmUpdateable updateable);
 
 		/// <summary>
 		/// Removes the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>
-		public void RemoveUpdateable(ICanBeUpdated updateable);
+		public void RemoveUpdateable(IAmUpdateable updateable);
 
 		/// <summary>
 		/// Changes the updateable update order.
 		/// </summary>
 		/// <param name="updateOrder">The update order.</param>
 		/// <param name="updateable">The updateable.</param>
-		public void ChangeUpdateableLayer(int updateOrder, ICanBeUpdated updateable);
+		public void ChangeUpdateableLayer(int updateOrder, IAmUpdateable updateable);
 	}
 }

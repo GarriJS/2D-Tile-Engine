@@ -8,8 +8,8 @@ using Engine.Core.Textures;
 using Engine.Core.Textures.Contracts;
 using Engine.Debugging.Services;
 using Engine.Debugging.Services.Contracts;
-using Engine.Drawables.Services;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Services;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Managers;
@@ -105,7 +105,6 @@ namespace Engine.Core.Initialization
 				(typeof(IFontService), new FontService(game.Services)),
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IWritingService), new WritingService(game.Services)),
-				(typeof(IUpdateService), new UpdateService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(ISpriteService), new SpriteService(game.Services)),
 				(typeof(IAnimationService), new AnimationService(game.Services)),

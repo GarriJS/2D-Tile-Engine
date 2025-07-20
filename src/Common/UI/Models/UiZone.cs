@@ -1,9 +1,10 @@
 ﻿using Common.UI.Models.Contracts;
 using Common.UI.Models.Enums;
-using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -15,7 +16,7 @@ namespace Common.UI.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
+	public class UiZone : IAmDrawable, IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -33,7 +34,12 @@ namespace Common.UI.Models
 		public UiZoneJustificationTypes JustificationType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
+		/// </summary>
+		public IAmAGraphic Graphic { get => this.Image; }
+
+		/// <summary>
+		/// Gets the image.
 		/// </summary>
 		public Image Image { get; set; }
 

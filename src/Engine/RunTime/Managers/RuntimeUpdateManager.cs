@@ -17,7 +17,7 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Gets or sets the active sorted updateable.
 		/// </summary>
-		private SortedDictionary<int, List<ICanBeUpdated>> ActiveSortedUpdateables { get; set; } = [];
+		private SortedDictionary<int, List<IAmUpdateable>> ActiveSortedUpdateables { get; set; } = [];
 
 		/// <summary>
 		/// Initializes the runtime update manager.
@@ -31,7 +31,7 @@ namespace Engine.RunTime.Managers
 		/// Adds the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>
-		public void AddUpdateable(ICanBeUpdated updateable)
+		public void AddUpdateable(IAmUpdateable updateable)
 		{
 			if (true == this.ActiveSortedUpdateables.TryGetValue(updateable.UpdateOrder, out var orderList))
 			{
@@ -48,7 +48,7 @@ namespace Engine.RunTime.Managers
 		/// Removes the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>
-		public void RemoveUpdateable(ICanBeUpdated updateable)
+		public void RemoveUpdateable(IAmUpdateable updateable)
 		{
 			if (true == this.ActiveSortedUpdateables.TryGetValue(updateable.UpdateOrder, out var orderList))
 			{
@@ -61,7 +61,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="updateOrder">The update order.</param>
 		/// <param name="updateable">The updateable.</param>
-		public void ChangeUpdateableLayer(int updateOrder, ICanBeUpdated updateable)
+		public void ChangeUpdateableLayer(int updateOrder, IAmUpdateable updateable)
 		{
 			this.RemoveUpdateable(updateable);
 			updateable.UpdateOrder = updateOrder;
@@ -74,13 +74,14 @@ namespace Engine.RunTime.Managers
 		/// <param name="gameTime">The game time.</param>
 		public override void Update(GameTime gameTime)
 		{
-			var updateService = this.Game.Services.GetService<IUpdateService>();
-
 			foreach (var layer in this.ActiveSortedUpdateables.Values)
 			{
 				foreach (var updateable in layer)
 				{
-					updateable.Update(gameTime, this.Game.Services);
+					if (updateable is IAmUpdateable updateType)
+					{
+						updateType.Update(gameTime, this.Game.Services);
+					}
 				}
 			}
 

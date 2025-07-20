@@ -1,7 +1,7 @@
 ﻿using Common.UI.Models.Contracts;
 using Common.UI.Models.Enums;
-using Engine.Drawables.Models;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Models;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -60,9 +60,9 @@ namespace Common.UI.Models.Elements
 		public Vector2 ClickableArea { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public Image Image { get; set; }
+		public Image Graphic { get; set; }
 
 		/// <summary>
 		/// Gets or set the press event.
@@ -104,7 +104,7 @@ namespace Common.UI.Models.Elements
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var writingService = gameServices.GetService<IWritingService>();
 
-			drawingService.Draw(this.Image.Texture, position.Coordinates + offset, this.Image.TextureBox, Color.White);
+			drawingService.Draw(this.Graphic.Texture, position.Coordinates + offset, this.Graphic.TextureBox, Color.White);
 
 			if (false == string.IsNullOrEmpty(this.Text))
 			{
@@ -119,7 +119,7 @@ namespace Common.UI.Models.Elements
 		/// </summary>
 		public void Dispose()
 		{
-			this.Image?.Dispose(); 
+			this.Graphic?.Dispose(); 
 			this.HoverEvent = null;
 			this.PressEvent = null;
 		}

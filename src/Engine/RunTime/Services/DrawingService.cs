@@ -1,4 +1,4 @@
-﻿using Engine.Drawables.Models.Contracts;
+﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -58,26 +58,15 @@ namespace Engine.RunTime.Services
 		}
 
 		/// <summary>
-		/// Draws the drawable. 
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="drawable">The drawable.</param>
-		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, IHaveAnImage drawable, Vector2 offset = default)
-		{
-			this.SpriteBatch.Draw(drawable.Image.Texture, drawable.Position.Coordinates + offset, drawable.Image.TextureBox, Color.White);
-		}
-
-		/// <summary>
 		/// Draws the sub drawable. 
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="subDrawable">The sub drawable.</param>
+		/// <param name="graphic">The graphic.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, IAmSubDrawable subDrawable, Position position, Vector2 offset)
+		public void Draw(GameTime gameTime, IAmAGraphic graphic, Position position, Vector2 offset = default)
 		{
-			this.SpriteBatch.Draw(subDrawable.Image.Texture, position.Coordinates + offset, subDrawable.Image.TextureBox, Color.White);
+			this.SpriteBatch.Draw(graphic.Texture, position.Coordinates + offset, graphic.TextureBox, Color.White);
 		}
 	}
 }

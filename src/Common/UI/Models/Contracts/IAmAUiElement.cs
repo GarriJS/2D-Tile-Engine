@@ -1,15 +1,15 @@
 ﻿using Common.UI.Models.Enums;
-using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+using Engine.Graphics.Models;
+using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 
 namespace Common.UI.Models.Contracts
 {
-	/// <summary>
-	/// Represents a user interface element.
-	/// </summary>
-	public interface IAmAUiElement : IAmSubDrawable, ICanBeHovered<IAmAUiElement>, ICanBePressed, IDisposable
+    /// <summary>
+    /// Represents a user interface element.
+    /// </summary>
+    public interface IAmAUiElement : IAmSubDrawable, ICanBeHovered<IAmAUiElement>, ICanBePressed, IDisposable
 	{
         /// <summary>
         /// Gets or sets the user interface element name.
@@ -47,8 +47,8 @@ namespace Common.UI.Models.Contracts
 		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public new Image Image { get; set; }
+		public new Image Graphic { get; set; }
 	}
 }

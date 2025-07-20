@@ -1,7 +1,7 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.Drawables.Models;
+using Engine.Graphics.Models;
 
-namespace Engine.Drawables.Services.Contracts
+namespace Engine.Graphics.Services.Contracts
 {
 	/// <summary>
 	/// Represents a image service.
@@ -9,7 +9,7 @@ namespace Engine.Drawables.Services.Contracts
 	public interface IImageService
 	{
 		/// <summary>
-		/// Gets the image.
+		/// Gets the graphic.
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
 		/// <param name="width">The width.</param>
@@ -18,7 +18,7 @@ namespace Engine.Drawables.Services.Contracts
 		public Image GetImage(ImageModel imageModel, int width, int height);
 
 		/// <summary>
-		/// Gets the image.
+		/// Gets the graphic.
 		/// </summary>
 		/// <param name="textureName">The texture name.</param>
 		/// <param name="width">The width.</param>

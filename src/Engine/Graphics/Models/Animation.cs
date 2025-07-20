@@ -1,16 +1,17 @@
-﻿using Engine.Drawables.Models.Contracts;
+﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 
-namespace Engine.Drawables.Models
+namespace Engine.Graphics.Models
 {
 	/// <summary>
 	/// Represents the animation.
 	/// </summary>
-	public class Animation : IAmSubDrawable, IDisposable
+	public class Animation : IAmAGraphic, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the current frame index.
@@ -38,14 +39,34 @@ namespace Engine.Drawables.Models
 		public double? FrameStartTime { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets or sets the texture name.
 		/// </summary>
-		public Image Image { get => Frames[this.CurrentFrameIndex]; }
+		public string TextureName { get => this.Frames[this.CurrentFrameIndex].TextureName; }
+
+		/// <summary>
+		/// Gets or sets the texture box.
+		/// </summary>
+		public Rectangle TextureBox { get => this.Frames[this.CurrentFrameIndex].TextureBox; }
+
+		/// <summary>
+		/// Gets or sets the texture.
+		/// </summary>
+		public Texture2D Texture { get => this.Frames[this.CurrentFrameIndex].Texture; }
+
+		/// <summary>
+		/// Gets the graphic.
+		/// </summary>
+		public IAmAGraphic Graphic { get => this.Frames[this.CurrentFrameIndex]; }
+
+		/// <summary>
+		/// Gets the current frame.
+		/// </summary>
+		public Image CurrentFrame { get => this.Frames[this.CurrentFrameIndex]; }
 
 		/// <summary>
 		/// Gets or sets the frames.
 		/// </summary>
-		public Image[] Frames { get; set; }
+		public Image[] Frames { get; set; } = [];
 
 		/// <summary>
 		/// Draws the sub drawable.

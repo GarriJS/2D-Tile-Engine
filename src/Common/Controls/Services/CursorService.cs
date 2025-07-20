@@ -1,6 +1,7 @@
 ﻿using Common.Controls.Models;
 using Common.Controls.Models.Constants;
 using Common.Controls.Services.Contracts;
+using Common.UI.Models;
 using Common.UI.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
@@ -9,6 +10,7 @@ using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -142,32 +144,34 @@ namespace Common.Controls.Services
 		public void ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-			var uiElementWithLocation = uiService.GetUiElementAtScreenLocation(cursor.Position.Coordinates);
+			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
 
-			if (null != uiElementWithLocation)
+			if (null != uiObject)
 			{
-				if (controlState.MouseState.LeftButton == ButtonState.Pressed &&
-					priorControlState.MouseState.LeftButton != ButtonState.Pressed)
+				switch (uiObject)
 				{
-					uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
+					case UiElementWithLocation uiElementWithLocation:
+						if (controlState.MouseState.LeftButton == ButtonState.Pressed &&
+							priorControlState.MouseState.LeftButton != ButtonState.Pressed)
+						{
+							uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
 
-					return;
+							return;
+						}
+						else
+						{
+							uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
+
+							return;
+						}
+					case UiRow uiRow:
+
+						break;
+					case UiZone uiZone:
+						uiZone.RaiseHoverEvent(uiZone.Position.Coordinates);
+
+						return;
 				}
-				else
-				{
-					uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
-
-					return;
-				}
-			}
-
-			var uiZone = uiService.GetUiZoneAtScreenLocation(cursor.Position.Coordinates);
-
-			if (null != uiZone)
-			{
-				uiZone.RaiseHoverEvent(uiZone.Position.Coordinates);
-
-				return;
 			}
 		}
 

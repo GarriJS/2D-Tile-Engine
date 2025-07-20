@@ -1,4 +1,4 @@
-﻿using Engine.Drawables.Models.Contracts;
+﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.Contracts;
 
 namespace Common.Tiling.Models.Contracts

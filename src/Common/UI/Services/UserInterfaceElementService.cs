@@ -8,8 +8,8 @@ using Common.UI.Models.Enums;
 using Common.UI.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Initialization.Contracts;
-using Engine.Drawables.Models;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Models;
+using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
@@ -69,17 +69,17 @@ namespace Common.UI.Services
 		public void UpdateElementHeight(IAmAUiElement element, float height)
 		{
 			element.Area = new Vector2(element.Area.X, height);
-			element.Image.TextureBox = new Rectangle(element.Image.TextureBox.X, element.Image.TextureBox.Y, element.Image.TextureBox.Width, (int)height);
+			element.Graphic.TextureBox = new Rectangle(element.Graphic.TextureBox.X, element.Graphic.TextureBox.Y, element.Graphic.TextureBox.Width, (int)height);
 
 			if (element is UiButton uiButton)
 			{
-				uiButton.ClickableArea = new Vector2(uiButton.ClickableArea.X, (int)(element.Image.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
+				uiButton.ClickableArea = new Vector2(uiButton.ClickableArea.X, (int)(element.Graphic.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
 
 				if (true == uiButton.ClickAnimation?.Frames?.Any())
 				{
 					foreach (var frame in uiButton.ClickAnimation.Frames)
 					{
-						frame.TextureBox = new Rectangle(frame.TextureBox.X, frame.TextureBox.Y, frame.TextureBox.Width, (int)(element.Image.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
+						frame.TextureBox = new Rectangle(frame.TextureBox.X, frame.TextureBox.Y, frame.TextureBox.Width, (int)(element.Graphic.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
 					}
 				}
 			}
@@ -145,7 +145,7 @@ namespace Common.UI.Services
 			if (null != uiElement)
 			{
 				uiElement.VisibilityGroup = visibilityGroup;
-				uiElement.Image = image;
+				uiElement.Graphic = image;
 				uiElement.PressEvent += this.CheckForUiElementClick;
 
 				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonHoverEventName)) &&

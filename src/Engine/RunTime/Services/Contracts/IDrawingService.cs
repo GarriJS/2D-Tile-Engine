@@ -1,4 +1,4 @@
-﻿using Engine.Drawables.Models.Contracts;
+﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,20 +35,12 @@ namespace Engine.RunTime.Services.Contracts
 		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color);
 
 		/// <summary>
-		/// Draws the texture. 
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="drawable">The drawable.</param>
-		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, IHaveAnImage drawable, Vector2 offset = default);
-
-		/// <summary>
 		/// Draws the sub drawable. 
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="subDrawable">The sub drawable.</param>
+		/// <param name="graphic">The graphic.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, IAmSubDrawable subDrawable, Position position, Vector2 offset);
+		public void Draw(GameTime gameTime, IAmAGraphic graphic, Position position, Vector2 offset = default);
 	}
 }

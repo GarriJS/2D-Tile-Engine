@@ -8,7 +8,7 @@ using Common.UI.Models.Elements;
 using Common.UI.Models.Enums;
 using Common.UI.Services.Contracts;
 using Engine.Core.Initialization.Contracts;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -38,6 +38,14 @@ namespace Common.UI.Services
 		/// Gets or sets the user interface groups.
 		/// </summary>
 		public List<UiGroup> UserInterfaceGroups { get; set; } = [];
+
+		/// <summary>
+		/// Performs initialization.
+		/// </summary>
+		public void Initialize()
+		{
+
+		}
 
 		/// <summary>
 		/// Toggles the user interface group visibility.
@@ -134,11 +142,11 @@ namespace Common.UI.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface zone at the screen location.
+		/// Gets the user interface object at the screen location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		/// <returns>The user interface zone at the screen location is one is found.</returns>
-		public UiZone GetUiZoneAtScreenLocation(Vector2 location)
+		/// <returns>The user interface object at the location if one is found.</returns>
+		public object GetUiObjectAtScreenLocation(Vector2 location)
 		{
 			if (true != this.ActiveVisibilityGroupId.HasValue)
 			{
@@ -148,28 +156,9 @@ namespace Common.UI.Services
 			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
 			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => e.Area.Contains(location));
 
-			return uiZone;
-		}
-
-		/// <summary>
-		/// Gets the user interface element at the screen location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns>The user interface element at the location if one is found.</returns>
-		public UiElementWithLocation GetUiElementAtScreenLocation(Vector2 location)
-		{
-			if (true != this.ActiveVisibilityGroupId.HasValue)
+			if (true != uiZone?.ElementRows?.Any())
 			{
-				return null;
-			}
-
-			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
-			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => e.Area.Contains(location));
-
-			if ((null == uiZone) ||
-				(true != uiZone.ElementRows.Any()))
-			{
-				return null;
+				return uiZone;
 			}
 
 			var height = uiZone.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
@@ -205,11 +194,18 @@ namespace Common.UI.Services
 				if ((rowTop <= location.Y) &&
 					(rowBottom >= location.Y))
 				{
-					return this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
+					var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
+
+					if (null == uiElementWithLocation)
+					{ 
+						return elementRow;
+					}
+
+					return uiElementWithLocation;
 				}
 			}
 
-			return null;
+			return uiZone;
 		}
 
 		/// <summary>
@@ -505,7 +501,7 @@ namespace Common.UI.Services
 				BottomPadding = uiRowModel.BottomPadding,
 				HorizontalJustificationType = (UiRowHorizontalJustificationTypes)uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = (UiRowVerticalJustificationTypes)uiRowModel.VerticalJustificationType,
-				Image = image,
+				Graphic = image,
 				SubElements = subElements
 			};
 		}
@@ -533,7 +529,7 @@ namespace Common.UI.Services
 				BottomPadding = 1,
 				HorizontalJustificationType = uiRow.HorizontalJustificationType,
 				VerticalJustificationType = uiRow.VerticalJustificationType,
-				Image = uiRow.Image,
+				Graphic = uiRow.Graphic,
 				SubElements = []
 			};
 
@@ -556,7 +552,7 @@ namespace Common.UI.Services
 						BottomPadding = 0,
 						HorizontalJustificationType = uiRow.HorizontalJustificationType,
 						VerticalJustificationType = uiRow.VerticalJustificationType,
-						Image = uiRow.Image,
+						Graphic = uiRow.Graphic,
 						SubElements = []
 					};
 				}

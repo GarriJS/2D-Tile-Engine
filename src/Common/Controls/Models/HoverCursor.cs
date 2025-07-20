@@ -1,6 +1,6 @@
-﻿using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+﻿using Engine.Graphics.Models;
 using Engine.Physics.Models;
+using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Common.Controls.Models
 {
-	/// <summary>
-	/// Represents a hover cursor.
-	/// </summary>
-	public class HoverCursor : Image, IAmSubDrawable
+    /// <summary>
+    /// Represents a hover cursor.
+    /// </summary>
+    public class HoverCursor : Image, IAmSubDrawable
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.
@@ -29,9 +29,9 @@ namespace Common.Controls.Models
 		public Vector2 Offset { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public Image Image { get => this; }
+		public Image Graphic { get => this; }
 
 		/// <summary>
 		/// Gets or sets the trailing cursors.
@@ -72,7 +72,7 @@ namespace Common.Controls.Models
 		/// </summary>
 		new public void Dispose()
 		{
-			this.Image?.Dispose();
+			this.Graphic?.Dispose();
 
 			if (true != this.TrailingCursors?.Any())
 			{

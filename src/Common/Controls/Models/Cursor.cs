@@ -1,6 +1,6 @@
 ﻿using Engine.Controls.Services;
-using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
@@ -14,7 +14,7 @@ namespace Common.Controls.Models
 	/// <summary>
 	/// Represents a cursor.
 	/// </summary>
-	public class Cursor : Image, IHaveAnImage, IAmSubUpdateable
+	public class Cursor : Image, IAmDrawable, IHaveAnImage, IAmSubUpdateable
 	{
 		/// <summary>
 		/// A value describing if the cursor is active or not.
@@ -47,7 +47,7 @@ namespace Common.Controls.Models
 		public Position Position { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
 		/// </summary>
 		public Image Image { get => this; }
 
@@ -96,7 +96,7 @@ namespace Common.Controls.Models
 				return;
 			}
 
-			drawingService.Draw(gameTime, this, this.Offset);
+			drawingService.Draw(gameTime, this.Graphic, this.Position, this.Offset);
 
 			if (true != this.TrailingCursors?.Any())
 			{
@@ -130,7 +130,7 @@ namespace Common.Controls.Models
 
 			foreach (var trailingCursor in this.TrailingCursors)
 			{
-				trailingCursor.CursorUpdater.Invoke(this, trailingCursor, gameTime);
+				trailingCursor.CursorUpdater?.Invoke(this, trailingCursor, gameTime);
 			}
 		}
 

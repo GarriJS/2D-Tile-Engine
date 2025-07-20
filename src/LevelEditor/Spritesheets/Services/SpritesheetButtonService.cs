@@ -76,7 +76,7 @@ namespace LevelEditor.Spritesheets.Services
 				TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
 				Offset = new Vector2(localTileLocation.X - position.X,
 									 localTileLocation.Y - position.Y),
-				Image = element.Image,
+				Graphic = element.Graphic,
 				CursorUpdater = this.SpritesheetButtonTrailingCursorUpdater,
 			};
 
@@ -92,9 +92,9 @@ namespace LevelEditor.Spritesheets.Services
 				{
 					IsActive = true,
 					TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
-					Offset = new Vector2(tileGridCursor.HoverCursor.Image.Texture.Width,
-										tileGridCursor.HoverCursor.Image.Texture.Height),
-					Image = element.Image
+					Offset = new Vector2(tileGridCursor.HoverCursor.Graphic.Texture.Width,
+										tileGridCursor.HoverCursor.Graphic.Texture.Height),
+					Graphic = element.Graphic
 				};
 
 				tileGridCursor.HoverCursor.TrailingCursors.Add(trailingHoverCursor);

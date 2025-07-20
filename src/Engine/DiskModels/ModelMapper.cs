@@ -1,7 +1,7 @@
 ﻿using Engine.Core.Initialization;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;

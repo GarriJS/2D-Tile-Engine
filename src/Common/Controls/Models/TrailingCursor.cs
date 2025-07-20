@@ -1,16 +1,16 @@
-﻿using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+﻿using Engine.Graphics.Models;
 using Engine.Physics.Models;
+using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 
 namespace Common.Controls.Models
 {
-	/// <summary>
-	/// Represents a trailing cursor.
-	/// </summary>
-	public class TrailingCursor : IAmSubDrawable, IDisposable
+    /// <summary>
+    /// Represents a trailing cursor.
+    /// </summary>
+    public class TrailingCursor : IAmSubDrawable, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets a value describing if the trailing cursor is active or not.
@@ -28,9 +28,9 @@ namespace Common.Controls.Models
 		public Vector2 Offset { get; set; }
 
 		/// <summary>
-		/// Gets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public Image Image { get; init; }
+		public Image Graphic { get; init; }
 
 		/// <summary>
 		/// Gets or sets the cursor updater.
@@ -48,7 +48,7 @@ namespace Common.Controls.Models
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
-			drawingService.Draw(gameTime, this, position, offset);
+			drawingService.Draw(gameTime, this.Graphic, position, offset);
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace Common.Controls.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.Image?.Dispose();
+			this.Graphic?.Dispose();
 		}
 	}
 }

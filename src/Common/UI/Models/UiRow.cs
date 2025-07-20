@@ -1,8 +1,8 @@
 ﻿using Common.UI.Models.Contracts;
 using Common.UI.Models.Enums;
-using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+using Engine.Graphics.Models;
 using Engine.Physics.Models;
+using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -11,10 +11,10 @@ using System.Linq;
 
 namespace Common.UI.Models
 {
-	/// <summary>
-	/// Represents a user interface row.
-	/// </summary>
-	public class UiRow : IAmSubDrawable, IDisposable
+    /// <summary>
+    /// Represents a user interface row.
+    /// </summary>
+    public class UiRow : IAmSubDrawable, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface row name.
@@ -57,9 +57,9 @@ namespace Common.UI.Models
 		public UiRowVerticalJustificationTypes VerticalJustificationType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public Image Image { get; set; }
+		public Image Graphic { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sub elements.
@@ -78,9 +78,9 @@ namespace Common.UI.Models
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var spritebatch = drawingService.SpriteBatch;
 
-			if (null != this.Image)
+			if (null != this.Graphic)
 			{
-				spritebatch.Draw(this.Image.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Image.TextureBox, Color.White);
+				spritebatch.Draw(this.Graphic.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Graphic.TextureBox, Color.White);
 			}
 
 			if (true != this?.SubElements.Any())

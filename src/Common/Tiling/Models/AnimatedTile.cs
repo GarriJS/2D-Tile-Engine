@@ -1,6 +1,6 @@
 ﻿using Common.Tiling.Models.Contracts;
-using Engine.Drawables.Models;
-using Engine.Drawables.Models.Contracts;
+using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -33,9 +33,14 @@ namespace Common.Tiling.Models
 		public int UpdateOrder { get; set; }
 
 		/// <summary>
+		/// Gets the graphic.
+		/// </summary>
+		public IAmAGraphic Graphic { get => this.Image; }
+
+		/// <summary>
 		/// Get the image.
 		/// </summary>
-		public Image Image { get => this.Animation.Image; }
+		public Image Image { get => this.Animation.CurrentFrame; }
 
 		/// <summary>
 		/// Gets or sets the animation.

@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Engine.Drawables.Models.Contracts
+namespace Engine.RunTime.Models.Contracts
 {
-	/// <summary>
-	/// Represents something that can be drawn.
-	/// </summary>
-	public interface ICanBeDrawn
-	{
-		/// <summary>
-		/// Gets or sets the draw layer.
-		/// </summary>
-		public int DrawLayer { get; set; }
+    /// <summary>
+    /// Represents something drawable.
+    /// </summary>
+    public interface IAmDrawable
+    {
+        /// <summary>
+        /// Gets or sets the draw layer.
+        /// </summary>
+        public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Draws the drawable.

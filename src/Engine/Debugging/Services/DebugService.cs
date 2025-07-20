@@ -1,7 +1,7 @@
 ﻿using Engine.Core.Fonts.Contracts;
 using Engine.Debugging.Models;
 using Engine.Debugging.Services.Contracts;
-using Engine.Drawables.Models;
+using Engine.Graphics.Models;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;

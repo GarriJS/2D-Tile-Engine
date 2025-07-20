@@ -1,12 +1,12 @@
-﻿using Engine.Physics.Models.Contracts;
+﻿using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawables.Models.Contracts
+namespace Engine.Graphics.Models.Contracts
 {
 	/// <summary>
-	/// Represents something that can be written.
+	/// Represents graphical text.
 	/// </summary>
-	public interface ICanBeWritten : ICanBeDrawn, IHavePosition
+	public interface IAmGraphicalText : IAmSubDrawable
 	{
 		/// <summary>
 		/// Gets the text.

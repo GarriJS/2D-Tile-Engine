@@ -1,7 +1,7 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.Drawables.Models;
+using Engine.Graphics.Models;
 
-namespace Engine.Drawables.Services.Contracts
+namespace Engine.Graphics.Services.Contracts
 {
 	/// <summary>
 	/// Represents a sprite service.

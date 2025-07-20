@@ -1,21 +1,15 @@
 ﻿using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
-using System;
 
-namespace Engine.Drawables.Models.Contracts
+namespace Engine.RunTime.Models.Contracts
 {
 	/// <summary>
-	/// Represents something that can be drawn from another drawable.
+	/// Represents something that is written by another writable.
 	/// </summary>
-	public interface IAmSubDrawable : IDisposable
+	public interface IAmSubWritable
 	{
 		/// <summary>
-		/// Gets the image.
-		/// </summary>
-		public Image Image { get; }
-
-		/// <summary>
-		/// Draws the sub drawable.
+		/// Writes the sub writable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>

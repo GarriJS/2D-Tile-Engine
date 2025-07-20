@@ -1,5 +1,6 @@
 ﻿using Common.DiskModels.UI;
 using Common.UI.Models;
+using Engine.Core.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace Common.UI.Services.Contracts
 	/// <summary>
 	/// Represents a user interface service.
 	/// </summary>
-	public interface IUserInterfaceService
+	public interface IUserInterfaceService : INeedInitialization
 	{
 		/// <summary>
 		/// Gets or sets the user interface groups.
@@ -42,18 +43,11 @@ namespace Common.UI.Services.Contracts
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
 
 		/// <summary>
-		/// Gets the user interface zone at the screen location.
+		/// Gets the user interface object at the screen location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		/// <returns>The user interface zone at the screen location is one is found.</returns>
-		public UiZone GetUiZoneAtScreenLocation(Vector2 location);
-
-		/// <summary>
-		/// Gets the user interface element at the screen location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns>The user interface element at the location if one is found.</returns>
-		public UiElementWithLocation GetUiElementAtScreenLocation(Vector2 location);
+		/// <returns>The user interface object at the location if one is found.</returns>
+		public object GetUiObjectAtScreenLocation(Vector2 location);
 
 		/// <summary>
 		/// Gets the user interface zone.

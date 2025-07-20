@@ -1,11 +1,11 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
-using Engine.Drawables.Models;
-using Engine.Drawables.Services.Contracts;
+using Engine.Graphics.Models;
+using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Drawables.Services
+namespace Engine.Graphics.Services
 {
 	/// <summary>
 	/// Represents a sprite service.
