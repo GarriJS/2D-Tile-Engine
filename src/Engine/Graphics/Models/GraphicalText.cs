@@ -4,7 +4,7 @@ using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics.Services
+namespace Engine.Graphics.Models
 {
 	/// <summary>
 	/// Represents graphical text.

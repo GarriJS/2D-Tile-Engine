@@ -24,12 +24,17 @@ namespace Engine.Debugging.Services
 		/// <summary>
 		/// Gets or sets a value indicating whether the screen area indicators are enabled.
 		/// </summary>
-		private bool ScreenAreaIndicatorsEnabled { get => this.ScreenAreaIndicatorImages.Count != 0; }
+		private bool ScreenAreaIndicatorsEnabled { get => 0 != this.ScreenAreaIndicatorImages.Count; }
 
 		/// <summary>
-		/// Gets or sets the performance rate counter.
+		/// Gets or sets the FPS counter;
 		/// </summary>
-		private PerformanceRateCounter PerformanceRateCounter { get; set; }
+		private FpsCounter FpsCounter { get; set; }
+
+		/// <summary>
+		/// Gets or sets TPS counter.
+		/// </summary>
+		private TpsCounter TpsCounter { get; set; }
 
 		/// <summary>
 		/// Gets or sets the screen area indicator images.
@@ -169,7 +174,8 @@ namespace Engine.Debugging.Services
 			var runtimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 			var fontService = this._gameServices.GetService<IFontService>();
 
-			if (null == this.PerformanceRateCounter)
+			if (null == this.FpsCounter ||
+				null == this.TpsCounter)
 			{
 				var spriteFont = fontService.DebugSpriteFont;
 
@@ -178,13 +184,23 @@ namespace Engine.Debugging.Services
 					return;
 				}
 
-				this.PerformanceRateCounter = new PerformanceRateCounter
+				this.FpsCounter = new FpsCounter
+				{
+					IsActive = true,
+					DrawLayer = 0,
+					LastFrameTime = null,
+					Font = spriteFont,
+					Position = new Position
+					{
+						Coordinates = new Vector2(5, 0)
+					}
+				};
+
+				this.TpsCounter = new TpsCounter
 				{
 					IsActive = true,
 					DrawLayer = 0,
 					UpdateOrder = 0,
-					FpsText = "0",
-					LastFrameTime = null,
 					Font = spriteFont,
 					Position = new Position
 					{
@@ -193,15 +209,17 @@ namespace Engine.Debugging.Services
 				};
 			}
 
-			if (true == this.PerformanceRateCounter.IsActive)
+			if (true == this.TpsCounter.IsActive)
 			{
-				runtimeDrawingService.AddOverlaidDrawable(this.PerformanceRateCounter);
-				runtimeUpdateService.AddUpdateable(this.PerformanceRateCounter);
+				runtimeDrawingService.AddOverlaidDrawable(this.FpsCounter);
+				runtimeDrawingService.AddOverlaidDrawable(this.TpsCounter);
+				runtimeUpdateService.AddUpdateable(this.TpsCounter);
 			}
 			else
 			{
-				runtimeDrawingService.RemoveOverlaidDrawable(this.PerformanceRateCounter);
-				runtimeUpdateService.RemoveUpdateable(this.PerformanceRateCounter);
+				runtimeDrawingService.RemoveOverlaidDrawable(this.FpsCounter);
+				runtimeDrawingService.RemoveOverlaidDrawable(this.TpsCounter);
+				runtimeUpdateService.RemoveUpdateable(this.TpsCounter);
 			}
 		}
 	}
