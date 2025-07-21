@@ -1,16 +1,16 @@
 ﻿using Common.Controls.Models;
-using Common.Controls.Models.Constants;
+using Common.Controls.Constants;
 using Common.Controls.Services.Contracts;
 using Common.DiskModels.UI.Elements;
 using Common.Tiling.Services.Contracts;
-using Common.UI.Models.Contracts;
+using Common.UserInterface.Models.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
-using LevelEditor.Controls.Models.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
+using LevelEditor.Controls.Constants;
 
 namespace LevelEditor.Spritesheets.Services
 {

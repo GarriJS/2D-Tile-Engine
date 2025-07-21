@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Models\" />
     <Folder Include="Spritesheets\Models\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">

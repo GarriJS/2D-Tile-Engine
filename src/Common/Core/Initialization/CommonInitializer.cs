@@ -1,6 +1,6 @@
 ﻿using Common.Core.Constants;
-using Common.UI.Models;
-using Common.UI.Services.Contracts;
+using Common.UserInterface.Models;
+using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

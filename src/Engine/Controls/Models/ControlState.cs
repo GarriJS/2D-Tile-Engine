@@ -1,13 +1,13 @@
-﻿using Engine.Controls.Models.Enums;
+﻿using Engine.Controls.Enums;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace Engine.Controls.Models
 {
-	/// <summary>
-	/// Represents a control state.
-	/// </summary>
-	public class ControlState
+    /// <summary>
+    /// Represents a control state.
+    /// </summary>
+    public class ControlState
 	{
 		/// <summary>
 		/// Gets or sets the direction.

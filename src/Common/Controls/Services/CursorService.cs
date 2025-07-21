@@ -1,8 +1,8 @@
 ﻿using Common.Controls.Models;
-using Common.Controls.Models.Constants;
+using Common.Controls.Constants;
 using Common.Controls.Services.Contracts;
-using Common.UI.Models;
-using Common.UI.Services.Contracts;
+using Common.UserInterface.Models;
+using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;

@@ -1,12 +1,12 @@
-﻿using Engine.Controls.Models.Enums;
+﻿using Engine.Controls.Enums;
 using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Controls.Models
 {
-	/// <summary>
-	/// Represents a action control.
-	/// </summary>
-	public class ActionControl
+    /// <summary>
+    /// Represents a action control.
+    /// </summary>
+    public class ActionControl
 	{
 		/// <summary>
 		/// Gets or sets the action control description.

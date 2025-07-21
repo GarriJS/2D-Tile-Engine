@@ -2,11 +2,10 @@
 using Common.Controls.Services.Contracts;
 using Common.Tiling.Services;
 using Common.Tiling.Services.Contracts;
-using Common.UI.Services.Contracts;
-using Common.UI.Services;
+using Common.UserInterface.Services;
+using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
-using Engine.Controls.Services.Contracts;
 
 namespace Common.Core.Initialization
 {

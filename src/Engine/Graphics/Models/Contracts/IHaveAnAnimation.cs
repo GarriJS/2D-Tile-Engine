@@ -1,11 +1,9 @@
-﻿using Engine.RunTime.Models.Contracts;
-
-namespace Engine.Graphics.Models.Contracts
+﻿namespace Engine.Graphics.Models.Contracts
 {
-    /// <summary>
-    /// Represents something with an animation.
-    /// </summary>
-    public interface IHaveAnAnimation : IHaveAGraphic, IAmUpdateable
+	/// <summary>
+	/// Represents something with an animation.
+	/// </summary>
+	public interface IHaveAnAnimation : IHaveAGraphic
 	{
 		/// <summary>
 		/// Gets the graphic.

@@ -1,12 +1,12 @@
 ﻿using Common.Controls.Models;
-using Common.Controls.Models.Constants;
+using Common.Controls.Constants;
 using Common.Controls.Services.Contracts;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
-using Common.UI.Services.Contracts;
+using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;

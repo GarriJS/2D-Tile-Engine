@@ -1,7 +1,7 @@
 ﻿using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.UI;
 using Common.Tiling.Services.Contracts;
-using Common.UI.Services.Contracts;
+using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 

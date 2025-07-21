@@ -68,16 +68,6 @@ namespace Common.Tiling.Models
 		}
 
 		/// <summary>
-		/// Updates the updateable.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="updateable">The updateable.</param>
-		public void Update(GameTime gameTime, GameServiceContainer gameServices)
-		{
-
-		}
-
-		/// <summary>
 		/// Disposes of the animated tile.
 		/// </summary>
 		public void Dispose()

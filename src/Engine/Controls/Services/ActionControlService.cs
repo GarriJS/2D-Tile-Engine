@@ -1,6 +1,5 @@
 ﻿using Engine.DiskModels.Controls;
 using Engine.Controls.Models;
-using Engine.Controls.Models.Enums;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
@@ -10,17 +9,18 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Engine.Controls.Enums;
 
 namespace Engine.Controls.Services
 {
-	/// <summary>
-	/// Represents a action control service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the action control service.
-	/// </remarks>
-	/// <param name="gameServices">The game services.</param>
-	public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
+    /// <summary>
+    /// Represents a action control service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the action control service.
+    /// </remarks>
+    /// <param name="gameServices">The game services.</param>
+    public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

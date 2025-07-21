@@ -1,5 +1,5 @@
-﻿using Engine.Controls.Models;
-using Engine.Controls.Models.Enums;
+﻿using Engine.Controls.Enums;
+using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -9,14 +9,14 @@ using System.Linq;
 
 namespace Engine.Controls.Services
 {
-	/// <summary>
-	/// Represents a control manager.
-	/// </summary>
-	/// <remarks>
-	/// Initializes a new instance of the control manager.
-	/// </remarks>
-	/// <param name="game">The game.</param>
-	public class ControlManager(Game game) : GameComponent(game), IControlService
+    /// <summary>
+    /// Represents a control manager.
+    /// </summary>
+    /// <remarks>
+    /// Initializes a new instance of the control manager.
+    /// </remarks>
+    /// <param name="game">The game.</param>
+    public class ControlManager(Game game) : GameComponent(game), IControlService
 	{
 		/// <summary>
 		/// Gets or sets the action controls.

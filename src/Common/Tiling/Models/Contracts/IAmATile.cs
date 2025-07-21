@@ -1,12 +1,13 @@
 ﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.Contracts;
+using Engine.RunTime.Models.Contracts;
 
 namespace Common.Tiling.Models.Contracts
 {
 	/// <summary>
 	/// Represents a tile.
 	/// </summary>
-	public interface IAmATile : IHaveAnImage, IHaveArea
+	public interface IAmATile : IAmDrawable, IHaveAnImage, IHaveArea
 	{
 		/// <summary>
 		/// Gets the row.

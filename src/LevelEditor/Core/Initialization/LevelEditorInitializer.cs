@@ -1,7 +1,7 @@
 ﻿using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
-using Common.UI.Models.Contracts;
-using Common.UI.Models.Enums;
+using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
 using LevelEditor.Core.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
