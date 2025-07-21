@@ -1,5 +1,7 @@
-﻿using Common.UserInterface.Enums;
+﻿using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.UserInterface.Enums;
 using Engine.Graphics.Models;
+using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -9,7 +11,7 @@ namespace Common.UserInterface.Models.Contracts
     /// <summary>
     /// Represents a user interface element.
     /// </summary>
-    public interface IAmAUiElement : IAmSubDrawable, ICanBeHovered<IAmAUiElement>, ICanBePressed, IDisposable
+    public interface IAmAUiElement : IAmSubDrawable, IHaveASubArea, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
 	{
         /// <summary>
         /// Gets or sets the user interface element name.
@@ -44,11 +46,11 @@ namespace Common.UserInterface.Models.Contracts
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Vector2 Area { get; set; }
+		new public Vector2 Area { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
-		public new Image Graphic { get; set; }
+		public Image Graphic { get; set; }
 	}
 }

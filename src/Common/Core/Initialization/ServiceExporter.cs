@@ -1,5 +1,7 @@
-﻿using Common.Controls.Services;
-using Common.Controls.Services.Contracts;
+﻿using Common.Controls.CursorInteraction.Services;
+using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Services;
+using Common.Controls.Cursors.Services.Contracts;
 using Common.Tiling.Services;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Services;
@@ -24,10 +26,11 @@ namespace Common.Core.Initialization
 			return
 			[
 				(typeof(IMouseService), new MouseService(game.Services)),
+				(typeof(ICursorService), new CursorService(game.Services)),
+				(typeof(ICursorInteractionService), new CursorInteractionService(game.Services)),
 				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),
 				(typeof(IUserInterfaceElementService), new UserInterfaceElementService(game.Services)),
 				(typeof(IUserInterfaceService), new UserInterfaceService(game.Services)),
-				(typeof(ICursorService), new CursorService(game.Services)),
 				(typeof(ITileService), new TileService(game.Services))
 			];
 		}

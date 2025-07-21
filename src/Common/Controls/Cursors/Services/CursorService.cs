@@ -1,6 +1,6 @@
-﻿using Common.Controls.Models;
-using Common.Controls.Constants;
-using Common.Controls.Services.Contracts;
+﻿using Common.Controls.Constants;
+using Common.Controls.Cursors.Models;
+using Common.Controls.Cursors.Services.Contracts;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
@@ -10,11 +10,10 @@ using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Common.Controls.Services
+namespace Common.Controls.Cursors.Services
 {
 	/// <summary>
 	/// Represents a cursors service.
@@ -42,9 +41,9 @@ namespace Common.Controls.Services
 		/// </summary>
 		public void LoadContent()
 		{
-			var textureService = this._gameServices.GetService<ITextureService>();
-			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
-			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+			var textureService = _gameServices.GetService<ITextureService>();
+			var runTimeDrawService = _gameServices.GetService<IRuntimeDrawService>();
+			var runTimeUpdateService = _gameServices.GetService<IRuntimeUpdateService>();
 
 			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
 			{
@@ -71,8 +70,8 @@ namespace Common.Controls.Services
 			};
 
 			runTimeDrawService.AddOverlaidDrawable(cursor);
-			this.Cursors.Add(cursor.CursorName, cursor);
-			this.SetActiveCursor(cursor);
+			Cursors.Add(cursor.CursorName, cursor);
+			SetActiveCursor(cursor);
 		}
 
 		/// <summary>
@@ -82,7 +81,7 @@ namespace Common.Controls.Services
 		/// <returns>The hover cursor.</returns>
 		public HoverCursor GetHoverCursor(string textureName = "mouse")
 		{
-			var textureService = this._gameServices.GetService<ITextureService>();
+			var textureService = _gameServices.GetService<ITextureService>();
 
 			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
 			{
@@ -112,9 +111,9 @@ namespace Common.Controls.Services
 		/// <param name="cursor"></param>
 		public void SetActiveCursor(Cursor cursor)
 		{
-			this.DisableAllCursors();
+			DisableAllCursors();
 			cursor.IsActive = true;
-			this.ActiveCursor = cursor;
+			ActiveCursor = cursor;
 		}
 
 		/// <summary>
@@ -122,12 +121,12 @@ namespace Common.Controls.Services
 		/// </summary>
 		public void DisableAllCursors()
 		{
-			if (true != this.Cursors?.Any())
+			if (true != Cursors?.Any())
 			{
 				return;
 			}
 
-			foreach (var cursor in this.Cursors.Values)
+			foreach (var cursor in Cursors.Values)
 			{
 				cursor.IsActive = false;
 				cursor.TrailingCursors.Clear();
@@ -143,35 +142,37 @@ namespace Common.Controls.Services
 		/// <param name="priorControlState">The prior control state.</param>
 		public void ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
 		{
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var uiService = _gameServices.GetService<IUserInterfaceService>();
 			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
 
-			if (null != uiObject)
+			if (null == uiObject)
 			{
-				switch (uiObject)
-				{
-					case UiElementWithLocation uiElementWithLocation:
-						if (controlState.MouseState.LeftButton == ButtonState.Pressed &&
-							priorControlState.MouseState.LeftButton != ButtonState.Pressed)
-						{
-							uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
+				return;
+			}
 
-							return;
-						}
-						else
-						{
-							uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
-
-							return;
-						}
-					case UiRow uiRow:
-
-						break;
-					case UiZone uiZone:
-						uiZone.RaiseHoverEvent(uiZone.Position.Coordinates);
+			switch (uiObject)
+			{
+				case UiElementWithLocation uiElementWithLocation:
+					if (controlState.MouseState.LeftButton == ButtonState.Pressed &&
+						priorControlState.MouseState.LeftButton != ButtonState.Pressed)
+					{
+						uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
 
 						return;
-				}
+					}
+					else
+					{
+						uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
+
+						return;
+					}
+				case UiRow uiRow:
+
+					break;
+				case UiZone uiZone:
+					uiZone.RaiseHoverEvent(uiZone.Position.Coordinates);
+
+					return;
 			}
 		}
 
@@ -182,8 +183,8 @@ namespace Common.Controls.Services
 		/// <param name="gameTime">The game time.</param>
 		public void BasicCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
-			var controlService = this._gameServices.GetService<IControlService>();
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var controlService = _gameServices.GetService<IControlService>();
+			var uiService = _gameServices.GetService<IUserInterfaceService>();
 
 			if (null == controlService.ControlState)
 			{
@@ -191,7 +192,7 @@ namespace Common.Controls.Services
 			}
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
-			this.ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
+			ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
 		}
 
 		/// <summary>

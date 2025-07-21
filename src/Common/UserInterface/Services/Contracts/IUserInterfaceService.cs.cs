@@ -1,6 +1,5 @@
 ﻿using Common.DiskModels.UI;
 using Common.UserInterface.Models;
-using Engine.Core.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -9,7 +8,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface service.
 	/// </summary>
-	public interface IUserInterfaceService : INeedInitialization
+	public interface IUserInterfaceService
 	{
 		/// <summary>
 		/// Gets or sets the user interface groups.

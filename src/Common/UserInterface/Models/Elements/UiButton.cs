@@ -1,18 +1,19 @@
-﻿using Common.UserInterface.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace Common.UserInterface.Models.Elements
 {
-	/// <summary>
-	/// Represents a user interface button.
-	/// </summary>
-	public class UiButton : IAmAUiElementWithText, ICanBePressed, ICanBeClicked
+    /// <summary>
+    /// Represents a user interface button.
+    /// </summary>
+    public class UiButton : IAmAUiElementWithText, ICanBeClicked<IAmAUiElement>
 	{
 		/// <summary>
 		/// Gets or sets the user interface element name.
@@ -50,19 +51,14 @@ namespace Common.UserInterface.Models.Elements
 		public UiElementSizeTypes SizeType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the area.
-		/// </summary>
-		public Vector2 Area { get; set; }
-
-		/// <summary>
-		/// Gets or sets the clickable area.
-		/// </summary>
-		public Vector2 ClickableArea { get; set; }
-
-		/// <summary>
 		/// Gets or sets the clickable area scaler.
 		/// </summary>
 		public Vector2 ClickableAreaScaler { get; set; }
+
+		/// <summary>
+		/// Gets or sets the area.
+		/// </summary>
+		public Vector2 Area { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.
@@ -80,19 +76,19 @@ namespace Common.UserInterface.Models.Elements
 		public TriggeredAnimation ClickAnimation { get; set; }
 
 		/// <summary>
-		/// Gets or set the press event.
+		/// Gets or sets the hover configuration.
 		/// </summary>
-		public event Action<IAmAUiElement, Vector2> HoverEvent;
+		public HoverConfiguration<IAmAUiElement> HoverConfig { get; set; }
 
 		/// <summary>
-		/// Gets or set the press event.
+		/// Gets or sets the press configuration.
 		/// </summary>
-		public event Action<IAmAUiElement, Vector2> PressEvent;
+		public PressConfiguration<IAmAUiElement> PressConfig { get; set; }
 
 		/// <summary>
-		/// Gets or sets the click event.
+		/// Gets or sets the click configuration.
 		/// </summary>
-		public event Action<IAmAUiElement, Vector2> ClickEvent;
+		public ClickConfiguration<IAmAUiElement> ClickConfig { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -100,7 +96,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="elementLocation">The element location.</param>
 		public void RaiseHoverEvent(Vector2 elementLocation)
 		{
-			this.HoverEvent?.Invoke(this, elementLocation);
+			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
 		}
 
 		/// <summary>
@@ -109,15 +105,16 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="elementLocation">The element location.</param>
 		public void RaisePressEvent(Vector2 elementLocation)
 		{
-			this.PressEvent?.Invoke(this, elementLocation);
+			this.PressConfig?.RaisePressEvent(this, elementLocation);
 		}
 
 		/// <summary>
 		/// Raises the click event.
 		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
 		public void RaiseClickEvent(Vector2 elementLocation)
 		{
-			this.ClickEvent?.Invoke(this, elementLocation);
+			this.ClickConfig?.RaiseClickEvent(this, elementLocation);
 		}
 
 		/// <summary>
@@ -136,8 +133,7 @@ namespace Common.UserInterface.Models.Elements
 
 			if (null != this.ClickAnimation)
 			{
-				var clickableOffset = new Vector2((this.Area.X - this.ClickableArea.X) / 2, (this.Area.Y - this.ClickableArea.Y) / 2);
-				this.ClickAnimation.Draw(gameTime, gameServices, position, offset + clickableOffset);
+				this.ClickAnimation.Draw(gameTime, gameServices, position, offset + this.ClickConfig.Offset);
 			}
 
 			if (false == string.IsNullOrEmpty(this.Text))
@@ -154,9 +150,9 @@ namespace Common.UserInterface.Models.Elements
 		public void Dispose()
 		{
 			this.Graphic?.Dispose();
-			this.HoverEvent = null;
-			this.PressEvent = null;
-			this.ClickEvent = null;
+			this.HoverConfig?.Dispose();
+			this.PressConfig?.Dispose();
+			this.ClickConfig?.Dispose();
 		}
 	}
 }

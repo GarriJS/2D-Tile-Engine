@@ -1,4 +1,5 @@
-﻿using Common.UserInterface.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
@@ -13,10 +14,10 @@ using System.Linq;
 
 namespace Common.UserInterface.Models
 {
-	/// <summary>
-	/// Represents a user interface zone.
-	/// </summary>
-	public class UiZone : IAmDrawable, IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
+    /// <summary>
+    /// Represents a user interface zone.
+    /// </summary>
+    public class UiZone : IAmDrawable, IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -54,6 +55,11 @@ namespace Common.UserInterface.Models
 		public IAmAArea Area { get => this.UserInterfaceScreenZone?.Area; }
 
 		/// <summary>
+		/// Gets or sets the hover configuration.
+		/// </summary>
+		public HoverConfiguration<UiZone> HoverConfig { get; set; }
+
+		/// <summary>
 		/// Gets or sets the user interface screen zone.
 		/// </summary>
 		public UiScreenZone UserInterfaceScreenZone { get; set; }
@@ -64,17 +70,12 @@ namespace Common.UserInterface.Models
 		public List<UiRow> ElementRows { get; set; }
 
 		/// <summary>
-		/// Gets or set the hover event.
-		/// </summary>
-		public event Action<UiZone, Vector2> HoverEvent;
-
-		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
 		/// <param name="elementLocation">The element location.</param>
 		public void RaiseHoverEvent(Vector2 elementLocation)
 		{
-			this.HoverEvent?.Invoke(this, elementLocation);
+			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
 		}
 
 		/// <summary>
@@ -135,6 +136,7 @@ namespace Common.UserInterface.Models
 		public void Dispose()
 		{
 			this.Image?.Dispose();
+			this.HoverConfig?.Dispose();
 
 			if (true != this.ElementRows?.Any())
 			{ 

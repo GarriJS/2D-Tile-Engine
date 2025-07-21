@@ -1,11 +1,11 @@
-﻿using Common.UserInterface.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace Common.UserInterface.Models.Elements
 {
@@ -55,24 +55,19 @@ namespace Common.UserInterface.Models.Elements
 		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the clickable area.
-		/// </summary>
-		public Vector2 ClickableArea { get; set; }
-
-		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
 		public Image Graphic { get; set; }
 
 		/// <summary>
-		/// Gets or set the press event.
+		/// Gets or sets the hover configuration.
 		/// </summary>
-		public event Action<IAmAUiElement, Vector2> HoverEvent;
+		public HoverConfiguration<IAmAUiElement> HoverConfig { get; set; }
 
 		/// <summary>
-		/// Gets or set the press event.
+		/// Gets or sets the press configuration.
 		/// </summary>
-		public event Action<IAmAUiElement, Vector2> PressEvent;
+		public PressConfiguration<IAmAUiElement> PressConfig { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -80,7 +75,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="elementLocation">The element location.</param>
 		public void RaiseHoverEvent(Vector2 elementLocation)
 		{
-			this.HoverEvent?.Invoke(this, elementLocation);
+			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
 		}
 
 		/// <summary>
@@ -89,7 +84,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="elementLocation">The element location.</param>
 		public void RaisePressEvent(Vector2 elementLocation)
 		{
-			this.PressEvent?.Invoke(this, elementLocation);
+			this.PressConfig?.RaisePressEvent(this, elementLocation);
 		}
 
 		/// <summary>
@@ -119,9 +114,9 @@ namespace Common.UserInterface.Models.Elements
 		/// </summary>
 		public void Dispose()
 		{
-			this.Graphic?.Dispose(); 
-			this.HoverEvent = null;
-			this.PressEvent = null;
+			this.Graphic?.Dispose();
+			this.HoverConfig?.Dispose();
+			this.PressConfig?.Dispose();
 		}
 	}
 }

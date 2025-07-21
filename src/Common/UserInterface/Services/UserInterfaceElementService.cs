@@ -13,6 +13,7 @@ using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
+using Common.Controls.CursorInteraction.Services.Contracts;
 
 namespace Common.UserInterface.Services
 {
@@ -73,7 +74,8 @@ namespace Common.UserInterface.Services
 
 			if (element is UiButton uiButton)
 			{
-				uiButton.ClickableArea = new Vector2(uiButton.ClickableArea.X, (int)(element.Graphic.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
+				uiButton.ClickConfig.Area = new Vector2(uiButton.Area.X * uiButton.ClickableAreaScaler.X, uiButton.Area.Y * uiButton.ClickableAreaScaler.Y);
+				uiButton.ClickConfig.Offset = new Vector2((uiButton.Area.X - uiButton.ClickConfig.Area.X) / 2, (uiButton.Area.Y - uiButton.ClickConfig.Area.Y) / 2);
 
 				if (true == uiButton.ClickAnimation?.Frames?.Any())
 				{
@@ -98,12 +100,12 @@ namespace Common.UserInterface.Services
 			{ 
 				case UiButton button:
 					var mouseLocation = controlService.ControlState.MouseState.Position;
-					var clickableLocation = new Vector2(elementLocation.X + ((element.Area.X - button.ClickableArea.X) / 2), elementLocation.Y + ((element.Area.Y - button.ClickableArea.Y) / 2));
+					var clickableLocation = new Vector2(elementLocation.X + ((element.Area.X - button.ClickConfig.Area.X) / 2), elementLocation.Y + ((element.Area.Y - button.ClickConfig.Area.Y) / 2));
 
 					if ((clickableLocation.X <= mouseLocation.X) &&
-						(clickableLocation.X + button.ClickableArea.X >= mouseLocation.X) &&
+						(clickableLocation.X + button.ClickConfig.Area.X >= mouseLocation.X) &&
 						(clickableLocation.Y <= mouseLocation.Y) &&
-						(clickableLocation.Y + button.ClickableArea.Y >= mouseLocation.Y))
+						(clickableLocation.Y + button.ClickConfig.Area.Y >= mouseLocation.Y))
 					{
 						button.RaiseClickEvent(elementLocation);
 					}
@@ -146,18 +148,18 @@ namespace Common.UserInterface.Services
 			{
 				uiElement.VisibilityGroup = visibilityGroup;
 				uiElement.Graphic = image;
-				uiElement.PressEvent += this.CheckForUiElementClick;
+				uiElement.PressConfig?.AddSubscription(this.CheckForUiElementClick);
 
 				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonHoverEventName)) &&
 					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ButtonHoverEventName, out var hoverAction))) // LOGGING
 				{
-					uiElement.HoverEvent += hoverAction;
+					uiElement.HoverConfig?.AddSubscription(hoverAction);
 				}
 
 				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonPressEventName)) &&
 					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ButtonPressEventName, out var pressAction))) // LOGGING
 				{
-					uiElement.PressEvent += pressAction;
+					uiElement.PressConfig?.AddSubscription(pressAction);
 				}
 			}
 
@@ -172,6 +174,11 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface text.</returns>
 		private UiText GetUiText(UiTextModel textModel, Vector2 area)
 		{
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area);
+			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
+
 			return new UiText
 			{
 				UiElementName = textModel.UiElementName,
@@ -180,6 +187,8 @@ namespace Common.UserInterface.Services
 				RightPadding = textModel.RightPadding,
 				ElementType = UiElementTypes.Button,
 				Area = area,
+				HoverConfig = hoverConfig,
+				PressConfig = pressConfig
 			};
 		}
 
@@ -193,26 +202,33 @@ namespace Common.UserInterface.Services
 		{
 			var animationService = this._gameServices.GetService<IAnimationService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
 			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
-			var button =  new UiButton
+			var clickableOffset = new Vector2((area.X - clickableArea.X) / 2, (area.Y - clickableArea.Y) /2);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area);
+			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
+			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
+			var button = new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
 				Text = buttonModel.Text,
 				LeftPadding = buttonModel.LeftPadding,
 				RightPadding = buttonModel.RightPadding,
 				ElementType = UiElementTypes.Button,
+				ClickableAreaScaler = buttonModel.ClickableAreaScaler,
 				Area = area,
-				ClickableArea = clickableArea,
-				ClickableAreaScaler = buttonModel.ClickableAreaScaler
+				HoverConfig = hoverConfig,
+				PressConfig = pressConfig,
+				ClickConfig = clickConfig
 			};
 
-			button.ClickEvent += this.TriggerUiButtonClickAnimation;
+			button.ClickConfig?.AddSubscription(this.TriggerUiButtonClickAnimation);
 
 			if ((false == string.IsNullOrEmpty(buttonModel.ButtonClickEventName)) &&
 				(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ButtonClickEventName, out var clickAction))) // LOGGING
 			{
-				button.ClickEvent += clickAction;
+				button.ClickConfig?.AddSubscription(clickAction);
 			}
 
 			if (null != buttonModel.ClickableAreaAnimation)
@@ -227,7 +243,6 @@ namespace Common.UserInterface.Services
 
 			return button;
 		}
-
 
 		/// <summary>
 		/// Triggers the user interface elements click animation.

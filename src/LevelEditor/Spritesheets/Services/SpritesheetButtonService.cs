@@ -1,6 +1,4 @@
-﻿using Common.Controls.Models;
-using Common.Controls.Constants;
-using Common.Controls.Services.Contracts;
+﻿using Common.Controls.Constants;
 using Common.DiskModels.UI.Elements;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Models.Contracts;
@@ -11,6 +9,8 @@ using LevelEditor.Core.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using LevelEditor.Controls.Constants;
+using Common.Controls.Cursors.Models;
+using Common.Controls.Cursors.Services.Contracts;
 
 namespace LevelEditor.Spritesheets.Services
 {

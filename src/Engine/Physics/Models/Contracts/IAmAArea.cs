@@ -18,6 +18,11 @@ namespace Engine.Physics.Models.Contracts
 		public float Height { get; }
 
 		/// <summary>
+		/// The area to its dimensions.
+		/// </summary>
+		public Vector2 ToDimensions { get => new(this.Width, this.Height); }
+
+		/// <summary>
 		/// Determines if a the area contains the coordinate.
 		/// </summary>
 		/// <param name="coordinate">The coordinate.</param>

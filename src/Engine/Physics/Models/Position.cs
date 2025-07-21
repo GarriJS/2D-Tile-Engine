@@ -7,7 +7,7 @@ namespace Engine.Physics.Models
 	/// </summary>
 	public class Position
 	{
-		private Vector2 _coordinates;
+		private Vector2 _coordinates = default;
 
 		/// <summary>
 		/// Gets or sets the coordinates.

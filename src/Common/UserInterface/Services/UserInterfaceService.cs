@@ -1,5 +1,4 @@
 ﻿using Common.Controls.Constants;
-using Common.Controls.Services.Contracts;
 using Common.DiskModels.UI;
 using Common.UserInterface.Constants;
 using Common.UserInterface.Models;
@@ -15,6 +14,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Controls.Cursors.Services.Contracts;
+using Common.Controls.CursorInteraction.Services.Contracts;
 
 namespace Common.UserInterface.Services
 {
@@ -38,14 +39,6 @@ namespace Common.UserInterface.Services
 		/// Gets or sets the user interface groups.
 		/// </summary>
 		public List<UiGroup> UserInterfaceGroups { get; set; } = [];
-
-		/// <summary>
-		/// Performs initialization.
-		/// </summary>
-		public void Initialize()
-		{
-
-		}
 
 		/// <summary>
 		/// Toggles the user interface group visibility.
@@ -334,20 +327,23 @@ namespace Common.UserInterface.Services
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
+			var imageService = this._gameServices.GetService<IImageService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
 			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
 			{
 				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneTypes.None];
 			}
 
-			var imageService = this._gameServices.GetService<IImageService>();
 			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions);
 			var uiZone = new UiZone
 			{
 				UiZoneName = uiZoneModel.UiZoneName,
 				DrawLayer = 0,
 				JustificationType = (UiZoneJustificationTypes)uiZoneModel.JustificationType,
 				Image = background,
+				HoverConfig = hoverConfig,
 				UserInterfaceScreenZone = uiScreenZone,
 				ElementRows = []
 			};
@@ -355,7 +351,7 @@ namespace Common.UserInterface.Services
 			if ((false == string.IsNullOrEmpty(uiZoneModel.ZoneHoverEventName)) &&
 				(true == functionService.TryGetFunction<Action<UiZone, Vector2>>(uiZoneModel.ZoneHoverEventName, out var hoverAction))) // LOGGING
 			{
-				uiZone.HoverEvent += hoverAction;
+				uiZone.HoverConfig?.AddSubscription(hoverAction);
 			}
 
 			if (true != uiZoneModel.ElementRows?.Any())

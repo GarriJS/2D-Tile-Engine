@@ -1,6 +1,4 @@
-﻿using Common.Controls.Models;
-using Common.Controls.Constants;
-using Common.Controls.Services.Contracts;
+﻿using Common.Controls.Constants;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
@@ -16,17 +14,19 @@ using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Common.Controls.Cursors.Models;
+using Common.Controls.Cursors.Services.Contracts;
 
 namespace Common.Tiling.Services
 {
-	/// <summary>
-	/// Represents a tile service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the tile service.
-	/// </remarks>
-	/// <param name="gameServices">The game services.</param>
-	public class TileService(GameServiceContainer gameServices) : ITileService
+    /// <summary>
+    /// Represents a tile service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the tile service.
+    /// </remarks>
+    /// <param name="gameServices">The game services.</param>
+    public class TileService(GameServiceContainer gameServices) : ITileService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
