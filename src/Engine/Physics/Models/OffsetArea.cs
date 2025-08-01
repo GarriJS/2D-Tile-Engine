@@ -27,7 +27,7 @@ namespace Engine.Physics.Models
 		/// </summary>
 		/// <param name="coordinate">The coordinate.</param>
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
-		public new bool Contains(Vector2 coordinate)
+		new public bool Contains(Vector2 coordinate)
 		{
 			var offsetPosition = this.OffsetPosition;	
 

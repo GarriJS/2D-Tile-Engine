@@ -34,11 +34,6 @@ namespace Engine.Controls.Services
 		public ControlState ControlState { get; private set; }
 
 		/// <summary>
-		/// Event for when the control state is updated.
-		/// </summary>
-		public static event Action<GameTime, GameServiceContainer> ControlStateUpdated;
-
-		/// <summary>
 		/// Initializes the control manager.
 		/// </summary>
 		public override void Initialize()
@@ -64,7 +59,6 @@ namespace Engine.Controls.Services
 		{
 			this.PriorControlState = this.ControlState;
 			this.ControlState = this.GetCurrentControlState();
-			ControlStateUpdated?.Invoke(gameTime, this.Game.Services);
 
 			base.Update(gameTime);
 		}

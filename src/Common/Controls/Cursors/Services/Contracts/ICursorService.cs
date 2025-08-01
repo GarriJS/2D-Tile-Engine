@@ -22,14 +22,6 @@ namespace Common.Controls.Cursors.Services.Contracts
         public Dictionary<string, Cursor> Cursors { get; }
 
         /// <summary>
-        /// Gets the hover cursor.
-        /// </summary>
-        /// <param name="isActive">A value indicating whether the hover cursor will be active.</param>
-        /// <param name="textureName">The texture name.</param>
-        /// <returns>The hover cursor.</returns>
-        public HoverCursor GetHoverCursor(string textureName = "mouse");
-
-        /// <summary>
         /// Sets the active cursor.
         /// </summary>
         /// <param name="cursor"></param>

@@ -44,7 +44,6 @@ namespace Common.Tiling.Services
 				tileGridTexture = textureService.DebugTexture;
 			}
 
-			var hoverCursor = cursorService.GetHoverCursor();
 			var position = new Position
 			{
 				Coordinates = default
@@ -52,20 +51,16 @@ namespace Common.Tiling.Services
 
 			var cursor = new Cursor
 			{
-				IsActive = false,
 				CursorName = CommonCursorNames.TileGridCursorName,
 				TextureName = tileGridTexture.Name,
 				Offset = new Vector2(-80, -80),
-				HoverCursor = hoverCursor,	
 				CursorUpdater = this.UpdateTileGridCursorPosition,
 				TextureBox = new Rectangle(0, 0, 160, 160),
 				Texture = tileGridTexture,
 				Position = position,
-				DrawLayer = 0,
-				TrailingCursors = []
+				DrawLayer = 0
 			};
 
-			runTimeDrawService.AddOverlaidDrawable(cursor);
 			cursorService.Cursors.Add(cursor.CursorName, cursor);
 		}
 

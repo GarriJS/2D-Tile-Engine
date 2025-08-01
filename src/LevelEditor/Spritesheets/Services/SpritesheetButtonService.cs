@@ -34,17 +34,18 @@ namespace LevelEditor.Spritesheets.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			if (null != cursorService.ActiveCursor?.HoverCursor)
-			{ 
-				cursorService.ActiveCursor.HoverCursor.IsActive = true;
+			//if (null != cursorService.ActiveCursor?.HoverCursor)
+			//{ 
+			//	cursorService.ActiveCursor.HoverCursor.IsActive = true;
 
-				return;
-			}
+			//	return;
+			//}
 
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
 			{
 				return;
 			}
+
 
 			cursorService.SetActiveCursor(primaryCursor);
 		}
@@ -70,35 +71,35 @@ namespace LevelEditor.Spritesheets.Services
 			var position = controlService.ControlState.MouseState.Position.ToVector2();
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 
-			var trailingCursor = new TrailingCursor
-			{
-				IsActive = true,
-				TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
-				Offset = new Vector2(localTileLocation.X - position.X,
-									 localTileLocation.Y - position.Y),
-				Graphic = element.Graphic,
-				CursorUpdater = this.SpritesheetButtonTrailingCursorUpdater,
-			};
+			//var trailingCursor = new TrailingCursor
+			//{
+			//	IsActive = true,
+			//	TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
+			//	Offset = new Vector2(localTileLocation.X - position.X,
+			//						 localTileLocation.Y - position.Y),
+			//	Image = element.Graphic,
+			//	CursorUpdater = this.SpritesheetButtonTrailingCursorUpdater,
+			//};
 
-			tileGridCursor.TrailingCursors.Add(trailingCursor);
+			//tileGridCursor.TrailingCursors.Add(trailingCursor);
 			tileGridCursor.Offset = new Vector2(localTileLocation.X - tileGridCursor.Position.X - ((tileGridCursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
 												localTileLocation.Y - tileGridCursor.Position.Y - ((tileGridCursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
 
-			if (null != tileGridCursor.HoverCursor)
-			{
-				tileGridCursor.HoverCursor.IsActive = true;
+			//if (null != tileGridCursor.HoverCursor)
+			//{
+			//	tileGridCursor.HoverCursor.IsActive = true;
 
-				var trailingHoverCursor = new TrailingCursor
-				{
-					IsActive = true,
-					TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
-					Offset = new Vector2(tileGridCursor.HoverCursor.Graphic.Texture.Width,
-										tileGridCursor.HoverCursor.Graphic.Texture.Height),
-					Graphic = element.Graphic
-				};
+			//	var trailingHoverCursor = new TrailingCursor
+			//	{
+			//		IsActive = true,
+			//		TrailingCursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
+			//		Offset = new Vector2(tileGridCursor.HoverCursor.Graphic.Texture.Width,
+			//							tileGridCursor.HoverCursor.Graphic.Texture.Height),
+			//		Image = element.Graphic
+			//	};
 
-				tileGridCursor.HoverCursor.TrailingCursors.Add(trailingHoverCursor);
-			}
+			//	tileGridCursor.HoverCursor.TrailingCursors.Add(trailingHoverCursor);
+			//}
 		}
 
 		/// <summary>
@@ -107,21 +108,21 @@ namespace LevelEditor.Spritesheets.Services
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="trailingCursor">The trailing cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		private void SpritesheetButtonTrailingCursorUpdater(Cursor cursor, TrailingCursor trailingCursor, GameTime gameTime)
-		{
-			var controlService = this._gameServices.GetService<IControlService>();
-			var tileService = this._gameServices.GetService<ITileService>();
+		//private void SpritesheetButtonTrailingCursorUpdater(Cursor cursor, TrailingCursor trailingCursor, GameTime gameTime)
+		//{
+		//	var controlService = this._gameServices.GetService<IControlService>();
+		//	var tileService = this._gameServices.GetService<ITileService>();
 
-			if (null == controlService.ControlState)
-			{
-				return;
-			}
+		//	if (null == controlService.ControlState)
+		//	{
+		//		return;
+		//	}
 
-			var position = controlService.ControlState.MouseState.Position.ToVector2();
-			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-			trailingCursor.Offset = new Vector2(localTileLocation.X - position.X,
-												localTileLocation.Y - position.Y);
-		}
+		//	var position = controlService.ControlState.MouseState.Position.ToVector2();
+		//	var localTileLocation = tileService.GetLocalTileCoordinates(position);
+		//	trailingCursor.Offset = new Vector2(localTileLocation.X - position.X,
+		//										localTileLocation.Y - position.Y);
+		//}
 
 		/// <summary>
 		/// Gets the user interface buttons for the spritesheet.

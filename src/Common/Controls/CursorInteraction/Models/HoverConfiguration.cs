@@ -24,7 +24,7 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <summary>
 		/// Gets or sets the hover cursor.
 		/// </summary>
-		public HoverCursor HoverCursor { get; set; }
+		public Cursor HoverCursor { get; set; }
 
 		/// <summary>
 		/// Gets or set the hover event.
@@ -65,6 +65,7 @@ namespace Common.Controls.CursorInteraction.Models
 		public void Dispose()
 		{
 			this.HoverEvent = null;
+			this.HoverCursor.Dispose();
 		}
 	}
 }

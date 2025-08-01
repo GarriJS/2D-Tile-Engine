@@ -41,9 +41,9 @@ namespace Common.Controls.Cursors.Services
 		/// </summary>
 		public void LoadContent()
 		{
-			var textureService = _gameServices.GetService<ITextureService>();
-			var runTimeDrawService = _gameServices.GetService<IRuntimeDrawService>();
-			var runTimeUpdateService = _gameServices.GetService<IRuntimeUpdateService>();
+			var textureService = this._gameServices.GetService<ITextureService>();
+			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 
 			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
 			{
@@ -57,7 +57,6 @@ namespace Common.Controls.Cursors.Services
 
 			var cursor = new Cursor
 			{
-				IsActive = true,
 				CursorName = CommonCursorNames.PrimaryCursorName,
 				TextureName = cursorTexture.Name,
 				Offset = default,
@@ -65,44 +64,11 @@ namespace Common.Controls.Cursors.Services
 				TextureBox = new Rectangle(0, 0, 18, 28),
 				Texture = cursorTexture,
 				Position = position,
-				DrawLayer = 1,
-				TrailingCursors = []
+				DrawLayer = 1
 			};
 
-			runTimeDrawService.AddOverlaidDrawable(cursor);
-			Cursors.Add(cursor.CursorName, cursor);
-			SetActiveCursor(cursor);
-		}
-
-		/// <summary>
-		/// Gets the hover cursor.
-		/// </summary>
-		/// <param name="textureName">The texture name.</param>
-		/// <returns>The hover cursor.</returns>
-		public HoverCursor GetHoverCursor(string textureName = "mouse")
-		{
-			var textureService = _gameServices.GetService<ITextureService>();
-
-			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
-			{
-				cursorTexture = textureService.DebugTexture;
-			}
-
-			var position = new Position
-			{
-				Coordinates = default
-			};
-
-			return new HoverCursor
-			{
-				IsActive = false,
-				CursorName = CommonCursorNames.PrimaryCursorName,
-				TextureName = cursorTexture.Name,
-				Offset = default,
-				TextureBox = new Rectangle(0, 0, 18, 28),
-				Texture = cursorTexture,
-				TrailingCursors = []
-			};
+			this.Cursors.Add(cursor.CursorName, cursor);
+			this.SetActiveCursor(cursor);
 		}
 
 		/// <summary>
@@ -111,9 +77,18 @@ namespace Common.Controls.Cursors.Services
 		/// <param name="cursor"></param>
 		public void SetActiveCursor(Cursor cursor)
 		{
-			DisableAllCursors();
-			cursor.IsActive = true;
-			ActiveCursor = cursor;
+			if (this.ActiveCursor == cursor)
+			{
+				return;
+			}
+
+			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+
+			this.DisableAllCursors();
+			this.ActiveCursor = cursor;
+			runTimeDrawService.AddOverlaidDrawable(cursor);
+			runTimeUpdateService.AddUpdateable(cursor);
 		}
 
 		/// <summary>
@@ -121,16 +96,18 @@ namespace Common.Controls.Cursors.Services
 		/// </summary>
 		public void DisableAllCursors()
 		{
-			if (true != Cursors?.Any())
+			if (true != this.Cursors?.Any())
 			{
 				return;
 			}
 
-			foreach (var cursor in Cursors.Values)
+			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+
+			foreach (var cursor in this.Cursors.Values)
 			{
-				cursor.IsActive = false;
-				cursor.TrailingCursors.Clear();
-				cursor.HoverCursor?.TrailingCursors?.Clear();
+				runTimeDrawService.RemoveOverlaidDrawable(cursor);
+				runTimeUpdateService.RemoveUpdateable(cursor);
 			}
 		}
 
@@ -142,7 +119,7 @@ namespace Common.Controls.Cursors.Services
 		/// <param name="priorControlState">The prior control state.</param>
 		public void ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
 		{
-			var uiService = _gameServices.GetService<IUserInterfaceService>();
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
 
 			if (null == uiObject)
@@ -183,8 +160,8 @@ namespace Common.Controls.Cursors.Services
 		/// <param name="gameTime">The game time.</param>
 		public void BasicCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
-			var controlService = _gameServices.GetService<IControlService>();
-			var uiService = _gameServices.GetService<IUserInterfaceService>();
+			var controlService = this._gameServices.GetService<IControlService>();
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 
 			if (null == controlService.ControlState)
 			{
@@ -192,18 +169,7 @@ namespace Common.Controls.Cursors.Services
 			}
 
 			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
-			ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
+			this.ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
 		}
-
-		/// <summary>
-		/// Updates the spritesheet button trailing cursor.
-		/// </summary>
-		/// <param name="cursor">The cursor.</param>
-		/// <param name="trailingCursor">The trailing cursor.</param>
-		/// <param name="gameTime">The game time.</param>
-		//public void BasicTrailingCursorUpdater(Cursor cursor, TrailingCursor trailingCursor, GameTime gameTime)
-		//{
-
-		//}
 	}
 }

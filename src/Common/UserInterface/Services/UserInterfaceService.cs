@@ -119,13 +119,6 @@ namespace Common.UserInterface.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			if (null != cursorService.ActiveCursor?.HoverCursor)
-			{
-				cursorService.ActiveCursor.HoverCursor.IsActive = true;
-
-				return;
-			}
-
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
 			{
 				return;

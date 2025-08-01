@@ -8,6 +8,16 @@ namespace Engine.RunTime.Services.Contracts
     public interface IRuntimeDrawService
 	{
 		/// <summary>
+		/// Gets or sets a value indicating whether the draw is in progress.
+		/// </summary>
+		public bool DrawInProgress { get; set; } 
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the overlaid draw is in progress.
+		/// </summary>
+		public bool OverlaidDrawInProgress { get; set; }
+
+		/// <summary>
 		/// Adds the drawable.
 		/// </summary>
 		/// <param name="drawable">The drawable.</param>

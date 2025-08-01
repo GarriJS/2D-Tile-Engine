@@ -8,6 +8,11 @@ namespace Engine.RunTime.Services.Contracts
     public interface IRuntimeUpdateService
 	{
 		/// <summary>
+		/// Gets or sets a value indicating whether the update is in progress.
+		/// </summary>
+		public bool UpdateInProgress { get; set; }
+
+		/// <summary>
 		/// Adds the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>

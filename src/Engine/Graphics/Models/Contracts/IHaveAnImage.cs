@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
-		public new IAmAGraphic Graphic { get => this.Image; }
+		new public IAmAGraphic Graphic { get => this.Image; }
 
 		/// <summary>
 		/// Gets the image.
