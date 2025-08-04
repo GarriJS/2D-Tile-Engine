@@ -105,8 +105,12 @@ namespace Common.Controls.Cursors.Services
 
 			this.DisableAllNonHoverCursors();
 			this.PrimaryCursor = cursor;
-			runTimeOverlaidDrawService.AddDrawable(cursor);
-			runTimeUpdateService.AddUpdateable(cursor);
+
+			if (null == this.PrimaryHoverCursor)
+			{
+				runTimeOverlaidDrawService.AddDrawable(cursor);
+				runTimeUpdateService.AddUpdateable(cursor);
+			}
 		}
 
 		/// <summary>
@@ -125,8 +129,12 @@ namespace Common.Controls.Cursors.Services
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 
 			this.SecondaryCursors.Add(cursor);
-			runTimeOverlaidDrawService.AddDrawable(cursor);
-			runTimeUpdateService.AddUpdateable(cursor);
+
+			if (null == this.PrimaryHoverCursor)
+			{
+				runTimeOverlaidDrawService.AddDrawable(cursor);
+				runTimeUpdateService.AddUpdateable(cursor);
+			}
 		}
 
 		/// <summary>
@@ -286,6 +294,7 @@ namespace Common.Controls.Cursors.Services
 		public IHaveAHoverConfiguration ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			//cursor.Position.Coordinates = new Vector2(639, 772);
 			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
 
 			if (null == uiObject)
@@ -300,7 +309,7 @@ namespace Common.Controls.Cursors.Services
 					if ((ButtonState.Pressed == controlState.MouseState.LeftButton) &&
 						(ButtonState.Pressed == priorControlState.MouseState.LeftButton))
 					{
-						uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location);
+						uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location, cursor.Position.Coordinates);
 					}
 					else
 					{

@@ -18,6 +18,7 @@ namespace Common.Controls.CursorInteraction.Models.Contracts
         /// Raises the press event.
         /// </summary>
         /// <param name="elementLocation">The element location.</param>
-        public void RaisePressEvent(Vector2 elementLocation);
+        /// <param name="pressLocation">The press location.</param>
+        public void RaisePressEvent(Vector2 elementLocation, Vector2 pressLocation);
     }
 }

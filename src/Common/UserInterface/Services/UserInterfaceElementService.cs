@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Constants;
+using Common.Controls.Cursors.Services.Contracts;
 
 namespace Common.UserInterface.Services
 {
@@ -93,20 +94,19 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
-		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation)
+		/// <param name="pressLocation">The press location.</param>
+		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation)
 		{
-			var controlService = this._gameServices.GetService<IControlService>();
-
 			switch (element)
 			{ 
 				case UiButton button:
-					var mouseLocation = controlService.ControlState.MouseState.Position;
+
 					var clickableLocation = new Vector2(elementLocation.X + ((element.Area.X - button.ClickConfig.Area.X) / 2), elementLocation.Y + ((element.Area.Y - button.ClickConfig.Area.Y) / 2));
 
-					if ((clickableLocation.X <= mouseLocation.X) &&
-						(clickableLocation.X + button.ClickConfig.Area.X >= mouseLocation.X) &&
-						(clickableLocation.Y <= mouseLocation.Y) &&
-						(clickableLocation.Y + button.ClickConfig.Area.Y >= mouseLocation.Y))
+					if ((clickableLocation.X <= pressLocation.X) &&
+						(clickableLocation.X + button.ClickConfig.Area.X >= pressLocation.X) &&
+						(clickableLocation.Y <= pressLocation.Y) &&
+						(clickableLocation.Y + button.ClickConfig.Area.Y >= pressLocation.Y))
 					{
 						button.RaiseClickEvent(elementLocation);
 					}
@@ -158,7 +158,7 @@ namespace Common.UserInterface.Services
 				}
 
 				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonPressEventName)) &&
-					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ButtonPressEventName, out var pressAction))) // LOGGING
+					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.ButtonPressEventName, out var pressAction))) // LOGGING
 				{
 					uiElement.PressConfig?.AddSubscription(pressAction);
 				}

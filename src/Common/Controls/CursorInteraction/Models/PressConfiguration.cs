@@ -23,13 +23,13 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <summary>
 		/// Gets or set the press event.
 		/// </summary>
-		private event Action<T, Vector2> PressEvent;
+		private event Action<T, Vector2, Vector2> PressEvent;
 
 		/// <summary>
 		/// Adds the subscription.
 		/// </summary>
 		/// <param name="action">The action.</param>
-		public void AddSubscription(Action<T, Vector2> action)
+		public void AddSubscription(Action<T, Vector2, Vector2> action)
 		{
 			this.PressEvent += action;
 		}
@@ -38,7 +38,7 @@ namespace Common.Controls.CursorInteraction.Models
 		/// Removes the subscription.
 		/// </summary>
 		/// <param name="action">The action.</param>
-		public void RemoveSubscription(Action<T, Vector2> action)
+		public void RemoveSubscription(Action<T, Vector2, Vector2> action)
 		{ 
 			this.PressEvent -= action;
 		}
@@ -48,9 +48,10 @@ namespace Common.Controls.CursorInteraction.Models
 		/// </summary>
 		/// <param name="parent">The parent object being pressed.</param>
 		/// <param name="elementLocation">The element location.</param>
-		public void RaisePressEvent(T parent, Vector2 elementLocation)
+		/// <param name="pressLocation">The press location.</param>
+		public void RaisePressEvent(T parent, Vector2 elementLocation, Vector2 pressLocation)
 		{
-			this.PressEvent?.Invoke(parent, elementLocation);
+			this.PressEvent?.Invoke(parent, elementLocation, pressLocation);
 		}
 
 		/// <summary>

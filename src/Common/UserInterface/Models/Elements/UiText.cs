@@ -88,9 +88,10 @@ namespace Common.UserInterface.Models.Elements
 		/// Raises the press event.
 		/// </summary>
 		/// <param name="elementLocation">The element location.</param>
-		public void RaisePressEvent(Vector2 elementLocation)
+		/// <param name="pressLocation">The press location.</param>
+		public void RaisePressEvent(Vector2 elementLocation, Vector2 pressLocation)
 		{
-			this.PressConfig?.RaisePressEvent(this, elementLocation);
+			this.PressConfig?.RaisePressEvent(this, elementLocation, pressLocation);
 		}
 
 		/// <summary>

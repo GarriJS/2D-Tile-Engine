@@ -30,7 +30,8 @@ namespace Common.UserInterface.Services.Contracts
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
-		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation);
+		/// <param name="pressLocation">The press location.</param>
+		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation);
 
 		/// <summary>
 		/// Gets the user interface element.
