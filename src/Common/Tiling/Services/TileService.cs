@@ -1,4 +1,6 @@
 ﻿using Common.Controls.Constants;
+using Common.Controls.Cursors.Models;
+using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
@@ -13,20 +15,17 @@ using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Common.Controls.Cursors.Models;
-using Common.Controls.Cursors.Services.Contracts;
 
 namespace Common.Tiling.Services
 {
-    /// <summary>
-    /// Represents a tile service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the tile service.
-    /// </remarks>
-    /// <param name="gameServices">The game services.</param>
-    public class TileService(GameServiceContainer gameServices) : ITileService
+	/// <summary>
+	/// Represents a tile service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the tile service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class TileService(GameServiceContainer gameServices) : ITileService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -80,11 +79,10 @@ namespace Common.Tiling.Services
 				return;
 			}
 
-			cursor.Position.Coordinates = controlService.ControlState.MouseState.Position.ToVector2();
+			cursor.Position.Coordinates = controlService.ControlState.MousePosition;
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
 										localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
-			cursorService.ProcessCursorControlState(cursor, controlService.ControlState, controlService.PriorControlState);
 		}
 
 		/// <summary>

@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
 using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Constants;
 
 namespace Common.UserInterface.Services
 {
@@ -176,7 +177,7 @@ namespace Common.UserInterface.Services
 		{
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 
 			return new UiText
@@ -206,7 +207,7 @@ namespace Common.UserInterface.Services
 
 			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
 			var clickableOffset = new Vector2((area.X - clickableArea.X) / 2, (area.Y - clickableArea.Y) /2);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
 			var button = new UiButton

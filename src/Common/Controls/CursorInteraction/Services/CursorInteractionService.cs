@@ -1,5 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Controls.CursorInteraction.Services
@@ -20,14 +21,19 @@ namespace Common.Controls.CursorInteraction.Services
 		/// </summary>
 		/// <typeparam name="T">The parent type.</typeparam>
 		/// <param name="area">The area.</param>
+		/// <param name="hoverCursorName">The hover cursor name.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns>The hover configuration.</returns>
-		public HoverConfiguration<T> GetHoverConfiguration<T>(Vector2 area, Vector2 offset = default)
+		public HoverConfiguration<T> GetHoverConfiguration<T>(Vector2 area, string hoverCursorName, Vector2 offset = default)
 		{
+			var cursorService = this._gameServices.GetService<ICursorService>();
+			cursorService.Cursors.TryGetValue(hoverCursorName, out var cursor);
+
 			return new HoverConfiguration<T>
 			{
 				Area = area,
-				Offset = offset
+				Offset = offset,
+				HoverCursor = cursor,
 			};
 		}
 

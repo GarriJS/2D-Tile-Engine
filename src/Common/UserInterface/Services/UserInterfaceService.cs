@@ -119,12 +119,12 @@ namespace Common.UserInterface.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
+			if (null == uiZone.HoverConfig?.HoverCursor)
 			{
 				return;
 			}
 
-			cursorService.SetActiveCursor(primaryCursor);
+			cursorService.SetPrimaryHoverCursor(uiZone.HoverConfig.HoverCursor);
 		}
 
 		/// <summary>
@@ -329,7 +329,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, CommonCursorNames.PrimaryCursorName);
 			var uiZone = new UiZone
 			{
 				UiZoneName = uiZoneModel.UiZoneName,

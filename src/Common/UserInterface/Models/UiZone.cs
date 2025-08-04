@@ -1,4 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
 using Engine.Graphics.Models;
@@ -53,6 +54,11 @@ namespace Common.UserInterface.Models
 		/// Gets or sets the area.
 		/// </summary>
 		public IAmAArea Area { get => this.UserInterfaceScreenZone?.Area; }
+
+		/// <summary>
+		/// Gets the base hover configuration.
+		/// </summary>
+		public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
 
 		/// <summary>
 		/// Gets or sets the hover configuration.

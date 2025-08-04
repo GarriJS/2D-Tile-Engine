@@ -1,4 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
@@ -74,6 +75,11 @@ namespace Common.UserInterface.Models.Elements
 		/// Gets or sets the clickable animation.
 		/// </summary>
 		public TriggeredAnimation ClickAnimation { get; set; }
+
+		/// <summary>
+		/// Gets the base hover configuration.
+		/// </summary>
+		public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
 
 		/// <summary>
 		/// Gets or sets the hover configuration.

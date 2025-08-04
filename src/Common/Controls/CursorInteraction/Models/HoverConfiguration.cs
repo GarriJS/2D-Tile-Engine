@@ -1,5 +1,4 @@
-﻿using Common.Controls.Cursors.Models;
-using Engine.Physics.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models.Abstract;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -9,23 +8,8 @@ namespace Common.Controls.CursorInteraction.Models
 	/// Represents a hover configuration.
 	/// </summary>
 	/// <typeparam name="T">The parent type.</typeparam>
-	public class HoverConfiguration<T> : IHaveASubArea, IDisposable
+	public class HoverConfiguration<T> : BaseHoverConfiguration
 	{
-		/// <summary>
-		/// Gets or sets the area.
-		/// </summary>
-		public Vector2 Area { get; set; }
-
-		/// <summary>
-		/// Gets or sets the offset;
-		/// </summary>
-		public Vector2 Offset { get; set; }
-
-		/// <summary>
-		/// Gets or sets the hover cursor.
-		/// </summary>
-		public Cursor HoverCursor { get; set; }
-
 		/// <summary>
 		/// Gets or set the hover event.
 		/// </summary>
@@ -62,7 +46,7 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <summary>
 		/// Disposes of the hover configuration.
 		/// </summary>
-		public void Dispose()
+		new public void Dispose()
 		{
 			this.HoverEvent = null;
 			this.HoverCursor.Dispose();

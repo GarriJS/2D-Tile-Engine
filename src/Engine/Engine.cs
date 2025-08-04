@@ -161,7 +161,7 @@ namespace Engine
 			var imageService = this.Services.GetService<IImageService>();
 			var controlService = this.Services.GetService<IControlService>();
 			var image = imageService.GetImage("tile_grid", 160, 160);
-			var mouse = controlService.ControlState.MouseState.Position.ToVector2();
+			var mouse = controlService.ControlState.MousePosition;
 
 			base.Draw(gameTime);
 

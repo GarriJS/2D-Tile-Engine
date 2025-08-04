@@ -49,7 +49,7 @@ namespace LevelEditor.Core.Initialization
 
 			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
 			{
-				[UiEventNameConstants.SpritesheetButtonHover] = spritesheetButtonService.SpritesheetButtonHoverEventProcessor
+
 			};
 		}
 

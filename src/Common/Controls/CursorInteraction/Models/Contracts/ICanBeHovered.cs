@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Common.Controls.CursorInteraction.Models.Abstract;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace Common.Controls.CursorInteraction.Models.Contracts
@@ -7,8 +8,13 @@ namespace Common.Controls.CursorInteraction.Models.Contracts
 	/// Represents something that can be hovered.
 	/// </summary>
 	/// <typeparam name="T">The type being hovered.</typeparam>
-	public interface ICanBeHovered<T> : IDisposable
-    {
+	public interface ICanBeHovered<T> : IHaveAHoverConfiguration, IDisposable
+	{
+        /// <summary>
+        /// Gets the base hover configuration.
+        /// </summary>
+        new public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
+
         /// <summary>
         /// Gets the hover configuration.
         /// </summary>

@@ -10,13 +10,6 @@ namespace LevelEditor.Spritesheets.Services.Contracts
 	public interface ISpritesheetButtonService
 	{
 		/// <summary>
-		/// The spritesheet button hover event processor.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void SpritesheetButtonHoverEventProcessor(IAmAUiElement element, Vector2 elementLocation);
-
-		/// <summary>
 		/// The spritesheet button click event processor.
 		/// </summary>
 		/// <param name="element">The element.</param>
