@@ -28,6 +28,11 @@ namespace Common.Controls.Cursors.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
+		/// Gets the cursor position.
+		/// </summary>
+		public Position CursorPosition { get; private set; }
+
+		/// <summary>
 		/// Gets the primary cursor.
 		/// </summary>
 		public Cursor PrimaryCursor { get; private set; }
@@ -61,15 +66,15 @@ namespace Common.Controls.Cursors.Services
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 
+			this.CursorPosition = new Position
+			{
+				Coordinates = default
+			};
+
 			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
 			{
 				cursorTexture = textureService.DebugTexture;
 			}
-
-			var position = new Position
-			{
-				Coordinates = default
-			};
 
 			var cursor = new Cursor
 			{
@@ -79,7 +84,7 @@ namespace Common.Controls.Cursors.Services
 				CursorUpdater = this.BasicCursorUpdater,
 				TextureBox = new Rectangle(0, 0, 18, 28),
 				Texture = cursorTexture,
-				Position = position,
+				Position = this.CursorPosition,
 				DrawLayer = 1
 			};
 
@@ -110,6 +115,11 @@ namespace Common.Controls.Cursors.Services
 			{
 				runTimeOverlaidDrawService.AddDrawable(cursor);
 				runTimeUpdateService.AddUpdateable(cursor);
+			}
+			else
+			{
+				runTimeOverlaidDrawService.AddDrawable(this.PrimaryHoverCursor);
+				runTimeUpdateService.AddUpdateable(this.PrimaryHoverCursor);
 			}
 		}
 

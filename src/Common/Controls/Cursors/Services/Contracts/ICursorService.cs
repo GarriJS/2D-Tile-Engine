@@ -2,6 +2,7 @@
 using Common.Controls.Cursors.Models;
 using Engine.Controls.Models;
 using Engine.Core.Contracts;
+using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -12,10 +13,15 @@ namespace Common.Controls.Cursors.Services.Contracts
     /// </summary>
     public interface ICursorService : ILoadContent
     {
-        /// <summary>
-        /// Gets the active cursor.
-        /// </summary>
-        public Cursor PrimaryCursor { get; }
+		/// <summary>
+		/// Gets the cursor position.
+		/// </summary>
+		public Position CursorPosition { get; }
+
+		/// <summary>
+		/// Gets the active cursor.
+		/// </summary>
+		public Cursor PrimaryCursor { get; }
 
 		/// <summary>
 		/// Gets or sets the primary hover cursor.

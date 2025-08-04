@@ -43,11 +43,6 @@ namespace Common.Tiling.Services
 				tileGridTexture = textureService.DebugTexture;
 			}
 
-			var position = new Position
-			{
-				Coordinates = default
-			};
-
 			var cursor = new Cursor
 			{
 				CursorName = CommonCursorNames.TileGridCursorName,
@@ -56,7 +51,7 @@ namespace Common.Tiling.Services
 				CursorUpdater = this.UpdateTileGridCursorPosition,
 				TextureBox = new Rectangle(0, 0, 160, 160),
 				Texture = tileGridTexture,
-				Position = position,
+				Position = cursorService.CursorPosition,
 				DrawLayer = 0
 			};
 

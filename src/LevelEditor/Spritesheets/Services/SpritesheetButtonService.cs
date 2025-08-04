@@ -57,7 +57,7 @@ namespace LevelEditor.Spritesheets.Services
 				CursorUpdater = this.SpritesheetButtonCursorUpdater,
 				Texture = element.Graphic.Texture,
 				TextureBox = element.Graphic.TextureBox,
-				Position = tileGridCursor.Position,
+				Position = cursorService.CursorPosition,
 				DrawLayer = 1
 			};
 
