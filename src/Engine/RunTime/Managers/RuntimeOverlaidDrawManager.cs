@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework;
 namespace Engine.RunTime.Managers
 {
 	/// <summary>
-	/// Represents a runtime draw manager.
+	/// Represents a runtime overlaid draw manager.
 	/// </summary>
 	/// <remarks>
-	/// Creates a new instance of the runtime draw manager.
+	/// Creates a new instance of the runtime overlaid draw manager.
 	/// </remarks>
 	/// <param name="game">The game.</param>
-	public class RuntimeDrawManager(Game game) : DrawableGameComponent(game), IRuntimeDrawService
+	public class RuntimeOverlaidDrawManager(Game game) : DrawableGameComponent(game), IRuntimeOverlaidDrawService
 	{
 		/// <summary>
 		/// Gets or sets the run time collections.

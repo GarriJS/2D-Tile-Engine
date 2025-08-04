@@ -3,9 +3,9 @@
 namespace Engine.RunTime.Services.Contracts
 {
     /// <summary>
-    /// Represents a runtime draw manager.
+    /// Represents a runtime overlaid draw manager.
     /// </summary>
-    public interface IRuntimeDrawService
+    public interface IRuntimeOverlaidDrawService
 	{
 		/// <summary>
 		/// Adds the drawable.

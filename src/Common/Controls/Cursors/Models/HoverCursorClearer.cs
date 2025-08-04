@@ -53,7 +53,6 @@ namespace Common.Controls.Cursors.Models
 				if (true == this.HoverCursorActive)
 				{
 					cursorService.ClearHoverCursors();
-					cursorService.PrimaryCursor.Position.Coordinates = controlService.ControlState.MousePosition;
 					this.HoverCursorActive = false;
 				}
 
@@ -67,7 +66,6 @@ namespace Common.Controls.Cursors.Models
 			else
 			{
 				cursorService.SetPrimaryHoverCursor(hoverResult.BaseHoverConfig.HoverCursor);
-				cursorService.PrimaryHoverCursor.Position.Coordinates = controlService.ControlState.MousePosition;
 				this.HoverCursorActive = true;
 
 				return;

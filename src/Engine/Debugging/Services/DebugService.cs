@@ -170,7 +170,7 @@ namespace Engine.Debugging.Services
 		/// </summary>
 		public void TogglePerformanceRateCounter()
 		{
-			var runtimeDrawingService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runtimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runtimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 			var fontService = this._gameServices.GetService<IFontService>();
 
@@ -211,14 +211,14 @@ namespace Engine.Debugging.Services
 
 			if (true == this.TpsCounter.IsActive)
 			{
-				runtimeDrawingService.AddOverlaidDrawable(this.FpsCounter);
-				runtimeDrawingService.AddOverlaidDrawable(this.TpsCounter);
+				runtimeOverlaidDrawService.AddDrawable(this.FpsCounter);
+				runtimeOverlaidDrawService.AddDrawable(this.TpsCounter);
 				runtimeUpdateService.AddUpdateable(this.TpsCounter);
 			}
 			else
 			{
-				runtimeDrawingService.RemoveOverlaidDrawable(this.FpsCounter);
-				runtimeDrawingService.RemoveOverlaidDrawable(this.TpsCounter);
+				runtimeOverlaidDrawService.RemoveDrawable(this.FpsCounter);
+				runtimeOverlaidDrawService.RemoveDrawable(this.TpsCounter);
 				runtimeUpdateService.RemoveUpdateable(this.TpsCounter);
 			}
 		}

@@ -61,7 +61,7 @@ namespace Common.UserInterface.Services
 				return;
 			}
 
-			var runtimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (true == this.ActiveVisibilityGroupId.HasValue)
 			{
@@ -69,7 +69,7 @@ namespace Common.UserInterface.Services
 
 				foreach (var uiZoneContainer in activeGroup.UiZones)
 				{
-					runtimeDrawService.RemoveOverlaidDrawable(uiZoneContainer);
+					runTimeOverlaidDrawService.RemoveDrawable(uiZoneContainer);
 				}
 			}
 
@@ -84,7 +84,7 @@ namespace Common.UserInterface.Services
 
 			foreach (var uiZoneContainer in uiGroup.UiZones)
 			{
-				runtimeDrawService.AddOverlaidDrawable(uiZoneContainer);
+				runTimeOverlaidDrawService.AddDrawable(uiZoneContainer);
 
 				if (true != uiZoneContainer.ElementRows?.Any())
 				{

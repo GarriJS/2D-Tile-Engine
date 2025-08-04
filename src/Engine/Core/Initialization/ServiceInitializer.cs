@@ -96,7 +96,8 @@ namespace Engine.Core.Initialization
 			[
 				(typeof(ContentManager), game.Content),
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
-				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),
+				(typeof(IRuntimeDrawService), new RuntimeDrawManager(game)),               
+				(typeof(IRuntimeOverlaidDrawService), new RuntimeOverlaidDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
 				(typeof(IFunctionService), new FunctionService(game.Services)),
 				(typeof(IDebugService), new DebugService(game.Services)),
