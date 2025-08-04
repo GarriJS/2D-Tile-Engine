@@ -9,6 +9,16 @@ namespace Engine.Debugging.Services.Contracts
 	public interface IDebugService
 	{
 		/// <summary>
+		/// Gets the debug draw layer.
+		/// </summary>
+		public int DebugDrawLayer { get; }
+
+		/// <summary>
+		/// Gets the debug update layer.
+		/// </summary>
+		public int DebugUpdateOrder { get; }
+
+		/// <summary>
 		/// Toggles the screen area indicators.
 		/// </summary>
 		public void ToggleScreenAreaIndicators();

@@ -27,6 +27,16 @@ namespace Engine.Debugging.Services
 		private bool ScreenAreaIndicatorsEnabled { get => 0 != this.ScreenAreaIndicatorImages.Count; }
 
 		/// <summary>
+		/// Gets the debug draw layer.
+		/// </summary>
+		public int DebugDrawLayer { get; } = 999;
+
+		/// <summary>
+		/// Gets the debug update layer.
+		/// </summary>
+		public int DebugUpdateOrder { get; } = 999;
+
+		/// <summary>
 		/// Gets or sets the FPS counter;
 		/// </summary>
 		private FpsCounter FpsCounter { get; set; }
@@ -72,11 +82,11 @@ namespace Engine.Debugging.Services
 						TextureName = "screen width line",
 						TextureBox = new Rectangle(0, 0, screenWidth, 1),
 						Texture = widthTexture,
+						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
 							Coordinates = new Vector2(0, i)
-						},
-						DrawLayer = 0,
+						}
 					};
 
 					var nextWidthImage = new IndependentImage
@@ -84,11 +94,11 @@ namespace Engine.Debugging.Services
 						TextureName = "screen width line",
 						TextureBox = new Rectangle(0, 0, screenWidth, 1),
 						Texture = widthTexture,
+						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
 							Coordinates = new Vector2(0, i + 1)
-						},
-						DrawLayer = 0,
+						}
 					};
 
 					runtimeDrawingService.AddDrawable(widthImage);
@@ -104,11 +114,11 @@ namespace Engine.Debugging.Services
 						TextureName = "screen height line",
 						TextureBox = new Rectangle(0, 0, 1, screenHeight),
 						Texture = heightTexture,
+						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
 							Coordinates = new Vector2(i, 0)
-						},
-						DrawLayer = 0,
+						}
 					};
 
 					var nextHeightImage = new IndependentImage
@@ -116,11 +126,11 @@ namespace Engine.Debugging.Services
 						TextureName = "screen height line",
 						TextureBox = new Rectangle(0, 0, 1, screenHeight),
 						Texture = heightTexture,
+						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
 							Coordinates = new Vector2(i + 1, 0)
-						},
-						DrawLayer = 0,
+						}
 					};
 
 					runtimeDrawingService.AddDrawable(heightImage);
@@ -174,8 +184,8 @@ namespace Engine.Debugging.Services
 			var runtimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 			var fontService = this._gameServices.GetService<IFontService>();
 
-			if (null == this.FpsCounter ||
-				null == this.TpsCounter)
+			if ((null == this.FpsCounter) ||
+				(null == this.TpsCounter))
 			{
 				var spriteFont = fontService.DebugSpriteFont;
 
@@ -187,7 +197,7 @@ namespace Engine.Debugging.Services
 				this.FpsCounter = new FpsCounter
 				{
 					IsActive = true,
-					DrawLayer = 0,
+					DrawLayer = this.DebugDrawLayer,
 					LastFrameTime = null,
 					Font = spriteFont,
 					Position = new Position
@@ -199,8 +209,8 @@ namespace Engine.Debugging.Services
 				this.TpsCounter = new TpsCounter
 				{
 					IsActive = true,
-					DrawLayer = 0,
-					UpdateOrder = 0,
+					DrawLayer = this.DebugDrawLayer,
+					UpdateOrder = this.DebugUpdateOrder,
 					Font = spriteFont,
 					Position = new Position
 					{

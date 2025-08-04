@@ -65,16 +65,6 @@ namespace Common.Tiling.Services
 		/// <param name="gameTime">The game time.</param>
 		private void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime)
 		{
-			var controlService = this._gameServices.GetService<IControlService>();
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-			var cursorService = this._gameServices.GetService<ICursorService>();
-
-			if (null == controlService.ControlState)
-			{
-				return;
-			}
-
-			cursor.Position.Coordinates = controlService.ControlState.MousePosition;
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
 										localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));

@@ -12,14 +12,14 @@ namespace Engine.Graphics.Models
 	public class IndependentImage : Image, IHaveAnImage, IAmDrawable
 	{
 		/// <summary>
-		/// Gets or sets the position.
-		/// </summary>
-		public Position Position { get; set; }
-
-		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
 		public int DrawLayer { get; set; }
+
+		/// <summary>
+		/// Gets or sets the position.
+		/// </summary>
+		public Position Position { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.

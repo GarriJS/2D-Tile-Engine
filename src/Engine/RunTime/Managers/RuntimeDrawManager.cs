@@ -1,4 +1,5 @@
-﻿using Engine.RunTime.Models;
+﻿using Engine.RunTime.Constants;
+using Engine.RunTime.Models;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -24,6 +25,8 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		public override void Initialize()
 		{
+			this.UpdateOrder = ManagerOrderConstants.UnusedOrder;
+			this.DrawOrder = ManagerOrderConstants.DrawMangerDrawOrder;
 			this.RunTimeCollection = new RunTimeCollection<IAmDrawable>
 			{
 				KeyFunction = this.GetKey
@@ -96,17 +99,13 @@ namespace Engine.RunTime.Managers
 					drawable.Draw(gameTime, this.Game.Services);
 				}
 
-				foreach (var drawable in this.RunTimeCollection.PendingAdds)
-				{
-					drawable.Draw(gameTime, this.Game.Services);
-				}
-
 				this.RunTimeCollection.ResolvePendingModels();
 				this.RunTimeCollection.CurrentKey = null;
 			}
 
 			base.Draw(gameTime);
-			drawingService.EndDraw();
+			drawingService.EndDraw(); 
+			this.RunTimeCollection.ResolvePendingLists();
 		}
 	}
 }

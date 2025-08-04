@@ -49,38 +49,41 @@ namespace Common.Controls.Cursors.Services.Contracts
         /// <param name="cursor"></param>
         public void SetPrimaryCursor(Cursor cursor);
 
-        /// <summary>
-        /// Adds the secondary cursors.
-        /// </summary>
-        /// <param name="cursor">The cursor.</param>
-        public void AddSecondaryCursor(Cursor cursor);
+		/// <summary>
+		/// Adds the secondary cursors.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="disableExisting">A value indicating whether to disable existing secondary hover cursors.</param>
+		public void AddSecondaryCursor(Cursor cursor, bool disableExisting);
 
-        /// <summary>
-        /// Sets the primary hover cursor.
-        /// </summary>
-        /// <param name="cursor">The cursor.</param>
-        public void SetPrimaryHoverCursor(Cursor cursor);
+		/// <summary>
+		/// Sets the primary hover cursor.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		public void SetPrimaryHoverCursor(Cursor cursor);
 
-        /// <summary>
-        /// Adds the secondary cursors.
-        /// </summary>
-        /// <param name="cursor">The cursor.</param>
-        public void AddSecondaryHoverCursor(Cursor cursor);
+		/// <summary>
+		/// Adds the secondary cursors.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="disableExisting">A value indicating whether to disable existing secondary hover cursors.</param>
+		public void AddSecondaryHoverCursor(Cursor cursor, bool disableExisting);
 
 		/// <summary>
 		/// Disables all non hover cursors.
 		/// </summary>
 		public void DisableAllNonHoverCursors();
 
-        /// <summary>
-        /// Disables all hover cursors.
-        /// </summary>
-        public void DisableAllHoverCursors();
+		/// <summary>
+		/// Disables all hover cursors.
+		/// </summary>
+		/// <param name="disableSecondaryHoverCursors">A value indicating whether to disable secondary hover cursors.</param>
+		public void DisableAllHoverCursors(bool disableSecondaryHoverCursors);
 
-        /// <summary>
-        /// Clears the hover cursors.
-        /// </summary>
-        public void ClearHoverCursors();
+		/// <summary>
+		/// Clears the hover cursors.
+		/// </summary>
+		public void ClearHoverCursors();
 
 		/// <summary>
 		/// Process the cursor and control state.

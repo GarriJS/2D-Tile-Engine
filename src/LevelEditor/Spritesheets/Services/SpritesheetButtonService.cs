@@ -61,7 +61,20 @@ namespace LevelEditor.Spritesheets.Services
 				DrawLayer = 1
 			};
 
-			cursorService.AddSecondaryCursor(secondaryCursor);
+			var secondaryHoverCursor = new Cursor
+			{
+				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
+				TextureName = element.Graphic.TextureName,
+				Offset = new Vector2(20, 25),
+				CursorUpdater = cursorService.BasicCursorUpdater,
+				Texture = element.Graphic.Texture,
+				TextureBox = element.Graphic.TextureBox,
+				Position = cursorService.CursorPosition,
+				DrawLayer = 1
+			};
+
+			cursorService.AddSecondaryCursor(secondaryCursor, disableExisting: true);
+			cursorService.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
 		}
 
 		/// <summary>
@@ -71,18 +84,11 @@ namespace LevelEditor.Spritesheets.Services
 		/// <param name="gameTime">The game time.</param>
 		private void SpritesheetButtonCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
-			var controlService = this._gameServices.GetService<IControlService>();
 			var tileService = this._gameServices.GetService<ITileService>();
 
-			if (null == controlService.ControlState)
-			{
-				return;
-			}
-
-			var position = controlService.ControlState.MouseState.Position.ToVector2();
-			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-			cursor.Offset = new Vector2(localTileLocation.X - position.X,
-												localTileLocation.Y - position.Y);
+			var localTileLocation = tileService.GetLocalTileCoordinates(cursor.Position.Coordinates);
+			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.Coordinates.X,
+										localTileLocation.Y - cursor.Position.Coordinates.Y);
 		}
 
 		/// <summary>

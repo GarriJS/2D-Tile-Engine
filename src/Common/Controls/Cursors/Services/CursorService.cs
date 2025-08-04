@@ -5,14 +5,12 @@ using Common.Controls.Cursors.Services.Contracts;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
-using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Common.Controls.Cursors.Services
 {
@@ -91,12 +89,13 @@ namespace Common.Controls.Cursors.Services
 			this.Cursors.Add(cursor.CursorName, cursor);
 			this.SetPrimaryCursor(cursor);
 
-			var hoverCursorClearer = new HoverCursorClearer
+			var hoverCursorMonitor = new CursorStateMonitor
 			{
+				CursorPosition = this.CursorPosition,
 				UpdateOrder = -100
 			};
 
-			runTimeUpdateService.AddUpdateable(hoverCursorClearer);
+			runTimeUpdateService.AddUpdateable(hoverCursorMonitor);
 		}
 
 		/// <summary>
@@ -127,7 +126,8 @@ namespace Common.Controls.Cursors.Services
 		/// Adds the secondary cursors.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
-		public void AddSecondaryCursor(Cursor cursor)
+		/// <param name="disableExisting">A value indicating whether to disable existing secondary hover cursors.</param>
+		public void AddSecondaryCursor(Cursor cursor, bool disableExisting)
 		{
 			if ((this.PrimaryCursor == cursor) ||
 				(true == this.SecondaryCursors.Contains(cursor)))
@@ -137,6 +137,17 @@ namespace Common.Controls.Cursors.Services
 
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+
+			if (true == disableExisting)
+			{
+				foreach (var secondaryCursor in this.SecondaryCursors)
+				{
+					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
+					runTimeUpdateService.RemoveUpdateable(secondaryCursor);
+				}
+
+				this.SecondaryCursors.Clear();
+			}
 
 			this.SecondaryCursors.Add(cursor);
 
@@ -162,26 +173,30 @@ namespace Common.Controls.Cursors.Services
 				runTimeUpdateService.RemoveUpdateable(this.PrimaryCursor);
 			}
 
-			if (true == this.SecondaryCursors?.Any())
+			foreach (var secondaryCursor in this.SecondaryCursors)
 			{
-				foreach (var secondaryCursor in this.SecondaryCursors)
-				{
-					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-					runTimeUpdateService.RemoveUpdateable(secondaryCursor);
-				}
+				runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
+				runTimeUpdateService.RemoveUpdateable(secondaryCursor);
 			}
 
-			this.DisableAllHoverCursors();
+			this.DisableAllHoverCursors(disableSecondaryHoverCursors: false);
 			this.PrimaryHoverCursor = cursor;
 			runTimeOverlaidDrawService.AddDrawable(cursor);
 			runTimeUpdateService.AddUpdateable(cursor);
+
+			foreach (var secondaryHoverCursor in this.SecondaryHoverCursors)
+			{
+				runTimeOverlaidDrawService.AddDrawable(secondaryHoverCursor);
+				runTimeUpdateService.AddUpdateable(secondaryHoverCursor);
+			}
 		}
 
 		/// <summary>
 		/// Adds the secondary cursors.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
-		public void AddSecondaryHoverCursor(Cursor cursor)
+		/// <param name="disableExisting">A value indicating whether to disable existing secondary hover cursors.</param>
+		public void AddSecondaryHoverCursor(Cursor cursor, bool disableExisting)
 		{
 			if ((this.PrimaryHoverCursor == cursor) ||
 				(true == this.SecondaryHoverCursors.Contains(cursor)))
@@ -191,6 +206,17 @@ namespace Common.Controls.Cursors.Services
 
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+
+			if (true == disableExisting)
+			{
+				foreach (var secondaryCursor in this.SecondaryHoverCursors)
+				{
+					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
+					runTimeUpdateService.RemoveUpdateable(secondaryCursor);
+				}
+
+				this.SecondaryHoverCursors.Clear();
+			}
 
 			this.SecondaryHoverCursors.Add(cursor);
 			runTimeOverlaidDrawService.AddDrawable(cursor);
@@ -212,8 +238,8 @@ namespace Common.Controls.Cursors.Services
 				this.PrimaryCursor = null;
 			}
 
-			if (true != this.SecondaryCursors?.Any())
-			{ 
+			if (0 == this.SecondaryCursors.Count)
+			{
 				return;
 			}
 
@@ -229,7 +255,8 @@ namespace Common.Controls.Cursors.Services
 		/// <summary>
 		/// Disables all hover cursors.
 		/// </summary>
-		public void DisableAllHoverCursors()
+		/// <param name="disableSecondaryHoverCursors">A value indicating whether to disable secondary hover cursors.</param>
+		public void DisableAllHoverCursors(bool disableSecondaryHoverCursors)
 		{
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
@@ -241,7 +268,8 @@ namespace Common.Controls.Cursors.Services
 				this.PrimaryHoverCursor = null;
 			}
 
-			if (true != this.SecondaryHoverCursors?.Any())
+			if ((false == disableSecondaryHoverCursors) ||
+				(0 == this.SecondaryHoverCursors.Count))
 			{
 				return;
 			}
@@ -269,13 +297,10 @@ namespace Common.Controls.Cursors.Services
 				runTimeUpdateService.RemoveUpdateable(this.PrimaryHoverCursor);
 			}
 
-			if (true == this.SecondaryHoverCursors?.Any())
+			foreach (var cursor in this.SecondaryHoverCursors)
 			{
-				foreach (var cursor in this.SecondaryCursors)
-				{
-					runTimeOverlaidDrawService.RemoveDrawable(cursor);
-					runTimeUpdateService.RemoveUpdateable(cursor);
-				}
+				runTimeOverlaidDrawService.RemoveDrawable(cursor);
+				runTimeUpdateService.RemoveUpdateable(cursor);
 			}
 
 			if (null != this.PrimaryCursor)
@@ -284,13 +309,10 @@ namespace Common.Controls.Cursors.Services
 				runTimeUpdateService.AddUpdateable(this.PrimaryCursor);
 			}
 
-			if (true == this.SecondaryCursors?.Any())
+			foreach (var cursor in this.SecondaryCursors)
 			{
-				foreach (var cursor in this.SecondaryCursors)
-				{
-					runTimeOverlaidDrawService.AddDrawable(cursor);
-					runTimeUpdateService.AddUpdateable(cursor);
-				}
+				runTimeOverlaidDrawService.AddDrawable(cursor);
+				runTimeUpdateService.AddUpdateable(cursor);
 			}
 		}
 
@@ -348,15 +370,7 @@ namespace Common.Controls.Cursors.Services
 		/// <param name="gameTime">The game time.</param>
 		public void BasicCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
-			var controlService = this._gameServices.GetService<IControlService>();
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-
-			if (null == controlService.ControlState)
-			{
-				return;
-			}
-
-			cursor.Position.Coordinates = controlService.ControlState.MousePosition;
+			// cursor position is updated in the cursor state monitor
 		}
 	}
 }

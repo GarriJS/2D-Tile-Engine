@@ -1,14 +1,15 @@
 ﻿using Common.Controls.Cursors.Services.Contracts;
 using Engine.Controls.Services.Contracts;
+using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Controls.Cursors.Models
 {
 	/// <summary>
-	/// Represents a hover cursor clearer.
+	/// Represents a cursor state monitor.
 	/// </summary>
-	public class HoverCursorClearer : IAmUpdateable
+	public class CursorStateMonitor : IAmUpdateable
 	{
 		/// <summary>
 		/// Gets or sets a value indicating whether hover cursors are active.
@@ -19,6 +20,11 @@ namespace Common.Controls.Cursors.Models
 		/// Gets or sets the update order.
 		/// </summary>
 		public int UpdateOrder { get; set; }
+
+		/// <summary>
+		/// Gets or sets the cursor position.
+		/// </summary>
+		public Position CursorPosition { get; set; }
 
 		/// <summary>
 		/// Updates the updateable.
@@ -36,6 +42,7 @@ namespace Common.Controls.Cursors.Models
 				return;
 			}
 
+			this.CursorPosition.Coordinates = controlService.ControlState.MousePosition;
 			var activeCursor = true == this.HoverCursorActive ?
 							   cursorService.PrimaryHoverCursor :
 							   cursorService.PrimaryCursor;

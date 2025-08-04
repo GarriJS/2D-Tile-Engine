@@ -1,4 +1,5 @@
-﻿using Engine.RunTime.Models;
+﻿using Engine.RunTime.Constants;
+using Engine.RunTime.Models;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -24,6 +25,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		public override void Initialize()
 		{
+			this.UpdateOrder = ManagerOrderConstants.UpdateManagerUpdateOrder;
 			this.RunTimeCollection = new RunTimeCollection<IAmUpdateable>
 			{
 				KeyFunction = this.GetKey
@@ -92,16 +94,12 @@ namespace Engine.RunTime.Managers
 					updateable.Update(gameTime, this.Game.Services);
 				}
 
-				foreach (var updateable in this.RunTimeCollection.PendingAdds)
-				{
-					updateable.Update(gameTime, this.Game.Services);
-				}
-
 				this.RunTimeCollection.ResolvePendingModels();
 				this.RunTimeCollection.CurrentKey = null;
 			}
-			
+
 			base.Update(gameTime);
+			this.RunTimeCollection.ResolvePendingLists();
 		}
 	}
 }

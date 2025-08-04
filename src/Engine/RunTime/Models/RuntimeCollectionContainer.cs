@@ -15,17 +15,27 @@ namespace Engine.RunTime.Models
 		public int? CurrentKey { get; set; }
 
 		/// <summary>
-		/// Gets or sets the active models.
+		/// Gets the active models.
 		/// </summary>
 		public SortedDictionary<int, List<T>> ActiveModels { get; private set; } = [];
 
 		/// <summary>
-		/// Gets or sets the pending adds.
+		/// Gets the pending list adds.
+		/// </summary>
+		public SortedDictionary<int, List<T>> PendingListAdds { get; private set; } = [];
+
+		/// <summary>
+		/// Gets the pending list removals.
+		/// </summary>
+		public HashSet<int> PendingListRemovals { get; private set; } = [];
+
+		/// <summary>
+		/// Gets the pending adds.
 		/// </summary>
 		public HashSet<T> PendingAdds { get; private set; } = [];
 
 		/// <summary>
-		/// Gets or sets the pending removals.
+		/// Gets the pending removals.
 		/// </summary>
 		public HashSet<T> PendingRemovals { get; private set; } = [];
 
@@ -49,7 +59,21 @@ namespace Engine.RunTime.Models
 
 			if (false == this.ActiveModels.TryGetValue(key, out var modelList))
 			{
-				this.ActiveModels[key] = [model];
+				if (false == this.CurrentKey.HasValue)
+				{
+					this.ActiveModels[key] = [model];
+				}
+				else if (true == this.PendingListAdds.TryGetValue(key, out var pendingModelList))
+				{
+					if (false == pendingModelList.Contains(model))
+					{
+						pendingModelList.Add(model);
+					}
+				}
+				else
+				{
+					this.PendingListAdds[key] = [model];
+				}
 
 				return;
 			}
@@ -68,6 +92,11 @@ namespace Engine.RunTime.Models
 			else if (false == modelList.Contains(model))
 			{
 				modelList.Add(model);
+
+				if (true == this.PendingListRemovals.Contains(key))
+				{
+					this.PendingListRemovals.Remove(key);
+				}
 			}
 		}
 
@@ -104,7 +133,16 @@ namespace Engine.RunTime.Models
 			{
 				modelList.Remove(model);
 
-				if (0 == modelList.Count)
+				if (0 < modelList.Count)
+				{
+					return;
+				}
+
+				if (true == this.CurrentKey.HasValue)
+				{
+					this.PendingListRemovals.Add(key);
+				}
+				else
 				{
 					this.ActiveModels.Remove(key);
 				}
@@ -118,9 +156,9 @@ namespace Engine.RunTime.Models
 		{
 			if ((false == this.CurrentKey.HasValue) ||
 				(false == this.ActiveModels.TryGetValue(this.CurrentKey.Value, out var modelList)))
-			{ 
+			{
 				this.ClearPendingModels();
-			
+
 				return;
 			}
 
@@ -136,12 +174,44 @@ namespace Engine.RunTime.Models
 		}
 
 		/// <summary>
-		/// Clears the pending.
+		/// /Resolves the pending lists.
+		/// </summary>
+		public void ResolvePendingLists()
+		{
+			if (true == this.CurrentKey.HasValue)
+			{
+				this.ClearPendingLists();
+			}
+
+			foreach (var kvp in this.PendingListAdds)
+			{ 
+				this.ActiveModels[kvp.Key] = kvp.Value;
+			}
+
+			foreach (var key in this.PendingListRemovals)
+			{
+				this.ActiveModels.Remove(key);
+			}
+
+			this.ClearPendingLists();
+		}
+
+		/// <summary>
+		/// Clears the pending models.
 		/// </summary>
 		private void ClearPendingModels()
-		{ 
+		{
 			this.PendingAdds.Clear();
 			this.PendingRemovals.Clear();
+		}
+
+		/// <summary>
+		/// Clears the pending lists.
+		/// </summary>
+		private void ClearPendingLists()
+		{ 
+			this.PendingListAdds.Clear();
+			this.PendingListRemovals.Clear();
 		}
 	}
 }
