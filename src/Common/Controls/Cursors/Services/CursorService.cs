@@ -294,7 +294,6 @@ namespace Common.Controls.Cursors.Services
 		public IHaveAHoverConfiguration ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-			//cursor.Position.Coordinates = new Vector2(639, 772);
 			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
 
 			if (null == uiObject)
