@@ -83,7 +83,7 @@ namespace Common.UserInterface.Models
 				spritebatch.Draw(this.Graphic.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Graphic.TextureBox, Color.White);
 			}
 
-			if (true != this?.SubElements.Any())
+			if (0 == this.SubElements.Count)
 			{
 				return;
 			}

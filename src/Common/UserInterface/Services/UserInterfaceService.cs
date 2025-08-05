@@ -75,7 +75,7 @@ namespace Common.UserInterface.Services
 
 			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
 
-			if (true != uiGroup.UiZones?.Any())
+			if (0 == uiGroup.UiZones.Count)
 			{
 				return;
 			}
@@ -86,14 +86,14 @@ namespace Common.UserInterface.Services
 			{
 				runTimeOverlaidDrawService.AddDrawable(uiZoneContainer);
 
-				if (true != uiZoneContainer.ElementRows?.Any())
+				if (0 == uiZoneContainer.ElementRows.Count)
 				{
 					continue;
 				}
 
 				foreach (var uiRow in uiZoneContainer.ElementRows)
 				{
-					if (true != uiRow.SubElements?.Any())
+					if (0 == uiRow.SubElements.Count)
 					{
 						continue;
 					}
@@ -140,9 +140,10 @@ namespace Common.UserInterface.Services
 			}
 
 			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
-			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => e.Area.Contains(location));
+			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => true == e.Area.Contains(location));
 
-			if (true != uiZone?.ElementRows?.Any())
+			if ((null == uiZone) ||
+				(0 == uiZone.ElementRows.Count))
 			{
 				return uiZone;
 			}
@@ -329,11 +330,11 @@ namespace Common.UserInterface.Services
 			}
 
 			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, CommonCursorNames.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, CommonCursorNamesConstants.PrimaryCursorName);
 			var uiZone = new UiZone
 			{
 				UiZoneName = uiZoneModel.UiZoneName,
-				DrawLayer = 0,
+				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
 				JustificationType = (UiZoneJustificationTypes)uiZoneModel.JustificationType,
 				Image = background,
 				HoverConfig = hoverConfig,
@@ -347,7 +348,7 @@ namespace Common.UserInterface.Services
 				uiZone.HoverConfig?.AddSubscription(hoverAction);
 			}
 
-			if (true != uiZoneModel.ElementRows?.Any())
+			if (0 == uiZoneModel.ElementRows.Length)
 			{
 				return uiZone;
 			}
@@ -390,10 +391,10 @@ namespace Common.UserInterface.Services
 				elementRowsSecondPass.Add(elementRow);
 			}
 
-			var fillRows = elementRowsSecondPass.Where(e => e.SubElements.Any(s => s.Area.Y == 0))
+			var fillRows = elementRowsSecondPass.Where(e => true == e.SubElements.Any(s => s.Area.Y == 0))
 												.ToList();
 
-			if (true == fillRows?.Any())
+			if (0 < fillRows.Count)
 			{
 				var fillHeight = (uiScreenZone.Area.Height - currentTotalHeight) / fillRows.Count();
 
@@ -436,7 +437,7 @@ namespace Common.UserInterface.Services
 			var numberOfFillElements = 0;
 			var subElements = new List<IAmAUiElement>();
 
-			if (true != uiRowModel.SubElements?.Any())
+			if (0 == uiRowModel.SubElements.Length)
 			{
 				return null;
 			}
@@ -502,7 +503,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The flexed user interface rows.</returns>
 		private IList<UiRow> GetFlexedUiRows(UiRow uiRow)
 		{
-			if (true != uiRow?.SubElements.Any())
+			if (0 == uiRow.SubElements.Count)
 			{
 				return [];
 			}
@@ -552,7 +553,7 @@ namespace Common.UserInterface.Services
 
 			currentRow.BottomPadding = uiRow.BottomPadding;
 
-			if (true == currentRow.SubElements.Any())
+			if (0 < currentRow.SubElements.Count)
 			{
 				currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
 														  .FirstOrDefault().Area.Y;

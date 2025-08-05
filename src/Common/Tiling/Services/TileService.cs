@@ -6,8 +6,6 @@ using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
-using Common.UserInterface.Services.Contracts;
-using Engine.Controls.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
 using Engine.Graphics.Services.Contracts;
@@ -45,7 +43,7 @@ namespace Common.Tiling.Services
 
 			var cursor = new Cursor
 			{
-				CursorName = CommonCursorNames.TileGridCursorName,
+				CursorName = CommonCursorNamesConstants.TileGridCursorName,
 				TextureName = tileGridTexture.Name,
 				Offset = new Vector2(-80, -80),
 				CursorUpdater = this.UpdateTileGridCursorPosition,

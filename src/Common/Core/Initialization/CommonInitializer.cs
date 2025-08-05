@@ -22,7 +22,9 @@ namespace Common.Core.Initialization
 			var result = new Dictionary<string, Delegate>();
 
 			foreach (var kv in GetInitialHoverEventProcessors(gameServices))
+			{
 				result[kv.Key] = kv.Value;
+			}
 
 			return result;
 		}

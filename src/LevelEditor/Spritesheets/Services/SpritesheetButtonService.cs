@@ -34,7 +34,7 @@ namespace LevelEditor.Spritesheets.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.TileGridCursorName, out var tileGridCursor))
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNamesConstants.TileGridCursorName, out var tileGridCursor))
 			{
 				return;
 			}

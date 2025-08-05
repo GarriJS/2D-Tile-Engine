@@ -99,7 +99,7 @@ namespace Common.UserInterface.Models
 				spritebatch.Draw(this.Image.Texture, this.Position.Coordinates, this.Image.TextureBox, Color.White);
 			}
 
-			if (true != this.ElementRows?.Any())
+			if (0 == this.ElementRows.Count)
 			{
 				return;
 			}

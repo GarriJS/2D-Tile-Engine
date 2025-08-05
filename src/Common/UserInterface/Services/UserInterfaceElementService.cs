@@ -1,32 +1,30 @@
-﻿using Common.DiskModels.UI.Contracts;
+﻿using Common.Controls.Constants;
+using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.DiskModels.UI.Contracts;
 using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Constants;
+using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
-using Common.UserInterface.Enums;
 using Common.UserInterface.Services.Contracts;
-using Engine.Controls.Services.Contracts;
 using Engine.Core.Initialization.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
-using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Controls.Constants;
-using Common.Controls.Cursors.Services.Contracts;
 
 namespace Common.UserInterface.Services
 {
-    /// <summary>
-    /// Represents a user interface element service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the user interface element service.
-    /// </remarks>
-    /// <param name="gameServices">The game service.</param>
-    public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
+	/// <summary>
+	/// Represents a user interface element service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the user interface element service.
+	/// </remarks>
+	/// <param name="gameServices">The game service.</param>
+	public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -79,7 +77,8 @@ namespace Common.UserInterface.Services
 				uiButton.ClickConfig.Area = new Vector2(uiButton.Area.X * uiButton.ClickableAreaScaler.X, uiButton.Area.Y * uiButton.ClickableAreaScaler.Y);
 				uiButton.ClickConfig.Offset = new Vector2((uiButton.Area.X - uiButton.ClickConfig.Area.X) / 2, (uiButton.Area.Y - uiButton.ClickConfig.Area.Y) / 2);
 
-				if (true == uiButton.ClickAnimation?.Frames?.Any())
+				if ((null != uiButton.ClickAnimation) &&
+					(0 < uiButton.ClickAnimation.Frames.Length))
 				{
 					foreach (var frame in uiButton.ClickAnimation.Frames)
 					{
@@ -130,11 +129,11 @@ namespace Common.UserInterface.Services
 
 			var elementSize = this.GetElementDimensions(uiZone, uiElementModel);
 			var width = true == elementSize.HasValue
-						? elementSize.Value.X
-						: fillWidth;
+				? elementSize.Value.X
+				: fillWidth;
 			var height = true == elementSize.HasValue
-						 ? elementSize.Value.Y
-						 : 0;
+				? elementSize.Value.Y
+				: 0;
 
 			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
 			var area = new Vector2(width, height);
@@ -177,7 +176,7 @@ namespace Common.UserInterface.Services
 		{
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNamesConstants.PrimaryCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 
 			return new UiText
@@ -207,7 +206,7 @@ namespace Common.UserInterface.Services
 
 			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
 			var clickableOffset = new Vector2((area.X - clickableArea.X) / 2, (area.Y - clickableArea.Y) /2);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNamesConstants.PrimaryCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
 			var button = new UiButton

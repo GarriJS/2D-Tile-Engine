@@ -206,7 +206,7 @@ namespace LevelEditor.Core.Initialization
 											RightPadding = 4,
 											BackgroundTextureName = "black",
 											Text = "Push Me 2",
-											SizeType = (int)UiElementSizeTypes.ExtraLarge,
+											SizeType = (int)UiElementSizeTypes.Fill,
 											ClickableAreaScaler = new Vector2(1f, 1f),
 										}
 									]

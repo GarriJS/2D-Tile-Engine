@@ -43,9 +43,9 @@ namespace Common.Controls.Cursors.Models
 			}
 
 			this.CursorPosition.Coordinates = controlService.ControlState.MousePosition;
-			var activeCursor = true == this.HoverCursorActive ?
-							   cursorService.PrimaryHoverCursor :
-							   cursorService.PrimaryCursor;
+			var activeCursor = true == this.HoverCursorActive
+				? cursorService.PrimaryHoverCursor
+				: cursorService.PrimaryCursor;
 
 			if (null == activeCursor)
 			{ 

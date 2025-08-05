@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Constants for common cursor names.
 	/// </summary>
-	public static class CommonCursorNames
+	public static class CommonCursorNamesConstants
 	{
 		/// <summary>
 		/// Gets or sets the primary cursor name.

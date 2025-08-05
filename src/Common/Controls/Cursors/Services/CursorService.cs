@@ -76,7 +76,7 @@ namespace Common.Controls.Cursors.Services
 
 			var cursor = new Cursor
 			{
-				CursorName = CommonCursorNames.PrimaryCursorName,
+				CursorName = CommonCursorNamesConstants.PrimaryCursorName,
 				TextureName = cursorTexture.Name,
 				Offset = default,
 				CursorUpdater = this.BasicCursorUpdater,

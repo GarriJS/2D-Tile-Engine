@@ -25,7 +25,6 @@ namespace Common.Core.Initialization
 		{
 			return
 			[
-				(typeof(IMouseService), new MouseService(game.Services)),
 				(typeof(ICursorService), new CursorService(game.Services)),
 				(typeof(ICursorInteractionService), new CursorInteractionService(game.Services)),
 				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),
