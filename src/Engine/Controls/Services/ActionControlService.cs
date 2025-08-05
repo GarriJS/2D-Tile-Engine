@@ -1,26 +1,25 @@
-﻿using Engine.DiskModels.Controls;
+﻿using Engine.Controls.Enums;
 using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Initialization;
+using Engine.DiskModels.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using Engine.Controls.Enums;
 
 namespace Engine.Controls.Services
 {
-    /// <summary>
-    /// Represents a action control service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the action control service.
-    /// </remarks>
-    /// <param name="gameServices">The game services.</param>
-    public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
+	/// <summary>
+	/// Represents a action control service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the action control service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -72,7 +71,8 @@ namespace Engine.Controls.Services
 			Keys[] controlKeys = null;
 			MouseButtonTypes[] controlMouseButtons = null;
 
-			if (true == actionControlModel.ControlKeys?.Any())
+			if ((null != actionControlModel.ControlKeys) &&
+				(0 < actionControlModel.ControlKeys.Length))
 			{
 				controlKeys = new Keys[actionControlModel.ControlKeys.Length];
 
@@ -82,7 +82,8 @@ namespace Engine.Controls.Services
 				}
 			}
 
-			if (true == actionControlModel.ControlMouseButtons?.Any())
+			if ((null != actionControlModel.ControlMouseButtons) &&
+				(0 < actionControlModel.ControlMouseButtons.Length))
 			{
 				controlMouseButtons = new MouseButtonTypes[actionControlModel.ControlMouseButtons.Length];
 
@@ -110,7 +111,8 @@ namespace Engine.Controls.Services
 			int[] controlKeys = null;
 			int[] controlMouseButtons = null;
 
-			if (true == actionControl.ControlKeys?.Any())
+			if ((null != actionControl.ControlKeys) &&
+				(0 < actionControl.ControlKeys.Length))
 			{
 				controlKeys = new int[actionControl.ControlKeys.Length];
 
@@ -120,7 +122,8 @@ namespace Engine.Controls.Services
 				}
 			}
 
-			if (true == actionControl.ControlMouseButtons?.Any())
+			if ((null != actionControl.ControlMouseButtons) &&
+				(0 < actionControl.ControlMouseButtons.Length))
 			{
 				controlMouseButtons = new int[actionControl.ControlMouseButtons.Length];
 

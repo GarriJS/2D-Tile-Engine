@@ -28,6 +28,7 @@ namespace Engine.Graphics.Services
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
 			var positionService = this._gameServices.GetService<IPositionService>();
+
 			var position = positionService.GetPosition(independentImageModel.Position);
 
 			if (false == textureService.TryGetTexture(independentImageModel.TextureName, out var texture))

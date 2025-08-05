@@ -26,6 +26,7 @@ namespace Engine.Graphics.Services
 		public Sprite GetSprite(SpriteModel spriteModel)
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
+
 			var textureName = textureService.GetTextureName(spriteModel.TextureName, spriteModel.SpritesheetBox);
 
 			if (false == textureService.TryGetTexture(textureName, out var texture))

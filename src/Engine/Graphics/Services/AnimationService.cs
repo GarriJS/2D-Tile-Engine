@@ -27,6 +27,7 @@ namespace Engine.Graphics.Services
 		public Animation GetAnimation(AnimationModel animationModel, int frameWidth, int frameHeight)
 		{
 			var imageService = this._gameServices.GetService<IImageService>();
+
 			var frames = new Image[animationModel.Frames.Length];
 
 			for (int i = 0; i < frames.Length; i++)
@@ -62,6 +63,7 @@ namespace Engine.Graphics.Services
 			else
 			{
 				var randomService = this._gameServices.GetService<RandomService>();
+
 				animation.FrameDuration = randomService.GetRandomInt(animationModel.FrameMinDuration.Value, animationModel.FrameMaxDuration.Value);
 			}
 

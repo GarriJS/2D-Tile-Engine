@@ -4,7 +4,6 @@ using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Linq;
 
 namespace Engine.Graphics.Models
 {
@@ -103,6 +102,7 @@ namespace Engine.Graphics.Models
 					(true == this.FrameMaxDuration.HasValue))
 				{
 					var randomService = gameServices.GetService<IRandomService>();
+
 					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
 				}
 
@@ -124,7 +124,7 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		public void Dispose()
 		{
-			if (true != this.Frames?.Any())
+			if (0 == this.Frames.Length)
 			{
 				return;
 			}

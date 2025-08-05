@@ -36,7 +36,7 @@ namespace Engine.Physics.Models
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
 		public bool Contains(Vector2 coordinate)
 		{
-			return this.Areas.Any(e => e.Contains(coordinate));
+			return this.Areas.Any(e => true == e.Contains(coordinate));
 		}
 	}
 }

@@ -70,6 +70,7 @@ namespace Engine.Debugging.Services
 			else
 			{
 				var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
 				var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
 				var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
 				var widthTexture = this.GetLineTexture(false, screenWidth, Color.MonoGameOrange);
@@ -151,6 +152,7 @@ namespace Engine.Debugging.Services
 		public Texture2D GetLineTexture(bool verticalLine, int length, Color color)
 		{
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
 			int width = 1, height = 1;
 
 			if (true == verticalLine)

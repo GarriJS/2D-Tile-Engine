@@ -25,7 +25,9 @@ namespace Engine.RunTime.Services
 		public DrawingService(GameServiceContainer gameServices)
 		{
 			this._gameServices = gameServices;
+
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
 			this.SpriteBatch = new SpriteBatch(graphicDeviceService.GraphicsDevice);
 		}
 

@@ -3,7 +3,6 @@ using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Engine.Core.Fonts
 {
@@ -64,7 +63,7 @@ namespace Engine.Core.Fonts
 				return font;
 			}
 
-			Debug.WriteLine($"Sprite font {spriteFontName} was not found.");
+			//LOGGING
 			return null;
 		}
 

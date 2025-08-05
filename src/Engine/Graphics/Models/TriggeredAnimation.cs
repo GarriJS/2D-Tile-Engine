@@ -76,6 +76,7 @@ namespace Engine.Graphics.Models
 					(true == this.FrameMaxDuration.HasValue))
 				{
 					var randomService = gameServices.GetService<IRandomService>();
+
 					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
 				}
 

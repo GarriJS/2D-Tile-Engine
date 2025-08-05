@@ -28,6 +28,7 @@ namespace Engine.Graphics.Services
 		public void Initialize()
 		{
 			var drawingService = this._gameServices.GetService<IDrawingService>();
+
 			this.SpriteBatch = drawingService.SpriteBatch;
 		}
 
@@ -40,6 +41,7 @@ namespace Engine.Graphics.Services
 		public Vector2 MeasureString(string fontName, string text)
 		{
 			var fontService = this._gameServices.GetService<IFontService>();
+
 			var font = fontService.GetSpriteFont(fontName);
 			return font.MeasureString(text);
 		}
@@ -65,6 +67,7 @@ namespace Engine.Graphics.Services
 		public void Draw(string fontName, string text, Vector2 position, Color color)
 		{
 			var fontService = this._gameServices.GetService<IFontService>();		
+
 			var font = fontService.GetSpriteFont(fontName);
 			this.Draw(font, text, position, color);
 		}

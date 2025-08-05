@@ -264,6 +264,7 @@ namespace Engine.Core.Textures
 			}
 
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
 			var extendedTexture = new Texture2D(graphicsDeviceService.GraphicsDevice, extendedWidth, extendedHeight);
 			extendedTexture.SetData(extendedTextureData);
 
@@ -277,6 +278,7 @@ namespace Engine.Core.Textures
 		private Texture2D GetDebugTexture()
 		{
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
 			var texture = new Texture2D(graphicsDeviceService.GraphicsDevice, 1080, 1080);
 			var debugColor = Color.MonoGameOrange;
 			var colorData = new Color[1080 * 1080];
