@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Engine.RunTime.Models
@@ -167,7 +168,7 @@ namespace Engine.RunTime.Models
 
 			if (modelList.Count == 0)
 			{
-				this.ActiveModels.Remove(this.CurrentKey.Value);
+				this.PendingListRemovals.Add(this.CurrentKey.Value);
 			}
 
 			this.ClearPendingModels();
@@ -184,7 +185,7 @@ namespace Engine.RunTime.Models
 			}
 
 			foreach (var kvp in this.PendingListAdds)
-			{ 
+			{
 				this.ActiveModels[kvp.Key] = kvp.Value;
 			}
 
@@ -209,7 +210,7 @@ namespace Engine.RunTime.Models
 		/// Clears the pending lists.
 		/// </summary>
 		private void ClearPendingLists()
-		{ 
+		{
 			this.PendingListAdds.Clear();
 			this.PendingListRemovals.Clear();
 		}

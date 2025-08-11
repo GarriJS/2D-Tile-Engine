@@ -1,9 +1,9 @@
-﻿namespace Common.Core.Constants
+﻿namespace Common.UserInterface.Constants
 {
     /// <summary>
     /// Constants for user interface event names.
     /// </summary>
-    public static class UiEventNameConstants
+    public static class CommonUiEventNameConstants
     {
         /// <summary>
         /// Gets the user interface zone hover event name.

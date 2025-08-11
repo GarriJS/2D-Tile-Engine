@@ -2,11 +2,13 @@
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
+using Common.Core.Constants;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
+using Engine.RunTime.Constants;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -14,14 +16,14 @@ using System.Collections.Generic;
 
 namespace Common.Controls.Cursors.Services
 {
-	/// <summary>
-	/// Represents a cursors service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the cursor service.
-	/// </remarks>
-	/// <param name="gameServices">The game services.</param>
-	public class CursorService(GameServiceContainer gameServices) : ICursorService
+    /// <summary>
+    /// Represents a cursors service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the cursor service.
+    /// </remarks>
+    /// <param name="gameServices">The game services.</param>
+    public class CursorService(GameServiceContainer gameServices) : ICursorService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -76,14 +78,15 @@ namespace Common.Controls.Cursors.Services
 
 			var cursor = new Cursor
 			{
+				DrawLayer = RunTimeConstants.BaseAboveUiCursorDrawLayer,
+				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = CommonCursorNamesConstants.PrimaryCursorName,
 				TextureName = cursorTexture.Name,
 				Offset = default,
-				CursorUpdater = this.BasicCursorUpdater,
+				Position = this.CursorPosition,
 				TextureBox = new Rectangle(0, 0, 18, 28),
 				Texture = cursorTexture,
-				Position = this.CursorPosition,
-				DrawLayer = 1
+				CursorUpdater = this.BasicCursorUpdater
 			};
 
 			this.Cursors.Add(cursor.CursorName, cursor);
@@ -92,7 +95,7 @@ namespace Common.Controls.Cursors.Services
 			var hoverCursorMonitor = new CursorStateMonitor
 			{
 				CursorPosition = this.CursorPosition,
-				UpdateOrder = -100
+				UpdateOrder = ManagerOrderConstants.EarlyUpdateOrder
 			};
 
 			runTimeUpdateService.AddUpdateable(hoverCursorMonitor);

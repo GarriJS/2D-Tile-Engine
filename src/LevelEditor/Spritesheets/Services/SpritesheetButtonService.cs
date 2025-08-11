@@ -11,17 +11,18 @@ using Microsoft.Xna.Framework;
 using LevelEditor.Controls.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
+using Common.Core.Constants;
 
 namespace LevelEditor.Spritesheets.Services
 {
-    /// <summary>
-    /// Represents a user interface service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the spritesheet button service.
-    /// </remarks>
-    /// <param name="gameServices">The game services.</param>
-    public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
+	/// <summary>
+	/// Represents a user interface service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the spritesheet button service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -42,35 +43,47 @@ namespace LevelEditor.Spritesheets.Services
 			var tileService = this._gameServices.GetService<ITileService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 
+			cursorService.SetPrimaryCursor(tileGridCursor);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-			tileGridCursor.Offset = new Vector2(localTileLocation.X - tileGridCursor.Position.X - ((tileGridCursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
-												localTileLocation.Y - tileGridCursor.Position.Y - ((tileGridCursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
-			cursorService.SetPrimaryCursor(tileGridCursor);
 
 			var secondaryCursor = new Cursor
 			{
+				DrawLayer = RunTimeConstants.BaseAboveUiCursorDrawLayer,
+				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
 				TextureName = element.Graphic.TextureName,
-				Offset = new Vector2(localTileLocation.X - position.X,
-									 localTileLocation.Y - position.Y),
-				CursorUpdater = this.SpritesheetButtonCursorUpdater,
+				Offset = new Vector2
+				{
+					X = localTileLocation.X - position.X,
+					Y = localTileLocation.Y - position.Y
+				},
+				Position = cursorService.CursorPosition,
 				Texture = element.Graphic.Texture,
 				TextureBox = element.Graphic.TextureBox,
-				Position = cursorService.CursorPosition,
-				DrawLayer = 1
+				CursorUpdater = this.SpritesheetButtonCursorUpdater
 			};
+
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNamesConstants.PrimaryCursorName, out var primaryCursor))
+			{ 
+				// LOGGING
+			}
 
 			var secondaryHoverCursor = new Cursor
 			{
+				DrawLayer = RunTimeConstants.BaseAboveUiCursorDrawLayer,
+				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
 				TextureName = element.Graphic.TextureName,
-				Offset = new Vector2(20, 25),
-				CursorUpdater = cursorService.BasicCursorUpdater,
+				Position = cursorService.CursorPosition,
+				Offset = new Vector2
+				{
+					X = (primaryCursor?.TextureBox.Width ?? 25) + 1,
+					Y = (primaryCursor?.TextureBox.Height ?? 25) + 1
+				},
 				Texture = element.Graphic.Texture,
 				TextureBox = element.Graphic.TextureBox,
-				Position = cursorService.CursorPosition,
-				DrawLayer = 1
+				CursorUpdater = cursorService.BasicCursorUpdater
 			};
 
 			cursorService.AddSecondaryCursor(secondaryCursor, disableExisting: true);
@@ -100,7 +113,7 @@ namespace LevelEditor.Spritesheets.Services
 		public UiButtonModel[][] GetUiButtonsForSpritesheet(string spritesheetName, Point spriteDimensions)
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
-			
+
 			if (true == string.IsNullOrEmpty(spritesheetName))
 			{
 				return null;
@@ -109,7 +122,7 @@ namespace LevelEditor.Spritesheets.Services
 			if (false == textureService.TryGetTexture(spritesheetName, out var texture))
 			{
 				return null;
-			}	
+			}
 
 			var horizontalSize = texture.Width / spriteDimensions.X;
 			var verticalSize = texture.Height / spriteDimensions.Y;
@@ -122,7 +135,7 @@ namespace LevelEditor.Spritesheets.Services
 				for (var j = 0; j < verticalSize; j++)
 				{
 					var textureName = textureService.GetTextureName(spritesheetName, new Rectangle(i * spriteDimensions.X, j * spriteDimensions.Y, spriteDimensions.X, spriteDimensions.Y));
-					
+
 					if (false == textureService.TryGetTexture(textureName, out var buttonTexture))
 					{
 						continue;

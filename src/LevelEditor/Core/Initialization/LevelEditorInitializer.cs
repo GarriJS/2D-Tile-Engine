@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.UserInterface.Constants;
 
 namespace LevelEditor.Core.Initialization
 {
@@ -107,7 +108,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row2Col1,
 							BackgroundTextureName = string.Empty,
 							JustificationType = (int)UiZoneJustificationTypes.Bottom,
-							ZoneHoverEventName = Common.Core.Constants.UiEventNameConstants.UserInterfaceZoneHover,
+							ZoneHoverEventName = CommonUiEventNameConstants.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -139,7 +140,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Center,
-							ZoneHoverEventName = Common.Core.Constants.UiEventNameConstants.UserInterfaceZoneHover,
+							ZoneHoverEventName = CommonUiEventNameConstants.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -219,7 +220,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Top,
-							ZoneHoverEventName = Common.Core.Constants.UiEventNameConstants.UserInterfaceZoneHover,
+							ZoneHoverEventName = CommonUiEventNameConstants.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel

@@ -1,6 +1,7 @@
 ﻿using Common.Controls.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
+using Common.Core.Constants;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
@@ -16,14 +17,14 @@ using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Services
 {
-	/// <summary>
-	/// Represents a tile service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the tile service.
-	/// </remarks>
-	/// <param name="gameServices">The game services.</param>
-	public class TileService(GameServiceContainer gameServices) : ITileService
+    /// <summary>
+    /// Represents a tile service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the tile service.
+    /// </remarks>
+    /// <param name="gameServices">The game services.</param>
+    public class TileService(GameServiceContainer gameServices) : ITileService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -43,14 +44,15 @@ namespace Common.Tiling.Services
 
 			var cursor = new Cursor
 			{
+				DrawLayer = RunTimeConstants.BaseBelowUiCursorDrawLayer,
+				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = CommonCursorNamesConstants.TileGridCursorName,
 				TextureName = tileGridTexture.Name,
-				Offset = new Vector2(-80, -80),
-				CursorUpdater = this.UpdateTileGridCursorPosition,
+				Offset = default,
+				Position = cursorService.CursorPosition,
 				TextureBox = new Rectangle(0, 0, 160, 160),
 				Texture = tileGridTexture,
-				Position = cursorService.CursorPosition,
-				DrawLayer = 0
+				CursorUpdater = this.UpdateTileGridCursorPosition,
 			};
 
 			cursorService.Cursors.Add(cursor.CursorName, cursor);
@@ -64,8 +66,11 @@ namespace Common.Tiling.Services
 		private void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime)
 		{
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
-			cursor.Offset = new Vector2(localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
-										localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2)));
+			cursor.Offset = new Vector2
+			{
+				X = localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
+				Y = localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2))
+			};
 		}
 
 		/// <summary>
@@ -79,7 +84,11 @@ namespace Common.Tiling.Services
 			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
 			var row = (int)coordinates.Y / TileConstants.TILE_SIZE;
 
-			return new Vector2((col + gridOffset) * TileConstants.TILE_SIZE, (row + gridOffset) * TileConstants.TILE_SIZE);
+			return new Vector2
+			{
+				X = (col + gridOffset) * TileConstants.TILE_SIZE,
+				Y = (row + gridOffset) * TileConstants.TILE_SIZE
+			};
 		}
 
 		/// <summary>
@@ -159,7 +168,11 @@ namespace Common.Tiling.Services
 			var spriteService = this._gameServices.GetService<ISpriteService>();
 			var tilePosition = new Position
 			{
-				Coordinates = new Vector2(tileModel.Column * TileConstants.TILE_SIZE, tileModel.Row * TileConstants.TILE_SIZE)
+				Coordinates = new Vector2
+				{
+					X = tileModel.Column * TileConstants.TILE_SIZE,
+					Y = tileModel.Row * TileConstants.TILE_SIZE
+				}
 			};
 
 			var area = areaService.GetArea(tileModel.Area, tilePosition);

@@ -6,9 +6,14 @@
 	public static class ManagerOrderConstants
 	{
 		/// <summary>
+		/// Gets the early update order.
+		/// </summary>
+		public static int EarlyUpdateOrder { get; } = -100;
+
+		/// <summary>
 		/// Gets the unused order.
 		/// </summary>
-		public static int UnusedOrder { get; } = 999;
+		public static int UnusedOrder { get; } = 9999;
 
 		/// <summary>
 		/// Gets the control manager update order.

@@ -1,4 +1,4 @@
-﻿using Common.Core.Constants;
+﻿using Common.UserInterface.Constants;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -7,10 +7,10 @@ using System.Collections.Generic;
 
 namespace Common.Core.Initialization
 {
-	/// <summary>
-	/// Represents a level editor initializer.
-	/// </summary>
-	public static class CommonInitializer
+    /// <summary>
+    /// Represents a level editor initializer.
+    /// </summary>
+    public static class CommonInitializer
 	{
 		/// <summary>
 		/// Gets the function providers. 
@@ -40,7 +40,7 @@ namespace Common.Core.Initialization
 
 			return new Dictionary<string, Action<UiZone, Vector2>>
 			{
-				[UiEventNameConstants.UserInterfaceZoneHover] = uiService.BasicUiZoneHoverEventProcessor,
+				[CommonUiEventNameConstants.UserInterfaceZoneHover] = uiService.BasicUiZoneHoverEventProcessor,
 			};
 		}
 	}
