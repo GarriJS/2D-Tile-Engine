@@ -1,5 +1,4 @@
-﻿using Common.Controls.Constants;
-using Common.DiskModels.UI;
+﻿using Common.DiskModels.UI;
 using Common.UserInterface.Constants;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
@@ -17,6 +16,7 @@ using System.Linq;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Core.Constants;
+using Common.Controls.Cursors.Constants;
 
 namespace Common.UserInterface.Services
 {
@@ -331,7 +331,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, CommonCursorNamesConstants.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, CommonCursorNames.PrimaryCursorName);
 			var uiZone = new UiZone
 			{
 				UiZoneName = uiZoneModel.UiZoneName,

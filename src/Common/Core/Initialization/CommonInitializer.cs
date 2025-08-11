@@ -1,4 +1,6 @@
-﻿using Common.UserInterface.Constants;
+﻿using Common.Controls.Cursors.Models;
+using Common.Controls.Cursors.Services.Contracts;
+using Common.UserInterface.Constants;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -29,6 +31,16 @@ namespace Common.Core.Initialization
 			return result;
 		}
 
+		public static Dictionary<string, Action<Cursor, GameTime>> GetCursorUpdaters(GameServiceContainer gameService)
+		{
+			var cursorService = gameService.GetService<ICursorService>();
+
+			return new Dictionary<string, Action<Cursor, GameTime>>
+			{
+				[] = cursorService.BasicCursorUpdater
+			};
+		}
+
 		/// <summary>
 		/// Gets the initial hover event processors.
 		/// </summary>
@@ -40,7 +52,7 @@ namespace Common.Core.Initialization
 
 			return new Dictionary<string, Action<UiZone, Vector2>>
 			{
-				[CommonUiEventNameConstants.UserInterfaceZoneHover] = uiService.BasicUiZoneHoverEventProcessor,
+				[CommonUiEventName.UserInterfaceZoneHover] = uiService.BasicUiZoneHoverEventProcessor
 			};
 		}
 	}

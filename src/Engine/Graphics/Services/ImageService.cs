@@ -39,15 +39,16 @@ namespace Engine.Graphics.Services
 				texture = textureService.DebugTexture;
 			}
 
-			var textureBox = new Rectangle(TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-										   TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-										   width,
-										   height);
-
 			return new Image
 			{
 				TextureName = imageModel.TextureName,
-				TextureBox = textureBox,
+				TextureBox = new Rectangle
+				{
+					X = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+					Y = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+					Width = width,
+					Height = height
+				},
 				Texture = texture
 			};
 		}
@@ -73,15 +74,16 @@ namespace Engine.Graphics.Services
 				texture = textureService.DebugTexture;
 			}
 
-			var textureBox = new Rectangle(TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-										   TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-										   width,
-										   height);
-
 			return new Image
 			{
 				TextureName = textureName,
-				TextureBox = textureBox,
+				TextureBox = new Rectangle
+				{
+					X = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+					Y = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+					Width = width,
+					Height = height
+				},
 				Texture = texture
 			};
 		}

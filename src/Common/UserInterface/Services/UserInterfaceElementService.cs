@@ -1,5 +1,5 @@
-﻿using Common.Controls.Constants;
-using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Constants;
 using Common.DiskModels.UI.Contracts;
 using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Constants;
@@ -17,14 +17,14 @@ using System.Linq;
 
 namespace Common.UserInterface.Services
 {
-	/// <summary>
-	/// Represents a user interface element service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the user interface element service.
-	/// </remarks>
-	/// <param name="gameServices">The game service.</param>
-	public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
+    /// <summary>
+    /// Represents a user interface element service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the user interface element service.
+    /// </remarks>
+    /// <param name="gameServices">The game service.</param>
+    public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -176,7 +176,7 @@ namespace Common.UserInterface.Services
 		{
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNamesConstants.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 
 			return new UiText
@@ -206,7 +206,7 @@ namespace Common.UserInterface.Services
 
 			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
 			var clickableOffset = new Vector2((area.X - clickableArea.X) / 2, (area.Y - clickableArea.Y) /2);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNamesConstants.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
 			var button = new UiButton

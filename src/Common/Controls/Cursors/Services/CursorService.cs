@@ -1,17 +1,21 @@
-﻿using Common.Controls.Constants;
-using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
+using Common.DiskModels.Controls;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
+using Engine.Core.Constants;
+using Engine.Core.Initialization.Contracts;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Constants;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Common.Controls.Cursors.Services
@@ -62,8 +66,6 @@ namespace Common.Controls.Cursors.Services
 		/// </summary>
 		public void LoadContent()
 		{
-			var textureService = this._gameServices.GetService<ITextureService>();
-			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 
 			this.CursorPosition = new Position
@@ -71,34 +73,79 @@ namespace Common.Controls.Cursors.Services
 				Coordinates = default
 			};
 
-			if (false == textureService.TryGetTexture("mouse", out var cursorTexture))
-			{
-				cursorTexture = textureService.DebugTexture;
-			}
-
-			var cursor = new Cursor
-			{
-				DrawLayer = RunTimeConstants.BaseAboveUiCursorDrawLayer,
-				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
-				CursorName = CommonCursorNamesConstants.PrimaryCursorName,
-				TextureName = cursorTexture.Name,
-				Offset = default,
-				Position = this.CursorPosition,
-				TextureBox = new Rectangle(0, 0, 18, 28),
-				Texture = cursorTexture,
-				CursorUpdater = this.BasicCursorUpdater
-			};
-
-			this.Cursors.Add(cursor.CursorName, cursor);
-			this.SetPrimaryCursor(cursor);
-
 			var hoverCursorMonitor = new CursorStateMonitor
 			{
 				CursorPosition = this.CursorPosition,
 				UpdateOrder = ManagerOrderConstants.EarlyUpdateOrder
 			};
 
+			var cursorModel = new CursorModel
+			{
+				CursorName = CommonCursorNames.PrimaryCursorName,
+				TextureName = "mouse",
+				Offset = default,
+				CursorUpdaterName = "BasicCursorUpdater"
+			};
+
+			var cursor = this.GetCursor(cursorModel, 18, 28, addCursor: true);
+			this.SetPrimaryCursor(cursor);
+
 			runTimeUpdateService.AddUpdateable(hoverCursorMonitor);
+		}
+
+		/// <summary>
+		/// Gets the cursor.
+		/// </summary>
+		/// <param name="cursorModel">The cursor model.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="addCursor">A value indicating whether to add the cursors.</param>
+		/// <returns>The cursor.</returns>
+		public Cursor GetCursor(CursorModel cursorModel, int width, int height, bool addCursor = false)
+		{
+			if (null == cursorModel)
+			{
+				return null;
+			}
+
+			var textureService = this._gameServices.GetService<ITextureService>();
+			var functionService = this._gameServices.GetService<IFunctionService>();
+
+			if (false == textureService.TryGetTexture(cursorModel.TextureName, out var texture))
+			{
+				texture = textureService.DebugTexture;
+			}
+
+			if (false == functionService.TryGetFunction<Action<Cursor, GameTime>>(cursorModel.CursorUpdaterName, out var cursorUpdater))
+			{ 
+				cursorUpdater = this.BasicCursorUpdater;
+			}
+
+			var cursor =  new Cursor
+			{
+				DrawLayer = RunTimeConstants.BaseAboveUiCursorDrawLayer,
+				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
+				CursorName = cursorModel.CursorName,
+				TextureName = cursorModel.TextureName,
+				Offset = cursorModel.Offset,
+				Position = this.CursorPosition,
+				TextureBox = new Rectangle
+				{
+					X = 0,
+					Y = 0,
+					Width = width,
+					Height = height
+				},
+				Texture = texture,
+				CursorUpdater = cursorUpdater
+			};
+
+			if (true == addCursor)
+			{
+				this.Cursors.Add(cursor.CursorName, cursor);
+			}
+
+			return cursor;
 		}
 
 		/// <summary>

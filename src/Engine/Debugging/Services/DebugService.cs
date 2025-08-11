@@ -86,7 +86,11 @@ namespace Engine.Debugging.Services
 						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
-							Coordinates = new Vector2(0, i)
+							Coordinates = new Vector2
+							{
+								X = 0,
+								Y = i
+							}
 						}
 					};
 
@@ -118,7 +122,11 @@ namespace Engine.Debugging.Services
 						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
-							Coordinates = new Vector2(i, 0)
+							Coordinates = new Vector2
+							{
+								X = i,
+								Y = 0
+							}
 						}
 					};
 
@@ -130,7 +138,11 @@ namespace Engine.Debugging.Services
 						DrawLayer = this.DebugDrawLayer,
 						Position = new Position
 						{
-							Coordinates = new Vector2(i + 1, 0)
+							Coordinates = new Vector2
+							{
+								X = i + 1,
+								Y = 0
+							}
 						}
 					};
 
@@ -204,7 +216,11 @@ namespace Engine.Debugging.Services
 					Font = spriteFont,
 					Position = new Position
 					{
-						Coordinates = new Vector2(5, 0)
+						Coordinates = new Vector2
+						{
+							X = 5,
+							Y = 0
+						}
 					}
 				};
 
@@ -216,7 +232,11 @@ namespace Engine.Debugging.Services
 					Font = spriteFont,
 					Position = new Position
 					{
-						Coordinates = new Vector2(5, 0)
+						Coordinates = new Vector2
+						{
+							X = 5,
+							Y = 0
+						}
 					}
 				};
 			}

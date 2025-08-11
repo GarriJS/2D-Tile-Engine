@@ -5,9 +5,10 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a position.
 	/// </summary>
-	public class Position
+	/// <param name="coordinates">The coordinates.</param>
+	public class Position(Vector2 coordinates = default)
 	{
-		private Vector2 _coordinates = default;
+		private Vector2 _coordinates = coordinates;
 
 		/// <summary>
 		/// Gets or sets the coordinates.

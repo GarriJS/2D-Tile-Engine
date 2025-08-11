@@ -3,7 +3,7 @@
     /// <summary>
     /// Constants for user interface event names.
     /// </summary>
-    public static class UiEventNameConstants
+    public static class UiEventName
     {
         /// <summary>
         /// Gets the spritesheet button click event name.

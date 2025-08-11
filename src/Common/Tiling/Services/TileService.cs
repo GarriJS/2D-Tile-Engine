@@ -1,4 +1,4 @@
-﻿using Common.Controls.Constants;
+﻿using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
@@ -46,7 +46,7 @@ namespace Common.Tiling.Services
 			{
 				DrawLayer = RunTimeConstants.BaseBelowUiCursorDrawLayer,
 				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
-				CursorName = CommonCursorNamesConstants.TileGridCursorName,
+				CursorName = CommonCursorNames.TileGridCursorName,
 				TextureName = tileGridTexture.Name,
 				Offset = default,
 				Position = cursorService.CursorPosition,

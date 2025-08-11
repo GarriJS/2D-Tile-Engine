@@ -78,7 +78,7 @@ namespace LevelEditor.Core.Initialization
 
 			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
 			{
-				[UiEventNameConstants.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
+				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
 			};
 		}
 
@@ -108,7 +108,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row2Col1,
 							BackgroundTextureName = string.Empty,
 							JustificationType = (int)UiZoneJustificationTypes.Bottom,
-							ZoneHoverEventName = CommonUiEventNameConstants.UserInterfaceZoneHover,
+							ZoneHoverEventName = CommonUiEventName.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -140,7 +140,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Center,
-							ZoneHoverEventName = CommonUiEventNameConstants.UserInterfaceZoneHover,
+							ZoneHoverEventName = CommonUiEventName.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -220,7 +220,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Top,
-							ZoneHoverEventName = CommonUiEventNameConstants.UserInterfaceZoneHover,
+							ZoneHoverEventName = CommonUiEventName.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel

@@ -1,5 +1,4 @@
-﻿using Common.Controls.Constants;
-using Common.DiskModels.UI.Elements;
+﻿using Common.DiskModels.UI.Elements;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Models.Contracts;
 using Engine.Controls.Services.Contracts;
@@ -12,17 +11,18 @@ using LevelEditor.Controls.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
+using Common.Controls.Cursors.Constants;
 
 namespace LevelEditor.Spritesheets.Services
 {
-	/// <summary>
-	/// Represents a user interface service.
-	/// </summary>
-	/// <remarks>
-	/// Initializes the spritesheet button service.
-	/// </remarks>
-	/// <param name="gameServices">The game services.</param>
-	public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
+    /// <summary>
+    /// Represents a user interface service.
+    /// </summary>
+    /// <remarks>
+    /// Initializes the spritesheet button service.
+    /// </remarks>
+    /// <param name="gameServices">The game services.</param>
+    public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -35,7 +35,7 @@ namespace LevelEditor.Spritesheets.Services
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			if (false == cursorService.Cursors.TryGetValue(CommonCursorNamesConstants.TileGridCursorName, out var tileGridCursor))
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.TileGridCursorName, out var tileGridCursor))
 			{
 				return;
 			}
@@ -64,7 +64,7 @@ namespace LevelEditor.Spritesheets.Services
 				CursorUpdater = this.SpritesheetButtonCursorUpdater
 			};
 
-			if (false == cursorService.Cursors.TryGetValue(CommonCursorNamesConstants.PrimaryCursorName, out var primaryCursor))
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
 			{ 
 				// LOGGING
 			}
@@ -150,7 +150,7 @@ namespace LevelEditor.Spritesheets.Services
 						BackgroundTextureName = textureName,
 						Text = string.Empty,
 						ClickableAreaScaler = new Vector2(1, 1),
-						ButtonClickEventName = UiEventNameConstants.SpritesheetButtonClick
+						ButtonClickEventName = UiEventName.SpritesheetButtonClick
 					};
 				}
 			}

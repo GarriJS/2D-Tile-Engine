@@ -1,4 +1,6 @@
-﻿using Common.DiskModels.Common.Tiling;
+﻿using Common.Controls.Cursors.Services.Contracts;
+using Common.DiskModels.Common.Tiling;
+using Common.DiskModels.Controls;
 using Common.DiskModels.UI;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Services.Contracts;
@@ -21,6 +23,7 @@ namespace Common.DiskModels
 		{
 			var tileService = gameServices.GetService<ITileService>();
 			var uiService = gameServices.GetService<IUserInterfaceService>();
+			var cursorService = gameServices.GetService<ICursorService>();
 
 			return
 			[
@@ -28,7 +31,8 @@ namespace Common.DiskModels
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayer),
 				(typeof(TileMapModel), tileService.GetTileMap),
 				(typeof(TileModel), tileService.GetTile),
-				(typeof(UiGroupModel), uiService.GetUiGroup)
+				(typeof(UiGroupModel), uiService.GetUiGroup),
+				(typeof(CursorModel), cursorService.GetCursor)
 			];
 		}
 	}

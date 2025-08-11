@@ -1,5 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
+using Common.DiskModels.Controls;
 using Engine.Controls.Models;
 using Engine.Core.Contracts;
 using Engine.Physics.Models;
@@ -43,11 +44,21 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// </summary>
 		public Dictionary<string, Cursor> Cursors { get; }
 
-        /// <summary>
-        /// Sets the primary cursor.
-        /// </summary>
-        /// <param name="cursor"></param>
-        public void SetPrimaryCursor(Cursor cursor);
+		/// <summary>
+		/// Gets the cursor.
+		/// </summary>
+		/// <param name="cursorModel">The cursor model.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="addCursor">A value indicating whether to add the cursors.</param>
+		/// <returns>The cursor.</returns>
+		public Cursor GetCursor(CursorModel cursorModel, int width, int height, bool addCursor = false);
+
+		/// <summary>
+		/// Sets the primary cursor.
+		/// </summary>
+		/// <param name="cursor"></param>
+		public void SetPrimaryCursor(Cursor cursor);
 
 		/// <summary>
 		/// Adds the secondary cursors.
