@@ -1,7 +1,5 @@
 ﻿using Engine.Core.Initialization;
-using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
-using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -43,12 +41,10 @@ namespace Engine.DiskModels
 		/// <returns>The model processing mappings.</returns>
 		private static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
-			var spriteService = gameServices.GetService<ISpriteService>();
 			var positionService = gameServices.GetService<IPositionService>();
 
 			return
 			[
-				(typeof(SpriteModel), spriteService.GetSprite),
 				(typeof(PositionModel), positionService.GetPosition),
 			];
 		}

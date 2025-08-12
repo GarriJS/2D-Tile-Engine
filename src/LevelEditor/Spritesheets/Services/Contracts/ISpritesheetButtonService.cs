@@ -1,4 +1,5 @@
-﻿using Common.DiskModels.UI.Elements;
+﻿using Common.Controls.Cursors.Models;
+using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Models.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -15,6 +16,13 @@ namespace LevelEditor.Spritesheets.Services.Contracts
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
 		public void SpritesheetButtonClickEventProcessor(IAmAUiElement element, Vector2 elementLocation);
+
+		/// <summary>
+		/// Updates the spritesheet button trailing cursor.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>\
+		/// <param name="gameTime">The game time.</param>
+		public void SpritesheetButtonCursorUpdater(Cursor cursor, GameTime gameTime);
 
 		/// <summary>
 		/// Gets the user interface buttons for the spritesheet.

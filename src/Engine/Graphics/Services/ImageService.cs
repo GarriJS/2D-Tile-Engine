@@ -22,10 +22,8 @@ namespace Engine.Graphics.Services
 		/// Gets the graphic.
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
 		/// <returns>The image.</returns>
-		public Image GetImage(ImageModel imageModel, int width, int height)
+		public Image GetImage(ImageModel imageModel)
 		{
 			if (null == imageModel)
 			{
@@ -42,13 +40,7 @@ namespace Engine.Graphics.Services
 			return new Image
 			{
 				TextureName = imageModel.TextureName,
-				TextureBox = new Rectangle
-				{
-					X = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-					Y = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-					Width = width,
-					Height = height
-				},
+				TextureBox = imageModel.TextureBox,
 				Texture = texture
 			};
 		}

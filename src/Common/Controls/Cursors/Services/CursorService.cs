@@ -7,7 +7,6 @@ using Common.DiskModels.Controls;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
-using Engine.Core.Constants;
 using Engine.Core.Initialization.Contracts;
 using Engine.Core.Textures.Contracts;
 using Engine.Physics.Models;
@@ -20,14 +19,14 @@ using System.Collections.Generic;
 
 namespace Common.Controls.Cursors.Services
 {
-    /// <summary>
-    /// Represents a cursors service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the cursor service.
-    /// </remarks>
-    /// <param name="gameServices">The game services.</param>
-    public class CursorService(GameServiceContainer gameServices) : ICursorService
+	/// <summary>
+	/// Represents a cursors service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the cursor service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class CursorService(GameServiceContainer gameServices) : ICursorService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -79,29 +78,35 @@ namespace Common.Controls.Cursors.Services
 				UpdateOrder = ManagerOrderConstants.EarlyUpdateOrder
 			};
 
+			runTimeUpdateService.AddUpdateable(hoverCursorMonitor);
+
 			var cursorModel = new CursorModel
 			{
 				CursorName = CommonCursorNames.PrimaryCursorName,
+				TextureBox = new Rectangle
+				{ 
+					X = 0,
+					Y = 0,
+					Width = 18,
+					Height = 28	
+				},
+				AboveUi = true,
 				TextureName = "mouse",
 				Offset = default,
-				CursorUpdaterName = "BasicCursorUpdater"
+				CursorUpdaterName = CommonCursorUpdatersNames.BasicCursorUpdater
 			};
 
-			var cursor = this.GetCursor(cursorModel, 18, 28, addCursor: true);
+			var cursor = this.GetCursor(cursorModel, addCursor: true);
 			this.SetPrimaryCursor(cursor);
-
-			runTimeUpdateService.AddUpdateable(hoverCursorMonitor);
 		}
 
 		/// <summary>
 		/// Gets the cursor.
 		/// </summary>
 		/// <param name="cursorModel">The cursor model.</param>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
 		/// <param name="addCursor">A value indicating whether to add the cursors.</param>
 		/// <returns>The cursor.</returns>
-		public Cursor GetCursor(CursorModel cursorModel, int width, int height, bool addCursor = false)
+		public Cursor GetCursor(CursorModel cursorModel, bool addCursor = false)
 		{
 			if (null == cursorModel)
 			{
@@ -123,19 +128,13 @@ namespace Common.Controls.Cursors.Services
 
 			var cursor =  new Cursor
 			{
-				DrawLayer = RunTimeConstants.BaseAboveUiCursorDrawLayer,
+				DrawLayer = cursorModel.AboveUi ? RunTimeConstants.BaseAboveUiCursorDrawLayer : RunTimeConstants.BaseBelowUiCursorDrawLayer,
 				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = cursorModel.CursorName,
 				TextureName = cursorModel.TextureName,
 				Offset = cursorModel.Offset,
 				Position = this.CursorPosition,
-				TextureBox = new Rectangle
-				{
-					X = 0,
-					Y = 0,
-					Width = width,
-					Height = height
-				},
+				TextureBox = cursorModel.TextureBox,
 				Texture = texture,
 				CursorUpdater = cursorUpdater
 			};

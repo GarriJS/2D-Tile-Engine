@@ -6,13 +6,13 @@
     public static class CommonCursorNames
     {
         /// <summary>
-        /// Gets or sets the primary cursor name.
+        /// Gets the primary cursor name.
         /// </summary>
-        public static string PrimaryCursorName { get; set; } = "Primary_Cursor";
+        public static string PrimaryCursorName { get; } = "Primary_Cursor";
 
         /// <summary>
-        /// Gets or sets the tile grid cursor name.
+        /// Gets the tile grid cursor name.
         /// </summary>
-        public static string TileGridCursorName { get; set; } = "Tile_Grid_Cursor";
+        public static string TileGridCursorName { get; } = "Tile_Grid_Cursor";
     }
 }

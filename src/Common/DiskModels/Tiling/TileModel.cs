@@ -18,6 +18,6 @@ namespace Common.DiskModels.Common.Tiling
         public IAmAAreaModel Area { get; set; }
 
         [DataMember(Name = "sprite", Order = 4)]
-        public SpriteModel Sprite { get; set; }
+        public ImageModel Sprite { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
+using Common.DiskModels.Controls;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
@@ -33,29 +34,25 @@ namespace Common.Tiling.Services
 		/// </summary>
 		public void LoadContent()
 		{
-			var textureService = this._gameServices.GetService<ITextureService>();
-			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			if (false == textureService.TryGetTexture("tile_grid", out var tileGridTexture))
+			var cursorModel = new CursorModel
 			{
-				tileGridTexture = textureService.DebugTexture;
-			}
-
-			var cursor = new Cursor
-			{
-				DrawLayer = RunTimeConstants.BaseBelowUiCursorDrawLayer,
-				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = CommonCursorNames.TileGridCursorName,
-				TextureName = tileGridTexture.Name,
+				TextureBox = new Rectangle
+				{ 
+					X = 0, 
+					Y = 0,
+					Width = 160,
+					Height = 160
+				},
+				AboveUi = false,
+				TextureName = "tile_grid",
 				Offset = default,
-				Position = cursorService.CursorPosition,
-				TextureBox = new Rectangle(0, 0, 160, 160),
-				Texture = tileGridTexture,
-				CursorUpdater = this.UpdateTileGridCursorPosition,
+				CursorUpdaterName = CommonCursorUpdatersNames.TileGridCursorUpdater
 			};
 
-			cursorService.Cursors.Add(cursor.CursorName, cursor);
+			_ = cursorService.GetCursor(cursorModel, addCursor: true);
 		}
 
 		/// <summary>
@@ -63,7 +60,7 @@ namespace Common.Tiling.Services
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
-		private void UpdateTileGridCursorPosition(Cursor cursor, GameTime gameTime)
+		public void TileGridCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2
@@ -165,7 +162,7 @@ namespace Common.Tiling.Services
 		public IAmATile GetTile(IAmATileModel tileModel)
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
-			var spriteService = this._gameServices.GetService<ISpriteService>();
+			var imageService = this._gameServices.GetService<IImageService>();
 			var tilePosition = new Position
 			{
 				Coordinates = new Vector2
@@ -193,7 +190,7 @@ namespace Common.Tiling.Services
 			}
 
 			var basicTileModel = tileModel as TileModel;
-			var sprite = spriteService.GetSprite(basicTileModel.Sprite);
+			var sprite = imageService.GetImage(basicTileModel.Sprite);
 			var tile = new Tile
 			{
 				Row = tileModel.Row,

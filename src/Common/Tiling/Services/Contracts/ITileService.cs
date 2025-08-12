@@ -1,4 +1,5 @@
-﻿using Common.DiskModels.Common.Tiling;
+﻿using Common.Controls.Cursors.Models;
+using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Common.Tiling.Contracts;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
@@ -12,6 +13,13 @@ namespace Common.Tiling.Services.Contracts
 	/// </summary>
 	public interface ITileService : ILoadContent
 	{
+		/// <summary>
+		/// Updates the tile grid cursor position.
+		/// </summary>
+		/// <param name="cursor">The cursor.</param>
+		/// <param name="gameTime">The game time.</param>
+		public void TileGridCursorUpdater(Cursor cursor, GameTime gameTime);
+
 		/// <summary>
 		/// Gets the local tile coordinates.
 		/// </summary>

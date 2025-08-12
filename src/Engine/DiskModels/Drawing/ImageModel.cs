@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Microsoft.Xna.Framework;
+using System.Runtime.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
@@ -7,5 +8,8 @@ namespace Engine.DiskModels.Drawing
 	{
 		[DataMember(Name = "textureName", Order = 1)]
 		public string TextureName { get; set; }
+
+		[DataMember(Name = "textureBox", Order = 2)]
+		public Rectangle TextureBox { get; set; }
 	}
 }

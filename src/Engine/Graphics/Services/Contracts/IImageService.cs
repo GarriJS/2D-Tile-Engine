@@ -12,10 +12,8 @@ namespace Engine.Graphics.Services.Contracts
 		/// Gets the graphic.
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
 		/// <returns>The image.</returns>
-		public Image GetImage(ImageModel imageModel, int width, int height);
+		public Image GetImage(ImageModel imageModel);
 
 		/// <summary>
 		/// Gets the graphic.

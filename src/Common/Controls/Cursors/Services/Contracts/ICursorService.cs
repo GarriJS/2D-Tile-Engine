@@ -48,11 +48,9 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// Gets the cursor.
 		/// </summary>
 		/// <param name="cursorModel">The cursor model.</param>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
 		/// <param name="addCursor">A value indicating whether to add the cursors.</param>
 		/// <returns>The cursor.</returns>
-		public Cursor GetCursor(CursorModel cursorModel, int width, int height, bool addCursor = false);
+		public Cursor GetCursor(CursorModel cursorModel, bool addCursor = false);
 
 		/// <summary>
 		/// Sets the primary cursor.

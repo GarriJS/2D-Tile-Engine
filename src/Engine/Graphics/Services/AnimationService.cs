@@ -32,7 +32,7 @@ namespace Engine.Graphics.Services
 
 			for (int i = 0; i < frames.Length; i++)
 			{
-				frames[i] = imageService.GetImage(animationModel.Frames[i], frameWidth, frameHeight);
+				frames[i] = imageService.GetImage(animationModel.Frames[i]);
 			}
 
 			var animation = animationModel switch
