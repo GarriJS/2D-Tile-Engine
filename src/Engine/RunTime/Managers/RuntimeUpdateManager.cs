@@ -16,9 +16,9 @@ namespace Engine.RunTime.Managers
 	public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
 	{
 		/// <summary>
-		/// Gets or sets the run time collections.
+		/// Gets the run time collections.
 		/// </summary>
-		private RunTimeCollection<IAmUpdateable> RunTimeCollection { get; set; } 
+		public RunTimeCollection<IAmUpdateable> RunTimeCollection { get; private set; } 
 
 		/// <summary>
 		/// Initializes the runtime update manager.
@@ -87,9 +87,7 @@ namespace Engine.RunTime.Managers
 				foreach (var updateable in kvp.Value)
 				{ 
 					if (true == this.RunTimeCollection.PendingRemovals.Contains(updateable))
-					{
 						continue;
-					}
 
 					updateable.Update(gameTime, this.Game.Services);
 				}

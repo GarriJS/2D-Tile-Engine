@@ -16,9 +16,9 @@ namespace Engine.RunTime.Managers
 	public class RuntimeOverlaidDrawManager(Game game) : DrawableGameComponent(game), IRuntimeOverlaidDrawService
 	{
 		/// <summary>
-		/// Gets or sets the run time collections.
+		/// Gets the run time collections.
 		/// </summary>
-		private RunTimeCollection<IAmDrawable> RunTimeCollection { get; set; }
+		public RunTimeCollection<IAmDrawable> RunTimeCollection { get; private set; }
 
 		/// <summary>
 		/// Initializes the runtime draw manager.
@@ -92,9 +92,7 @@ namespace Engine.RunTime.Managers
 				foreach (var drawable in kvp.Value)
 				{
 					if (true == this.RunTimeCollection.PendingRemovals.Contains(drawable))
-					{
 						continue;
-					}
 
 					drawable.Draw(gameTime, this.Game.Services);
 				}

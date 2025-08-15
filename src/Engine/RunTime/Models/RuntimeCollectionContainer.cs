@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Engine.RunTime.Models
@@ -8,7 +7,7 @@ namespace Engine.RunTime.Models
 	/// Represents a run time collection.
 	/// </summary>
 	/// <typeparam name="T">The model type.</typeparam>
-	internal class RunTimeCollection<T>
+	public class RunTimeCollection<T>
 	{
 		/// <summary>
 		/// Gets the current key.
