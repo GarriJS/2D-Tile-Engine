@@ -143,7 +143,13 @@ namespace Engine.Core.Textures
 			{
 				for (int y = 0; y < tilesetTexture.Height; y += TileConstants.TILE_SIZE)
 				{
-					var sourceRectangle = new Rectangle(x, y, TileConstants.TILE_SIZE, TileConstants.TILE_SIZE);
+					var sourceRectangle = new Rectangle
+					{
+						X =	x,
+						Y = y,
+						Width = TileConstants.TILE_SIZE,
+						Height = TileConstants.TILE_SIZE
+					};
 					var textureData = new Color[TileConstants.TILE_SIZE * TileConstants.TILE_SIZE];
 					tilesetTexture.GetData(0, sourceRectangle, textureData, 0, textureData.Length);
 					var tileName = this.GetTextureName(tilesetName, sourceRectangle);

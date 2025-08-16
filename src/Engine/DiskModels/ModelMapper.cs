@@ -1,5 +1,11 @@
-﻿using Engine.Core.Initialization;
+﻿using Engine.Controls.Models;
+using Engine.Controls.Services.Contracts;
+using Engine.Core.Initialization;
+using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
+using Engine.Graphics.Models;
+using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -42,10 +48,22 @@ namespace Engine.DiskModels
 		private static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var positionService = gameServices.GetService<IPositionService>();
+			var areaService = gameServices.GetService<IAreaService>();
+			var imageService = gameServices.GetService<IImageService>();
+			var animationService = gameServices.GetService<IAnimationService>();
+			var actionControlService = gameServices.GetService<IActionControlServices>();
 
 			return
 			[
-				(typeof(PositionModel), positionService.GetPosition),
+				(typeof(PositionModel), positionService.GetPositionFromModel),
+				(typeof(SimpleAreaModel), areaService.GetAreaFromModel<SimpleArea>),
+				(typeof(OffsetAreaModel), areaService.GetAreaFromModel<OffsetArea>),
+				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
+				(typeof(ImageModel), imageService.GetImageFromModel<Image>),
+				(typeof(IndependentImageModel), imageService.GetImageFromModel<IndependentImage>),
+				(typeof(Animation), animationService.GetAnimationFromModel),
+				(typeof(TriggeredAnimation), animationService.GetAnimationFromModel),
+				(typeof(ActionControl), actionControlService.GetActionControlFromModel),
 			];
 		}
 	}

@@ -1,8 +1,11 @@
 ﻿using Engine.Core.Fonts.Contracts;
 using Engine.Debugging.Models;
 using Engine.Debugging.Services.Contracts;
+using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
-using Engine.Physics.Models;
+using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -70,42 +73,49 @@ namespace Engine.Debugging.Services
 			else
 			{
 				var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+				var imageService = this._gameServices.GetService<IImageService>();
 
 				var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
 				var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
-				var widthTexture = this.GetLineTexture(false, screenWidth, Color.MonoGameOrange);
-				var heightTexture = this.GetLineTexture(false, screenHeight, Color.MonoGameOrange);
 
 				for (int i = screenHeight / 3; i < screenHeight; i += screenHeight / 3)
 				{
-					var widthImage = new IndependentImage
+					var widthImageModel = new IndependentImageModel
 					{
-						TextureName = "screen width line",
-						TextureBox = new Rectangle(0, 0, screenWidth, 1),
-						Texture = widthTexture,
-						DrawLayer = this.DebugDrawLayer,
-						Position = new Position
+						TextureName = "debug",
+						TextureBox = new Rectangle
 						{
-							Coordinates = new Vector2
-							{
-								X = 0,
-								Y = i
-							}
+							X = 0,
+							Y = 0,
+							Width = screenWidth, 
+							Height = 1
+						},
+						Position = new PositionModel
+						{
+							X = 0,
+							Y = i
 						}
 					};
 
-					var nextWidthImage = new IndependentImage
+					var widthImage = imageService.GetImageFromModel<IndependentImage>(widthImageModel);
+					var nextWidthImageModel = new IndependentImageModel
 					{
-						TextureName = "screen width line",
-						TextureBox = new Rectangle(0, 0, screenWidth, 1),
-						Texture = widthTexture,
-						DrawLayer = this.DebugDrawLayer,
-						Position = new Position
+						TextureName = "debug",
+						TextureBox = new Rectangle
 						{
-							Coordinates = new Vector2(0, i + 1)
+							X = 0,
+							Y = 0,
+							Width = screenWidth,
+							Height = 1
+						},
+						Position = new PositionModel
+						{
+							X = 0,
+							Y = i + 1
 						}
 					};
 
+					var nextWidthImage = imageService.GetImageFromModel<IndependentImage>(nextWidthImageModel);
 					runtimeDrawingService.AddDrawable(widthImage);
 					runtimeDrawingService.AddDrawable(nextWidthImage);
 					this.ScreenAreaIndicatorImages.Add(widthImage);
@@ -114,79 +124,48 @@ namespace Engine.Debugging.Services
 
 				for (int i = screenWidth / 4; i < screenWidth; i += screenWidth / 4)
 				{
-					var heightImage = new IndependentImage
+					var heightImageModel = new IndependentImageModel
 					{
-						TextureName = "screen height line",
-						TextureBox = new Rectangle(0, 0, 1, screenHeight),
-						Texture = heightTexture,
-						DrawLayer = this.DebugDrawLayer,
-						Position = new Position
+						TextureName = "debug",
+						TextureBox = new Rectangle
 						{
-							Coordinates = new Vector2
-							{
-								X = i,
-								Y = 0
-							}
+							X = 0,
+							Y = 0,
+							Width = 1,
+							Height = screenHeight
+						},
+						Position = new PositionModel
+						{
+							X = i,
+							Y = 0
 						}
 					};
 
-					var nextHeightImage = new IndependentImage
+					var heightImage = imageService.GetImageFromModel<IndependentImage>(heightImageModel);
+					var nextHeightImageModel = new IndependentImageModel
 					{
-						TextureName = "screen height line",
-						TextureBox = new Rectangle(0, 0, 1, screenHeight),
-						Texture = heightTexture,
-						DrawLayer = this.DebugDrawLayer,
-						Position = new Position
+						TextureName = "debug",
+						TextureBox = new Rectangle
 						{
-							Coordinates = new Vector2
-							{
-								X = i + 1,
-								Y = 0
-							}
+							X = 0,
+							Y = 0,
+							Width = 1,
+							Height = screenHeight
+						},
+						Position = new PositionModel
+						{
+							X = i + 1,
+							Y = 0
 						}
 					};
 
+					var nextHeightImage = imageService.GetImageFromModel<IndependentImage>(nextHeightImageModel);
 					runtimeDrawingService.AddDrawable(heightImage);
 					runtimeDrawingService.AddDrawable(nextHeightImage);
 					this.ScreenAreaIndicatorImages.Add(heightImage);
 					this.ScreenAreaIndicatorImages.Add(nextHeightImage);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Gets the line texture.
-		/// </summary>
-		/// <param name="verticalLine">A value indicating whether the line texture will be vertical.</param>
-		/// <param name="length">The length.</param>
-		/// <param name="color">The color.</param>
-		/// <returns>The line texture.</returns>
-		public Texture2D GetLineTexture(bool verticalLine, int length, Color color)
-		{
-			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-
-			int width = 1, height = 1;
-
-			if (true == verticalLine)
-			{
-				height = length;
-			}
-			else
-			{
-				width = length;
-			}
-
-			var texture = new Texture2D(graphicsDeviceService.GraphicsDevice, width, height);
-			var colorData = new Color[length];
-
-			for (int i = 0; i < colorData.Length; i++)
-			{
-				colorData[i] = color;
-			}
-
-			texture.SetData(colorData);
-
-			return texture;
 		}
 
 		/// <summary>
@@ -197,6 +176,7 @@ namespace Engine.Debugging.Services
 			var runtimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runtimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 			var fontService = this._gameServices.GetService<IFontService>();
+			var positionService = this._gameServices.GetService<IPositionService>();
 
 			if ((null == this.FpsCounter) ||
 				(null == this.TpsCounter))
@@ -208,21 +188,29 @@ namespace Engine.Debugging.Services
 					return;
 				}
 
+				var fpsPositionModel = new PositionModel
+				{
+					X = 5,
+					Y = 0,
+				};
+
+				var fpsPosition = positionService.GetPositionFromModel(fpsPositionModel);
 				this.FpsCounter = new FpsCounter
 				{
 					IsActive = true,
 					DrawLayer = this.DebugDrawLayer,
 					LastFrameTime = null,
 					Font = spriteFont,
-					Position = new Position
-					{
-						Coordinates = new Vector2
-						{
-							X = 5,
-							Y = 0
-						}
-					}
+					Position = fpsPosition
 				};
+
+				var tpsPositionModel = new PositionModel
+				{
+					X = 5,
+					Y = 0,
+				};
+
+				var tpsPosition = positionService.GetPositionFromModel(tpsPositionModel);
 
 				this.TpsCounter = new TpsCounter
 				{
@@ -230,14 +218,7 @@ namespace Engine.Debugging.Services
 					DrawLayer = this.DebugDrawLayer,
 					UpdateOrder = this.DebugUpdateOrder,
 					Font = spriteFont,
-					Position = new Position
-					{
-						Coordinates = new Vector2
-						{
-							X = 5,
-							Y = 0
-						}
-					}
+					Position = tpsPosition
 				};
 			}
 

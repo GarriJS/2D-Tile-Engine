@@ -20,24 +20,27 @@ namespace Engine.Physics.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the area.
+		/// Gets the area from the model.
 		/// </summary>
 		/// <param name="areaModel">The area model.</param>
-		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
-		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position)
-		{ 
-			return this.GetArea<IAmAArea>(areaModel, position);
+		public IAmAArea GetAreaFromModel(IAmAAreaModel areaModel)
+		{
+			return this.GetAreaFromModel<IAmAArea>(areaModel);
 		}
 
 		/// <summary>
-		/// Gets the area.
+		/// Gets the area from the model.
 		/// </summary>
 		/// <param name="areaModel">The area model.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="position">The position</param>
 		/// <returns>The area.</returns>
-		public T GetArea<T>(IAmAAreaModel areaModel, Position position) where T : IAmAArea 
+		public T GetAreaFromModel<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea
 		{
+			var positionService = this._gameServices.GetService<IPositionService>();
+
+			position ??= positionService.GetPositionFromModel(areaModel.Position);
+
 			switch (areaModel)
 			{
 				case AreaCollectionModel areaCollectionModel:
@@ -48,8 +51,8 @@ namespace Engine.Physics.Services
 
 					for (int i = 0; i < areaCollectionModel.Areas?.Length; i++)
 					{
-						areas[i] = this.GetArea<OffsetArea>(areaCollectionModel.Areas[i], position);
-						
+						areas[i] = this.GetAreaFromModel<OffsetArea>(areaCollectionModel.Areas[i], position);
+
 						var subAreaWidth = areas[i].Width;
 						var subAreaHeight = areas[i].Height;
 
@@ -60,12 +63,12 @@ namespace Engine.Physics.Services
 						}
 
 						if (subAreaWidth > width)
-						{ 
+						{
 							width = subAreaWidth;
 						}
 
 						if (subAreaHeight > height)
-						{ 
+						{
 							height = subAreaHeight;
 						}
 					}

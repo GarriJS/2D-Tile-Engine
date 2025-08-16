@@ -1,7 +1,8 @@
-﻿using Common.UserInterface.Models;
-using Common.UserInterface.Enums;
+﻿using Common.UserInterface.Enums;
+using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
-using Engine.Physics.Models;
+using Engine.DiskModels.Physics;
+using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -57,6 +58,8 @@ namespace Common.UserInterface.Services
 		public void InitializeUiScreenZones()
 		{
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+			var areaService = this._gameServices.GetService<IAreaService>();
+
 			var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
 			var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
@@ -73,36 +76,44 @@ namespace Common.UserInterface.Services
 						continue;
 					}
 
+					var areaModel = new SimpleAreaModel
+					{
+						Position = new PositionModel
+						{
+							X = x,
+							Y = y,
+						},
+						Width = screenWidth / 4,
+						Height = screenHeight / 3,
+					};
+
+					var area = areaService.GetAreaFromModel(areaModel);
 					var zone = new UiScreenZone
 					{
 						UiZoneType = zoneType,
-						Area = new SimpleArea
-						{
-							Width = screenWidth / 4,
-							Height = screenHeight / 3,
-							Position = new Position
-							{
-								Coordinates = new Vector2(x, y)
-							}
-						}
+						Area = area
 					};
 
 					this.UserInterfaceScreenZones.TryAdd(zoneType, zone);
 				}
 			}
 
+			var noneAreaModel = new SimpleAreaModel
+			{
+				Position = new PositionModel
+				{
+					X = default,
+					Y = default,
+				},
+				Width = screenWidth / 4,
+				Height = screenHeight / 3,
+			};
+
+			var noneArea = areaService.GetAreaFromModel(noneAreaModel);
 			var noneZone = new UiScreenZone
 			{
 				UiZoneType = UiScreenZoneTypes.None,
-				Area = new SimpleArea
-				{
-					Width = screenWidth / 4,
-					Height = screenHeight / 3,
-					Position = new Position
-					{
-						Coordinates = default
-					}
-				}
+				Area = noneArea
 			};
 
 			this.UserInterfaceScreenZones.TryAdd(UiScreenZoneTypes.None, noneZone);

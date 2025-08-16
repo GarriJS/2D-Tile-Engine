@@ -9,12 +9,10 @@ namespace Engine.Graphics.Services.Contracts
 	public interface IAnimationService
 	{
 		/// <summary>
-		/// Gets the animation.
+		/// Gets the animation from the model.
 		/// </summary>
 		/// <param name="animationModel">The animation.</param>
-		/// <param name="frameWidth">The frame width.</param>
-		/// <param name="frameHeight">The frame height.</param>
 		/// <returns>The animation.</returns>
-		public Animation GetAnimation(AnimationModel animationModel, int frameWidth, int frameHeight);
+		public Animation GetAnimationFromModel(AnimationModel animationModel);
 	}
 }

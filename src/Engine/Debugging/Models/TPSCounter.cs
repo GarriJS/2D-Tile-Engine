@@ -13,6 +13,15 @@ namespace Engine.Debugging.Models
 	internal class TpsCounter : IAmDrawable, IAmUpdateable
 	{
 		/// <summary>
+		/// The draw offset.
+		/// </summary>
+		private readonly static Vector2 Offset = new Vector2
+		{
+			X = 0,
+			Y = 20
+		};
+
+		/// <summary>
 		/// A value describing whether the TPS counter is enabled.
 		/// </summary>
 		public bool IsActive { get; set; }
@@ -61,7 +70,7 @@ namespace Engine.Debugging.Models
 
 			var writingService = gameServices.GetService<IWritingService>();
 
-			writingService.Draw(this.Font, this.TpsText, this.Position.Coordinates + new Vector2(0, 20), Color.MonoGameOrange);
+			writingService.Draw(this.Font, this.TpsText, this.Position.Coordinates + Offset, Color.MonoGameOrange);
 		}
 
 		/// <summary>

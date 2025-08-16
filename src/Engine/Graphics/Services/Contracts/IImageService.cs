@@ -9,14 +9,21 @@ namespace Engine.Graphics.Services.Contracts
 	public interface IImageService
 	{
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the image from the model.
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
 		/// <returns>The image.</returns>
-		public Image GetImage(ImageModel imageModel);
+		public Image GetImageFromModel(ImageModel imageModel);
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the image from the model.
+		/// </summary>
+		/// <param name="imageModel">The image model.</param>
+		/// <returns>The image.</returns>
+		public T GetImageFromModel<T>(ImageModel imageModel) where T : Image;
+
+		/// <summary>
+		/// Gets the image.
 		/// </summary>
 		/// <param name="textureName">The texture name.</param>
 		/// <param name="width">The width.</param>

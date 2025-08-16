@@ -233,7 +233,8 @@ namespace Common.UserInterface.Services
 
 			if (null != buttonModel.ClickableAreaAnimation)
 			{
-				var clickAnimation = animationService.GetAnimation(buttonModel.ClickableAreaAnimation, (int)clickableArea.X, (int)clickableArea.Y);
+				//, (int)clickableArea.X, (int)clickableArea.Y
+				var clickAnimation = animationService.GetAnimationFromModel(buttonModel.ClickableAreaAnimation);
 
 				if (clickAnimation is TriggeredAnimation triggeredAnimation)
 				{

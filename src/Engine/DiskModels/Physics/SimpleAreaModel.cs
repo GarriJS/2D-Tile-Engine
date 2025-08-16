@@ -6,10 +6,13 @@ namespace Engine.DiskModels.Physics
 	[DataContract(Name = "simpleArea")]
 	public class SimpleAreaModel : IAmAAreaModel
 	{
-		[DataMember(Name = "width", Order = 1)]
+		[DataMember(Name = "position", Order = 1)]
+		public PositionModel Position { get; set; }
+
+		[DataMember(Name = "width", Order = 2)]
 		public float Width { get; set; }
 
-		[DataMember(Name = "height", Order = 2)]
+		[DataMember(Name = "height", Order = 3)]
 		public float Height { get; set; }
 	}
 }

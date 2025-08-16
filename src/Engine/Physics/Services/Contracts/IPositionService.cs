@@ -9,10 +9,10 @@ namespace Engine.Physics.Services.Contracts
 	public interface IPositionService
 	{
 		/// <summary>
-		/// Gets the position.
+		/// Gets the position from the model.
 		/// </summary>
 		/// <param name="positionModel">The position model.</param>
 		/// <returns>The position.</returns>
-		public Position GetPosition(PositionModel positionModel);
+		public Position GetPositionFromModel(PositionModel positionModel);
 	}
 }

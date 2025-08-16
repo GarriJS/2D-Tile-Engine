@@ -59,7 +59,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void AddDrawable_ShouldGoToPendingAdds_WhenCurrentKeyMatches()
+        public void AddDrawable_ShouldDeferToPendingAdds_WhenCurrentLayerIsActive()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
@@ -77,7 +77,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void AddDrawable_NewKeyDuringActiveKey_ShouldDeferViaPendingListAdds()
+        public void AddDrawable_ShouldDeferToPendingListAdds_WhenAddingNewLayerDuringActiveIterat()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 2 };
@@ -97,7 +97,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void RemoveDrawable_ShouldRemoveFromActiveModels_WhenNoCurrentKey()
+        public void RemoveDrawable_ShouldRemoveDrawableImmediately_WhenNoActiveIteration()
         {
             var manager = CreateManager();
             var drawable1 = new FakeDrawable { DrawLayer = 1 };
@@ -111,7 +111,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void RemoveDrawable_ShouldRemoveActiveModelList_WhenNoCurrentKey()
+        public void RemoveDrawable_ShouldRemoveLayerEntry_WhenLastDrawableRemoved()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
@@ -125,7 +125,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void RemoveDrawable_ShouldGoToPendingRemovals_WhenCurrentKeyMatches()
+        public void RemoveDrawable_ShouldDeferToPendingRemovals_WhenRemovingDuringActiveIteration()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
@@ -143,7 +143,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void RemoveDrawable_ShouldQueueListRemoval_ThenApplyWhenCurrentKeyIsNull()
+        public void RemoveDrawable_ShouldQueueAndApplyListRemoval_WhenOutsideActiveIteration()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
@@ -163,7 +163,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void ChangeDrawableLayer_ShouldMoveDrawableToNewLayer_WhenNoCurrentKey()
+        public void ChangeDrawableLayer_ShouldMoveImmediately_WhenNoActiveIteration()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
@@ -180,7 +180,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void ChangeDrawableLayer_ShouldDefer_WhenCalledDuringActiveIteration()
+        public void ChangeDrawableLayer_ShouldDeferMove_WhenCalledDuringActiveIteration()
         {
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
@@ -205,7 +205,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void Draw_ShouldCallDrawingServiceAndDrawables()
+        public void Draw_ShouldCallDrawingServiceAndEachDrawable()
         {
             var game = new Game();
             var drawingServiceMock = new Mock<IDrawingService>();
@@ -225,7 +225,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void Draw_ShouldCallDrawProperAmountOfTimes()
+        public void Draw_ShouldInvokeEachDrawableExactlyOncePerFrame()
         {
             var game = new Game();
             var drawingServiceMock = new Mock<IDrawingService>();
@@ -256,7 +256,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void Draw_AddsNewLayerMidFrame_ShouldDeferToNextFrame()
+        public void Draw_ShouldDeferNewLayerUntilNextFrame_WhenAddedMidFrame()
         {
             var game = new Game();
             var drawingServiceMock = new Mock<IDrawingService>();
@@ -279,7 +279,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void Draw_ShouldCallLowerLayerDrawablesBeforeHigherLayers()
+        public void Draw_ShouldRespectLayerOrdering_WhenDrawing()
         {
             var game = new Game();
             var drawingServiceMock = new Mock<IDrawingService>();
@@ -307,7 +307,7 @@ namespace EngineTests.RunTime
         }
 
         [Fact]
-        public void Draw_ShouldStillBeginAndEnd_WhenNoDrawables()
+        public void Draw_ShouldBeginAndEndEvenWhenNoDrawablesPresent()
         {
             var game = new Game();
             var drawingServiceMock = new Mock<IDrawingService>();
@@ -322,7 +322,7 @@ namespace EngineTests.RunTime
 
         // Behavior subject to change.
         [Fact]
-        public void ResolvePendingLists_WhileCurrentKeySet_ShouldDiscardPendingOps()
+        public void ResolvePendingLists_ShouldDiscardOperations_WhenActiveIterationInProgress()
         {
             var manager = CreateManager();
 

@@ -9,7 +9,9 @@ using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Core.Initialization.Contracts;
 using Engine.Core.Textures.Contracts;
+using Engine.DiskModels.Physics;
 using Engine.Physics.Models;
+using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Constants;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -66,11 +68,15 @@ namespace Common.Controls.Cursors.Services
 		public void LoadContent()
 		{
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
+			var positionService = this._gameServices.GetService<IPositionService>();
 
-			this.CursorPosition = new Position
+			var positionModel = new PositionModel
 			{
-				Coordinates = default
+				X = default,
+				Y = default
 			};
+
+			this.CursorPosition = positionService.GetPositionFromModel(positionModel);
 
 			var hoverCursorMonitor = new CursorStateMonitor
 			{

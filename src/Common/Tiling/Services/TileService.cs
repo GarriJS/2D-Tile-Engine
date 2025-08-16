@@ -10,6 +10,7 @@ using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
+using Engine.DiskModels.Physics;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
@@ -163,21 +164,13 @@ namespace Common.Tiling.Services
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
 			var imageService = this._gameServices.GetService<IImageService>();
-			var tilePosition = new Position
-			{
-				Coordinates = new Vector2
-				{
-					X = tileModel.Column * TileConstants.TILE_SIZE,
-					Y = tileModel.Row * TileConstants.TILE_SIZE
-				}
-			};
 
-			var area = areaService.GetArea(tileModel.Area, tilePosition);
+			var area = areaService.GetAreaFromModel(tileModel.Area);
 
 			if (tileModel is AnimatedTileModel animatedTileModel)
 			{
 				var animationService = this._gameServices.GetService<IAnimationService>();
-				var animation = animationService.GetAnimation(animatedTileModel.Animation, TileConstants.TILE_SIZE, TileConstants.TILE_SIZE);
+				var animation = animationService.GetAnimationFromModel(animatedTileModel.Animation);
 				var animatedTile = new AnimatedTile
 				{
 					Row = tileModel.Row,
@@ -190,7 +183,7 @@ namespace Common.Tiling.Services
 			}
 
 			var basicTileModel = tileModel as TileModel;
-			var sprite = imageService.GetImage(basicTileModel.Sprite);
+			var sprite = imageService.GetImageFromModel(basicTileModel.Sprite);
 			var tile = new Tile
 			{
 				Row = tileModel.Row,

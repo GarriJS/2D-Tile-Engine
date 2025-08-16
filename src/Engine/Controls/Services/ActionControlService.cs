@@ -52,7 +52,7 @@ namespace Engine.Controls.Services
 
 						foreach (var control in controls)
 						{
-							actionControls.Add(GetActionControl(control));
+							actionControls.Add(this.GetActionControlFromModel(control));
 						}
 					}
 				}
@@ -62,11 +62,11 @@ namespace Engine.Controls.Services
 		}
 
 		/// <summary>
-		/// Gets the action control.
+		/// Gets the action control from the model.
 		/// </summary>
 		/// <param name="actionControlModel">The action control model.</param>
 		/// <returns>The action control.</returns>
-		private ActionControl GetActionControl(ActionControlModel actionControlModel)
+		public ActionControl GetActionControlFromModel(ActionControlModel actionControlModel)
 		{
 			Keys[] controlKeys = null;
 			MouseButtonTypes[] controlMouseButtons = null;

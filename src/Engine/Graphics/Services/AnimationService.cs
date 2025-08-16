@@ -18,13 +18,11 @@ namespace Engine.Graphics.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the animation.
+		/// Gets the animation from the model.
 		/// </summary>
 		/// <param name="animationModel">The animation.</param>
-		/// <param name="frameWidth">The frame width.</param>
-		/// <param name="frameHeight">The frame height.</param>
 		/// <returns>The animation.</returns>
-		public Animation GetAnimation(AnimationModel animationModel, int frameWidth, int frameHeight)
+		public Animation GetAnimationFromModel(AnimationModel animationModel)
 		{
 			var imageService = this._gameServices.GetService<IImageService>();
 
@@ -32,13 +30,12 @@ namespace Engine.Graphics.Services
 
 			for (int i = 0; i < frames.Length; i++)
 			{
-				frames[i] = imageService.GetImage(animationModel.Frames[i]);
+				frames[i] = imageService.GetImageFromModel(animationModel.Frames[i]);
 			}
 
 			var animation = animationModel switch
 			{
-				TriggeredAnimationModel triggeredAnimationModel => 
-				new TriggeredAnimation
+				TriggeredAnimationModel triggeredAnimationModel => new TriggeredAnimation
 				{
 					CurrentFrameIndex = triggeredAnimationModel.CurrentFrameIndex,
 					FrameMinDuration = triggeredAnimationModel.FrameMinDuration,
@@ -46,8 +43,7 @@ namespace Engine.Graphics.Services
 					Frames = frames,
 					RestingFrameIndex = triggeredAnimationModel.RestingFrameIndex,
 				},
-				_ => 
-				new Animation
+				_ => new Animation
 				{
 					CurrentFrameIndex = animationModel.CurrentFrameIndex,
 					FrameMinDuration = animationModel.FrameMinDuration,

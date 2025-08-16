@@ -1,6 +1,6 @@
 ﻿using Engine.DiskModels.Physics.Contracts;
-using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models;
+using Engine.Physics.Models.Contracts;
 
 namespace Engine.Physics.Services.Contracts
 {
@@ -10,19 +10,18 @@ namespace Engine.Physics.Services.Contracts
 	public interface IAreaService
 	{
 		/// <summary>
-		/// Gets the area.
+		/// Gets the area from the model.
 		/// </summary>
 		/// <param name="areaModel">The area model.</param>
-		/// <param name="position">The position.</param>
 		/// <returns>The area.</returns>
-		public IAmAArea GetArea(IAmAAreaModel areaModel, Position position);
+		public IAmAArea GetAreaFromModel(IAmAAreaModel areaModel);
 
 		/// <summary>
-		/// Gets the area.
+		/// Gets the area from the model.
 		/// </summary>
 		/// <param name="areaModel">The area model.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="position">The position</param>
 		/// <returns>The area.</returns>
-		public T GetArea<T>(IAmAAreaModel areaModel, Position position) where T : IAmAArea;
+		public T GetAreaFromModel<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea;
 	}
 }
