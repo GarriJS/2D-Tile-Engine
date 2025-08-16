@@ -6,8 +6,8 @@ using Moq;
 
 namespace EngineTests.RunTime
 {
-    public class RuntimeDrawManagerTests
-    {
+    public class RuntimeOverlaidDrawManagerTests
+	{
         private class FakeDrawable : IAmDrawable
         {
             public int DrawLayer { get; set; }
@@ -17,13 +17,13 @@ namespace EngineTests.RunTime
 
         private class SelfAddingDrawable : IAmDrawable
         {
-            private RuntimeDrawManager Manager { get; init; }
+            private RuntimeOverlaidDrawManager Manager { get; init; }
 
             private IAmDrawable ToAdd { get; init; }
 
             public int DrawLayer { get; set; } = 1;
 
-            public SelfAddingDrawable(RuntimeDrawManager manager, IAmDrawable toAdd)
+            public SelfAddingDrawable(RuntimeOverlaidDrawManager manager, IAmDrawable toAdd)
             {
                 Manager = manager;
                 ToAdd = toAdd;
@@ -35,10 +35,10 @@ namespace EngineTests.RunTime
             }
         }
 
-        private RuntimeDrawManager CreateManager(Game game = null)
+        private RuntimeOverlaidDrawManager CreateManager(Game game = null)
         {
             game ??= new Game();
-            var manager = new RuntimeDrawManager(game);
+            var manager = new RuntimeOverlaidDrawManager(game);
             manager.Initialize();
 
             return manager;
