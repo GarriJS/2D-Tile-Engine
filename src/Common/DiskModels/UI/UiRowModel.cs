@@ -24,7 +24,10 @@ namespace Common.DiskModels.UI
 		[DataMember(Name = "backgroundTextureName", Order = 6)]
 		public string BackgroundTextureName { get; set; }
 
-		[DataMember(Name = "subElements", Order = 7)]
+		[DataMember(Name = "rowHoverEventName", Order = 7)]
+		public string rowHoverEventName { get; set; }
+
+		[DataMember(Name = "subElements", Order = 8)]
 		public IAmAUiElementModel[] SubElements { get; set; }
 	}
 }

@@ -1,9 +1,13 @@
-﻿using Common.DiskModels.UI;
+﻿using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Constants;
+using Common.Controls.Cursors.Services.Contracts;
+using Common.Core.Constants;
+using Common.DiskModels.UI;
 using Common.UserInterface.Constants;
+using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
-using Common.UserInterface.Enums;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Contracts;
 using Engine.Graphics.Services.Contracts;
@@ -13,21 +17,17 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Controls.Cursors.Services.Contracts;
-using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Core.Constants;
-using Common.Controls.Cursors.Constants;
 
 namespace Common.UserInterface.Services
 {
-    /// <summary>
-    /// Represents a user interface service.
-    /// </summary>
-    /// <remarks>
-    /// Initialize the user interface service.
-    /// </remarks>
-    /// <param name="gameServices">The game services.</param>
-    public class UserInterfaceService(GameServiceContainer gameServices) : IUserInterfaceService
+	/// <summary>
+	/// Represents a user interface service.
+	/// </summary>
+	/// <remarks>
+	/// Initialize the user interface service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class UserInterfaceService(GameServiceContainer gameServices) : IUserInterfaceService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -435,6 +435,8 @@ namespace Common.UserInterface.Services
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+
 			var numberOfFillElements = 0;
 			var subElements = new List<IAmAUiElement>();
 
@@ -481,6 +483,12 @@ namespace Common.UserInterface.Services
 									.OrderDescending()
 									.FirstOrDefault();
 			var image = imageService.GetImage(uiRowModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)height + uiRowModel.TopPadding + uiRowModel.BottomPadding);
+			var rowArea = new Vector2
+			{
+				X = uiZone.Area.Width,
+				Y = height
+			};
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, CommonCursorNames.PrimaryCursorName);
 
 			return new UiRow
 			{
@@ -492,7 +500,8 @@ namespace Common.UserInterface.Services
 				BottomPadding = uiRowModel.BottomPadding,
 				HorizontalJustificationType = (UiRowHorizontalJustificationTypes)uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = (UiRowVerticalJustificationTypes)uiRowModel.VerticalJustificationType,
-				Graphic = image,
+				Image = image,
+				HoverConfig = hoverConfig,
 				SubElements = subElements
 			};
 		}
@@ -520,7 +529,7 @@ namespace Common.UserInterface.Services
 				BottomPadding = 1,
 				HorizontalJustificationType = uiRow.HorizontalJustificationType,
 				VerticalJustificationType = uiRow.VerticalJustificationType,
-				Graphic = uiRow.Graphic,
+				Image = uiRow.Image,
 				SubElements = []
 			};
 
@@ -543,7 +552,7 @@ namespace Common.UserInterface.Services
 						BottomPadding = 0,
 						HorizontalJustificationType = uiRow.HorizontalJustificationType,
 						VerticalJustificationType = uiRow.VerticalJustificationType,
-						Graphic = uiRow.Graphic,
+						Image = uiRow.Image,
 						SubElements = []
 					};
 				}

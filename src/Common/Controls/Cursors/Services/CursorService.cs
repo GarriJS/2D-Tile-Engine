@@ -5,6 +5,7 @@ using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.Controls;
 using Common.UserInterface.Models;
+using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Core.Initialization.Contracts;
@@ -390,23 +391,25 @@ namespace Common.Controls.Cursors.Services
 
 			switch (uiObject)
 			{
-				case UiElementWithLocation uiElementWithLocation:
+				case LocationExtender<IAmAUiElement> uiElementWithLocation:
 
 					if ((ButtonState.Pressed == controlState.MouseState.LeftButton) &&
 						(ButtonState.Pressed == priorControlState.MouseState.LeftButton))
 					{
-						uiElementWithLocation.Element.RaisePressEvent(uiElementWithLocation.Location, cursor.Position.Coordinates);
+						uiElementWithLocation.Object.RaisePressEvent(uiElementWithLocation.Location, cursor.Position.Coordinates);
 					}
 					else
 					{
-						uiElementWithLocation.Element.RaiseHoverEvent(uiElementWithLocation.Location);
+						uiElementWithLocation.Object.RaiseHoverEvent(uiElementWithLocation.Location);
 					}
 
-					return uiElementWithLocation.Element;
+					return uiElementWithLocation.Object;
 
-				case UiRow uiRow:
+				case LocationExtender<UiRow> uiRowWithLocation:
 
-					return null;
+					uiRowWithLocation.Object.RaiseHoverEvent(uiRowWithLocation.Location);
+
+					return uiRowWithLocation.Object;
 
 				case UiZone uiZone:
 

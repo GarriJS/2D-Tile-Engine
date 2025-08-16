@@ -8,13 +8,16 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.CursorInteraction.Models.Abstract;
+using Common.Controls.CursorInteraction.Models;
 
 namespace Common.UserInterface.Models
 {
     /// <summary>
     /// Represents a user interface row.
     /// </summary>
-    public class UiRow : IAmSubDrawable, IDisposable
+    public class UiRow : IAmSubDrawable, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface row name.
@@ -57,14 +60,33 @@ namespace Common.UserInterface.Models
 		public UiRowVerticalJustificationTypes VerticalJustificationType { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the image.
 		/// </summary>
-		public Image Graphic { get; set; }
+		public Image Image { get; set; }
+
+		/// <summary>
+		/// Gets the base hover configuration.
+		/// </summary>
+		public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
+
+		/// <summary>
+		/// Gets or sets the hover configuration.
+		/// </summary>
+		public HoverConfiguration<UiRow> HoverConfig { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sub elements.
 		/// </summary>
 		public List<IAmAUiElement> SubElements { get; set; }
+
+		/// <summary>
+		/// Raises the hover event.
+		/// </summary>
+		/// <param name="elementLocation">The element location.</param>
+		public void RaiseHoverEvent(Vector2 elementLocation)
+		{
+			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
+		}
 
 		/// <summary>
 		/// Draws the sub drawable.
@@ -78,9 +100,9 @@ namespace Common.UserInterface.Models
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var spritebatch = drawingService.SpriteBatch;
 
-			if (null != this.Graphic)
+			if (null != this.Image)
 			{
-				spritebatch.Draw(this.Graphic.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Graphic.TextureBox, Color.White);
+				spritebatch.Draw(this.Image.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Image.TextureBox, Color.White);
 			}
 
 			if (0 == this.SubElements.Count)
@@ -144,7 +166,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			if (true != this.SubElements?.Any())
+			if (0 == this.SubElements.Count)
 			{ 
 				return;
 			}
