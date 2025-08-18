@@ -1,6 +1,7 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Controls.Cursors.Constants;
-using Common.Controls.Cursors.Services.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Models.Abstract;
+using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.UI;
 using Common.UserInterface.Constants;
@@ -112,28 +113,11 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// The basic user interface zone hover event processor.
-		/// </summary>
-		/// <param name="uiZone">The user interface zone..</param>
-		/// <param name="zoneLocation">The zone location.</param>
-		public void BasicUiZoneHoverEventProcessor(UiZone uiZone, Vector2 zoneLocation)
-		{
-			var cursorService = this._gameServices.GetService<ICursorService>();
-
-			if (null == uiZone.HoverConfig?.HoverCursor)
-			{
-				return;
-			}
-
-			cursorService.SetPrimaryHoverCursor(uiZone.HoverConfig.HoverCursor);
-		}
-
-		/// <summary>
-		/// Gets the user interface object at the screen location.
+		/// Gets the user interface hover state at the screen location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		/// <returns>The user interface object at the location if one is found.</returns>
-		public object GetUiObjectAtScreenLocation(Vector2 location)
+		/// <returns>The user interface hover state at the location if one is found.</returns>
+		public HoverState GetUiObjectAtScreenLocation(Vector2 location)
 		{
 			if (true != this.ActiveVisibilityGroupId.HasValue)
 			{
@@ -143,10 +127,24 @@ namespace Common.UserInterface.Services
 			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
 			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => true == e.Area.Contains(location));
 
-			if ((null == uiZone) ||
-				(0 == uiZone.ElementRows.Count))
+			if (null == uiZone)
 			{
-				return uiZone;
+				return null;
+			}
+
+			BaseHoverConfiguration topHoverCursorConfiguration = uiZone.HoverConfig;
+
+			if (0 == uiZone.ElementRows.Count)
+			{
+				return new HoverState
+				{ 
+					TopHoverCursorConfiguration = topHoverCursorConfiguration,
+					HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+					{ 
+						Location = uiZone.Position.Coordinates,
+						Object = uiZone
+					}
+				};
 			}
 
 			var height = uiZone.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
@@ -161,6 +159,11 @@ namespace Common.UserInterface.Services
 
 			foreach (var elementRow in uiZone.ElementRows)
 			{
+				if (null != elementRow.BaseHoverConfig?.HoverCursor)
+				{ 
+					topHoverCursorConfiguration = elementRow.BaseHoverConfig;
+				}
+
 				var rowTop = 0f;
 				var rowBottom = 0f;
 
@@ -184,24 +187,49 @@ namespace Common.UserInterface.Services
 				{
 					var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
 
-					if (null == uiElementWithLocation)
-					{ 
-						return new LocationExtender<UiRow>
-						{ 
-							Object = elementRow,
-							Location = new Vector2
-							{ 
-								X = uiZone.Position.X,
-								Y = rowTop
+					if (true == uiElementWithLocation.HasValue)
+					{
+						if (null != uiElementWithLocation.Value.Object.BaseHoverConfig?.HoverCursor)
+						{
+							topHoverCursorConfiguration = uiElementWithLocation.Value.Object.BaseHoverConfig;
+						}
+
+						return new HoverState
+						{
+							TopHoverCursorConfiguration = topHoverCursorConfiguration,
+							HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+							{
+								Location = uiElementWithLocation.Value.Location,
+								Object = uiElementWithLocation.Value.Object
 							}
 						};
 					}
 
-					return uiElementWithLocation;
+					return new HoverState
+					{
+						TopHoverCursorConfiguration = topHoverCursorConfiguration,
+						HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+						{
+							Location = uiZone.Position.Coordinates + new Vector2
+							{ 
+								X = 0,
+								Y = rowTop
+							},
+							Object = elementRow
+						}
+					};
 				}
 			}
 
-			return uiZone;
+			return new HoverState
+			{
+				TopHoverCursorConfiguration = topHoverCursorConfiguration,
+				HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+				{
+					Location = uiZone.Position.Coordinates,
+					Object = uiZone
+				}
+			};
 		}
 
 		/// <summary>

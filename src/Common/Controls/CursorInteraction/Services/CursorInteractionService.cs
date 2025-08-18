@@ -31,9 +31,8 @@ namespace Common.Controls.CursorInteraction.Services
 
 			hoverCursorName ??= string.Empty;
 			if (false == cursorService.Cursors.TryGetValue(hoverCursorName, out var cursor))
-			{ 
+			{
 				// LOGGING
-				cursor = cursorService.Cursors[CommonCursorNames.BasicCursorName];	
 			}
 
 			return new HoverConfiguration<T>

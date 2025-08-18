@@ -131,7 +131,6 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row2Col1,
 							BackgroundTextureName = string.Empty,
 							JustificationType = (int)UiZoneJustificationTypes.Bottom,
-							ZoneHoverEventName = CommonUiEventName.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -140,6 +139,7 @@ namespace LevelEditor.Core.Initialization
 									TopPadding = 0,
 									BottomPadding = 0,
 									BackgroundTextureName = null,
+									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Left,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
 									SubElements =
@@ -163,7 +163,6 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Center,
-							ZoneHoverEventName = CommonUiEventName.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel
@@ -243,7 +242,6 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 							BackgroundTextureName = "gray_transparent",
 							JustificationType = (int)UiZoneJustificationTypes.Top,
-							ZoneHoverEventName = CommonUiEventName.UserInterfaceZoneHover,
 							ElementRows =
 							[
 								new UiRowModel

@@ -5,9 +5,6 @@
     /// </summary>
     public static class CommonUiEventName
     {
-        /// <summary>
-        /// Gets the user interface zone hover event name.
-        /// </summary>
-        public static string UserInterfaceZoneHover { get; } = "USER_INTERFACE_ZONE_HOVER";
+
     }
 }

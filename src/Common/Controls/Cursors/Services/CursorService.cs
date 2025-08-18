@@ -1,4 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
@@ -32,6 +32,11 @@ namespace Common.Controls.Cursors.Services
 	public class CursorService(GameServiceContainer gameServices) : ICursorService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// Gets or sets the cursor state monitor.
+		/// </summary>
+		private CursorStateMonitor CursorStateMonitor { get; set; }
 
 		/// <summary>
 		/// Gets the cursor position.
@@ -78,13 +83,13 @@ namespace Common.Controls.Cursors.Services
 			};
 
 			this.CursorPosition = positionService.GetPositionFromModel(positionModel);
-			var cursorStateMonitor = new CursorStateMonitor
+			this.CursorStateMonitor = new CursorStateMonitor
 			{
 				CursorPosition = this.CursorPosition,
 				UpdateOrder = ManagerOrderConstants.EarlyUpdateOrder
 			};
 
-			runTimeUpdateService.AddUpdateable(cursorStateMonitor);
+			runTimeUpdateService.AddUpdateable(this.CursorStateMonitor);
 
 			var cursorModel = new CursorModel
 			{
@@ -98,8 +103,7 @@ namespace Common.Controls.Cursors.Services
 				},
 				AboveUi = true,
 				TextureName = "mouse",
-				Offset = default,
-				CursorUpdaterName = CommonCursorUpdatersNames.BasicCursorUpdater
+				Offset = default
 			};
 
 			var cursor = this.GetCursor(cursorModel, addCursor: true);
@@ -129,7 +133,7 @@ namespace Common.Controls.Cursors.Services
 
 			if (false == functionService.TryGetFunction<Action<Cursor, GameTime>>(cursorModel.CursorUpdaterName, out var cursorUpdater))
 			{ 
-				cursorUpdater = this.BasicCursorUpdater;
+				cursorUpdater = null;
 			}
 
 			var cursor =  new Cursor
@@ -206,7 +210,7 @@ namespace Common.Controls.Cursors.Services
 
 			this.SecondaryCursors.Add(cursor);
 
-			if (null == this.PrimaryHoverCursor)
+			if (false == this.CursorStateMonitor.HoverCursorActive)
 			{
 				runTimeOverlaidDrawService.AddDrawable(cursor);
 				runTimeUpdateService.AddUpdateable(cursor);
@@ -274,8 +278,12 @@ namespace Common.Controls.Cursors.Services
 			}
 
 			this.SecondaryHoverCursors.Add(cursor);
-			runTimeOverlaidDrawService.AddDrawable(cursor);
-			runTimeUpdateService.AddUpdateable(cursor);
+
+			if (true == this.CursorStateMonitor.HoverCursorActive)
+			{
+				runTimeOverlaidDrawService.AddDrawable(cursor);
+				runTimeUpdateService.AddUpdateable(cursor);
+			}
 		}
 
 		/// <summary>
@@ -377,10 +385,11 @@ namespace Common.Controls.Cursors.Services
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="controlState">The control state.</param>
 		/// <param name="priorControlState">The prior control state.</param>
-		/// <returns>The object the cursor is over.</returns>
-		public IHaveAHoverConfiguration ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
+		/// <returns>The hover state.</returns>
+		public HoverState ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+
 			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
 
 			if (null == uiObject)
@@ -388,46 +397,36 @@ namespace Common.Controls.Cursors.Services
 				return null;
 			}
 
-			switch (uiObject)
+			switch (uiObject.HoverObjectLocation.Object)
 			{
-				case LocationExtender<IAmAUiElement> uiElementWithLocation:
+				case IAmAUiElement uiElementWithLocation:
 
 					if ((ButtonState.Pressed == controlState.MouseState.LeftButton) &&
 						(ButtonState.Pressed == priorControlState.MouseState.LeftButton))
 					{
-						uiElementWithLocation.Object.RaisePressEvent(uiElementWithLocation.Location, cursor.Position.Coordinates);
+						uiElementWithLocation.RaisePressEvent(uiObject.HoverObjectLocation.Location, cursor.Position.Coordinates);
 					}
 					else
 					{
-						uiElementWithLocation.Object.RaiseHoverEvent(uiElementWithLocation.Location);
+						uiElementWithLocation.RaiseHoverEvent(uiObject.HoverObjectLocation.Location);
 					}
 
-					return uiElementWithLocation.Object;
+					break;
 
-				case LocationExtender<UiRow> uiRowWithLocation:
+				case UiRow uiRowWithLocation:
 
-					uiRowWithLocation.Object.RaiseHoverEvent(uiRowWithLocation.Location);
+					uiRowWithLocation.RaiseHoverEvent(uiObject.HoverObjectLocation.Location);
 
-					return uiRowWithLocation.Object;
+					break;
 
 				case UiZone uiZone:
 
-					uiZone.RaiseHoverEvent(uiZone.Position.Coordinates);
+					uiZone.RaiseHoverEvent(uiObject.HoverObjectLocation.Location);
 
-					return uiZone;
+					break;
 			}
 
-			return null;
-		}
-
-		/// <summary>
-		/// Updates the cursor.
-		/// </summary>
-		/// <param name="cursor">The cursor.</param>
-		/// <param name="gameTime">The game time.</param>
-		public void BasicCursorUpdater(Cursor cursor, GameTime gameTime)
-		{
-			// cursor position is updated in the cursor state monitor
+			return uiObject;
 		}
 	}
 }

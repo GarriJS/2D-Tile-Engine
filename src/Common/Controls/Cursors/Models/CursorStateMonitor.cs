@@ -55,7 +55,7 @@ namespace Common.Controls.Cursors.Models
 			var hoverResult = cursorService.ProcessCursorControlState(activeCursor, controlService.ControlState, controlService.PriorControlState);
 
 			if ((null == hoverResult) ||
-				(null == hoverResult.BaseHoverConfig?.HoverCursor))
+				(null == hoverResult.TopHoverCursorConfiguration?.HoverCursor))
 			{
 				if (true == this.HoverCursorActive)
 				{
@@ -66,13 +66,13 @@ namespace Common.Controls.Cursors.Models
 				return;
 			}
 			
-			if (activeCursor == hoverResult.BaseHoverConfig.HoverCursor)
+			if (activeCursor == hoverResult.TopHoverCursorConfiguration.HoverCursor)
 			{
 				return;
 			}
 			else
 			{
-				cursorService.SetPrimaryHoverCursor(hoverResult.BaseHoverConfig.HoverCursor);
+				cursorService.SetPrimaryHoverCursor(hoverResult.TopHoverCursorConfiguration.HoverCursor);
 				this.HoverCursorActive = true;
 
 				return;

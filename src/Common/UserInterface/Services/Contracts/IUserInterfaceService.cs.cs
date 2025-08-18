@@ -1,4 +1,5 @@
-﻿using Common.DiskModels.UI;
+﻿using Common.Controls.CursorInteraction.Models;
+using Common.DiskModels.UI;
 using Common.UserInterface.Models;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -22,13 +23,6 @@ namespace Common.UserInterface.Services.Contracts
 		public void ToggleUserInterfaceGroupVisibility(int visibilityGroupId);
 
 		/// <summary>
-		/// The basic user interface zone hover event processor.
-		/// </summary>
-		/// <param name="uiZone">The user interface zone..</param>
-		/// <param name="zoneLocation">The zone location.</param>
-		public void BasicUiZoneHoverEventProcessor(UiZone uiZone, Vector2 zoneLocation);
-
-		/// <summary>
 		/// Gets the user interface group.
 		/// </summary>
 		/// <param name="uiGroupModel">The user interface group model.</param>
@@ -42,11 +36,11 @@ namespace Common.UserInterface.Services.Contracts
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
 
 		/// <summary>
-		/// Gets the user interface object at the screen location.
+		/// Gets the user interface hover state at the screen location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		/// <returns>The user interface object at the location if one is found.</returns>
-		public object GetUiObjectAtScreenLocation(Vector2 location);
+		/// <returns>The user interface hover state at the location if one is found.</returns>
+		public HoverState GetUiObjectAtScreenLocation(Vector2 location);
 
 		/// <summary>
 		/// Gets the user interface zone.

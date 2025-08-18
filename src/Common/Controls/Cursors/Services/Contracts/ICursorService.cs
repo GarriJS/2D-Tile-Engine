@@ -1,18 +1,17 @@
-﻿using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.Controls;
 using Engine.Controls.Models;
 using Engine.Core.Contracts;
 using Engine.Physics.Models;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace Common.Controls.Cursors.Services.Contracts
 {
-    /// <summary>
-    /// Represents a cursors service.
-    /// </summary>
-    public interface ICursorService : ILoadContent
+	/// <summary>
+	/// Represents a cursors service.
+	/// </summary>
+	public interface ICursorService : ILoadContent
     {
 		/// <summary>
 		/// Gets the cursor position.
@@ -100,14 +99,7 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="controlState">The control state.</param>
 		/// <param name="priorControlState">The prior control state.</param>
-		/// <returns>The object the cursor is hovering.</returns>
-		public IHaveAHoverConfiguration ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState);
-
-        /// <summary>
-        /// Updates the cursor.
-        /// </summary>
-        /// <param name="cursor">The cursor.</param>
-        /// <param name="gameTime">The game time.</param>
-        public void BasicCursorUpdater(Cursor cursor, GameTime gameTime);
+		/// <returns>The hover state.</returns>
+		public HoverState ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState);
     }
 }

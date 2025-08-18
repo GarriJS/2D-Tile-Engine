@@ -46,7 +46,6 @@ namespace Common.Core.Initialization
 
 			return new Dictionary<string, Action<Cursor, GameTime>>
 			{
-				[CommonCursorUpdatersNames.BasicCursorUpdater] = cursorService.BasicCursorUpdater,
 				[CommonCursorUpdatersNames.TileGridCursorUpdater] = tileService.TileGridCursorUpdater
 			};
 		}
@@ -62,7 +61,7 @@ namespace Common.Core.Initialization
 
 			return new Dictionary<string, Action<UiZone, Vector2>>
 			{
-				[CommonUiEventName.UserInterfaceZoneHover] = uiService.BasicUiZoneHoverEventProcessor
+
 			};
 		}
 	}

@@ -46,7 +46,6 @@ namespace LevelEditor.Spritesheets.Services
 			cursorService.SetPrimaryCursor(tileGridCursor);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-
 			var secondaryCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
@@ -80,8 +79,7 @@ namespace LevelEditor.Spritesheets.Services
 				{
 					X = (primaryCursor?.TextureBox.Width ?? 25) + 1,
 					Y = (primaryCursor?.TextureBox.Height ?? 25) + 1
-				},
-				CursorUpdaterName = CommonCursorUpdatersNames.BasicCursorUpdater
+				}
 			};
 
 			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
