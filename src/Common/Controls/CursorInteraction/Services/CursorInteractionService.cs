@@ -1,5 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Services.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -27,7 +28,13 @@ namespace Common.Controls.CursorInteraction.Services
 		public HoverConfiguration<T> GetHoverConfiguration<T>(Vector2 area, string hoverCursorName, Vector2 offset = default)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
-			cursorService.Cursors.TryGetValue(hoverCursorName, out var cursor);
+
+			hoverCursorName ??= string.Empty;
+			if (false == cursorService.Cursors.TryGetValue(hoverCursorName, out var cursor))
+			{ 
+				// LOGGING
+				cursor = cursorService.Cursors[CommonCursorNames.BasicCursorName];	
+			}
 
 			return new HoverConfiguration<T>
 			{

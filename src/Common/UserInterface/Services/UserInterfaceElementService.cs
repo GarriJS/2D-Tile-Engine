@@ -1,5 +1,4 @@
 ﻿using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Controls.Cursors.Constants;
 using Common.DiskModels.UI.Contracts;
 using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Constants;
@@ -13,18 +12,17 @@ using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
-using System.Linq;
 
 namespace Common.UserInterface.Services
 {
-    /// <summary>
-    /// Represents a user interface element service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the user interface element service.
-    /// </remarks>
-    /// <param name="gameServices">The game service.</param>
-    public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
+	/// <summary>
+	/// Represents a user interface element service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the user interface element service.
+	/// </remarks>
+	/// <param name="gameServices">The game service.</param>
+	public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -37,7 +35,7 @@ namespace Common.UserInterface.Services
 		public Vector2? GetElementDimensions(UiScreenZone uiScreenZone, IAmAUiElementModel elementModel)
 		{
 			if (true == elementModel.FixedSized.HasValue)
-			{ 
+			{
 				return elementModel.FixedSized.Value;
 			}
 
@@ -52,12 +50,36 @@ namespace Common.UserInterface.Services
 
 			return uiElementSizeType switch
 			{
-				UiElementSizeTypes.ExtraSmall => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.ExtraSmall.X, uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y),
-				UiElementSizeTypes.Small => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.Small.X, uiScreenZone.Area.Height * ElementSizesScalars.Small.Y),
-				UiElementSizeTypes.Medium => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.Medium.X, uiScreenZone.Area.Height * ElementSizesScalars.Medium.Y),
-				UiElementSizeTypes.Large => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.Large.X, uiScreenZone.Area.Height * ElementSizesScalars.Large.Y),
-				UiElementSizeTypes.ExtraLarge => new Vector2(uiScreenZone.Area.Width * ElementSizesScalars.ExtraLarge.X, uiScreenZone.Area.Height * ElementSizesScalars.ExtraLarge.Y),
-				UiElementSizeTypes.Full => new Vector2(uiScreenZone.Area.Width, uiScreenZone.Area.Height),
+				UiElementSizeTypes.ExtraSmall => new Vector2
+				{
+					X = uiScreenZone.Area.Width * ElementSizesScalars.ExtraSmall.X,
+					Y = uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y
+				},
+				UiElementSizeTypes.Small => new Vector2
+				{
+					X = uiScreenZone.Area.Width * ElementSizesScalars.Small.X,
+					Y = uiScreenZone.Area.Height * ElementSizesScalars.Small.Y
+				},
+				UiElementSizeTypes.Medium => new Vector2
+				{
+					X = uiScreenZone.Area.Width * ElementSizesScalars.Medium.X,
+					Y = uiScreenZone.Area.Height * ElementSizesScalars.Medium.Y
+				},
+				UiElementSizeTypes.Large => new Vector2
+				{
+					X = uiScreenZone.Area.Width * ElementSizesScalars.Large.X,
+					Y = uiScreenZone.Area.Height * ElementSizesScalars.Large.Y
+				},
+				UiElementSizeTypes.ExtraLarge => new Vector2
+				{
+					X = uiScreenZone.Area.Width * ElementSizesScalars.ExtraLarge.X,
+					Y = uiScreenZone.Area.Height * ElementSizesScalars.ExtraLarge.Y
+				},
+				UiElementSizeTypes.Full => new Vector2
+				{
+					X = uiScreenZone.Area.Width,
+					Y = uiScreenZone.Area.Height
+				},
 				_ => null,
 			};
 		}
@@ -70,21 +92,44 @@ namespace Common.UserInterface.Services
 		public void UpdateElementHeight(IAmAUiElement element, float height)
 		{
 			element.Area = new Vector2(element.Area.X, height);
-			element.Graphic.TextureBox = new Rectangle(element.Graphic.TextureBox.X, element.Graphic.TextureBox.Y, element.Graphic.TextureBox.Width, (int)height);
-
-			if (element is UiButton uiButton)
+			element.Graphic.TextureBox = new Rectangle
 			{
-				uiButton.ClickConfig.Area = new Vector2(uiButton.Area.X * uiButton.ClickableAreaScaler.X, uiButton.Area.Y * uiButton.ClickableAreaScaler.Y);
-				uiButton.ClickConfig.Offset = new Vector2((uiButton.Area.X - uiButton.ClickConfig.Area.X) / 2, (uiButton.Area.Y - uiButton.ClickConfig.Area.Y) / 2);
+				X = element.Graphic.TextureBox.X,
+				Y = element.Graphic.TextureBox.Y,
+				Width = element.Graphic.TextureBox.Width,
+				Height = (int)height
+			};
 
-				if ((null != uiButton.ClickAnimation) &&
-					(0 < uiButton.ClickAnimation.Frames.Length))
+			if (element is not UiButton uiButton)
+			{
+				return;
+			}
+
+			uiButton.ClickConfig.Area = new Vector2
+			{
+				X = uiButton.Area.X * uiButton.ClickableAreaScaler.X,
+				Y = uiButton.Area.Y * uiButton.ClickableAreaScaler.Y
+			};
+			uiButton.ClickConfig.Offset = new Vector2
+			{
+				X = (uiButton.Area.X - uiButton.ClickConfig.Area.X) / 2,
+				Y = (uiButton.Area.Y - uiButton.ClickConfig.Area.Y) / 2
+			};
+
+			if (null == uiButton.ClickAnimation?.Frames)
+			{
+				return;
+			}
+
+			foreach (var frame in uiButton.ClickAnimation.Frames)
+			{
+				frame.TextureBox = new Rectangle
 				{
-					foreach (var frame in uiButton.ClickAnimation.Frames)
-					{
-						frame.TextureBox = new Rectangle(frame.TextureBox.X, frame.TextureBox.Y, frame.TextureBox.Width, (int)(element.Graphic.TextureBox.Height * uiButton.ClickableAreaScaler.Y));
-					}
-				}
+					X = frame.TextureBox.X,
+					Y = frame.TextureBox.Y,
+					Width = frame.TextureBox.Width,
+					Height = (int)(element.Graphic.TextureBox.Height * uiButton.ClickableAreaScaler.Y)
+				};
 			}
 		}
 
@@ -97,10 +142,14 @@ namespace Common.UserInterface.Services
 		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation)
 		{
 			switch (element)
-			{ 
+			{
 				case UiButton button:
 
-					var clickableLocation = new Vector2(elementLocation.X + ((element.Area.X - button.ClickConfig.Area.X) / 2), elementLocation.Y + ((element.Area.Y - button.ClickConfig.Area.Y) / 2));
+					var clickableLocation = new Vector2
+					{
+						X = elementLocation.X + ((element.Area.X - button.ClickConfig.Area.X) / 2),
+						Y = elementLocation.Y + ((element.Area.Y - button.ClickConfig.Area.Y) / 2)
+					};
 
 					if ((clickableLocation.X <= pressLocation.X) &&
 						(clickableLocation.X + button.ClickConfig.Area.X >= pressLocation.X) &&
@@ -126,6 +175,7 @@ namespace Common.UserInterface.Services
 		{
 			var imageService = this._gameServices.GetService<IImageService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
 			var elementSize = this.GetElementDimensions(uiZone, uiElementModel);
 			var width = true == elementSize.HasValue
@@ -150,14 +200,14 @@ namespace Common.UserInterface.Services
 				uiElement.Graphic = image;
 				uiElement.PressConfig?.AddSubscription(this.CheckForUiElementClick);
 
-				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonHoverEventName)) &&
-					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ButtonHoverEventName, out var hoverAction))) // LOGGING
+				// LOGGING
+				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ElementHoverCursorName, out var hoverAction))
 				{
 					uiElement.HoverConfig?.AddSubscription(hoverAction);
 				}
 
-				if ((false == string.IsNullOrEmpty(uiElementModel.ButtonPressEventName)) &&
-					(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.ButtonPressEventName, out var pressAction))) // LOGGING
+				// LOGGING
+				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.ElementPressEventName, out var pressAction))
 				{
 					uiElement.PressConfig?.AddSubscription(pressAction);
 				}
@@ -176,7 +226,7 @@ namespace Common.UserInterface.Services
 		{
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, textModel.ElementHoverCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 
 			return new UiText
@@ -204,15 +254,23 @@ namespace Common.UserInterface.Services
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var clickableArea = new Vector2(area.X * buttonModel.ClickableAreaScaler.X, area.Y * buttonModel.ClickableAreaScaler.Y);
-			var clickableOffset = new Vector2((area.X - clickableArea.X) / 2, (area.Y - clickableArea.Y) /2);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, CommonCursorNames.PrimaryCursorName);
+			var clickableArea = new Vector2
+			{
+				X = area.X * buttonModel.ClickableAreaScaler.X,
+				Y = area.Y * buttonModel.ClickableAreaScaler.Y
+			};
+			var clickableOffset = new Vector2
+			{
+				X = (area.X - clickableArea.X) / 2,
+				Y = (area.Y - clickableArea.Y) / 2
+			};
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, buttonModel.ElementHoverCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
 			var button = new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
-				Text = buttonModel.Text,
+				Text = buttonModel.ButtonText,
 				LeftPadding = buttonModel.LeftPadding,
 				RightPadding = buttonModel.RightPadding,
 				ElementType = UiElementTypes.Button,
@@ -225,16 +283,15 @@ namespace Common.UserInterface.Services
 
 			button.ClickConfig?.AddSubscription(this.TriggerUiButtonClickAnimation);
 
-			if ((false == string.IsNullOrEmpty(buttonModel.ButtonClickEventName)) &&
-				(true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ButtonClickEventName, out var clickAction))) // LOGGING
+			// LOGGING
+			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ButtonClickEventName, out var clickAction))
 			{
 				button.ClickConfig?.AddSubscription(clickAction);
 			}
 
 			if (null != buttonModel.ClickableAreaAnimation)
 			{
-				//, (int)clickableArea.X, (int)clickableArea.Y
-				var clickAnimation = animationService.GetAnimationFromModel(buttonModel.ClickableAreaAnimation);
+				var clickAnimation = animationService.GetFixedAnimationFromModel(buttonModel.ClickableAreaAnimation, (int)clickableArea.X, (int)clickableArea.Y);
 
 				if (clickAnimation is TriggeredAnimation triggeredAnimation)
 				{
@@ -257,10 +314,9 @@ namespace Common.UserInterface.Services
 
 			uiService.ToggleUserInterfaceGroupVisibility(element.VisibilityGroup == 1 ? 2 : 1);
 
-			if ((element is UiButton button) &&
-				(null != button.ClickAnimation))
+			if (element is UiButton button)
 			{
-				button.ClickAnimation.TriggerAnimation(true);
+				button.ClickAnimation?.TriggerAnimation(allowReset: true);
 			}
 		}
 	}

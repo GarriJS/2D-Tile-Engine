@@ -37,6 +37,7 @@ namespace LevelEditor.Spritesheets.Services
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.TileGridCursorName, out var tileGridCursor))
 			{
 				// LOGGING
+				return;
 			}
 
 			var tileService = this._gameServices.GetService<ITileService>();
@@ -63,9 +64,10 @@ namespace LevelEditor.Spritesheets.Services
 			var secondaryCursor = cursorService.GetCursor(secondaryCursorModel, addCursor: false);
 			cursorService.AddSecondaryCursor(secondaryCursor, disableExisting: true);
 
-			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.PrimaryCursorName, out var primaryCursor))
-			{ 
+			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.BasicCursorName, out var primaryCursor))
+			{
 				// LOGGING
+				return;
 			}
 
 			var secondaryHoverCursorModel = new CursorModel
@@ -159,7 +161,7 @@ namespace LevelEditor.Spritesheets.Services
 							Y = spriteDimensions.Y
 						},
 						BackgroundTextureName = textureName,
-						Text = string.Empty,
+						ButtonText = string.Empty,
 						ClickableAreaScaler = new Vector2
 						{
 							X = 1,

@@ -17,10 +17,13 @@ namespace Common.DiskModels.UI
 		[DataMember(Name = "uiZoneType", Order = 4)]
 		public int UiZoneType { get; set; }
 
-		[DataMember(Name = "zoneHoverEventName", Order = 5)]
+		[DataMember(Name = "zoneHoverCursorName", Order = 5)]
+		public string ZoneHoverCursorName { get; set; }
+
+		[DataMember(Name = "zoneHoverEventName", Order = 6)]
 		public string ZoneHoverEventName { get; set; }
 
-		[DataMember(Name = "elementRows", Order = 6)]
+		[DataMember(Name = "elementRows", Order = 7)]
 		public UiRowModel[] ElementRows { get; set; }
 	}
 }

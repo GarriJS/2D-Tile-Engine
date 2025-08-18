@@ -59,13 +59,13 @@ namespace Engine.Debugging.Services
 		/// </summary>
 		public void ToggleScreenAreaIndicators()
 		{
-			var runtimeDrawingService = this._gameServices.GetService<IRuntimeDrawService>();
+			var runtimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (true == this.ScreenAreaIndicatorsEnabled)
 			{
 				foreach (var screenAreaIndicatorImage in this.ScreenAreaIndicatorImages)
 				{
-					runtimeDrawingService.RemoveDrawable(screenAreaIndicatorImage);
+					runtimeOverlaidDrawService.RemoveDrawable(screenAreaIndicatorImage);
 				}
 
 				this.ScreenAreaIndicatorImages = [];
@@ -116,8 +116,8 @@ namespace Engine.Debugging.Services
 					};
 
 					var nextWidthImage = imageService.GetImageFromModel<IndependentImage>(nextWidthImageModel);
-					runtimeDrawingService.AddDrawable(widthImage);
-					runtimeDrawingService.AddDrawable(nextWidthImage);
+					runtimeOverlaidDrawService.AddDrawable(widthImage);
+					runtimeOverlaidDrawService.AddDrawable(nextWidthImage);
 					this.ScreenAreaIndicatorImages.Add(widthImage);
 					this.ScreenAreaIndicatorImages.Add(nextWidthImage);
 				}
@@ -160,8 +160,8 @@ namespace Engine.Debugging.Services
 					};
 
 					var nextHeightImage = imageService.GetImageFromModel<IndependentImage>(nextHeightImageModel);
-					runtimeDrawingService.AddDrawable(heightImage);
-					runtimeDrawingService.AddDrawable(nextHeightImage);
+					runtimeOverlaidDrawService.AddDrawable(heightImage);
+					runtimeOverlaidDrawService.AddDrawable(nextHeightImage);
 					this.ScreenAreaIndicatorImages.Add(heightImage);
 					this.ScreenAreaIndicatorImages.Add(nextHeightImage);
 				}

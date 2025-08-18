@@ -78,18 +78,17 @@ namespace Common.Controls.Cursors.Services
 			};
 
 			this.CursorPosition = positionService.GetPositionFromModel(positionModel);
-
-			var hoverCursorMonitor = new CursorStateMonitor
+			var cursorStateMonitor = new CursorStateMonitor
 			{
 				CursorPosition = this.CursorPosition,
 				UpdateOrder = ManagerOrderConstants.EarlyUpdateOrder
 			};
 
-			runTimeUpdateService.AddUpdateable(hoverCursorMonitor);
+			runTimeUpdateService.AddUpdateable(cursorStateMonitor);
 
 			var cursorModel = new CursorModel
 			{
-				CursorName = CommonCursorNames.PrimaryCursorName,
+				CursorName = CommonCursorNames.BasicCursorName,
 				TextureBox = new Rectangle
 				{ 
 					X = 0,

@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
+// LOGGING
 namespace Engine
 {
 	/// <summary>

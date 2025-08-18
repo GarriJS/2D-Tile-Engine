@@ -186,7 +186,15 @@ namespace Common.UserInterface.Services
 
 					if (null == uiElementWithLocation)
 					{ 
-						return elementRow;
+						return new LocationExtender<UiRow>
+						{ 
+							Object = elementRow,
+							Location = new Vector2
+							{ 
+								X = uiZone.Position.X,
+								Y = rowTop
+							}
+						};
 					}
 
 					return uiElementWithLocation;
@@ -204,7 +212,7 @@ namespace Common.UserInterface.Services
 		/// <param name="heightOffset">The height offset.</param>
 		/// <param name="location">The location.</param>
 		/// <returns>The user interface element at the location if one is found.</returns>
-		private UiElementWithLocation GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
+		private LocationExtender<IAmAUiElement>? GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
 		{
 			var width = uiRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
 			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
@@ -263,10 +271,14 @@ namespace Common.UserInterface.Services
 					if ((elementTop <= location.Y) &&
 						(elementBottom >= location.Y))
 					{
-						return new UiElementWithLocation
+						return new LocationExtender<IAmAUiElement>
 						{
-							Element = element,
-							Location = new Vector2(elementLeft, elementTop),
+							Object = element,
+							Location = new Vector2
+							{
+								X = elementLeft,
+								Y = elementTop
+							}
 						};
 					}
 				}
@@ -331,7 +343,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, CommonCursorNames.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, uiZoneModel.ZoneHoverCursorName);
 			var uiZone = new UiZone
 			{
 				UiZoneName = uiZoneModel.UiZoneName,
@@ -343,8 +355,8 @@ namespace Common.UserInterface.Services
 				ElementRows = []
 			};
 
-			if ((false == string.IsNullOrEmpty(uiZoneModel.ZoneHoverEventName)) &&
-				(true == functionService.TryGetFunction<Action<UiZone, Vector2>>(uiZoneModel.ZoneHoverEventName, out var hoverAction))) // LOGGING
+			// LOGGING
+			if (true == functionService.TryGetFunction<Action<UiZone, Vector2>>(uiZoneModel.ZoneHoverEventName, out var hoverAction))
 			{
 				uiZone.HoverConfig?.AddSubscription(hoverAction);
 			}
@@ -488,7 +500,7 @@ namespace Common.UserInterface.Services
 				X = uiZone.Area.Width,
 				Y = height
 			};
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, CommonCursorNames.PrimaryCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, uiRowModel.RowHoverCursorName);
 
 			return new UiRow
 			{

@@ -65,5 +65,28 @@ namespace Engine.Graphics.Services
 
 			return animation;
 		}
+
+		/// <summary>
+		/// Gets the fixed animation.
+		/// </summary>
+		/// <param name="animationModel">The animation model.</param>
+		/// <param name="frameSetWidth">The frame set width.</param>
+		/// <param name="frameSetHeight">The frame set height.</param>
+		/// <returns>The fixed animation.</returns>
+		public Animation GetFixedAnimationFromModel(AnimationModel animationModel, int frameSetWidth, int frameSetHeight)
+		{
+			foreach (var frameModel in animationModel.Frames)
+			{
+				frameModel.TextureBox = new Rectangle
+				{
+					X = 0,
+					Y = 0,
+					Width = frameSetWidth,
+					Height = frameSetHeight
+				};
+			}
+
+			return this.GetAnimationFromModel(animationModel);
+		}
 	}
 }

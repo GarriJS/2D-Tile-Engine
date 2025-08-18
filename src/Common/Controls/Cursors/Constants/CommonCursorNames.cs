@@ -6,9 +6,9 @@
     public static class CommonCursorNames
     {
         /// <summary>
-        /// Gets the primary cursor name.
+        /// Gets the basic cursor name.
         /// </summary>
-        public static string PrimaryCursorName { get; } = "Primary_Cursor";
+        public static string BasicCursorName { get; } = "Basic_Cursor";
 
         /// <summary>
         /// Gets the tile grid cursor name.
