@@ -160,8 +160,9 @@ namespace Common.Controls.Cursors.Services
 		/// <summary>
 		/// Sets the primary cursor.
 		/// </summary>
-		/// <param name="cursor"></param>
-		public void SetPrimaryCursor(Cursor cursor)
+		/// <param name="cursor">The cursor</param>
+		/// <param name="forceSetHover">A value indicating whether to force set the hover.</param>
+		public void SetPrimaryCursor(Cursor cursor, bool forceSetHover = false)
 		{
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
@@ -169,12 +170,13 @@ namespace Common.Controls.Cursors.Services
 			this.DisableAllNonHoverCursors();
 			this.PrimaryCursor = cursor;
 
-			if (null == this.PrimaryHoverCursor)
+			if ((false == this.CursorStateMonitor.HoverCursorActive) &&
+				(false == forceSetHover))
 			{
 				runTimeOverlaidDrawService.AddDrawable(cursor);
 				runTimeUpdateService.AddUpdateable(cursor);
 			}
-			else
+			else if (null != this.PrimaryHoverCursor)
 			{
 				runTimeOverlaidDrawService.AddDrawable(this.PrimaryHoverCursor);
 				runTimeUpdateService.AddUpdateable(this.PrimaryHoverCursor);

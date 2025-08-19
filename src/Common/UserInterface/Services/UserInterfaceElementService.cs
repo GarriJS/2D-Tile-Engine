@@ -39,7 +39,8 @@ namespace Common.UserInterface.Services
 				return elementModel.FixedSized.Value;
 			}
 
-			if (null == uiScreenZone?.Area)
+			if ((null == uiScreenZone?.Area) ||
+				(false == elementModel.SizeType.HasValue))
 			{
 				return null;
 			}

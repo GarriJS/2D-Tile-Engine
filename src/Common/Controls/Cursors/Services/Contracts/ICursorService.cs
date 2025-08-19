@@ -54,8 +54,9 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// <summary>
 		/// Sets the primary cursor.
 		/// </summary>
-		/// <param name="cursor"></param>
-		public void SetPrimaryCursor(Cursor cursor);
+		/// <param name="cursor">The cursor</param>
+		/// <param name="forceSetHover">A value indicating whether to force set the hover.</param>
+		public void SetPrimaryCursor(Cursor cursor, bool forceSetHover = false);
 
 		/// <summary>
 		/// Adds the secondary cursors.

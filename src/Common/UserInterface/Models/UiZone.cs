@@ -15,10 +15,10 @@ using System.Linq;
 
 namespace Common.UserInterface.Models
 {
-    /// <summary>
-    /// Represents a user interface zone.
-    /// </summary>
-    public class UiZone : IAmDrawable, IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
+	/// <summary>
+	/// Represents a user interface zone.
+	/// </summary>
+	public class UiZone : IAmDrawable, IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -115,24 +115,20 @@ namespace Common.UserInterface.Models
 			};
 
 			if (0 > rowVerticalOffset)
-			{ 
+			{
 				rowVerticalOffset = 0;
 			}
 
 			foreach (var elementRow in this.ElementRows)
 			{
-				switch (this.JustificationType)
+				rowVerticalOffset += elementRow.TopPadding;
+				var offset = new Vector2
 				{
-					case UiZoneJustificationTypes.Bottom:
-					case UiZoneJustificationTypes.Center:
-					case UiZoneJustificationTypes.None:
-					case UiZoneJustificationTypes.Top:
-					default:
-						rowVerticalOffset += elementRow.TopPadding;
-						elementRow.Draw(gameTime, gameServices, this.Position, new Vector2(0, rowVerticalOffset));
-						rowVerticalOffset += (elementRow.BottomPadding + elementRow.Height);
-						break;
-				}
+					X = 0,
+					Y = rowVerticalOffset
+				};
+				elementRow.Draw(gameTime, gameServices, this.Position, offset);
+				rowVerticalOffset += (elementRow.BottomPadding + elementRow.Height);
 			}
 		}
 
@@ -144,13 +140,13 @@ namespace Common.UserInterface.Models
 			this.Image?.Dispose();
 			this.HoverConfig?.Dispose();
 
-			if (true != this.ElementRows?.Any())
-			{ 
+			if (0 == this.ElementRows.Count)
+			{
 				return;
 			}
 
 			foreach (var elementRow in this.ElementRows)
-			{ 
+			{
 				elementRow?.Dispose();
 			}
 		}

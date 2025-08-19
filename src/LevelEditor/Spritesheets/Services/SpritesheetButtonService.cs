@@ -43,7 +43,7 @@ namespace LevelEditor.Spritesheets.Services
 			var tileService = this._gameServices.GetService<ITileService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 
-			cursorService.SetPrimaryCursor(tileGridCursor);
+			cursorService.SetPrimaryCursor(tileGridCursor, forceSetHover: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 			var secondaryCursorModel = new CursorModel
@@ -77,8 +77,8 @@ namespace LevelEditor.Spritesheets.Services
 				TextureName = element.Graphic.TextureName,
 				Offset = new Vector2
 				{
-					X = (primaryCursor?.TextureBox.Width ?? 25) + 1,
-					Y = (primaryCursor?.TextureBox.Height ?? 25) + 1
+					X = (primaryCursor?.TextureBox.Width ?? 25) + 3,
+					Y = 0
 				}
 			};
 

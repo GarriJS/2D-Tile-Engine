@@ -137,10 +137,10 @@ namespace Common.UserInterface.Services
 			if (0 == uiZone.ElementRows.Count)
 			{
 				return new HoverState
-				{ 
+				{
 					TopHoverCursorConfiguration = topHoverCursorConfiguration,
 					HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
-					{ 
+					{
 						Location = uiZone.Position.Coordinates,
 						Object = uiZone
 					}
@@ -159,50 +159,32 @@ namespace Common.UserInterface.Services
 
 			foreach (var elementRow in uiZone.ElementRows)
 			{
-				if (null != elementRow.BaseHoverConfig?.HoverCursor)
-				{ 
-					topHoverCursorConfiguration = elementRow.BaseHoverConfig;
-				}
-
 				var rowTop = 0f;
 				var rowBottom = 0f;
 
-				switch (uiZone.JustificationType)
+				rowTop =  uiZone.Position.Y + rowVerticalOffset;
+				rowBottom = rowTop + elementRow.TopPadding + elementRow.Height + elementRow.BottomPadding;
+
+				if ((rowTop > location.Y) ||
+					(rowBottom < location.Y))
 				{
-					case UiZoneJustificationTypes.Bottom:
-					case UiZoneJustificationTypes.Center:
-					case UiZoneJustificationTypes.None:
-					case UiZoneJustificationTypes.Top:
-					default:
-						rowVerticalOffset += elementRow.TopPadding;
-						rowTop = rowVerticalOffset + uiZone.Position.Y;
-						rowVerticalOffset += elementRow.Height;
-						rowBottom = rowVerticalOffset + uiZone.Position.Y;
-						rowVerticalOffset += elementRow.BottomPadding;
-						break;
+					continue;
 				}
 
-				if ((rowTop <= location.Y) &&
-					(rowBottom >= location.Y))
+				rowVerticalOffset += rowBottom;
+
+				if (null != elementRow.BaseHoverConfig?.HoverCursor)
 				{
-					var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
+					topHoverCursorConfiguration = elementRow.BaseHoverConfig;
+				}
 
-					if (true == uiElementWithLocation.HasValue)
+				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
+
+				if (true == uiElementWithLocation.HasValue)
+				{
+					if (null != uiElementWithLocation.Value.Object.BaseHoverConfig?.HoverCursor)
 					{
-						if (null != uiElementWithLocation.Value.Object.BaseHoverConfig?.HoverCursor)
-						{
-							topHoverCursorConfiguration = uiElementWithLocation.Value.Object.BaseHoverConfig;
-						}
-
-						return new HoverState
-						{
-							TopHoverCursorConfiguration = topHoverCursorConfiguration,
-							HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
-							{
-								Location = uiElementWithLocation.Value.Location,
-								Object = uiElementWithLocation.Value.Object
-							}
-						};
+						topHoverCursorConfiguration = uiElementWithLocation.Value.Object.BaseHoverConfig;
 					}
 
 					return new HoverState
@@ -210,15 +192,25 @@ namespace Common.UserInterface.Services
 						TopHoverCursorConfiguration = topHoverCursorConfiguration,
 						HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
 						{
-							Location = uiZone.Position.Coordinates + new Vector2
-							{ 
-								X = 0,
-								Y = rowTop
-							},
-							Object = elementRow
+							Location = uiElementWithLocation.Value.Location,
+							Object = uiElementWithLocation.Value.Object
 						}
 					};
 				}
+
+				return new HoverState
+				{
+					TopHoverCursorConfiguration = topHoverCursorConfiguration,
+					HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+					{
+						Location = uiZone.Position.Coordinates + new Vector2
+						{
+							X = 0,
+							Y = rowTop
+						},
+						Object = elementRow
+					}
+				};
 			}
 
 			return new HoverState

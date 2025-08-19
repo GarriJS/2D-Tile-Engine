@@ -120,6 +120,104 @@ namespace LevelEditor.Core.Initialization
 			[
 				new UiGroupModel
 				{
+					UiGroupName = "Level Editor Main UI",
+					VisibilityGroupId = 1,
+					IsVisible = true,
+					UiZoneElements =
+					[
+						new UiZoneModel
+						{
+							UiZoneName = "Level Editor Label Row",
+							UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
+							BackgroundTextureName = string.Empty,
+							JustificationType = (int)UiZoneJustificationTypes.Top,
+							ElementRows =
+							[
+								new UiRowModel
+								{
+									UiRowName = "Level Editor Label Row",
+									TopPadding = 0,
+									BottomPadding = 0,
+									BackgroundTextureName = null,
+									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									SubElements =
+									[
+										new UiTextModel
+										{
+											UiElementName = "Level Editor Label Element",
+											LeftPadding = 0,
+											RightPadding = 0,
+											BackgroundTextureName = "gray",
+											ElementHoverCursorName = CommonCursorNames.BasicCursorName,
+											Text = "Level Editor",
+											SizeType = (int)UiElementSizeTypes.Small
+										}
+									]
+								}
+							]
+						},
+						new UiZoneModel
+						{
+							UiZoneName = "Disc Zone",
+							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
+							BackgroundTextureName = string.Empty,
+							JustificationType = (int)UiZoneJustificationTypes.Bottom,
+							ElementRows =
+							[
+								new UiRowModel
+								{
+									UiRowName = "Disc Row 1",
+									TopPadding = 0,
+									BottomPadding = 0,
+									BackgroundTextureName = null,
+									RowHoverCursorName = CommonCursorNames.BasicCursorName,
+									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Left,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									SubElements =
+									[
+										new UiTextModel
+										{
+											UiElementName = "TempElement",
+											LeftPadding = 0,
+											RightPadding = 0,
+											BackgroundTextureName = "white",
+											Text = "Disc Buttons to go here",
+											SizeType = (int)UiElementSizeTypes.Full
+										}
+									]
+								}
+							]
+						},
+						new UiZoneModel
+						{
+							UiZoneName = "foo1",
+							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
+							BackgroundTextureName = null,
+							JustificationType = (int)UiZoneJustificationTypes.Bottom,
+							ElementRows =
+							[
+								new UiRowModel
+								{
+									UiRowName = "foo1row3",
+									TopPadding = 15,
+									BottomPadding = 15,
+									BackgroundTextureName = "gray_transparent",
+									RowHoverCursorName = CommonCursorNames.BasicCursorName,
+									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+									SubElements = flattenedButtons
+								}
+							]
+						}
+					]
+				}
+			];
+
+			return
+			[
+				new UiGroupModel
+				{
 					UiGroupName = "foo",
 					VisibilityGroupId = 1,
 					IsVisible = true,
