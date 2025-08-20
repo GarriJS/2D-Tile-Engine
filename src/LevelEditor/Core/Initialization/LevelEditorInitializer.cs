@@ -201,13 +201,13 @@ namespace LevelEditor.Core.Initialization
 								{
 									UiRowName = "foo1row3",
 									TopPadding = 15,
-									BottomPadding = 15,
+									BottomPadding = 32+15,
 									BackgroundTextureName = "gray_transparent",
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
 									SubElements = flattenedButtons
-								}
+								}                             
 							]
 						}
 					]

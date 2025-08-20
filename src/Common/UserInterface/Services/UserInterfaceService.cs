@@ -178,7 +178,7 @@ namespace Common.UserInterface.Services
 					topHoverCursorConfiguration = elementRow.BaseHoverConfig;
 				}
 
-				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop, location);
+				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.TopPadding, location);
 
 				if (true == uiElementWithLocation.HasValue)
 				{
