@@ -7,6 +7,7 @@ using Common.DiskModels.Controls;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
+using Engine.Controls.Enums;
 using Engine.Controls.Models;
 using Engine.Core.Initialization.Contracts;
 using Engine.Core.Textures.Contracts;
@@ -379,6 +380,19 @@ namespace Common.Controls.Cursors.Services
 				runTimeOverlaidDrawService.AddDrawable(cursor);
 				runTimeUpdateService.AddUpdateable(cursor);
 			}
+		}
+
+		public void AddSetDefaultCursorStateActionControl(Keys key)
+		{
+			var actionControl = new ActionControl
+			{
+
+
+
+			};
+
+
+
 		}
 
 		/// <summary>

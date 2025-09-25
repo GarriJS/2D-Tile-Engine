@@ -1,20 +1,17 @@
-﻿using Common.DiskModels.UI;
+﻿using Common.Controls.Cursors.Constants;
+using Common.Controls.Cursors.Models;
+using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
-using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.Contracts;
 using Engine.DiskModels.Drawing;
+using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.UserInterface.Constants;
-using Common.Controls.Cursors.Constants;
-using Common.Controls.Cursors.Models;
-using Common.Controls.Cursors.Services.Contracts;
-using Common.Tiling.Services.Contracts;
-using LevelEditor.Controls.Constants;
 
 namespace LevelEditor.Core.Initialization
 {

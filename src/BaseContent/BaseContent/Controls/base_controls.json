@@ -1,0 +1,37 @@
+[
+  {
+    "actionName": "leftClick",
+    "controlKeys": null,
+    "controlMouseButtons": [ 0 ]
+  },
+  {
+    "actionName": "rightClick",
+    "controlKeys": null,
+    "controlMouseButtons": [ 1 ]
+  },
+  {
+    "actionName": "middleClick",
+    "controlKeys": null,
+    "controlMouseButtons": [ 3 ]
+  },
+  {
+    "actionName": "up",
+    "controlKeys": [ 87 ],
+    "controlMouseButtons": null
+  },
+  {
+    "actionName": "down",
+    "controlKeys": [ 83 ],
+    "controlMouseButtons": null
+  },
+  {
+    "actionName": "left",
+    "controlKeys": [ 65 ],
+    "controlMouseButtons": null
+  },
+  {
+    "actionName": "right",
+    "controlKeys": [ 68 ],
+    "controlMouseButtons": null
+  }
+]

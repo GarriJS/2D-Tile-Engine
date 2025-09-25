@@ -5,15 +5,15 @@
     /// </summary>
     public enum MouseButtonTypes
     {
-        /// <summary>
-        /// The right button type.
-        /// </summary>
-        RightButton = 0,
+		/// <summary>
+		/// The left button type.
+		/// </summary>
+		LeftButton = 0,
 
-        /// <summary>
-        /// The left button type.
-        /// </summary>
-        LeftButton = 1,
+		/// <summary>
+		/// The right button type.
+		/// </summary>
+		RightButton = 1,
 
         /// <summary>
         /// The middle button type.

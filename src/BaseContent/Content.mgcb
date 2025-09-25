@@ -13,6 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin BaseContent/Controls/base_controls.json
+/copy:BaseContent/Controls/base_controls.json
+
 #begin BaseContent/Fonts/Monobold.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

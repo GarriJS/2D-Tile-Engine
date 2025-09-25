@@ -1,5 +1,4 @@
-﻿using Engine.Controls.Enums;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
@@ -26,13 +25,13 @@ namespace Engine.Controls.Models
 		public MouseState MouseState { get; set; }
 
 		/// <summary>
-		/// Gets or sets the fresh action types. 
+		/// Gets or sets the fresh action names. 
 		/// </summary>
-		public List<ActionTypes> FreshActionTypes { get; set; }
+		public List<string> FreshActionNames { get; set; }
 
 		/// <summary>
-		/// Gets or sets the action types.
+		/// Gets or sets the active action names.
 		/// </summary>
-		public List<ActionTypes> ActionTypes { get; set; }
+		public List<string> ActiveActionNames { get; set; }
 	}
 }

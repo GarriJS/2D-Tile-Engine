@@ -47,8 +47,8 @@ namespace Engine.Controls.Managers
             {
                 Direction = null,
                 MouseState = default,
-                FreshActionTypes = [],
-                ActionTypes = []
+                FreshActionNames = [],
+                ActiveActionNames = []
             };
 
             base.Initialize();
@@ -75,26 +75,25 @@ namespace Engine.Controls.Managers
             var pressedKeys = Keyboard.GetState().GetPressedKeys();
             var mouseState = Mouse.GetState();
             var pressedMouseButtons = this.GetPressedMouseButtons(Mouse.GetState());
-            var activeActionTypes = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
-                                                                   (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
-                                                       .Select(e => e.ActionType)
-                                                       .ToList();
+            var actionControlNames = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
+                                                                 (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
+                                                     .Select(e => e.ActionName)
+                                                     .ToList();
 
-            var direction = this.GetMovementDirection(activeActionTypes);
-            var freshActionTypes = activeActionTypes;
+            //var direction = this.GetMovementDirection(actionControlNames);
+            var freshActionTypes = actionControlNames;
 
-            if (null != this.PriorControlState?.ActionTypes)
+            if (null != this.PriorControlState?.ActiveActionNames)
             {
-                freshActionTypes = activeActionTypes.Where(e => false == this.PriorControlState.ActionTypes.Contains(e))
-                                                    .ToList();
+                freshActionTypes = [.. actionControlNames.Where(e => false == this.PriorControlState.ActiveActionNames.Contains(e))];
             }
 
             return new ControlState
             {
-                Direction = direction,
+                //Direction = direction,
                 MouseState = mouseState,
-                FreshActionTypes = freshActionTypes,
-                ActionTypes = activeActionTypes
+				FreshActionNames = freshActionTypes,
+				ActiveActionNames = actionControlNames
             };
         }
 
@@ -140,69 +139,69 @@ namespace Engine.Controls.Managers
         /// </summary>
         /// <param name="actionTypes">The action types.</param>
         /// <returns>The movement direction.</returns>
-        private float? GetMovementDirection(List<ActionTypes> actionTypes)
-        {
-            var upMovement = actionTypes.Contains(ActionTypes.Up);
-			var downMovement = actionTypes.Contains(ActionTypes.Down);
-			var leftMovement = actionTypes.Contains(ActionTypes.Left);
-			var rightMovement = actionTypes.Contains(ActionTypes.Right);
+   //     private float? GetMovementDirection(List<int> actionTypes)
+   //     {
+   //         var upMovement = actionTypes.Contains(ActionTypes.Up);
+			//var downMovement = actionTypes.Contains(ActionTypes.Down);
+			//var leftMovement = actionTypes.Contains(ActionTypes.Left);
+			//var rightMovement = actionTypes.Contains(ActionTypes.Right);
 
-            if ((true == upMovement) &&
-                (true == downMovement))
-            {
-                upMovement = false;
-                downMovement = false;
-            }
+   //         if ((true == upMovement) &&
+   //             (true == downMovement))
+   //         {
+   //             upMovement = false;
+   //             downMovement = false;
+   //         }
 
-            if ((true == leftMovement) &&
-                (true == rightMovement))
-            {
-                leftMovement = false;
-                rightMovement = false;
-            }
+   //         if ((true == leftMovement) &&
+   //             (true == rightMovement))
+   //         {
+   //             leftMovement = false;
+   //             rightMovement = false;
+   //         }
 
-            if (true == upMovement)
-            {
-                if (true == leftMovement)
-                {
-                    return (float)(3 * Math.PI) / 4f;
-                }
-                else if (true == rightMovement)
-                {
-                    return (float)Math.PI / 4f;
-                }
-                else
-                {
-                    return (float)Math.PI / 2f;
-                }
-            }
-            else if (true == downMovement)
-            {
-                if (true == leftMovement)
-                {
-                    return (float)(5 * Math.PI) / 4f;
-                }
-                else if (true == rightMovement)
-                {
-                    return (float)(7 * Math.PI) / 4f;
-                }
-                else
-                {
-                    return (float)(3 * Math.PI) / 2f;
-                }
-            }
-            else if (true == leftMovement)
-            {
-                return (float)Math.PI;
-            }
-            else if (true == rightMovement)
-            {
-                return 0f;
-            }
-            else
-            {
-                return null;
-            }
-        }
+   //         if (true == upMovement)
+   //         {
+   //             if (true == leftMovement)
+   //             {
+   //                 return (float)(3 * Math.PI) / 4f;
+   //             }
+   //             else if (true == rightMovement)
+   //             {
+   //                 return (float)Math.PI / 4f;
+   //             }
+   //             else
+   //             {
+   //                 return (float)Math.PI / 2f;
+   //             }
+   //         }
+   //         else if (true == downMovement)
+   //         {
+   //             if (true == leftMovement)
+   //             {
+   //                 return (float)(5 * Math.PI) / 4f;
+   //             }
+   //             else if (true == rightMovement)
+   //             {
+   //                 return (float)(7 * Math.PI) / 4f;
+   //             }
+   //             else
+   //             {
+   //                 return (float)(3 * Math.PI) / 2f;
+   //             }
+   //         }
+   //         else if (true == leftMovement)
+   //         {
+   //             return (float)Math.PI;
+   //         }
+   //         else if (true == rightMovement)
+   //         {
+   //             return 0f;
+   //         }
+   //         else
+   //         {
+   //             return null;
+   //         }
+   //     }
     }
 }

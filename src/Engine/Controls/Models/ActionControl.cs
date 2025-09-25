@@ -9,14 +9,9 @@ namespace Engine.Controls.Models
     public class ActionControl
 	{
 		/// <summary>
-		/// Gets or sets the action control description.
+		/// Gets or sets the action name.
 		/// </summary>
-		public string ActionControlDescription { get; set; }
-
-		/// <summary>
-		/// Gets or sets the action type.
-		/// </summary>
-		public ActionTypes ActionType { get; set; } 
+		public string ActionName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the control keys.

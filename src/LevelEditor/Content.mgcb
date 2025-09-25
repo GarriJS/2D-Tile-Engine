@@ -13,6 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin LevelEditorContent/Controls/base_controls.json
-/copy:LevelEditorContent/Controls/base_controls.json
+#begin LevelEditorContent/Controls/level_editor_controls.json
+/copy:LevelEditorContent/Controls/level_editor_controls.json
 

@@ -13,10 +13,10 @@ using System.Text;
 namespace Engine.Controls.Services
 {
 	/// <summary>
-	/// Represents a action control service.
+	/// Represents a action actionControlModel service.
 	/// </summary>
 	/// <remarks>
-	/// Initializes the action control service.
+	/// Initializes the action actionControlModel service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
@@ -24,7 +24,7 @@ namespace Engine.Controls.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the action controls.
+		/// Gets the action actionControlModels.
 		/// </summary>
 		public List<ActionControl> GetActionControls()
 		{
@@ -38,21 +38,22 @@ namespace Engine.Controls.Services
 					continue;
 				}
 
-				var managerFontNames = LoadingInstructionsContainer.GetControlNamesForContentManager(contentManagerName);
+				var managerControlNames = LoadingInstructionsContainer.GetControlNamesForContentManager(contentManagerName);
 				var serializer = new DataContractJsonSerializer(typeof(List<ActionControlModel>));
 
-				foreach (var managerFontName in managerFontNames)
+				foreach (var managerControlName in managerControlNames)
 				{
-					var controlFilePath = Path.Combine(Directory.GetCurrentDirectory(), contentManagerName, "Controls", $"{managerFontName}.json");
+					var controlFilePath = Path.Combine(Directory.GetCurrentDirectory(), contentManagerName, "Controls", $"{managerControlName}.json");
 					var controlJson = File.ReadAllText(controlFilePath);
 
 					using var stream = new MemoryStream(Encoding.UTF8.GetBytes(controlJson));
 					{
-						var controls = (List<ActionControlModel>)serializer.ReadObject(stream);
+						var actionControlModels = (List<ActionControlModel>)serializer.ReadObject(stream);
 
-						foreach (var control in controls)
+						foreach (var actionControlModel in actionControlModels)
 						{
-							actionControls.Add(this.GetActionControlFromModel(control));
+							var actionControl = this.GetActionControlFromModel(actionControlModel);
+							actionControls.Add(actionControl);	
 						}
 					}
 				}
@@ -62,10 +63,10 @@ namespace Engine.Controls.Services
 		}
 
 		/// <summary>
-		/// Gets the action control from the model.
+		/// Gets the action actionControlModel from the model.
 		/// </summary>
-		/// <param name="actionControlModel">The action control model.</param>
-		/// <returns>The action control.</returns>
+		/// <param name="actionControlModel">The action actionControlModel model.</param>
+		/// <returns>The action actionControlModel.</returns>
 		public ActionControl GetActionControlFromModel(ActionControlModel actionControlModel)
 		{
 			Keys[] controlKeys = null;
@@ -95,17 +96,17 @@ namespace Engine.Controls.Services
 
 			return new ActionControl
 			{ 
-				ActionType = (ActionTypes)actionControlModel.ActionType,
+				ActionName = actionControlModel.ActionName,
 				ControlKeys = controlKeys,
 				ControlMouseButtons = controlMouseButtons
 			};
 		}
 
 		/// <summary>
-		/// Gets the action control model.
+		/// Gets the action actionControlModel model.
 		/// </summary>
-		/// <param name="actionControl">The action control.</param>
-		/// <returns>The action control model.</returns>
+		/// <param name="actionControl">The action actionControlModel.</param>
+		/// <returns>The action actionControlModel model.</returns>
 		private ActionControlModel GetActionControlModel(ActionControl actionControl)
 		{
 			int[] controlKeys = null;
@@ -134,9 +135,8 @@ namespace Engine.Controls.Services
 			}
 
 			return new ActionControlModel
-			{
-				ActionControlDescription = actionControl.ActionControlDescription,
-				ActionType = (int)actionControl.ActionType,
+			{ 
+				ActionName = actionControl.ActionName,
 				ControlKeys = controlKeys,
 				ControlMouseButtons = controlMouseButtons
 			};
