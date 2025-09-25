@@ -1,4 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using BaseContent.BaseContent.Controls;
+using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
@@ -417,8 +418,7 @@ namespace Common.Controls.Cursors.Services
 			{
 				case IAmAUiElement uiElementWithLocation:
 
-					if ((ButtonState.Pressed == controlState.MouseState.LeftButton) &&
-						(ButtonState.Pressed == priorControlState.MouseState.LeftButton))
+					if (true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick))
 					{
 						uiElementWithLocation.RaisePressEvent(uiObject.HoverObjectLocation.Location, cursor.Position.Coordinates);
 					}

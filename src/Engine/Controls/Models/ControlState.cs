@@ -33,5 +33,25 @@ namespace Engine.Controls.Models
 		/// Gets or sets the active action names.
 		/// </summary>
 		public List<string> ActiveActionNames { get; set; }
+
+		/// <summary>
+		/// Determines if the action name is fresh.
+		/// </summary>
+		/// <param name="actionName">The action name.</param>
+		/// <returns>A value indicating whether the action name is fresh.</returns>
+		public bool ActionNameIsFresh(string actionName)
+		{ 
+			return true == this.FreshActionNames?.Contains(actionName);
+		}
+
+		/// <summary>
+		/// Determines if the action name is active.
+		/// </summary>
+		/// <param name="actionName">The action name.</param>
+		/// <returns>A value indicating whether the action name is active.</returns>
+		public bool ActionNameIsActive(string actionName)
+		{
+			return true == this.ActiveActionNames?.Contains(actionName);
+		}
 	}
 }
