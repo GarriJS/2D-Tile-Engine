@@ -1,9 +1,7 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.Controls;
-using Engine.Controls.Models;
 using Engine.Core.Contracts;
-using Engine.Physics.Models;
 using System.Collections.Generic;
 
 namespace Common.Controls.Cursors.Services.Contracts
@@ -14,29 +12,9 @@ namespace Common.Controls.Cursors.Services.Contracts
 	public interface ICursorService : ILoadContent
     {
 		/// <summary>
-		/// Gets the cursor position.
+		/// Gets or sets the cursor state monitor.
 		/// </summary>
-		public Position CursorPosition { get; }
-
-		/// <summary>
-		/// Gets the active cursor.
-		/// </summary>
-		public Cursor PrimaryCursor { get; }
-
-		/// <summary>
-		/// Gets or sets the primary hover cursor.
-		/// </summary>
-		public Cursor PrimaryHoverCursor { get; }
-
-		/// <summary>
-		/// Gets the secondary cursors.
-		/// </summary>
-		public List<Cursor> SecondaryCursors { get; }
-
-		/// <summary>
-		/// Gets the secondary cursors.
-		/// </summary>
-		public List<Cursor> SecondaryHoverCursors { get; }
+		public CursorState CursorState { get; set; }
 
 		/// <summary>
 		/// Gets the cursors.
@@ -48,59 +26,16 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// </summary>
 		/// <param name="cursorModel">The cursor model.</param>
 		/// <param name="addCursor">A value indicating whether to add the cursors.</param>
+		/// <param name="drawLayerOffset">The draw layer offset.</param>
 		/// <returns>The cursor.</returns>
-		public Cursor GetCursor(CursorModel cursorModel, bool addCursor = false);
+		public Cursor GetCursor(CursorModel cursorModel, bool addCursor = false, byte drawLayerOffset = 0);
 
 		/// <summary>
-		/// Sets the primary cursor.
-		/// </summary>
-		/// <param name="cursor">The cursor</param>
-		/// <param name="forceSetHover">A value indicating whether to force set the hover.</param>
-		public void SetPrimaryCursor(Cursor cursor, bool forceSetHover = false);
-
-		/// <summary>
-		/// Adds the secondary cursors.
+		/// Gets the cursor hover state.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
-		/// <param name="disableExisting">A value indicating whether to disable existing secondary hover cursors.</param>
-		public void AddSecondaryCursor(Cursor cursor, bool disableExisting);
-
-		/// <summary>
-		/// Sets the primary hover cursor.
-		/// </summary>
-		/// <param name="cursor">The cursor.</param>
-		public void SetPrimaryHoverCursor(Cursor cursor);
-
-		/// <summary>
-		/// Adds the secondary cursors.
-		/// </summary>
-		/// <param name="cursor">The cursor.</param>
-		/// <param name="disableExisting">A value indicating whether to disable existing secondary hover cursors.</param>
-		public void AddSecondaryHoverCursor(Cursor cursor, bool disableExisting);
-
-		/// <summary>
-		/// Disables all non hover cursors.
-		/// </summary>
-		public void DisableAllNonHoverCursors();
-
-		/// <summary>
-		/// Disables all hover cursors.
-		/// </summary>
-		/// <param name="disableSecondaryHoverCursors">A value indicating whether to disable secondary hover cursors.</param>
-		public void DisableAllHoverCursors(bool disableSecondaryHoverCursors);
-
-		/// <summary>
-		/// Clears the hover cursors.
-		/// </summary>
-		public void ClearHoverCursors();
-
-		/// <summary>
-		/// Process the cursor and control state.
-		/// </summary>
-		/// <param name="cursor">The cursor.</param>
-		/// <param name="controlState">The control state.</param>
-		/// <param name="priorControlState">The prior control state.</param>
 		/// <returns>The hover state.</returns>
-		public HoverState ProcessCursorControlState(Cursor cursor, ControlState controlState, ControlState priorControlState);
-    }
+		public HoverState GetCursorHoverState(Cursor cursor);
+
+	}
 }

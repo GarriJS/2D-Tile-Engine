@@ -1,4 +1,5 @@
-﻿using Engine.Core.Initialization;
+﻿using Engine.Controls.Models;
+using Engine.Core.Initialization;
 using Engine.Core.Initialization.Models;
 using Microsoft.Xna.Framework;
 using System;
@@ -40,6 +41,16 @@ namespace Engine
 		public void SetLoadingInstructions(LoadingInstructions loadingInstructions)
 		{
 			LoadingInstructionsContainer.LoadingInstructions = loadingInstructions;
+		}
+
+		/// <summary>
+		/// Sets the initial control context type.
+		/// </summary>
+		/// <typeparam name="T">The control context type.</typeparam>
+		public void SetInitialControlContextType<T>() 
+			where T : ControlContext
+		{ 
+			this.InitialControlContextType = typeof(T);
 		}
 
 		/// <summary>

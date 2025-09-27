@@ -25,6 +25,11 @@ namespace Engine.Controls.Managers
         private List<ActionControl> ActionControls { get; set; }
 
         /// <summary>
+        /// Gets or sets the control context.
+        /// </summary>
+        public ControlContext ControlContext { get; set; }
+
+        /// <summary>
         /// Gets or sets the prior control state.
         /// </summary>
         public ControlState PriorControlState { get; private set; }
@@ -39,7 +44,7 @@ namespace Engine.Controls.Managers
         /// </summary>
         public override void Initialize()
         {
-            var actionControlServices = Game.Services.GetService<IActionControlServices>();
+            var actionControlServices = this.Game.Services.GetService<IActionControlServices>();
 
 			this.UpdateOrder = ManagerOrderConstants.ControlManagerUpdateOrder;
 			this.ActionControls = actionControlServices.GetActionControls();
@@ -62,6 +67,7 @@ namespace Engine.Controls.Managers
         {
             this.PriorControlState = this.ControlState;
             this.ControlState = this.GetCurrentControlState();
+            this.ControlContext?.ProcessControlState(gameTime, this.Game.Services, this.ControlState, this.PriorControlState);
 
             base.Update(gameTime);
         }

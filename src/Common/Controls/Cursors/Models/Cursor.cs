@@ -11,7 +11,7 @@ namespace Common.Controls.Cursors.Models
 	/// <summary>
 	/// Represents a cursor.
 	/// </summary>
-	public class Cursor : Image, IHaveAnImage, IAmDrawable, IAmUpdateable
+	public class Cursor : Image, IHaveAnImage, IAmDrawable, IAmSubUpdateable
     {
 		/// <summary>
 		/// Gets or sets the draw layer.

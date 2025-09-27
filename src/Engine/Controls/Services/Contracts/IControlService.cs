@@ -8,6 +8,11 @@ namespace Engine.Controls.Services.Contracts
 	public interface IControlService
 	{
 		/// <summary>
+		/// Gets or sets the control context.
+		/// </summary>
+		public ControlContext ControlContext { get; set; }
+
+		/// <summary>
 		/// Gets or sets the prior control state.
 		/// </summary>
 		public ControlState PriorControlState { get; }

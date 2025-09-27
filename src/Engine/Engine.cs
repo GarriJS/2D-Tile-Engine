@@ -1,4 +1,5 @@
-﻿using Engine.Controls.Services.Contracts;
+﻿using Engine.Controls.Models;
+using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Contracts;
 using Engine.Core.Fonts.Contracts;
@@ -23,6 +24,11 @@ namespace Engine
 	{
 		public GraphicsDeviceManager _graphics;
 
+		/// <summary>
+		/// Gets or sets the initial control context type.
+		/// </summary>
+		private Type InitialControlContextType { get; set; }
+		
 		/// <summary>
 		/// Gets the external services.
 		/// </summary>
@@ -133,6 +139,10 @@ namespace Engine
 			}
 
 			this.InitialModelsProviders.Clear();
+
+			var controlService = this.Services.GetService<IControlService>();
+			var controlContext = (ControlContext)Activator.CreateInstance(this.InitialControlContextType, this.Services);
+			controlService.ControlContext = controlContext;
 		}
 
 		protected override void Update(GameTime gameTime)

@@ -1,5 +1,6 @@
 ﻿
 using LevelEditor;
+using LevelEditor.Controls.Contexts;
 using LevelEditor.Core.Initialization;
 
 // Create the game object
@@ -12,6 +13,7 @@ game.DebugSpriteFontName = "Monolight";
 // Set the loading instructions
 var loadingInstructions = GameContainer.GetLoadingInstructions(game._graphics);
 game.SetLoadingInstructions(loadingInstructions);
+game.SetInitialControlContextType<LevelEditorControlContext>();
 
 // Add the external service providers
 game.AddExternalServiceProvider(ServiceExporter.GetServiceContractPairs);

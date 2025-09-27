@@ -43,7 +43,7 @@ namespace LevelEditor.Spritesheets.Services
 			var tileService = this._gameServices.GetService<ITileService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 
-			cursorService.SetPrimaryCursor(tileGridCursor, forceSetHover: true);
+			cursorService.CursorState.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 			var secondaryCursorModel = new CursorModel
@@ -60,8 +60,8 @@ namespace LevelEditor.Spritesheets.Services
 				CursorUpdaterName = LevelEditorCursorUpdatersNames.SpritesheetButtonCursorUpdater
 			};
 
-			var secondaryCursor = cursorService.GetCursor(secondaryCursorModel, addCursor: false);
-			cursorService.AddSecondaryCursor(secondaryCursor, disableExisting: true);
+			var secondaryCursor = cursorService.GetCursor(secondaryCursorModel, addCursor: false, drawLayerOffset: 1);
+			cursorService.CursorState.AddSecondaryCursor(secondaryCursor, disableExisting: true);
 
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.BasicCursorName, out var primaryCursor))
 			{
@@ -83,7 +83,7 @@ namespace LevelEditor.Spritesheets.Services
 			};
 
 			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
-			cursorService.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
+			cursorService.CursorState.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
 		}
 
 		/// <summary>
