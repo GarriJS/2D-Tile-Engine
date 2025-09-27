@@ -2,7 +2,6 @@
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Tiling.Services.Contracts;
-using Common.UserInterface.Constants;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;

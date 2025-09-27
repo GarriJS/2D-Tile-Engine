@@ -106,7 +106,10 @@ namespace Common.UserInterface.Models.Elements
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var writingService = gameServices.GetService<IWritingService>();
 
-			drawingService.Draw(this.Graphic.Texture, position.Coordinates + offset, this.Graphic.TextureBox, Color.White);
+			if (null != this.Graphic)
+			{
+				drawingService.Draw(this.Graphic.Texture, position.Coordinates + offset, this.Graphic.TextureBox, Color.White);
+			}
 
 			if (false == string.IsNullOrEmpty(this.Text))
 			{

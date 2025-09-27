@@ -1,4 +1,6 @@
-﻿using LevelEditor.Spritesheets.Services;
+﻿using LevelEditor.Scenes.Services;
+using LevelEditor.Scenes.Services.Contracts;
+using LevelEditor.Spritesheets.Services;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -19,7 +21,8 @@ namespace LevelEditor.Core.Initialization
 		{
 			return
 			[
-				(typeof(ISpritesheetButtonService), new SpritesheetButtonService(game.Services))
+				(typeof(ISpritesheetButtonService), new SpritesheetButtonService(game.Services)),
+				(typeof(ISceneEditService), new SceneEditService(game.Services))
 			];
 		}
 	}

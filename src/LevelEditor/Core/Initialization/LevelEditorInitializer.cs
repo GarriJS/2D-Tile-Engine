@@ -4,9 +4,9 @@ using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
-using Engine.DiskModels.Drawing;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
+using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -15,10 +15,10 @@ using System.Linq;
 
 namespace LevelEditor.Core.Initialization
 {
-    /// <summary>
-    /// Represents a level editor initializer.
-    /// </summary>
-    public static class LevelEditorInitializer
+	/// <summary>
+	/// Represents a level editor initializer.
+	/// </summary>
+	public static class LevelEditorInitializer
 	{
 		/// <summary>
 		/// Gets the function providers. 
@@ -95,10 +95,12 @@ namespace LevelEditor.Core.Initialization
 		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
+			var sceneEditService = gameServices.GetService<ISceneEditService>();
 
 			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
 			{
-				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor
+				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
+				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,
 			};
 		}
 
@@ -159,28 +161,83 @@ namespace LevelEditor.Core.Initialization
 							UiZoneName = "Disc Zone",
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTextureName = string.Empty,
-							JustificationType = (int)UiZoneJustificationTypes.Bottom,
+							JustificationType = (int)UiZoneJustificationTypes.Top,
 							ElementRows =
 							[
 								new UiRowModel
 								{
-									UiRowName = "Disc Row 1",
+									UiRowName = "Create Level",
 									TopPadding = 0,
 									BottomPadding = 0,
-									BackgroundTextureName = null,
+									BackgroundTextureName = "white",
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Left,
+									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Center,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
 									SubElements =
 									[
 										new UiTextModel
 										{
-											UiElementName = "TempElement",
+											UiElementName = "Create Element Label",
+											LeftPadding = 10,
+											RightPadding = 0,
+											BackgroundTextureName = null,
+											Text = "Create Level",
+											SizeType = (int)UiElementSizeTypes.ExtraSmall
+										},
+										new UiButtonModel
+										{
+											UiElementName = "Create Element Button",
 											LeftPadding = 0,
 											RightPadding = 0,
-											BackgroundTextureName = "white",
-											Text = "Disc Buttons to go here",
-											SizeType = (int)UiElementSizeTypes.Full
+											BackgroundTextureName = "black",
+											ButtonText = "+",
+											SizeType = (int)UiElementSizeTypes.ExtraSmall,                      
+											ClickableAreaScaler = new Vector2
+											{
+												X = 1,
+												Y = 1
+											},
+											ButtonClickEventName = UiEventName.CreateSceneClick
+										},
+										new UiTextModel
+										{
+											UiElementName = "Save Element Label",
+											LeftPadding = 10,
+											RightPadding = 0,
+											BackgroundTextureName = null,
+											Text = "Save Level",
+											SizeType = (int)UiElementSizeTypes.ExtraSmall
+										},
+										new UiButtonModel
+										{
+											UiElementName = "Save Element Button",
+											LeftPadding = 0,
+											RightPadding = 0,
+											BackgroundTextureName = "black",
+											ButtonText = "->",
+											SizeType = (int)UiElementSizeTypes.ExtraSmall
+										}
+									]
+								},
+								new UiRowModel
+								{
+									UiRowName = "Levels Header",
+									TopPadding = 0,
+									BottomPadding = 0,
+									BackgroundTextureName = "white",
+									RowHoverCursorName = CommonCursorNames.BasicCursorName,
+									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									SubElements =
+									[
+										new UiTextModel
+										{
+											UiElementName = "Saved Levels Element",
+											LeftPadding = 0,
+											RightPadding = 0,
+											BackgroundTextureName = null,
+											Text = "Saved Levels",
+											SizeType = (int)UiElementSizeTypes.ExtraSmall
 										}
 									]
 								}
@@ -188,7 +245,7 @@ namespace LevelEditor.Core.Initialization
 						},
 						new UiZoneModel
 						{
-							UiZoneName = "foo1",
+							UiZoneName = "Spritesheet Buttons Zone",
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
 							BackgroundTextureName = null,
 							JustificationType = (int)UiZoneJustificationTypes.Bottom,
@@ -196,156 +253,13 @@ namespace LevelEditor.Core.Initialization
 							[
 								new UiRowModel
 								{
-									UiRowName = "foo1row3",
+									UiRowName = "Spritesheet Buttons Row",
 									TopPadding = 15,
 									BottomPadding = 32+15,
 									BackgroundTextureName = "gray_transparent",
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
-									SubElements = flattenedButtons
-								}                             
-							]
-						}
-					]
-				}
-			];
-
-			return
-			[
-				new UiGroupModel
-				{
-					UiGroupName = "foo",
-					VisibilityGroupId = 1,
-					IsVisible = true,
-					UiZoneElements =
-					[
-						new UiZoneModel
-						{
-							UiZoneName = "foo1",
-							UiZoneType = (int)UiScreenZoneTypes.Row2Col1,
-							BackgroundTextureName = string.Empty,
-							JustificationType = (int)UiZoneJustificationTypes.Bottom,
-							ElementRows =
-							[
-								new UiRowModel
-								{
-									UiRowName = "foo1row1",
-									TopPadding = 0,
-									BottomPadding = 0,
-									BackgroundTextureName = null,
-									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Left,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
-									SubElements =
-									[
-										new UiTextModel
-										{
-											UiElementName = "foo1button1",
-											LeftPadding = 0,
-											RightPadding = 0,
-											BackgroundTextureName = "white",
-											Text = "Welcome to the level editor!",
-											SizeType = (int)UiElementSizeTypes.ExtraLarge
-										}
-									]
-								}
-							]
-						},
-						new UiZoneModel
-						{
-							UiZoneName = "foo1",
-							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
-							BackgroundTextureName = "gray_transparent",
-							JustificationType = (int)UiZoneJustificationTypes.Center,
-							ElementRows =
-							[
-								new UiRowModel
-								{
-									UiRowName = "foo1row1",
-									TopPadding = 4,
-									BottomPadding = 4,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Top,
-									SubElements =
-									[
-										new UiButtonModel
-										{
-											UiElementName = "foo1button2",
-											LeftPadding = 0,
-											RightPadding = 0,
-											BackgroundTextureName = "gray",
-											ButtonText = "Push Me",
-											SizeType = (int)UiElementSizeTypes.Fill,
-											ClickableAreaScaler = new Vector2(.9f, .9f),
-											ClickableAreaAnimation = new TriggeredAnimationModel
-											{
-												CurrentFrameIndex = 0,
-												FrameDuration = 1000,
-												RestingFrameIndex = 0,
-												Frames =
-												[
-													new ImageModel
-													{
-														TextureName = "black",
-													},
-													new ImageModel
-													{
-														TextureName = "white",
-													}
-												]
-											}
-										}
-									]
-								},
-								new UiRowModel
-								{
-									UiRowName = "foo1row2",
-									TopPadding = 4,
-									BottomPadding = 4,
-									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
-									SubElements =
-									[
-										new UiButtonModel
-										{
-											UiElementName = "foo1button1",
-											LeftPadding = 4,
-											RightPadding = 2,
-											BackgroundTextureName = "white",
-											ButtonText = "Push Me 1",
-											SizeType = (int)UiElementSizeTypes.Fill,
-											ClickableAreaScaler = new Vector2(1f, 1f),
-										},
-										new UiButtonModel
-										{
-											UiElementName = "foo1button2",
-											LeftPadding = 2,
-											RightPadding = 4,
-											BackgroundTextureName = "black",
-											ButtonText = "Push Me 2",
-											SizeType = (int)UiElementSizeTypes.Fill,
-											ClickableAreaScaler = new Vector2(1f, 1f),
-										}
-									]
-								}
-							]
-						},
-						new UiZoneModel
-						{
-							UiZoneName = "foo1",
-							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
-							BackgroundTextureName = "gray_transparent",
-							JustificationType = (int)UiZoneJustificationTypes.Top,
-							ElementRows =
-							[
-								new UiRowModel
-								{
-									UiRowName = "foo1row3",
-									TopPadding = 40,
-									BottomPadding = 4,
-									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.None,
 									SubElements = flattenedButtons
 								}
 							]
