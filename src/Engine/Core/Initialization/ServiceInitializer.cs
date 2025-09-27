@@ -2,6 +2,8 @@
 using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Contracts;
+using Engine.Core.Files;
+using Engine.Core.Files.Contracts;
 using Engine.Core.Fonts;
 using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization.Contracts;
@@ -101,6 +103,7 @@ namespace Engine.Core.Initialization
 				(typeof(IRuntimeOverlaidDrawService), new RuntimeOverlaidDrawManager(game)),
 				(typeof(IControlService), new ControlManager(game)),
 				(typeof(IFunctionService), new FunctionService(game.Services)),
+				(typeof(IJsonService), new JsonService(game.Services)),
 				(typeof(IDebugService), new DebugService(game.Services)),
 				(typeof(ITextureService), new TextureService(game.Services)),
 				(typeof(IActionControlServices), new ActionControlService(game.Services)),

@@ -1,14 +1,13 @@
 ﻿using Engine.Controls.Enums;
 using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
+using Engine.Core.Files.Contracts;
 using Engine.Core.Initialization;
+using Engine.DiskModels;
 using Engine.DiskModels.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
 
 namespace Engine.Controls.Services
 {
@@ -24,12 +23,20 @@ namespace Engine.Controls.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
+		/// Gets the controls file name.
+		/// </summary>
+		private string ControlsFileName { get; } = "Controls";
+
+		/// <summary>
 		/// Gets the action actionControlModels.
 		/// </summary>
 		public List<ActionControl> GetActionControls()
 		{
+			var jsonService = this._gameServices.GetService<IJsonService>();
+
 			var actionControls = new List<ActionControl>();
 			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
+			var serializer = new ModelSerializer<List<ActionControlModel>>();
 
 			foreach (var contentManagerName in contentManagerNames)
 			{
@@ -38,23 +45,17 @@ namespace Engine.Controls.Services
 					continue;
 				}
 
-				var managerControlNames = LoadingInstructionsContainer.GetControlNamesForContentManager(contentManagerName);
-				var serializer = new DataContractJsonSerializer(typeof(List<ActionControlModel>));
+				var controlNames = LoadingInstructionsContainer.GetControlNamesForContentManager(contentManagerName);
 
-				foreach (var managerControlName in managerControlNames)
+				foreach (var controlName in controlNames)
 				{
-					var controlFilePath = Path.Combine(Directory.GetCurrentDirectory(), contentManagerName, "Controls", $"{managerControlName}.json");
-					var controlJson = File.ReadAllText(controlFilePath);
+					using var stream = jsonService.GetJsonFileStream(contentManagerName, this.ControlsFileName, controlName);
+					var actionControlModels = serializer.Deserialize(stream);
 
-					using var stream = new MemoryStream(Encoding.UTF8.GetBytes(controlJson));
+					foreach (var actionControlModel in actionControlModels)
 					{
-						var actionControlModels = (List<ActionControlModel>)serializer.ReadObject(stream);
-
-						foreach (var actionControlModel in actionControlModels)
-						{
-							var actionControl = this.GetActionControlFromModel(actionControlModel);
-							actionControls.Add(actionControl);	
-						}
+						var actionControl = this.GetActionControlFromModel(actionControlModel);
+						actionControls.Add(actionControl);
 					}
 				}
 			}
