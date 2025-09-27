@@ -170,9 +170,8 @@ namespace Common.UserInterface.Services
 		/// <param name="uiElementModel">The user interface element model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="fillWidth">The fill width of the user interface element.</param>
-		/// <param name="visibilityGroup">The visibility group of the user interface element.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, int visibilityGroup)
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth)
 		{
 			var imageService = this._gameServices.GetService<IImageService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
@@ -197,7 +196,6 @@ namespace Common.UserInterface.Services
 
 			if (null != uiElement)
 			{
-				uiElement.VisibilityGroup = visibilityGroup;
 				uiElement.Graphic = image;
 				uiElement.PressConfig?.AddSubscription(this.CheckForUiElementClick);
 
@@ -312,9 +310,7 @@ namespace Common.UserInterface.Services
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			var animationService = this._gameServices.GetService<IAnimationService>();
-
-			uiService.ToggleUserInterfaceGroupVisibility(element.VisibilityGroup == 1 ? 2 : 1);
-
+			
 			if (element is UiButton button)
 			{
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);

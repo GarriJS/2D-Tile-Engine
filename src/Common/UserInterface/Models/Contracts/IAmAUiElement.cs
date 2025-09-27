@@ -19,11 +19,6 @@ namespace Common.UserInterface.Models.Contracts
         public string UiElementName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the visibility group.
-		/// </summary>
-		public int VisibilityGroup { get; set; }
-
-		/// <summary>
 		/// Gets or sets the left padding.
 		/// </summary>
 		public float LeftPadding { get; set; }

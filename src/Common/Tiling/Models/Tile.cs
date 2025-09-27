@@ -1,8 +1,10 @@
 ﻿using Common.Tiling.Models.Contracts;
+using Engine.Core.Constants;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
-using Engine.Physics.Models.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Models
@@ -38,23 +40,31 @@ namespace Common.Tiling.Models
 		public Image Image { get; set; }
 
 		/// <summary>
-		/// Gets the position.
-		/// </summary>
-		public Position Position { get => this.Area.Position; }
-
-		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public IAmAArea Area { get; set; }
+		public Vector2 Area { get; set; }
 
 		/// <summary>
-		/// Draws the drawable.
+		/// Draws the sub drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
+		/// <param name="position">The position.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
+			var drawingService = gameServices.GetService<IDrawingService>();
 
+			if (null != this.Graphic)
+			{
+				var tileOffset = new Vector2
+				{
+					X = this.Column * TileConstants.TILE_SIZE,
+					Y = this.Row * TileConstants.TILE_SIZE
+				};
+
+				drawingService.Draw(this.Graphic.Texture, position.Coordinates + tileOffset + offset, this.Graphic.TextureBox, Color.White);
+			}
 		}
 
 		/// <summary>

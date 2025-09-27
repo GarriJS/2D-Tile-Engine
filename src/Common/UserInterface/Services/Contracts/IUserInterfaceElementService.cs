@@ -39,8 +39,7 @@ namespace Common.UserInterface.Services.Contracts
 		/// <param name="uiElementModel">The user interface element model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
 		/// <param name="fillWidth">The fill width of the user interface element.</param>
-		/// <param name="visibilityGroup">The visibility group of the user interface element.</param>
 		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth, int visibilityGroup);
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth);
 	}
 }

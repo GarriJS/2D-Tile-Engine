@@ -1,19 +1,21 @@
 ﻿using Common.Controls.Cursors.Services.Contracts;
+using Common.Controls.Models.Contracts;
 using Engine.Controls.Models;
+using LevelEditor.Scenes.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Controls.Contexts
 {
 	/// <summary>
-	/// Represents a level editor control context.
+	/// Represents a scene edit control context.
 	/// </summary>
-	public class LevelEditorControlContext : ControlContext
+	public class SceneEditControlContext : ControlContext
 	{
 		/// <summary>
-		/// Initializes the level editor control context.
+		/// Initializes the scene edit control context.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
-		public LevelEditorControlContext(GameServiceContainer gameServices) : base(gameServices) { }
+		public SceneEditControlContext(GameServiceContainer gameServices) : base(gameServices) { }
 
 		/// <summary>
 		/// Initializes the control context.
@@ -22,8 +24,10 @@ namespace LevelEditor.Controls.Contexts
 		public override void Initialize(GameServiceContainer gameServices)
 		{
 			var cursorService = gameServices.GetService<ICursorService>();
+			var sceneEditService = gameServices.GetService<ISceneEditService>();
 
-			this.ControlContextComponents.Add(cursorService.CursorState);
+			this.ControlContextComponents.Add(cursorService.CursorControlComponent);
+			this.ControlContextComponents.Add(sceneEditService.AddTileComponent);
 		}
 
 		/// <summary>
@@ -35,8 +39,19 @@ namespace LevelEditor.Controls.Contexts
 		/// <param name="priorControlState">The prior control state.</param>
 		public override void ProcessControlState(GameTime gameTime, GameServiceContainer gameServices, ControlState controlState, ControlState priorControlState)
 		{
+			var cursorService = gameServices.GetService<ICursorService>();
+
+			var hoverState = cursorService.GetCursorHoverState();
+
 			foreach (var component in this.ControlContextComponents)
 			{
+				if (component is IAmACursorControlContextComponent cursorComponent)
+				{
+					cursorComponent.ConsumeControlState(gameTime, controlState, priorControlState, hoverState);
+
+					continue;
+				}
+
 				component.ConsumeControlState(gameTime, controlState, priorControlState);
 			}
 		}

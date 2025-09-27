@@ -242,27 +242,6 @@ namespace LevelEditor.Core.Initialization
 									]
 								}
 							]
-						},
-						new UiZoneModel
-						{
-							UiZoneName = "Spritesheet Buttons Zone",
-							UiZoneType = (int)UiScreenZoneTypes.Row3Col2,
-							BackgroundTextureName = null,
-							JustificationType = (int)UiZoneJustificationTypes.Bottom,
-							ElementRows =
-							[
-								new UiRowModel
-								{
-									UiRowName = "Spritesheet Buttons Row",
-									TopPadding = 15,
-									BottomPadding = 32+15,
-									BackgroundTextureName = "gray_transparent",
-									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
-									SubElements = flattenedButtons
-								}
-							]
 						}
 					]
 				}

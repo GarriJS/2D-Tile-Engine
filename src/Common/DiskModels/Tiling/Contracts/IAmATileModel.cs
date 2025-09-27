@@ -1,5 +1,4 @@
-﻿using Engine.DiskModels.Physics.Contracts;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Common.DiskModels.Common.Tiling.Contracts
 {
@@ -10,8 +9,5 @@ namespace Common.DiskModels.Common.Tiling.Contracts
 
         [DataMember(Name = "column", Order = 2)]
         public int Column { get; set; }
-
-        [DataMember(Name = "area", Order = 3)]
-        public IAmAAreaModel Area { get; set; }
     }
 }

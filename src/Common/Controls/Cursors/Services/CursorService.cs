@@ -28,9 +28,9 @@ namespace Common.Controls.Cursors.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets or sets the cursor state monitor.
+		/// Gets or sets the cursor control component.
 		/// </summary>
-		public CursorState CursorState { get; set; }
+		public CursorControlComponent CursorControlComponent { get; set; }
 
 		/// <summary>
 		/// Gets the cursors.
@@ -52,7 +52,7 @@ namespace Common.Controls.Cursors.Services
 			};
 
 			var position = positionService.GetPositionFromModel(positionModel);
-			this.CursorState = new CursorState(this._gameServices)
+			this.CursorControlComponent = new CursorControlComponent(this._gameServices)
 			{
 				CursorPosition = position
 			};
@@ -73,7 +73,7 @@ namespace Common.Controls.Cursors.Services
 			};
 
 			var cursor = this.GetCursor(cursorModel, addCursor: true);
-			this.CursorState.SetPrimaryCursor(cursor);
+			this.CursorControlComponent.SetPrimaryCursor(cursor);
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Common.Controls.Cursors.Services
 				CursorName = cursorModel.CursorName,
 				TextureName = cursorModel.TextureName,
 				Offset = cursorModel.Offset,
-				Position = this.CursorState.CursorPosition,
+				Position = this.CursorControlComponent.CursorPosition,
 				TextureBox = cursorModel.TextureBox,
 				Texture = texture,
 				CursorUpdater = cursorUpdater
@@ -127,13 +127,12 @@ namespace Common.Controls.Cursors.Services
 		/// <summary>
 		/// Gets the cursor hover state.
 		/// </summary>
-		/// <param name="cursor">The cursor.</param>
 		/// <returns>The hover state.</returns>
-		public HoverState GetCursorHoverState(Cursor cursor)
+		public HoverState GetCursorHoverState()
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 
-			var uiObject = uiService.GetUiObjectAtScreenLocation(cursor.Position.Coordinates);
+			var uiObject = uiService.GetUiObjectAtScreenLocation(this.CursorControlComponent.CursorPosition.Coordinates);
 
 			return uiObject;
 		}

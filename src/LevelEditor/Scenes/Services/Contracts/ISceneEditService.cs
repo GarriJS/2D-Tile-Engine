@@ -1,5 +1,7 @@
 ﻿using Common.Scenes.Models;
 using Common.UserInterface.Models.Contracts;
+using Engine.Core.Contracts;
+using LevelEditor.Scenes.Models;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Scenes.Services.Contracts
@@ -7,12 +9,17 @@ namespace LevelEditor.Scenes.Services.Contracts
 	/// <summary>
 	/// Represents a scene edit service.
 	/// </summary>
-	public interface ISceneEditService
+	public interface ISceneEditService : ILoadContent
 	{
 		/// <summary>
 		/// Gets the current scene.
 		/// </summary>
 		public Scene CurrentScene { get; }
+
+		/// <summary>
+		/// Gets the add tile component.
+		/// </summary>
+		public AddTileComponent AddTileComponent { get; }
 
 		/// <summary>
 		/// The create scene button click event processor.

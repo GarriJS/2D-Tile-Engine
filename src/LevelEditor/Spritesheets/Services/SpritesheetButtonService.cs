@@ -2,15 +2,23 @@
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.Controls;
+using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
 using Common.Tiling.Services.Contracts;
+using Common.UserInterface.Enums;
+using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Contracts;
+using Engine.DiskModels.Drawing;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
+using LevelEditor.Scenes.Models;
+using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace LevelEditor.Spritesheets.Services
 {
@@ -43,7 +51,7 @@ namespace LevelEditor.Spritesheets.Services
 			var tileService = this._gameServices.GetService<ITileService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 
-			cursorService.CursorState.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
+			cursorService.CursorControlComponent.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
 			var secondaryCursorModel = new CursorModel
@@ -61,7 +69,7 @@ namespace LevelEditor.Spritesheets.Services
 			};
 
 			var secondaryCursor = cursorService.GetCursor(secondaryCursorModel, addCursor: false, drawLayerOffset: 1);
-			cursorService.CursorState.AddSecondaryCursor(secondaryCursor, disableExisting: true);
+			cursorService.CursorControlComponent.AddSecondaryCursor(secondaryCursor, disableExisting: true);
 
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.BasicCursorName, out var primaryCursor))
 			{
@@ -83,7 +91,20 @@ namespace LevelEditor.Spritesheets.Services
 			};
 
 			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
-			cursorService.CursorState.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
+			cursorService.CursorControlComponent.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
+
+			var sceneEditService = this._gameServices.GetService<ISceneEditService>();
+			
+			var addTileParams = new AddTileParams
+			{
+				Sprite = new ImageModel
+				{
+					TextureName = element.Graphic.TextureName,
+					TextureBox = element.Graphic.TextureBox
+				}
+			};
+
+			sceneEditService.AddTileComponent.AddTileParameters = addTileParams;
 		}
 
 		/// <summary>
@@ -101,6 +122,45 @@ namespace LevelEditor.Spritesheets.Services
 				X = localTileLocation.X - cursor.Position.Coordinates.X,
 				Y = localTileLocation.Y - cursor.Position.Coordinates.Y
 			};
+		}
+
+		/// <summary>
+		/// Gets the user interface zone for the spritesheet buttons.
+		/// </summary>
+		/// <param name="spritesheetName">The spritesheet name.</param>
+		/// <param name="backgroundTexture">The background texture.</param>
+		/// <param name="uiScreenZoneType">The user interface zone type.</param>
+		/// <returns>The user interface zone.</returns>
+		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiScreenZoneTypes uiScreenZoneType)
+		{
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			
+			var spritesheetButtons = this.GetUiButtonsForSpritesheet(spritesheetName, new Point(32, 32));
+			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();
+
+			var uiZoneModel = new UiZoneModel
+			{
+				UiZoneName = "Spritesheet Buttons Zone",
+				UiZoneType = (int)uiScreenZoneType,
+				BackgroundTextureName = null,
+				JustificationType = (int)UiZoneJustificationTypes.Bottom,
+				ElementRows =
+				[
+					new UiRowModel
+					{
+						UiRowName = "Spritesheet Buttons Row",
+						TopPadding = 15,
+						BottomPadding = 32+15,
+						BackgroundTextureName = "gray_transparent",
+						RowHoverCursorName = CommonCursorNames.BasicCursorName,
+						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
+						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+						SubElements = flattenedButtons
+					}
+				]
+			};
+
+			return uiService.GetUiZone(uiZoneModel);
 		}
 
 		/// <summary>

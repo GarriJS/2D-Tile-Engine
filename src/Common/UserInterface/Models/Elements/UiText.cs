@@ -21,11 +21,6 @@ namespace Common.UserInterface.Models.Elements
 		public string UiElementName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the visibility group.
-		/// </summary>
-		public int VisibilityGroup { get; set; }
-
-		/// <summary>
 		/// Gets or sets the text.
 		/// </summary>
 		public string Text { get; set; }
@@ -124,7 +119,6 @@ namespace Common.UserInterface.Models.Elements
 		/// </summary>
 		public void Dispose()
 		{
-			this.Graphic?.Dispose();
 			this.HoverConfig?.Dispose();
 			this.PressConfig?.Dispose();
 		}

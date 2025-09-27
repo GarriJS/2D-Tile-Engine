@@ -43,6 +43,36 @@ namespace Common.UserInterface.Services
 		public List<UiGroup> UserInterfaceGroups { get; set; } = [];
 
 		/// <summary>
+		/// Adds the user interface zone to the user interface group.
+		/// </summary>
+		/// <param name="visibilityGroupId">The visibility group id.</param>
+		/// <param name="uiZone">The user interface zone.</param>
+		public void AddUserInterfaceZoneToUserInterfaceGroup(int visibilityGroupId, UiZone uiZone)
+		{
+			var uiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == visibilityGroupId);
+
+			if (null == uiGroup)
+			{
+				// LOGGING
+				return;
+			}
+
+			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
+
+			var existingZone = uiGroup.UiZones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType);
+
+			if (null != uiGroup.UiZones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType))
+			{
+				runTimeOverlaidDrawService.RemoveDrawable(existingZone);
+				uiGroup.UiZones.Remove(existingZone);
+				existingZone.Dispose();
+			}
+
+			uiGroup.UiZones.Add(uiZone);
+			runTimeOverlaidDrawService.AddDrawable(uiZone);
+		}
+
+		/// <summary>
 		/// Toggles the user interface group visibility.
 		/// </summary>
 		/// <param name="visibilityGroupId">The visibility group id.</param>
@@ -84,16 +114,16 @@ namespace Common.UserInterface.Services
 
 			var animationService = this._gameServices.GetService<IAnimationService>();
 
-			foreach (var uiZoneContainer in uiGroup.UiZones)
+			foreach (var uiZone in uiGroup.UiZones)
 			{
-				runTimeOverlaidDrawService.AddDrawable(uiZoneContainer);
+				runTimeOverlaidDrawService.AddDrawable(uiZone);
 
-				if (0 == uiZoneContainer.ElementRows.Count)
+				if (0 == uiZone.ElementRows.Count)
 				{
 					continue;
 				}
 
-				foreach (var uiRow in uiZoneContainer.ElementRows)
+				foreach (var uiRow in uiZone.ElementRows)
 				{
 					if (0 == uiRow.SubElements.Count)
 					{
@@ -318,7 +348,7 @@ namespace Common.UserInterface.Services
 
 			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
 			{
-				var uiZoneElement = this.GetUiZone(uiZoneElementModel, uiGroupModel.VisibilityGroupId);
+				var uiZoneElement = this.GetUiZone(uiZoneElementModel);
 
 				if (null != uiZoneElement)
 				{
@@ -349,7 +379,7 @@ namespace Common.UserInterface.Services
 		/// <param name="uiZoneModel">The user interface model.</param>
 		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
 		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZone(UiZoneModel uiZoneModel, int visibilityGroup)
+		public UiZone GetUiZone(UiZoneModel uiZoneModel)
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
@@ -390,7 +420,7 @@ namespace Common.UserInterface.Services
 
 			foreach (var elementRowModel in uiZoneModel.ElementRows)
 			{
-				var elementRow = this.GetUiRow(elementRowModel, uiScreenZone, visibilityGroup);
+				var elementRow = this.GetUiRow(elementRowModel, uiScreenZone);
 
 				if (null != elementRow)
 				{
@@ -461,9 +491,8 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <param name="uiZone">The user interface zone.</param>
-		/// <param name="visibilityGroup">The visibility group of the user interface row.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone, int visibilityGroup)
+		public UiRow GetUiRow(UiRowModel uiRowModel, UiScreenZone uiZone)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
@@ -502,7 +531,7 @@ namespace Common.UserInterface.Services
 
 			foreach (var elementModel in uiRowModel.SubElements)
 			{
-				var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth, visibilityGroup);
+				var element = uiElementService.GetUiElement(elementModel, uiZone, fillWidth);
 
 				if (null != element)
 				{

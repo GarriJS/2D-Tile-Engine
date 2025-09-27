@@ -9,7 +9,6 @@ using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Graphics.Services.Contracts;
-using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Services
@@ -157,10 +156,7 @@ namespace Common.Tiling.Services
 		/// <returns>The tile.</returns>
 		public IAmATile GetTile(IAmATileModel tileModel)
 		{
-			var areaService = this._gameServices.GetService<IAreaService>();
 			var imageService = this._gameServices.GetService<IImageService>();
-
-			var area = areaService.GetAreaFromModel(tileModel.Area);
 
 			if (tileModel is AnimatedTileModel animatedTileModel)
 			{
@@ -171,7 +167,7 @@ namespace Common.Tiling.Services
 					Row = tileModel.Row,
 					Column = tileModel.Column,
 					Animation = animation,
-					Area = area,
+					Area = TileConstants.TILE_AREA
 				};
 
 				return animatedTile;
@@ -184,7 +180,7 @@ namespace Common.Tiling.Services
 				Row = tileModel.Row,
 				Column = tileModel.Column,
 				Image = sprite,
-				Area = area,
+				Area = TileConstants.TILE_AREA
 			};
 
 			return tile;

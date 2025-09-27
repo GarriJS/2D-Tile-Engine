@@ -48,8 +48,8 @@ namespace Common.Controls.CursorInteraction.Models
 		/// </summary>
 		new public void Dispose()
 		{
+			this.HoverCursor?.Dispose();
 			this.HoverEvent = null;
-			this.HoverCursor.Dispose();
 		}
 	}
 }

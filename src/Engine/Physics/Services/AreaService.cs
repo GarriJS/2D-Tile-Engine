@@ -49,34 +49,10 @@ namespace Engine.Physics.Services
 					var width = 0f;
 					var height = 0f;
 
-					for (int i = 0; i < areaCollectionModel.Areas?.Length; i++)
-					{
-						areas[i] = this.GetAreaFromModel<OffsetArea>(areaCollectionModel.Areas[i], position);
-
-						var subAreaWidth = areas[i].Width;
-						var subAreaHeight = areas[i].Height;
-
-						if (areas[i] is OffsetArea subOffsetArea)
-						{
-							subAreaWidth += subOffsetArea.HorizontalOffset;
-							subAreaHeight += subOffsetArea.VerticalOffset;
-						}
-
-						if (subAreaWidth > width)
-						{
-							width = subAreaWidth;
-						}
-
-						if (subAreaHeight > height)
-						{
-							height = subAreaHeight;
-						}
-					}
-
 					var areaCollection = new AreaCollection(width, height)
 					{
 						Position = position,
-						Areas = areas
+						Areas = areaCollectionModel.Areas
 					};
 
 					if (areaCollection is T resultCollection)

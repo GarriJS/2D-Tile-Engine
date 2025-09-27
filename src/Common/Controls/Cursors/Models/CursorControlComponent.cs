@@ -1,9 +1,10 @@
 ﻿using BaseContent.BaseContent.Controls;
+using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Services.Contracts;
+using Common.Controls.Models.Contracts;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Controls.Models;
-using Engine.Controls.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -12,13 +13,13 @@ using System.Collections.Generic;
 namespace Common.Controls.Cursors.Models
 {
 	/// <summary>
-	/// Represents a cursor state.
+	/// Represents a cursor control component.
 	/// </summary>
 	/// <remarks>
-	/// Initializes a cursor state.
+	/// Initializes a cursor control component.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class CursorState(GameServiceContainer gameServices) : IAmAControlContextComponent
+	public class CursorControlComponent(GameServiceContainer gameServices) : IAmACursorControlContextComponent
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -61,6 +62,21 @@ namespace Common.Controls.Cursors.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
+
+			var hoverState = cursorService.GetCursorHoverState();
+			this.ConsumeControlState(gameTime, controlState, priorControlState, hoverState);
+		}
+
+		/// <summary>
+		/// Consumes the control state.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="controlState">The control state.</param>
+		/// <param name="priorControlState">The prior control state.</param>
+		/// <param name="hoverState">The hover state.</param>
+		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
+		{
+			var cursorService = this._gameServices.GetService<ICursorService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (null == controlState)
@@ -69,21 +85,11 @@ namespace Common.Controls.Cursors.Models
 			}
 
 			this.CursorPosition.Coordinates = controlState.MousePosition;
-			var activeCursor = true == this.HoverCursorActive
-				? this.PrimaryHoverCursor
-				: this.PrimaryCursor;
 
-			if (null == activeCursor)
-			{
-				return; // LOGGING
-			}
-
-			var hoverResult = cursorService.GetCursorHoverState(activeCursor);
-
-			if (null != hoverResult?.TopHoverCursorConfiguration?.HoverCursor)
+			if (null != hoverState?.TopHoverCursorConfiguration?.HoverCursor)
 			{
 				this.SetHoverState();
-				this.SetPrimaryHoverCursor(hoverResult.TopHoverCursorConfiguration.HoverCursor, clearSecondaryCursors: false);
+				this.SetPrimaryHoverCursor(hoverState.TopHoverCursorConfiguration.HoverCursor, clearSecondaryCursors: false);
 
 				foreach (var secondaryCursor in this.SecondaryHoverCursors)
 				{
@@ -103,17 +109,13 @@ namespace Common.Controls.Cursors.Models
 
 			this.UpdateActiveCursors(gameTime);
 
-			if (null == hoverResult?.HoverObjectLocation)
+			if (null == hoverState?.HoverObjectLocation)
 			{
 				return;
 			}
 
-			activeCursor = true == this.HoverCursorActive
-				? this.PrimaryHoverCursor
-				: this.PrimaryCursor;
-
-			var uiObject = hoverResult.HoverObjectLocation.Object;
-			var location = hoverResult.HoverObjectLocation.Location;
+			var uiObject = hoverState.HoverObjectLocation.Object;
+			var location = hoverState.HoverObjectLocation.Location;
 
 			switch (uiObject)
 			{
@@ -121,7 +123,7 @@ namespace Common.Controls.Cursors.Models
 
 					if (true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick))
 					{
-						uiElementWithLocation.RaisePressEvent(location, activeCursor.Position.Coordinates);
+						uiElementWithLocation.RaisePressEvent(location, this.CursorPosition.Coordinates);
 					}
 					else
 					{

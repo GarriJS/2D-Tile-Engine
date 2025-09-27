@@ -1,6 +1,5 @@
 ﻿using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
-using System.Linq;
 
 namespace Engine.Physics.Models
 {
@@ -8,7 +7,7 @@ namespace Engine.Physics.Models
 	/// Represents a area collection
 	/// </summary>
 	public class AreaCollection(float width, float height) : IAmAArea
-	{	
+	{
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
@@ -23,11 +22,11 @@ namespace Engine.Physics.Models
 		/// Gets or sets the position.
 		/// </summary>
 		public Position Position { get; set; }
-	
+
 		/// <summary>
 		/// Gets or sets the areas.
 		/// </summary>
-		public OffsetArea[] Areas { get; set; }
+		public (Vector2 offset, Vector2 dimensions)[] Areas { get; set; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.
@@ -36,7 +35,20 @@ namespace Engine.Physics.Models
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
 		public bool Contains(Vector2 coordinate)
 		{
-			return this.Areas.Any(e => true == e.Contains(coordinate));
+			foreach (var area in Areas)
+			{
+				var truePosition = this.Position.Coordinates + area.offset;
+
+				if (truePosition.X <= coordinate.X &&
+					truePosition.X + area.dimensions.X >= coordinate.X &&
+					truePosition.Y <= coordinate.Y &&
+					truePosition.Y + area.dimensions.Y >= coordinate.Y)
+				{
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }

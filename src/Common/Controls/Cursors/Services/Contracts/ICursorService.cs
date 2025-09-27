@@ -14,7 +14,7 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// <summary>
 		/// Gets or sets the cursor state monitor.
 		/// </summary>
-		public CursorState CursorState { get; set; }
+		public CursorControlComponent CursorControlComponent { get; set; }
 
 		/// <summary>
 		/// Gets the cursors.
@@ -33,9 +33,7 @@ namespace Common.Controls.Cursors.Services.Contracts
 		/// <summary>
 		/// Gets the cursor hover state.
 		/// </summary>
-		/// <param name="cursor">The cursor.</param>
 		/// <returns>The hover state.</returns>
-		public HoverState GetCursorHoverState(Cursor cursor);
-
+		public HoverState GetCursorHoverState();
 	}
 }

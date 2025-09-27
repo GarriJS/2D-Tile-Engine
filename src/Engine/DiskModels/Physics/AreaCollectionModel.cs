@@ -1,4 +1,5 @@
 ﻿using Engine.DiskModels.Physics.Contracts;
+using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
 namespace Engine.DiskModels.Physics
@@ -15,6 +16,6 @@ namespace Engine.DiskModels.Physics
 		public float Height { get; set; }
 
 		[DataMember(Name = "areas", Order = 4)]
-		public SimpleAreaModel[] Areas { get; set; }
+		public (Vector2 offset, Vector2 dimensions)[] Areas { get; set; }
 	}
 }
