@@ -19,6 +19,11 @@
     <Folder Include="Controls\Models\" />
     <Folder Include="Spritesheets\Models\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="LevelEditorContent\**\*.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
