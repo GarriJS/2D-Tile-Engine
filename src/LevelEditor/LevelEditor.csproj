@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="LevelEditorContent\**\*.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
