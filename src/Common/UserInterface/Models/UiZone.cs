@@ -137,7 +137,6 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.Image?.Dispose();
 			this.HoverConfig?.Dispose();
 
 			if (0 == this.ElementRows.Count)

@@ -62,13 +62,5 @@ namespace Common.Tiling.Models
 		{
 
 		}
-
-		/// <summary>
-		/// Disposes of the animated tile.
-		/// </summary>
-		public void Dispose()
-		{
-			this.Animation?.Dispose();
-		}
 	}
 }

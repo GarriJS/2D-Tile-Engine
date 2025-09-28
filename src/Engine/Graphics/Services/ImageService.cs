@@ -1,12 +1,8 @@
 ﻿using Engine.Core.Constants;
 using Engine.Core.Textures.Contracts;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Physics;
-using Engine.DiskModels.Physics.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
-using Engine.Physics.Models.Contracts;
-using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Graphics.Services
@@ -48,7 +44,13 @@ namespace Engine.Graphics.Services
 
 			var image = imageModel switch
 			{
-				IndependentImageModel independentImageModel => this.GetIndependentImageFromModel(independentImageModel),
+				FillImageModel fillImageModel => new FillImage
+				{
+					TextureName = imageModel.TextureName,
+					TextureBox = imageModel.TextureBox,
+					Texture = texture,
+					FillBox = fillImageModel.FillBox,
+				},
 				_ => new Image
 				{
 					TextureName = imageModel.TextureName,
@@ -58,32 +60,6 @@ namespace Engine.Graphics.Services
 			};
 
 			return image as T;
-		}
-
-		/// <summary>
-		/// Gets the independent image from the model.
-		/// </summary>
-		/// <param name="independentImageModel">The independent image model.</param>
-		/// <returns>The independent image.</returns>
-		private IndependentImage GetIndependentImageFromModel(IndependentImageModel independentImageModel)
-		{
-			var textureService = this._gameServices.GetService<ITextureService>();
-			var positionService = this._gameServices.GetService<IPositionService>();
-
-			var position = positionService.GetPositionFromModel(independentImageModel.Position);
-
-			if (false == textureService.TryGetTexture(independentImageModel.TextureName, out var texture))
-			{
-				texture = textureService.DebugTexture;
-			}
-
-			return new IndependentImage
-			{
-				TextureName = independentImageModel.TextureName,
-				TextureBox = independentImageModel.TextureBox,
-				Texture = texture,
-				Position = position
-			};
 		}
 
 		/// <summary>

@@ -4,8 +4,8 @@ using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
+using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
-using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
@@ -13,6 +13,7 @@ using LevelEditor.Scenes.Models;
 using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LevelEditor.Scenes.Services
 {
@@ -56,12 +57,35 @@ namespace LevelEditor.Scenes.Services
 			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			var controlService = this._gameServices.GetService<IControlService>();
+			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
 			var scene = this.CreateNewScene(setCurrent: true);
 			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneTypes.Row3Col4);
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
 			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
 			runTimeDrawService.AddDrawable(scene.TileMap);
+			var fillImageModel = new FillImageModel
+			{
+				TextureName = "tile_grid_light",
+				TextureBox = new Rectangle
+				{
+					X = 0,
+					Y = 0,
+					Width = 320,
+					Height = 320
+				},
+				FillBox = new Vector2
+				{
+					X = graphicDeviceService.GraphicsDevice.Viewport.Width,
+					Y = graphicDeviceService.GraphicsDevice.Viewport.Height
+				}
+			};
+			this.AddTileComponent.SetBackgroundGraphic(fillImageModel);
+
+			if (false == this.AddTileComponent.BackgroundGraphicActive)
+			{
+				this.AddTileComponent.ToggleBackgroundGraphic();
+			}
 		}
 
 		/// <summary>

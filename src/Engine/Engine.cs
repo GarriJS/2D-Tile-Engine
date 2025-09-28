@@ -171,7 +171,7 @@ namespace Engine
 			var drawService = this.Services.GetService<IDrawingService>();
 			var imageService = this.Services.GetService<IImageService>();
 			var controlService = this.Services.GetService<IControlService>();
-			var image = imageService.GetImage("tile_grid", 160, 160);
+			var image = imageService.GetImage("tile_grid_dark", 160, 160);
 			var mouse = controlService.ControlState.MousePosition;
 
 			base.Draw(gameTime);

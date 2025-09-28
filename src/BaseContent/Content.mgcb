@@ -94,7 +94,7 @@
 /processorParam:TextureFormat=Color
 /build:BaseContent/Images/mouse.png
 
-#begin BaseContent/Images/tile_grid.png
+#begin BaseContent/Images/tile_grid_dark.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -104,7 +104,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:BaseContent/Images/tile_grid.png
+/build:BaseContent/Images/tile_grid_dark.png
+
+#begin BaseContent/Images/tile_grid_light.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:BaseContent/Images/tile_grid_light.png
 
 #begin BaseContent/Images/white.png
 /importer:TextureImporter

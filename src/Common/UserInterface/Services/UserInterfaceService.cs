@@ -377,7 +377,6 @@ namespace Common.UserInterface.Services
 		/// Gets the user interface zone.
 		/// </summary>
 		/// <param name="uiZoneModel">The user interface model.</param>
-		/// <param name="visibilityGroup">The visibility group of the user interface zone.</param>
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetUiZone(UiZoneModel uiZoneModel)
 		{

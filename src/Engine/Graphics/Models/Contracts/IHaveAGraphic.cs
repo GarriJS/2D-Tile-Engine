@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Engine.Graphics.Models.Contracts
+﻿namespace Engine.Graphics.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that has a graphic.
 	/// </summary>
-	public interface IHaveAGraphic : IDisposable
+	public interface IHaveAGraphic
 	{
 		/// <summary>
 		/// Get the graphic.

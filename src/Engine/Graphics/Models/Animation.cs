@@ -79,7 +79,7 @@ namespace Engine.Graphics.Models
 			var drawingService = gameServices.GetService<IDrawingService>();
 
 			this.UpdateFrame(gameTime, gameServices);
-			drawingService.Draw(gameTime, this, position, offset);
+			drawingService.Draw(this, position, offset);
 		}
 
 		/// <summary>

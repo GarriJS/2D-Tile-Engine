@@ -6,6 +6,11 @@ using Common.DiskModels.Common.Tiling;
 using Common.Tiling.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Core.Constants;
+using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
+using Engine.Graphics.Models;
+using Engine.Graphics.Services.Contracts;
+using Engine.RunTime.Services.Contracts;
 using LevelEditor.Scenes.Services.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -23,9 +28,19 @@ namespace LevelEditor.Scenes.Models
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
+		/// Gets a value indicating whether the background graphic is active.
+		/// </summary>
+		public bool BackgroundGraphicActive { get; private set; }
+
+		/// <summary>
 		/// Gets or sets the add tile parameters.
 		/// </summary>
 		public AddTileParams AddTileParameters { get; set; }
+
+		/// <summary>
+		/// Gets the background graphic.
+		/// </summary>
+		public IndependentGraphic BackgroundGraphic { get; private set; }
 
 		/// <summary>
 		/// Consumes the control state.
@@ -50,7 +65,7 @@ namespace LevelEditor.Scenes.Models
 		/// <param name="hoverState">The hover state.</param>
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
-			if (false == controlState.ActionNameIsFresh(BaseControlNames.LeftClick))
+			if (false == controlState.ActionNameIsActive(BaseControlNames.LeftClick))
 			{
 				return;
 			}
@@ -77,6 +92,58 @@ namespace LevelEditor.Scenes.Models
 
 			var tile = tileService.GetTile(tileModel);
 			sceneEditService.CurrentScene.TileMap.AddTile(1, tile);
+		}
+
+		/// <summary>
+		/// Sets the background graphic.
+		/// </summary>
+		/// <param name="fillImageModel">The fill image model.</param>
+		public void SetBackgroundGraphic(FillImageModel fillImageModel)
+		{
+			var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
+			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
+
+			var independentGraphicModel = new IndependentGraphicModel
+			{
+				Position = new PositionModel
+				{
+					X = 0,
+					Y = 0,
+				},
+				Graphic = fillImageModel
+			};
+
+			if ((null != this.BackgroundGraphic) &&
+				(true == this.BackgroundGraphicActive))
+			{
+				runTimeOverlaidDrawService.RemoveDrawable(this.BackgroundGraphic);
+			}
+
+			this.BackgroundGraphic = independentGraphicService.GetIndependentGraphicFromModel(independentGraphicModel);
+
+			if (true == this.BackgroundGraphicActive)
+			{
+				runTimeOverlaidDrawService.AddDrawable(this.BackgroundGraphic);
+			}
+		}
+
+		/// <summary>
+		/// Toggles the background graphic.
+		/// </summary>
+		public void ToggleBackgroundGraphic()
+		{
+			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
+
+			if (true == this.BackgroundGraphicActive)
+			{
+				runTimeOverlaidDrawService.RemoveDrawable(this.BackgroundGraphic);
+			}
+			else
+			{
+				runTimeOverlaidDrawService.AddDrawable(this.BackgroundGraphic);
+			}
+
+			this.BackgroundGraphicActive = false == this.BackgroundGraphicActive;
 		}
 	}
 }

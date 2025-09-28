@@ -50,6 +50,7 @@ namespace Engine.DiskModels
 			var positionService = gameServices.GetService<IPositionService>();
 			var areaService = gameServices.GetService<IAreaService>();
 			var imageService = gameServices.GetService<IImageService>();
+			var independentGraphicService = gameServices.GetService<IIndependentGraphicService>();
 			var animationService = gameServices.GetService<IAnimationService>();
 			var actionControlService = gameServices.GetService<IActionControlServices>();
 
@@ -60,7 +61,7 @@ namespace Engine.DiskModels
 				(typeof(OffsetAreaModel), areaService.GetAreaFromModel<OffsetArea>),
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
 				(typeof(ImageModel), imageService.GetImageFromModel<Image>),
-				(typeof(IndependentImageModel), imageService.GetImageFromModel<IndependentImage>),
+				(typeof(IndependentGraphicModel), independentGraphicService.GetIndependentGraphicFromModel),
 				(typeof(Animation), animationService.GetAnimationFromModel),
 				(typeof(TriggeredAnimation), animationService.GetAnimationFromModel),
 				(typeof(ActionControl), actionControlService.GetActionControlFromModel),

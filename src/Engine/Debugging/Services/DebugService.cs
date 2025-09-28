@@ -52,7 +52,7 @@ namespace Engine.Debugging.Services
 		/// <summary>
 		/// Gets or sets the screen area indicator images.
 		/// </summary>
-		private List<IndependentImage> ScreenAreaIndicatorImages { get; set; } = [];
+		private List<IndependentGraphic> ScreenAreaIndicatorImages { get; set; } = [];
 
 		/// <summary>
 		/// Toggles the screen area indicators.
@@ -73,49 +73,55 @@ namespace Engine.Debugging.Services
 			else
 			{
 				var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-				var imageService = this._gameServices.GetService<IImageService>();
+				var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
 
 				var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
 				var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
 				for (int i = screenHeight / 3; i < screenHeight; i += screenHeight / 3)
 				{
-					var widthImageModel = new IndependentImageModel
+					var widthImageModel = new IndependentGraphicModel
 					{
-						TextureName = "debug",
-						TextureBox = new Rectangle
-						{
-							X = 0,
-							Y = 0,
-							Width = screenWidth, 
-							Height = 1
-						},
 						Position = new PositionModel
 						{
 							X = 0,
 							Y = i
+						},
+						Graphic = new ImageModel
+						{
+							TextureName = "debug",
+							TextureBox = new Rectangle
+							{
+								X = 0,
+								Y = 0,
+								Width = screenWidth,
+								Height = 1
+							}
 						}
 					};
 
-					var widthImage = imageService.GetImageFromModel<IndependentImage>(widthImageModel);
-					var nextWidthImageModel = new IndependentImageModel
+					var widthImage = independentGraphicService.GetIndependentGraphicFromModel(widthImageModel);
+					var nextWidthImageModel = new IndependentGraphicModel
 					{
-						TextureName = "debug",
-						TextureBox = new Rectangle
-						{
-							X = 0,
-							Y = 0,
-							Width = screenWidth,
-							Height = 1
-						},
 						Position = new PositionModel
 						{
 							X = 0,
 							Y = i + 1
+						},
+						Graphic = new ImageModel
+						{
+							TextureName = "debug",
+							TextureBox = new Rectangle
+							{
+								X = 0,
+								Y = 0,
+								Width = screenWidth,
+								Height = 1
+							}
 						}
 					};
 
-					var nextWidthImage = imageService.GetImageFromModel<IndependentImage>(nextWidthImageModel);
+					var nextWidthImage = independentGraphicService.GetIndependentGraphicFromModel(nextWidthImageModel);
 					runtimeOverlaidDrawService.AddDrawable(widthImage);
 					runtimeOverlaidDrawService.AddDrawable(nextWidthImage);
 					this.ScreenAreaIndicatorImages.Add(widthImage);
@@ -124,42 +130,48 @@ namespace Engine.Debugging.Services
 
 				for (int i = screenWidth / 4; i < screenWidth; i += screenWidth / 4)
 				{
-					var heightImageModel = new IndependentImageModel
+					var heightImageModel = new IndependentGraphicModel
 					{
-						TextureName = "debug",
-						TextureBox = new Rectangle
-						{
-							X = 0,
-							Y = 0,
-							Width = 1,
-							Height = screenHeight
-						},
 						Position = new PositionModel
 						{
 							X = i,
 							Y = 0
+						},
+						Graphic = new ImageModel
+						{
+							TextureName = "debug",
+							TextureBox = new Rectangle
+							{
+								X = 0,
+								Y = 0,
+								Width = 1,
+								Height = screenHeight
+							}
 						}
 					};
 
-					var heightImage = imageService.GetImageFromModel<IndependentImage>(heightImageModel);
-					var nextHeightImageModel = new IndependentImageModel
+					var heightImage = independentGraphicService.GetIndependentGraphicFromModel(heightImageModel);
+					var nextHeightImageModel = new IndependentGraphicModel
 					{
-						TextureName = "debug",
-						TextureBox = new Rectangle
-						{
-							X = 0,
-							Y = 0,
-							Width = 1,
-							Height = screenHeight
-						},
 						Position = new PositionModel
 						{
 							X = i + 1,
 							Y = 0
+						},
+						Graphic = new ImageModel
+						{
+							TextureName = "debug",
+							TextureBox = new Rectangle
+							{
+								X = 0,
+								Y = 0,
+								Width = 1,
+								Height = screenHeight
+							}
 						}
 					};
 
-					var nextHeightImage = imageService.GetImageFromModel<IndependentImage>(nextHeightImageModel);
+					var nextHeightImage = independentGraphicService.GetIndependentGraphicFromModel(nextHeightImageModel);
 					runtimeOverlaidDrawService.AddDrawable(heightImage);
 					runtimeOverlaidDrawService.AddDrawable(nextHeightImage);
 					this.ScreenAreaIndicatorImages.Add(heightImage);

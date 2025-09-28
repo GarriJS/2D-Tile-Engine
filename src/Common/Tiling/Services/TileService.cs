@@ -42,7 +42,7 @@ namespace Common.Tiling.Services
 					Height = 160
 				},
 				AboveUi = false,
-				TextureName = "tile_grid",
+				TextureName = "tile_grid_dark",
 				Offset = default,
 				CursorUpdaterName = CommonCursorUpdatersNames.TileGridCursorUpdater
 			};

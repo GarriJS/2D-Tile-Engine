@@ -111,6 +111,7 @@ namespace Engine.Core.Initialization
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IWritingService), new WritingService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
+				(typeof(IIndependentGraphicService), new IndependentGraphicService(game.Services)),
 				(typeof(IAnimationService), new AnimationService(game.Services)),
 				(typeof(IPositionService), new PositionService(game.Services)),
 				(typeof(IAreaService), new AreaService(game.Services)),

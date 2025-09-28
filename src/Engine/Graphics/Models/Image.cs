@@ -39,11 +39,11 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		public virtual void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
-			drawingService.Draw(gameTime, this, position, offset);
+			drawingService.Draw(this, position, offset);
 		}
 
 		/// <summary>

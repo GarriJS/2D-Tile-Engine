@@ -1,9 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using Engine.DiskModels.Drawing.Contracts;
+using System.Runtime.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
 	[DataContract(Name = "animation")]
-	public class AnimationModel
+	public class AnimationModel : IAmAGraphicModel
 	{
 		[DataMember(Name = "currentFrameIndex", Order = 1)]
 		public int CurrentFrameIndex { get; set; }

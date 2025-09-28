@@ -1,15 +1,14 @@
 ﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Graphics.Models
 {
 	/// <summary>
-	/// Represents a independent image.
+	/// Represents a independent graphic.
 	/// </summary>
-	public class IndependentImage : Image, IHaveAnImage, IAmDrawable
+	public class IndependentGraphic : IHaveAGraphic, IAmDrawable
 	{
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -24,7 +23,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
-		public Image Image { get => this; }
+		public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Draws the drawable.
@@ -33,9 +32,15 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			var drawingService = gameServices.GetService<IDrawingService>();
+			this.Graphic.Draw(gameTime, gameServices, this.Position);
+		}
 
-			drawingService.Draw(gameTime, this.Graphic, this.Position);
+		/// <summary>
+		/// Disposes of the draw data texture.
+		/// </summary>
+		public void Dispose()
+		{
+			this.Graphic?.Dispose();
 		}
 	}
 }

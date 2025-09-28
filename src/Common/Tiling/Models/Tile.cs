@@ -2,7 +2,6 @@
 using Engine.Core.Constants;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
-using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -65,14 +64,6 @@ namespace Common.Tiling.Models
 
 				drawingService.Draw(this.Graphic.Texture, position.Coordinates + tileOffset + offset, this.Graphic.TextureBox, Color.White);
 			}
-		}
-
-		/// <summary>
-		/// Disposes of the tile.
-		/// </summary>
-		public void Dispose()
-		{ 
-			this.Image?.Dispose();
 		}
 	}
 }

@@ -31,16 +31,23 @@ namespace Engine.RunTime.Services.Contracts
 		/// <param name="texture">The texture.</param>
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="sourceRectangle">The source rectangle.</param>
+		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle);
+
+		/// <summary>
+		/// Draws the texture. 
+		/// </summary>
+		/// <param name="texture">The texture.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="sourceRectangle">The source rectangle.</param>
 		/// <param name="color">The color.</param>
 		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color);
 
 		/// <summary>
 		/// Draws the sub drawable. 
 		/// </summary>
-		/// <param name="gameTime">The game time.</param>
 		/// <param name="graphic">The graphic.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, IAmAGraphic graphic, Position position, Vector2 offset = default);
+		public void Draw(IAmAGraphic graphic, Position position, Vector2 offset = default);
 	}
 }

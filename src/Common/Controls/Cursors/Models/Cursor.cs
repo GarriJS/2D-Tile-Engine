@@ -57,7 +57,7 @@ namespace Common.Controls.Cursors.Models
 		{
             var drawingService = gameServices.GetService<IDrawingService>();
 
-            drawingService.Draw(gameTime, this.Graphic, this.Position, this.Offset);
+            drawingService.Draw(this.Graphic, this.Position, this.Offset);
 		}
 
         /// <summary>
