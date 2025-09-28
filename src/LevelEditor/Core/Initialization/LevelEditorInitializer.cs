@@ -101,6 +101,7 @@ namespace LevelEditor.Core.Initialization
 			{
 				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
 				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,
+				[UiEventName.ToggleTileGrid] = sceneEditService.ToggleTileGridClickEventProcessor,
 			};
 		}
 

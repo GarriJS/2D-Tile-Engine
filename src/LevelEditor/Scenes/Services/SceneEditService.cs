@@ -1,7 +1,12 @@
-﻿using Common.Scenes.Models;
+﻿using Common.Controls.Cursors.Constants;
+using Common.DiskModels.UI;
+using Common.DiskModels.UI.Elements;
+using Common.Scenes.Models;
 using Common.Tiling.Models;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Services;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.DiskModels.Drawing;
@@ -9,6 +14,7 @@ using Engine.DiskModels.Physics;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
+using LevelEditor.Core.Constants;
 using LevelEditor.Scenes.Models;
 using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
@@ -61,7 +67,9 @@ namespace LevelEditor.Scenes.Services
 
 			var scene = this.CreateNewScene(setCurrent: true);
 			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneTypes.Row3Col4);
+			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
+			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
 			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
 			runTimeDrawService.AddDrawable(scene.TileMap);
 			var fillImageModel = new FillImageModel
@@ -89,6 +97,68 @@ namespace LevelEditor.Scenes.Services
 		}
 
 		/// <summary>
+		/// The toggle tile grid click event processor.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="elementLocation">The element location.</param>
+		public void ToggleTileGridClickEventProcessor(IAmAUiElement element, Vector2 elementLocation)
+		{
+			this.AddTileComponent.ToggleBackgroundGraphic();
+		}
+
+		/// <summary>
+		/// Gets the tile grid user interface zone.
+		/// </summary>
+		/// <returns>The user interface zone.</returns>
+		public UiZone GetTileGridUserInterfaceZone()
+		{
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+
+			var uiZoneModel = new UiZoneModel
+			{
+				UiZoneName = "Tile Grid User Interface Zone",
+				UiZoneType = (int)UiScreenZoneTypes.Row3Col3,
+				BackgroundTextureName = null,
+				JustificationType = (int)UiZoneJustificationTypes.Bottom,
+				ElementRows =
+				[
+					new UiRowModel
+					{
+						UiRowName = "Toggle Tile Grid Row",
+						TopPadding = 0,
+						BottomPadding = 0,
+						BackgroundTextureName = "gray_transparent",
+						RowHoverCursorName = CommonCursorNames.BasicCursorName,
+						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
+						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+						SubElements =
+						[
+							new UiButtonModel
+							{
+								UiElementName = "Toggle Tile Grid Button",
+								LeftPadding = 0,
+								RightPadding = 0,
+								BackgroundTextureName = "black",
+								ButtonText = "Toggle Tile Grid",
+								SizeType = (int)UiElementSizeTypes.Small,
+								ClickableAreaScaler = new Vector2
+								{
+									X = 1,
+									Y = 1
+								},
+								ButtonClickEventName = UiEventName.ToggleTileGrid
+							},
+						]
+					}
+				]
+			};
+
+			var uiZone = uiService.GetUiZone(uiZoneModel);
+
+			return uiZone;
+		}
+
+		/// <summary>
 		/// Creates a new scene.
 		/// </summary>
 		/// <param name="setCurrent">A value indicating whether to set the new scene as the current scene.</param>
@@ -97,7 +167,7 @@ namespace LevelEditor.Scenes.Services
 		public Scene CreateNewScene(bool setCurrent, string sceneName = null)
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
-			
+
 			var areaModel = new SimpleAreaModel
 			{
 				Position = new PositionModel
@@ -125,7 +195,7 @@ namespace LevelEditor.Scenes.Services
 			};
 
 			if (true == setCurrent)
-			{ 
+			{
 				this.CurrentScene = scene;
 			}
 

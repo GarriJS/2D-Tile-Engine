@@ -4,6 +4,7 @@ using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
 using Common.DiskModels.Common.Tiling;
 using Common.Tiling.Services.Contracts;
+using Common.UserInterface.Models;
 using Engine.Controls.Models;
 using Engine.Core.Constants;
 using Engine.DiskModels.Drawing;
@@ -13,6 +14,7 @@ using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Scenes.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LevelEditor.Scenes.Models
 {
@@ -65,6 +67,23 @@ namespace LevelEditor.Scenes.Models
 		/// <param name="hoverState">The hover state.</param>
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
+			//if ((true == this.BackgroundGraphicActive) &&
+			//	(this.BackgroundGraphic.Graphic is FillImage fillImage))
+			//{
+			//	var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
+			//	var fillBox = new Vector2
+			//	{
+			//		X = graphicDeviceService.GraphicsDevice.Viewport.Width,
+			//		Y = graphicDeviceService.GraphicsDevice.Viewport.Height
+			//	};
+
+			//	if (fillImage.FillBox != fillBox)
+			//	{ 
+			//		fillImage.FillBox = fillBox;
+			//	}
+			//}
+
 			if (false == controlState.ActionNameIsActive(BaseControlNames.LeftClick))
 			{
 				return;
@@ -74,7 +93,9 @@ namespace LevelEditor.Scenes.Models
 
 			if ((null == sceneEditService.CurrentScene )||
 				(null == this.AddTileParameters) ||
-				(null != hoverState))
+				((null != hoverState) &&
+				 ((hoverState.HoverObjectLocation.Object is not UiZone uiZone) ||
+				  (null != uiZone.Graphic))))
 			{
 				return;
 			}
