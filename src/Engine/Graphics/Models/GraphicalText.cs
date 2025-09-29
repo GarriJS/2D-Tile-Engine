@@ -1,6 +1,6 @@
 ﻿using Engine.Graphics.Models.Contracts;
-using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,9 +17,9 @@ namespace Engine.Graphics.Models
 		public string Text { get; set; }
 
 		/// <summary>
-		/// Gets or sets the color
+		/// Gets or sets the text color
 		/// </summary>
-		public Color Color { get; set; }
+		public Color TextColor { get; set; }
 
 		/// <summary>
 		/// Gets the font.
@@ -51,7 +51,7 @@ namespace Engine.Graphics.Models
 
 			var writingService = gameServices.GetService<IWritingService>();
 
-			writingService.Draw(this.Font, this.Text, position.Coordinates, this.Color);
+			writingService.Draw(this.Font, this.Text, position.Coordinates + offset, this.TextColor);
 		}
 	}
 }

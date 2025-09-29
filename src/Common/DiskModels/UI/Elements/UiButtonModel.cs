@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Common.DiskModels.UI.Elements
 {
 	[DataContract(Name = "uiButton")]
-	public class UiButtonModel : IAmAUiElementModel
+	public class UiButtonModel : IAmAUiElementWithTextModel
 	{
 		[DataMember(Name = "uiElementName", Order = 1)]
 		public string UiElementName { get; set; }
@@ -35,8 +35,8 @@ namespace Common.DiskModels.UI.Elements
 		[DataMember(Name = "buttonPressEventName", Order = 9)]
 		public string ElementPressEventName { get; set; }
 
-		[DataMember(Name = "buttonText", Order = 10)]
-		public string ButtonText { get; set; }
+		[DataMember(Name = "graphicText", Order = 10)]
+		public GraphicalTextModel GraphicText { get; set; }
 
 		[DataMember(Name = "clickableAreaAnimation", Order = 11)]
 		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }

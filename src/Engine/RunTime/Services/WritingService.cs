@@ -1,10 +1,9 @@
 ﻿using Engine.Core.Fonts.Contracts;
-using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics.Services
+namespace Engine.RunTime.Services
 
 {   /// <summary>
 	/// Represents a writing service.
@@ -27,34 +26,9 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		public void Initialize()
 		{
-			var drawingService = this._gameServices.GetService<IDrawingService>();
+			var drawingService = _gameServices.GetService<IDrawingService>();
 
 			this.SpriteBatch = drawingService.SpriteBatch;
-		}
-
-		/// <summary>
-		/// Measures the string.
-		/// </summary>
-		/// <param name="fontName">The font name.</param>
-		/// <param name="text">The text.</param>
-		/// <returns>The string measurements.</returns>
-		public Vector2 MeasureString(string fontName, string text)
-		{
-			var fontService = this._gameServices.GetService<IFontService>();
-
-			var font = fontService.GetSpriteFont(fontName);
-			return font.MeasureString(text);
-		}
-
-		/// <summary>
-		/// Measures the string.
-		/// </summary>
-		/// <param name="font">The font.</param>
-		/// <param name="text">The text.</param>
-		/// <returns>The string measurements.</returns>
-		public Vector2 MeasureString(SpriteFont font, string text)
-		{
-			return font.MeasureString(text);
 		}
 
 		/// <summary>
@@ -66,10 +40,10 @@ namespace Engine.Graphics.Services
 		/// <param name="color">The color.</param>
 		public void Draw(string fontName, string text, Vector2 position, Color color)
 		{
-			var fontService = this._gameServices.GetService<IFontService>();		
+			var fontService = _gameServices.GetService<IFontService>();		
 
 			var font = fontService.GetSpriteFont(fontName);
-			this.Draw(font, text, position, color);
+			Draw(font, text, position, color);
 		}
 
 		/// <summary>
@@ -81,7 +55,7 @@ namespace Engine.Graphics.Services
 		/// <param name="color">The color.</param>
 		public void Draw(SpriteFont font, string text, Vector2 position, Color color)
 		{
-			this.SpriteBatch.DrawString(font, text, position, color);
+			SpriteBatch.DrawString(font, text, position, color);
 		}
 	}
 }

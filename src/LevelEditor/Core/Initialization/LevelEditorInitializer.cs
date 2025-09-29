@@ -151,8 +151,13 @@ namespace LevelEditor.Core.Initialization
 											RightPadding = 0,
 											BackgroundTextureName = "gray",
 											ElementHoverCursorName = CommonCursorNames.BasicCursorName,
-											Text = "Level Editor",
-											SizeType = (int)UiElementSizeTypes.Small
+											GraphicText = new GraphicalTextModel
+											{ 
+												Text = "Level Editor",
+												TextColor = Color.Blue,
+												FontName = "MonoRegular"
+											},
+											SizeType = (int)UiElementSizeTypes.Fit
 										}
 									]
 								}
@@ -181,9 +186,14 @@ namespace LevelEditor.Core.Initialization
 										{
 											UiElementName = "Create Element Label",
 											LeftPadding = 10,
-											RightPadding = 0,
-											Text = "Create Level",
-											SizeType = (int)UiElementSizeTypes.ExtraSmall
+											RightPadding = 5,
+											GraphicText = new GraphicalTextModel
+											{
+												Text = "Create Level",
+												TextColor = Color.Blue,
+												FontName = "MonoRegular"
+											},
+											SizeType = (int)UiElementSizeTypes.Fit
 										},
 										new UiButtonModel
 										{
@@ -233,10 +243,15 @@ namespace LevelEditor.Core.Initialization
 										{
 											UiElementName = "Save Element Label",
 											LeftPadding = 10,
-											RightPadding = 0,
+											RightPadding = 5,
 											BackgroundTextureName = null,
-											Text = "Save Level",
-											SizeType = (int)UiElementSizeTypes.ExtraSmall
+											GraphicText = new GraphicalTextModel
+											{
+												Text = "Save Level",
+												TextColor = Color.Blue,
+												FontName = "MonoRegular"
+											},
+											SizeType = (int)UiElementSizeTypes.Fit
 										},
 										new UiButtonModel
 										{
@@ -300,8 +315,13 @@ namespace LevelEditor.Core.Initialization
 											LeftPadding = 0,
 											RightPadding = 0,
 											BackgroundTextureName = null,
-											Text = "Saved Levels",
-											SizeType = (int)UiElementSizeTypes.ExtraSmall
+											GraphicText = new GraphicalTextModel
+											{
+												Text = "Saved Levels",
+												TextColor = Color.Blue,
+												FontName = "MonoRegular"
+											},
+											SizeType = (int)UiElementSizeTypes.Fit
 										}
 									]
 								}

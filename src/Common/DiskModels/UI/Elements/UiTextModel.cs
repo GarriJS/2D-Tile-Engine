@@ -1,11 +1,12 @@
 ﻿using Common.DiskModels.UI.Contracts;
+using Engine.DiskModels.Drawing;
 using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
 
 namespace Common.DiskModels.UI.Elements
 {
 	[DataContract(Name = "uiText")]
-	public class UiTextModel : IAmAUiElementModel
+	public class UiTextModel : IAmAUiElementWithTextModel
 	{
 		[DataMember(Name = "uiElementName", Order = 1)]
 		public string UiElementName { get; set; }
@@ -34,7 +35,7 @@ namespace Common.DiskModels.UI.Elements
 		[DataMember(Name = "elementPressEventName", Order = 9)]
 		public string ElementPressEventName { get; set; }
 
-		[DataMember(Name = "text", Order = 10)]
-		public string Text { get; set; }
+		[DataMember(Name = "graphicText", Order = 10)]
+		public GraphicalTextModel GraphicText { get; set; }
 	}
 }

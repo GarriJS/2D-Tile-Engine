@@ -1,4 +1,6 @@
-﻿namespace Common.UserInterface.Models.Contracts
+﻿using Engine.Graphics.Models;
+
+namespace Common.UserInterface.Models.Contracts
 {
 	/// <summary>
 	/// Represents a user interface element with text
@@ -6,8 +8,8 @@
 	public interface IAmAUiElementWithText : IAmAUiElement
 	{
 		/// <summary>
-		/// Gets or sets the text.
+		/// Gets or sets the graphic text.
 		/// </summary>
-		public string Text { get; set; }
+		public GraphicalText GraphicText { get; set; }
 	}
 }

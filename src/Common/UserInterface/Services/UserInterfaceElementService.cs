@@ -7,6 +7,7 @@ using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
+using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
@@ -95,24 +96,63 @@ namespace Common.UserInterface.Services
 			};
 		}
 
+		/// <summary>
+		/// Gets the element fit dimensions.
+		/// </summary>
+		/// <param name="elementModel">The element model.</param>
+		/// <returns>The element fit dimensions.</returns>
 		private Vector2 GetElementFitDimensions(IAmAUiElementModel elementModel)
 		{
+			Vector2? textDimensions = null;
+
+			if (elementModel is IAmAUiElementWithTextModel elementTextModel)
+			{
+				var fontService = this._gameServices.GetService<IFontService>();
+
+				if (false == string.IsNullOrEmpty(elementTextModel.GraphicText?.FontName))
+				{
+					var font = fontService.GetSpriteFont(elementTextModel.GraphicText.FontName);
+					textDimensions = font.MeasureString(elementTextModel.GraphicText.Text);
+				}
+			}
+
 			switch (elementModel)
 			{
 				case UiButtonModel uiButton:
 
-					if (null == uiButton.ClickableAreaAnimation)
+					if ((false == textDimensions.HasValue) &&
+						(null == uiButton.ClickableAreaAnimation))
 					{
 						break;
 					}
 
-					var restingFrame = uiButton.ClickableAreaAnimation.Frames[uiButton.ClickableAreaAnimation.RestingFrameIndex];
+					var restingFrame = uiButton.ClickableAreaAnimation?.Frames[uiButton.ClickableAreaAnimation.RestingFrameIndex];
+					int width = 0;
+					int height = 0;
+
+					if (null != restingFrame)
+					{
+						width = restingFrame.TextureBox.Width;
+						height = restingFrame.TextureBox.Height;
+					}
+
+					if (true == textDimensions.HasValue)
+					{
+						width = (int)Math.Max(textDimensions.Value.X, width);
+						height = (int)Math.Max(textDimensions.Value.Y, height);
+					}
+
 					return new Vector2
 					{
-						X = restingFrame.TextureBox.Width,
-						Y = restingFrame.TextureBox.Height	
+						X = width,
+						Y = height
 					};
-				case UiText uiText:
+
+				case UiTextModel uiText:
+					if (true == textDimensions.HasValue)
+					{ 
+						return textDimensions.Value;
+					}
 
 					break;
 			}
@@ -262,15 +302,17 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface text.</returns>
 		private UiText GetUiText(UiTextModel textModel, Vector2 area)
 		{
+			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
+			var graphicText = graphicTextService.GetGraphicTextFromModel(textModel.GraphicText);
 			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, textModel.ElementHoverCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 
 			return new UiText
 			{
 				UiElementName = textModel.UiElementName,
-				Text = textModel.Text,
+				GraphicText = graphicText,
 				LeftPadding = textModel.LeftPadding,
 				RightPadding = textModel.RightPadding,
 				ElementType = UiElementTypes.Button,
@@ -288,10 +330,12 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface button.</returns>
 		private UiButton GetUiButton(UiButtonModel buttonModel, Vector2 area)
 		{
+			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 			var animationService = this._gameServices.GetService<IAnimationService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
+			var graphicText = graphicTextService.GetGraphicTextFromModel(buttonModel.GraphicText);
 			var clickableArea = new Vector2
 			{
 				X = area.X * buttonModel.ClickableAreaScaler.X,
@@ -308,7 +352,7 @@ namespace Common.UserInterface.Services
 			var button = new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
-				Text = buttonModel.ButtonText,
+				GraphicText = graphicText,
 				LeftPadding = buttonModel.LeftPadding,
 				RightPadding = buttonModel.RightPadding,
 				ElementType = UiElementTypes.Button,
@@ -347,9 +391,6 @@ namespace Common.UserInterface.Services
 		/// <param name="elementLocation">The element location.</param>
 		private void TriggerUiButtonClickAnimation(IAmAUiElement element, Vector2 elementLocation)
 		{
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-			var animationService = this._gameServices.GetService<IAnimationService>();
-
 			if (element is UiButton button)
 			{
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);

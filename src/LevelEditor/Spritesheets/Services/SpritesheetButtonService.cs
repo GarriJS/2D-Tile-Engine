@@ -219,7 +219,7 @@ namespace LevelEditor.Spritesheets.Services
 							Y = spriteDimensions.Y
 						},
 						BackgroundTextureName = textureName,
-						ButtonText = string.Empty,
+						GraphicText = null,
 						ClickableAreaScaler = new Vector2
 						{
 							X = 1,

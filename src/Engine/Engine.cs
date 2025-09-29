@@ -178,7 +178,7 @@ namespace Engine
 
 			//drawService.BeginDraw();
 
-			//drawService.Draw(image.Texture, this.GetLocalTileCoordinates(mouse, -2), new Rectangle(0, 0, 160, 160), Color.White);
+			//drawService.Draw(image.Texture, this.GetLocalTileCoordinates(mouse, -2), new Rectangle(0, 0, 160, 160), TextColor.White);
 
 			//drawService.EndDraw();
 

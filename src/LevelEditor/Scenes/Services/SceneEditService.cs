@@ -139,8 +139,13 @@ namespace LevelEditor.Scenes.Services
 								LeftPadding = 0,
 								RightPadding = 0,
 								BackgroundTextureName = "black",
-								ButtonText = "Toggle Tile Grid",
-								SizeType = (int)UiElementSizeTypes.Small,
+								GraphicText = new GraphicalTextModel
+								{
+									Text = "Toggle Tile Grid",
+									TextColor = Color.White,
+									FontName = "MonoRegular"
+								},
+								SizeType = (int)UiElementSizeTypes.Fit,
 								ClickableAreaScaler = new Vector2
 								{
 									X = 1,
