@@ -4,6 +4,7 @@ using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
+using Engine.DiskModels.Drawing;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.Scenes.Services.Contracts;
@@ -181,7 +182,6 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Create Element Label",
 											LeftPadding = 10,
 											RightPadding = 0,
-											BackgroundTextureName = null,
 											Text = "Create Level",
 											SizeType = (int)UiElementSizeTypes.ExtraSmall
 										},
@@ -190,9 +190,38 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Create Element Button",
 											LeftPadding = 0,
 											RightPadding = 0,
-											BackgroundTextureName = "black",
-											ButtonText = "+",
-											SizeType = (int)UiElementSizeTypes.ExtraSmall,                      
+											SizeType = (int)UiElementSizeTypes.Fit,
+											ClickableAreaAnimation = new TriggeredAnimationModel
+											{ 
+												CurrentFrameIndex = 0,
+												FrameDuration = 500,
+												Frames =
+												[
+													new ImageModel
+													{ 
+														TextureName = "dark_blue_buttons",
+														TextureBox = new Rectangle
+														{ 
+															X = 0,
+															Y = 0,
+															Width = 64,
+															Height = 64,
+														}
+													},
+													new ImageModel
+													{
+														TextureName = "dark_blue_buttons",
+														TextureBox = new Rectangle
+														{
+															X = 64,
+															Y = 0,
+															Width = 64,
+															Height = 64,
+														}
+													}
+												],
+												RestingFrameIndex = 0,
+											},
 											ClickableAreaScaler = new Vector2
 											{
 												X = 1,
@@ -214,9 +243,43 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Save Element Button",
 											LeftPadding = 0,
 											RightPadding = 0,
-											BackgroundTextureName = "black",
-											ButtonText = "->",
-											SizeType = (int)UiElementSizeTypes.ExtraSmall
+											SizeType = (int)UiElementSizeTypes.Fit,
+											ClickableAreaAnimation = new TriggeredAnimationModel
+											{
+												CurrentFrameIndex = 0,
+												FrameDuration = 500,
+												Frames =
+												[
+													new ImageModel
+													{
+														TextureName = "dark_blue_buttons",
+														TextureBox = new Rectangle
+														{
+															X = 0,
+															Y = 64,
+															Width = 64,
+															Height = 64,
+														}
+													},
+													new ImageModel
+													{
+														TextureName = "dark_blue_buttons",
+														TextureBox = new Rectangle
+														{
+															X = 64,
+															Y = 64,
+															Width = 64,
+															Height = 64,
+														}
+													}
+												],
+												RestingFrameIndex = 0,
+											},
+											ClickableAreaScaler = new Vector2
+											{
+												X = 1,
+												Y = 1
+											},
 										}
 									]
 								},

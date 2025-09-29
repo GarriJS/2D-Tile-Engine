@@ -17,9 +17,23 @@ namespace Engine.Graphics.Models
 		public string Text { get; set; }
 
 		/// <summary>
+		/// Gets or sets the color
+		/// </summary>
+		public Color Color { get; set; }
+
+		/// <summary>
 		/// Gets the font.
 		/// </summary>
 		public SpriteFont Font { get; set; }
+
+		/// <summary>
+		/// Gets the text dimensions.
+		/// </summary>
+		/// <returns>The text dimensions.</returns>
+		public Vector2 GetTextDimensions()
+		{
+			return this.Font.MeasureString(this.Text);
+		}
 
 		/// <summary>
 		/// Draws the sub drawable.
@@ -30,13 +44,14 @@ namespace Engine.Graphics.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
+			if (true == string.IsNullOrEmpty(this.Text))
+			{
+				return;
+			}
+
 			var writingService = gameServices.GetService<IWritingService>();
 
-			if (false == string.IsNullOrEmpty(this.Text))
-			{
-				var textMeasurements = writingService.MeasureString("Monobold", this.Text);
-				writingService.Draw("Monobold", this.Text, position.Coordinates, Color.Maroon);
-			}
+			writingService.Draw(this.Font, this.Text, position.Coordinates, this.Color);
 		}
 	}
 }

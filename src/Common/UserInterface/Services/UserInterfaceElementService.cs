@@ -42,7 +42,11 @@ namespace Common.UserInterface.Services
 			if ((null == uiScreenZone?.Area) ||
 				(false == elementModel.SizeType.HasValue))
 			{
-				return null;
+				return new Vector2
+				{
+					X = -1,
+					Y = -1
+				};
 			}
 
 			var uiElementSizeType = Enum.IsDefined(typeof(UiElementSizeTypes), elementModel.SizeType)
@@ -51,6 +55,7 @@ namespace Common.UserInterface.Services
 
 			return uiElementSizeType switch
 			{
+				UiElementSizeTypes.None => null,
 				UiElementSizeTypes.ExtraSmall => new Vector2
 				{
 					X = uiScreenZone.Area.Width * ElementSizesScalars.ExtraSmall.X,
@@ -81,7 +86,41 @@ namespace Common.UserInterface.Services
 					X = uiScreenZone.Area.Width,
 					Y = uiScreenZone.Area.Height
 				},
-				_ => null,
+				UiElementSizeTypes.Fit => this.GetElementFitDimensions(elementModel),
+				_ => new Vector2
+				{
+					X = -1,
+					Y = -1,
+				},
+			};
+		}
+
+		private Vector2 GetElementFitDimensions(IAmAUiElementModel elementModel)
+		{
+			switch (elementModel)
+			{
+				case UiButtonModel uiButton:
+
+					if (null == uiButton.ClickableAreaAnimation)
+					{
+						break;
+					}
+
+					var restingFrame = uiButton.ClickableAreaAnimation.Frames[uiButton.ClickableAreaAnimation.RestingFrameIndex];
+					return new Vector2
+					{
+						X = restingFrame.TextureBox.Width,
+						Y = restingFrame.TextureBox.Height	
+					};
+				case UiText uiText:
+
+					break;
+			}
+
+			return new Vector2
+			{
+				X = -1,
+				Y = -1
 			};
 		}
 
@@ -310,7 +349,7 @@ namespace Common.UserInterface.Services
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			var animationService = this._gameServices.GetService<IAnimationService>();
-			
+
 			if (element is UiButton button)
 			{
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);

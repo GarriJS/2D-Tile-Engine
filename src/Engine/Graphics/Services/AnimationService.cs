@@ -79,8 +79,8 @@ namespace Engine.Graphics.Services
 			{
 				frameModel.TextureBox = new Rectangle
 				{
-					X = 0,
-					Y = 0,
+					X = frameModel.TextureBox.X,
+					Y = frameModel.TextureBox.Y,
 					Width = frameSetWidth,
 					Height = frameSetHeight
 				};

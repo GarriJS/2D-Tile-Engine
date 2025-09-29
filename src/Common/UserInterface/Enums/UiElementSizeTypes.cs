@@ -43,6 +43,11 @@
 		/// <summary>
 		/// The full type.
 		/// </summary>
-		Full = 7
+		Full = 7,
+
+		/// <summary>
+		/// The fit type.
+		/// </summary>
+		Fit = 8,
 	}
 }
