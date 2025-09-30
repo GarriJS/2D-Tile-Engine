@@ -1,4 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.DiskModels.UI;
 using Common.DiskModels.UI.Contracts;
 using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Constants;
@@ -264,7 +265,21 @@ namespace Common.UserInterface.Services
 				? elementSize.Value.Y
 				: 0;
 
-			var image = imageService.GetImage(uiElementModel.BackgroundTextureName, (int)width, (int)height);
+			Image background = null;
+
+			if (null != uiElementModel.BackgroundTexture)
+			{
+				background = imageService.GetImageFromModel(uiElementModel.BackgroundTexture);
+
+				if ((true == uiElementModel.ResizeTexture) ||
+					(background is FillImage))
+				{
+					var textureWidth = width + uiElementModel.LeftPadding + uiElementModel.RightPadding;
+					var dimensions = new Vector2(textureWidth, height);
+					background.SetDrawDimensions(dimensions);
+				}
+			}
+
 			var area = new Vector2(width, height);
 			IAmAUiElement uiElement = uiElementModel switch
 			{
@@ -275,7 +290,7 @@ namespace Common.UserInterface.Services
 
 			if (null != uiElement)
 			{
-				uiElement.Graphic = image;
+				uiElement.Graphic = background;
 				uiElement.PressConfig?.AddSubscription(this.CheckForUiElementClick);
 
 				// LOGGING

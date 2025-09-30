@@ -1,4 +1,5 @@
-﻿using Common.Controls.Cursors.Constants;
+﻿using BaseContent.BaseContentConstants.Images;
+using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.Controls;
@@ -142,7 +143,6 @@ namespace LevelEditor.Spritesheets.Services
 			{
 				UiZoneName = "Spritesheet Buttons Zone",
 				UiZoneType = (int)uiScreenZoneType,
-				BackgroundTextureName = null,
 				JustificationType = (int)UiZoneJustificationTypes.Bottom,
 				ElementRows =
 				[
@@ -150,8 +150,13 @@ namespace LevelEditor.Spritesheets.Services
 					{
 						UiRowName = "Spritesheet Buttons Row",
 						TopPadding = 15,
-						BottomPadding = 32+15,
-						BackgroundTextureName = "gray_transparent",
+						BottomPadding = 30,
+						ResizeTexture = true,
+						BackgroundTexture = new FillImageModel
+						{
+							TextureName = "pallet",
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
+						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
 						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
 						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
@@ -193,15 +198,18 @@ namespace LevelEditor.Spritesheets.Services
 
 				for (var j = 0; j < verticalSize; j++)
 				{
-					var textureName = textureService.GetTextureName(
-						spritesheetName,
-						new Rectangle
+					var imageModel = new ImageModel
+					{
+						TextureName = spritesheetName,
+						TextureBox = new Rectangle
 						{
 							X = i * spriteDimensions.X,
 							Y = j * spriteDimensions.Y,
 							Width = spriteDimensions.X,
 							Height = spriteDimensions.Y
-						});
+						}
+					};
+					var textureName = textureService.GetTextureName(imageModel.TextureName, imageModel.TextureBox);
 
 					if (false == textureService.TryGetTexture(textureName, out var buttonTexture))
 					{
@@ -218,7 +226,7 @@ namespace LevelEditor.Spritesheets.Services
 							X = spriteDimensions.X,
 							Y = spriteDimensions.Y
 						},
-						BackgroundTextureName = textureName,
+						BackgroundTexture = imageModel,
 						GraphicText = null,
 						ClickableAreaScaler = new Vector2
 						{

@@ -99,11 +99,8 @@ namespace Common.UserInterface.Models
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var spritebatch = drawingService.SpriteBatch;
-
-			if (null != this.Image)
-			{
-				spritebatch.Draw(this.Image.Texture, position.Coordinates + new Vector2(0, offset.Y - this.TopPadding), this.Image.TextureBox, Color.White);
-			}
+ 
+			this.Image?.Draw(gameTime, gameServices, position, new Vector2(offset.X, offset.Y - this.TopPadding));
 
 			if (0 == this.SubElements.Count)
 			{
@@ -152,10 +149,9 @@ namespace Common.UserInterface.Models
 					case UiRowHorizontalJustificationTypes.None:
 					case UiRowHorizontalJustificationTypes.Left:
 					default:
-						elementHorizontalOffset += element.LeftPadding;
 						var elementOffset = new Vector2(elementHorizontalOffset, offset.Y + verticallyCenterOffset);
 						element.Draw(gameTime, gameServices, position, elementOffset);
-						elementHorizontalOffset += (element.RightPadding + element.Area.X);
+						elementHorizontalOffset += (element.LeftPadding + element.RightPadding + element.Area.X);
 						break;
 				}
 			}

@@ -43,13 +43,20 @@ namespace Engine.Graphics.Services
 			}
 
 			var image = imageModel switch
-			{
-				FillImageModel fillImageModel => new FillImage
+			{   
+				TiledImageModel fillImageModel => new TiledImage
 				{
 					TextureName = imageModel.TextureName,
 					TextureBox = imageModel.TextureBox,
 					Texture = texture,
 					FillBox = fillImageModel.FillBox,
+				},
+				FillImageModel stretchImageModel => new FillImage
+				{
+					TextureName = imageModel.TextureName,
+					TextureBox = imageModel.TextureBox,
+					Texture = texture,
+					FillBox = stretchImageModel.FillBox,
 				},
 				_ => new Image
 				{

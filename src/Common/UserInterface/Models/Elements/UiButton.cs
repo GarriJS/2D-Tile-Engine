@@ -5,7 +5,6 @@ using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Physics.Models;
-using Engine.RunTime.Services;
 using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Models.Elements
@@ -127,10 +126,14 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var textMeasurements = this.GraphicText?.GetTextDimensions();
-
+			var textMeasurements = this.GraphicText?.GetTextDimensions() ?? default;
+			var finalOffset = new Vector2
+			{
+				X = offset.X + (this.Area.X / 2) - (textMeasurements.X / 2) + this.LeftPadding,
+				Y = offset.Y + (this.Area.Y / 2) - (textMeasurements.Y / 2)
+			};
 			this.Graphic?.Draw(gameTime, gameServices, position, offset);
-			this.GraphicText?.Draw(gameTime, gameServices, position, offset + (this.Area / 2) - (textMeasurements.Value / 2));
+			this.GraphicText?.Draw(gameTime, gameServices, position, finalOffset);
 			this.ClickAnimation?.Draw(gameTime, gameServices, position, offset);
 		}
 

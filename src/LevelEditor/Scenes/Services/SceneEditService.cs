@@ -1,4 +1,6 @@
-﻿using Common.Controls.Cursors.Constants;
+﻿using BaseContent.BaseContentConstants.Fonts;
+using BaseContent.BaseContentConstants.Images;
+using Common.Controls.Cursors.Constants;
 using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
 using Common.Scenes.Models;
@@ -6,7 +8,6 @@ using Common.Tiling.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
-using Common.UserInterface.Services;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.DiskModels.Drawing;
@@ -72,7 +73,7 @@ namespace LevelEditor.Scenes.Services
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
 			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
 			runTimeDrawService.AddDrawable(scene.TileMap);
-			var fillImageModel = new FillImageModel
+			var fillImageModel = new TiledImageModel
 			{
 				TextureName = "tile_grid_light",
 				TextureBox = new Rectangle
@@ -118,34 +119,74 @@ namespace LevelEditor.Scenes.Services
 			{
 				UiZoneName = "Tile Grid User Interface Zone",
 				UiZoneType = (int)UiScreenZoneTypes.Row3Col3,
-				BackgroundTextureName = null,
+				BackgroundTexture = null,
 				JustificationType = (int)UiZoneJustificationTypes.Bottom,
 				ElementRows =
 				[
 					new UiRowModel
 					{
 						UiRowName = "Toggle Tile Grid Row",
-						TopPadding = 0,
-						BottomPadding = 0,
-						BackgroundTextureName = "gray_transparent",
-						RowHoverCursorName = CommonCursorNames.BasicCursorName,
-						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
-						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+						TopPadding = 10,
+						BottomPadding = 5,
+						RowHoverCursorName = CommonCursorNames.BasicCursorName,               
+						ResizeTexture = true,
+						BackgroundTexture = new FillImageModel
+						{
+							TextureName = "pallet",
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+						},
+						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Right,
+						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
 						SubElements =
 						[
-							new UiButtonModel
+							new UiTextModel
 							{
-								UiElementName = "Toggle Tile Grid Button",
-								LeftPadding = 0,
-								RightPadding = 0,
-								BackgroundTextureName = "black",
+								UiElementName = "Create Element Label",
+								RightPadding = 5,
 								GraphicText = new GraphicalTextModel
 								{
 									Text = "Toggle Tile Grid",
-									TextColor = Color.White,
-									FontName = "MonoRegular"
+									TextColor = PalletColors.Hex_BF6F4A,
+									FontName = FontNames.MonoBold
 								},
+								SizeType = (int)UiElementSizeTypes.Fit
+							},
+							new UiButtonModel
+							{
+								UiElementName = "Toggle Tile Grid Button",
+								RightPadding = 10,
 								SizeType = (int)UiElementSizeTypes.Fit,
+								ClickableAreaAnimation = new TriggeredAnimationModel
+								{
+									CurrentFrameIndex = 0,
+									FrameDuration = 500,
+									Frames =
+									[
+										new ImageModel
+										{
+											TextureName = "dark_blue_buttons",
+											TextureBox = new Rectangle
+											{
+												X = 0,
+												Y = 128,
+												Width = 64,
+												Height = 64,
+											}
+										},
+										new ImageModel
+										{
+											TextureName = "dark_blue_buttons",
+											TextureBox = new Rectangle
+											{
+												X = 64,
+												Y = 128,
+												Width = 64,
+												Height = 64,
+											}
+										}
+									],
+									RestingFrameIndex = 0,
+								},
 								ClickableAreaScaler = new Vector2
 								{
 									X = 1,

@@ -11,6 +11,7 @@ using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Contracts;
+using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
@@ -391,7 +392,19 @@ namespace Common.UserInterface.Services
 				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneTypes.None];
 			}
 
-			var background = imageService.GetImage(uiZoneModel.BackgroundTextureName, (int)uiScreenZone.Area.Width, (int)uiScreenZone.Area.Height);
+			Image background = null;
+
+			if (null != uiZoneModel.BackgroundTexture)
+			{
+				background = imageService.GetImageFromModel(uiZoneModel.BackgroundTexture);
+
+				if ((true == uiZoneModel.ResizeTexture) ||
+					(background is FillImage))
+				{
+					background.SetDrawDimensions(uiScreenZone.Area.ToDimensions);
+				}
+			}
+
 			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, uiZoneModel.ZoneHoverCursorName);
 			var uiZone = new UiZone
 			{
@@ -542,7 +555,25 @@ namespace Common.UserInterface.Services
 									.Select(e => e.Area.Y)
 									.OrderDescending()
 									.FirstOrDefault();
-			var image = imageService.GetImage(uiRowModel.BackgroundTextureName, (int)uiZone.Area.Width, (int)height + uiRowModel.TopPadding + uiRowModel.BottomPadding);
+
+			Image background = null;
+
+			if (null != uiRowModel.BackgroundTexture)
+			{
+				background = imageService.GetImageFromModel(uiRowModel.BackgroundTexture);
+
+				if ((true == uiRowModel.ResizeTexture) ||
+					(background is FillImage))
+				{
+					var dimensions = new Vector2
+					{
+						X = uiZone.Area.Width,
+						Y = height + uiRowModel.TopPadding + uiRowModel.BottomPadding
+					};
+					background.SetDrawDimensions(dimensions);
+				}
+			}
+
 			var rowArea = new Vector2
 			{
 				X = uiZone.Area.Width,
@@ -560,7 +591,7 @@ namespace Common.UserInterface.Services
 				BottomPadding = uiRowModel.BottomPadding,
 				HorizontalJustificationType = (UiRowHorizontalJustificationTypes)uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = (UiRowVerticalJustificationTypes)uiRowModel.VerticalJustificationType,
-				Image = image,
+				Image = background,
 				HoverConfig = hoverConfig,
 				SubElements = subElements
 			};

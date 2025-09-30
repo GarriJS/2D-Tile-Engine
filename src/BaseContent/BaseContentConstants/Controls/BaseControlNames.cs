@@ -1,4 +1,4 @@
-﻿namespace BaseContent.BaseContent.Controls
+﻿namespace BaseContent.BaseContentConstants.Controls
 {
 	/// <summary>
 	/// Represents base control names.

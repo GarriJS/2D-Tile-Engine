@@ -3,6 +3,9 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Graphics\Models\TiledImage.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.2.*" />
   </ItemGroup>

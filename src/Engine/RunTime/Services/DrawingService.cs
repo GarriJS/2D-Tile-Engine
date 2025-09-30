@@ -36,7 +36,7 @@ namespace Engine.RunTime.Services
 		/// </summary>
 		public void BeginDraw()
 		{
-			this.SpriteBatch.Begin();
+			this.SpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 		}
 
 		/// <summary>
@@ -68,6 +68,27 @@ namespace Engine.RunTime.Services
 		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color)
 		{
 			this.SpriteBatch.Draw(texture, coordinates, sourceRectangle, color);
+		}
+
+		/// <summary>
+		/// Draws the texture. 
+		/// </summary>
+		/// <param name="texture">The texture.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="sourceRectangle">The source rectangle.</param>
+		/// <param name="stretchBox">The stretch box.</param>
+		/// <param name="color">The color.</param>
+		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Vector2 stretchBox, Color color)
+		{
+			var destinationRectangle = new Rectangle
+			{
+				X = (int)coordinates.X,
+				Y = (int)coordinates.Y,
+				Width = (int)stretchBox.X,
+				Height = (int)stretchBox.Y
+			};
+
+			this.SpriteBatch.Draw(texture, destinationRectangle, sourceRectangle, color);
 		}
 
 		/// <summary>

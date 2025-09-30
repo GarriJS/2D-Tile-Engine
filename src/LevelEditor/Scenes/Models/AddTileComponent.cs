@@ -1,4 +1,4 @@
-﻿using BaseContent.BaseContent.Controls;
+﻿using BaseContent.BaseContentConstants.Controls;
 using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
@@ -14,7 +14,6 @@ using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Scenes.Services.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace LevelEditor.Scenes.Models
 {
@@ -68,19 +67,19 @@ namespace LevelEditor.Scenes.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
 			//if ((true == this.BackgroundGraphicActive) &&
-			//	(this.BackgroundGraphic.Graphic is FillImage fillImage))
+			//	(this.BackgroundGraphic.Graphic is TiledImage fillImage))
 			//{
 			//	var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
-			//	var fillBox = new Vector2
+			//	var FillBox = new Vector2
 			//	{
 			//		X = graphicDeviceService.GraphicsDevice.Viewport.Width,
 			//		Y = graphicDeviceService.GraphicsDevice.Viewport.Height
 			//	};
 
-			//	if (fillImage.FillBox != fillBox)
+			//	if (fillImage.FillBox != FillBox)
 			//	{ 
-			//		fillImage.FillBox = fillBox;
+			//		fillImage.FillBox = FillBox;
 			//	}
 			//}
 
@@ -119,7 +118,7 @@ namespace LevelEditor.Scenes.Models
 		/// Sets the background graphic.
 		/// </summary>
 		/// <param name="fillImageModel">The fill image model.</param>
-		public void SetBackgroundGraphic(FillImageModel fillImageModel)
+		public void SetBackgroundGraphic(TiledImageModel fillImageModel)
 		{
 			var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();

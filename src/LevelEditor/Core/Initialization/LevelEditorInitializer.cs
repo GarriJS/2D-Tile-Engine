@@ -1,4 +1,6 @@
-﻿using Common.Controls.Cursors.Constants;
+﻿using BaseContent.BaseContentConstants.Fonts;
+using BaseContent.BaseContentConstants.Images;
+using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
@@ -130,34 +132,36 @@ namespace LevelEditor.Core.Initialization
 						{
 							UiZoneName = "Level Editor Label Row",
 							UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
-							BackgroundTextureName = string.Empty,
+							BackgroundTexture = null,
 							JustificationType = (int)UiZoneJustificationTypes.Top,
 							ElementRows =
 							[
 								new UiRowModel
 								{
 									UiRowName = "Level Editor Label Row",
-									TopPadding = 0,
-									BottomPadding = 0,
-									BackgroundTextureName = null,
+									ResizeTexture = true,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,                                 
 									SubElements =
 									[
 										new UiTextModel
 										{
 											UiElementName = "Level Editor Label Element",
-											LeftPadding = 0,
-											RightPadding = 0,
-											BackgroundTextureName = "gray",
 											ElementHoverCursorName = CommonCursorNames.BasicCursorName,
+											LeftPadding = 10,
+											RightPadding = 10,
+											SizeType = (int)UiElementSizeTypes.Fit,
 											GraphicText = new GraphicalTextModel
-											{ 
+											{
 												Text = "Level Editor",
-												TextColor = Color.Blue,
-												FontName = "MonoRegular"
+												TextColor = PalletColors.Hex_BF6F4A,
+												FontName = FontNames.MonoBold
 											},
-											SizeType = (int)UiElementSizeTypes.Fit
+											BackgroundTexture = new FillImageModel
+											{
+												TextureName = "pallet",
+												TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+											}
 										}
 									]
 								}
@@ -167,16 +171,20 @@ namespace LevelEditor.Core.Initialization
 						{
 							UiZoneName = "Disc Zone",
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
-							BackgroundTextureName = string.Empty,
+							BackgroundTexture = null,
 							JustificationType = (int)UiZoneJustificationTypes.Top,
 							ElementRows =
 							[
 								new UiRowModel
 								{
 									UiRowName = "Create Level",
-									TopPadding = 0,
-									BottomPadding = 0,
-									BackgroundTextureName = "white",
+									TopPadding = 10,
+									ResizeTexture = true,
+									BackgroundTexture = new FillImageModel
+									{
+										TextureName = "pallet",
+										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Center,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
@@ -190,28 +198,26 @@ namespace LevelEditor.Core.Initialization
 											GraphicText = new GraphicalTextModel
 											{
 												Text = "Create Level",
-												TextColor = Color.Blue,
-												FontName = "MonoRegular"
+												TextColor = PalletColors.Hex_BF6F4A,
+												FontName = FontNames.MonoBold
 											},
 											SizeType = (int)UiElementSizeTypes.Fit
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Create Element Button",
-											LeftPadding = 0,
-											RightPadding = 0,
 											SizeType = (int)UiElementSizeTypes.Fit,
 											ClickableAreaAnimation = new TriggeredAnimationModel
-											{ 
+											{
 												CurrentFrameIndex = 0,
 												FrameDuration = 500,
 												Frames =
 												[
 													new ImageModel
-													{ 
+													{
 														TextureName = "dark_blue_buttons",
 														TextureBox = new Rectangle
-														{ 
+														{
 															X = 0,
 															Y = 0,
 															Width = 64,
@@ -244,20 +250,17 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Save Element Label",
 											LeftPadding = 10,
 											RightPadding = 5,
-											BackgroundTextureName = null,
 											GraphicText = new GraphicalTextModel
 											{
 												Text = "Save Level",
-												TextColor = Color.Blue,
-												FontName = "MonoRegular"
+												TextColor = PalletColors.Hex_BF6F4A,
+												FontName = FontNames.MonoBold
 											},
 											SizeType = (int)UiElementSizeTypes.Fit
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Save Element Button",
-											LeftPadding = 0,
-											RightPadding = 0,
 											SizeType = (int)UiElementSizeTypes.Fit,
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
@@ -301,9 +304,12 @@ namespace LevelEditor.Core.Initialization
 								new UiRowModel
 								{
 									UiRowName = "Levels Header",
-									TopPadding = 0,
-									BottomPadding = 0,
-									BackgroundTextureName = "white",
+									ResizeTexture = true,
+									BackgroundTexture = new FillImageModel
+									{
+										TextureName = "pallet",
+										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Center,
 									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
@@ -312,14 +318,11 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Saved Levels Element",
-											LeftPadding = 0,
-											RightPadding = 0,
-											BackgroundTextureName = null,
 											GraphicText = new GraphicalTextModel
 											{
 												Text = "Saved Levels",
-												TextColor = Color.Blue,
-												FontName = "MonoRegular"
+												TextColor = PalletColors.Hex_BF6F4A,
+												FontName = FontNames.MonoBold
 											},
 											SizeType = (int)UiElementSizeTypes.Fit
 										}

@@ -12,6 +12,8 @@ namespace Engine.Graphics.Models
 	/// </summary>
 	public class Image : IAmAGraphic, IDisposable
 	{
+		protected Rectangle _textureBox;
+
 		/// <summary>
 		/// Gets or sets the texture name.
 		/// </summary>
@@ -20,7 +22,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the texture box.
 		/// </summary>
-		public Rectangle TextureBox { get; set; }
+		public Rectangle TextureBox { get => this._textureBox; set => this._textureBox = value; }
 
 		/// <summary>
 		/// Gets or sets the texture.
@@ -31,6 +33,16 @@ namespace Engine.Graphics.Models
 		/// Gets the graphic.
 		/// </summary>
 		public IAmAGraphic Graphic { get => this; }
+
+		/// <summary>
+		/// Sets the draw dimensions.
+		/// </summary>
+		/// <param name="dimensions">The dimensions.</param>
+		public virtual void SetDrawDimensions(Vector2 dimensions)
+		{ 
+			this._textureBox.Width = (int)dimensions.X;
+			this._textureBox.Height = (int)dimensions.Y;
+		}
 
 		/// <summary>
 		/// Draws the sub drawable.
