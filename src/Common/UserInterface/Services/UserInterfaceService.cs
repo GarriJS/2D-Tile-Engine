@@ -178,7 +178,7 @@ namespace Common.UserInterface.Services
 				};
 			}
 
-			var height = uiZone.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
+			var height = uiZone.ElementRows.Sum(e => e.InsideHeight + e.BottomPadding + e.TopPadding);
 			var rowVerticalOffset = uiZone.JustificationType switch
 			{
 				UiZoneJustificationTypes.None => 0,
@@ -194,7 +194,7 @@ namespace Common.UserInterface.Services
 				var rowBottom = 0f;
 
 				rowTop =  uiZone.Position.Y + rowVerticalOffset;
-				rowBottom = rowTop + elementRow.TopPadding + elementRow.Height + elementRow.BottomPadding;
+				rowBottom = rowTop + elementRow.TopPadding + elementRow.InsideHeight + elementRow.BottomPadding;
 
 				if ((rowTop > location.Y) ||
 					(rowBottom < location.Y))
@@ -269,9 +269,9 @@ namespace Common.UserInterface.Services
 			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
 			{
 				UiRowHorizontalJustificationTypes.None => 0,
-				UiRowHorizontalJustificationTypes.Center => (uiRow.Width - width) / 2,
+				UiRowHorizontalJustificationTypes.Center => (uiRow.InsideWidth - width) / 2,
 				UiRowHorizontalJustificationTypes.Left => 0,
-				UiRowHorizontalJustificationTypes.Right => uiRow.Width - width,
+				UiRowHorizontalJustificationTypes.Right => uiRow.InsideWidth - width,
 				_ => 0,
 			};
 
@@ -440,7 +440,7 @@ namespace Common.UserInterface.Services
 				}
 			}
 
-			var currentTotalHeight = elementRowsFirstPass.Sum(e => e.Height);
+			var currentTotalHeight = elementRowsFirstPass.Sum(e => e.InsideHeight);
 			var elementRowsSecondPass = new List<UiRow>();
 
 			foreach (var elementRow in elementRowsFirstPass)
@@ -449,10 +449,10 @@ namespace Common.UserInterface.Services
 
 				if ((true == elementRow.Flex) &&
 					(currentTotalHeight < uiScreenZone.Area.Height) &&
-					(elementRow.Width < rowRealWidth))
+					(elementRow.InsideWidth < rowRealWidth))
 				{
 					var flexedElementRows = this.GetFlexedUiRows(elementRow);
-					var newHeight = (currentTotalHeight - elementRow.Height) + flexedElementRows.Sum(e => e.Height);
+					var newHeight = (currentTotalHeight - elementRow.InsideHeight) + flexedElementRows.Sum(e => e.InsideHeight);
 
 					if (newHeight < uiScreenZone.Area.Height)
 					{
@@ -615,7 +615,7 @@ namespace Common.UserInterface.Services
 			{
 				UiRowName = uiRow.UiRowName,
 				Flex = true,
-				Width = uiRow.Width,
+				Width = uiRow.InsideWidth,
 				TopPadding = uiRow.TopPadding,
 				BottomPadding = 1,
 				HorizontalJustificationType = uiRow.HorizontalJustificationType,
@@ -628,7 +628,7 @@ namespace Common.UserInterface.Services
 			{
 				var elementWidth = element.Area.X + element.LeftPadding + element.RightPadding;
 
-				if (currentWidth + elementWidth > uiRow.Width)
+				if (currentWidth + elementWidth > uiRow.InsideWidth)
 				{
 					currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
 															  .FirstOrDefault().Area.Y;
@@ -638,7 +638,7 @@ namespace Common.UserInterface.Services
 					{
 						UiRowName = uiRow.UiRowName,
 						Flex = true,
-						Width = uiRow.Width,
+						Width = uiRow.InsideWidth,
 						TopPadding = 1,
 						BottomPadding = 0,
 						HorizontalJustificationType = uiRow.HorizontalJustificationType,

@@ -226,14 +226,14 @@ namespace LevelEditor.Spritesheets.Services
 							X = spriteDimensions.X,
 							Y = spriteDimensions.Y
 						},
-						BackgroundTexture = imageModel,
-						GraphicText = null,
+						Texture = imageModel,
+						Text = null,
 						ClickableAreaScaler = new Vector2
 						{
 							X = 1,
 							Y = 1
 						},
-						ButtonClickEventName = UiEventName.SpritesheetButtonClick
+						ClickEventName = UiEventName.SpritesheetButtonClick
 					};
 				}
 			}

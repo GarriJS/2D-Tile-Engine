@@ -147,17 +147,17 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Level Editor Label Element",
-											ElementHoverCursorName = CommonCursorNames.BasicCursorName,
+											HoverCursorName = CommonCursorNames.BasicCursorName,
 											LeftPadding = 10,
 											RightPadding = 10,
 											SizeType = (int)UiElementSizeTypes.Fit,
-											GraphicText = new GraphicalTextModel
+											Text = new GraphicalTextModel
 											{
 												Text = "Level Editor",
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											BackgroundTexture = new FillImageModel
+											Texture = new FillImageModel
 											{
 												TextureName = "pallet",
 												TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
@@ -195,7 +195,7 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Create Element Label",
 											LeftPadding = 10,
 											RightPadding = 5,
-											GraphicText = new GraphicalTextModel
+											Text = new GraphicalTextModel
 											{
 												Text = "Create Level",
 												TextColor = PalletColors.Hex_BF6F4A,
@@ -243,14 +243,14 @@ namespace LevelEditor.Core.Initialization
 												X = 1,
 												Y = 1
 											},
-											ButtonClickEventName = UiEventName.CreateSceneClick
+											ClickEventName = UiEventName.CreateSceneClick
 										},
 										new UiTextModel
 										{
 											UiElementName = "Save Element Label",
 											LeftPadding = 10,
 											RightPadding = 5,
-											GraphicText = new GraphicalTextModel
+											Text = new GraphicalTextModel
 											{
 												Text = "Save Level",
 												TextColor = PalletColors.Hex_BF6F4A,
@@ -318,7 +318,7 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Saved Levels Element",
-											GraphicText = new GraphicalTextModel
+											Text = new GraphicalTextModel
 											{
 												Text = "Saved Levels",
 												TextColor = PalletColors.Hex_BF6F4A,

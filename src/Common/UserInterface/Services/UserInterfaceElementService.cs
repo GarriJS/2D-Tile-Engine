@@ -110,10 +110,10 @@ namespace Common.UserInterface.Services
 			{
 				var fontService = this._gameServices.GetService<IFontService>();
 
-				if (false == string.IsNullOrEmpty(elementTextModel.GraphicText?.FontName))
+				if (false == string.IsNullOrEmpty(elementTextModel.Text?.FontName))
 				{
-					var font = fontService.GetSpriteFont(elementTextModel.GraphicText.FontName);
-					textDimensions = font.MeasureString(elementTextModel.GraphicText.Text);
+					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
+					textDimensions = font.MeasureString(elementTextModel.Text.Text);
 				}
 			}
 
@@ -267,14 +267,14 @@ namespace Common.UserInterface.Services
 
 			Image background = null;
 
-			if (null != uiElementModel.BackgroundTexture)
+			if (null != uiElementModel.Texture)
 			{
-				background = imageService.GetImageFromModel(uiElementModel.BackgroundTexture);
+				background = imageService.GetImageFromModel(uiElementModel.Texture);
 
 				if ((true == uiElementModel.ResizeTexture) ||
 					(background is FillImage))
 				{
-					var textureWidth = width + uiElementModel.LeftPadding + uiElementModel.RightPadding;
+					var textureWidth = width + uiElementModel.InsidePadding.LeftPadding + uiElementModel.InsidePadding.RightPadding;
 					var dimensions = new Vector2(textureWidth, height);
 					background.SetDrawDimensions(dimensions);
 				}
@@ -294,13 +294,13 @@ namespace Common.UserInterface.Services
 				uiElement.PressConfig?.AddSubscription(this.CheckForUiElementClick);
 
 				// LOGGING
-				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.ElementHoverCursorName, out var hoverAction))
+				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.HoverCursorName, out var hoverAction))
 				{
 					uiElement.HoverConfig?.AddSubscription(hoverAction);
 				}
 
 				// LOGGING
-				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.ElementPressEventName, out var pressAction))
+				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.pressEventName, out var pressAction))
 				{
 					uiElement.PressConfig?.AddSubscription(pressAction);
 				}
@@ -320,8 +320,8 @@ namespace Common.UserInterface.Services
 			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var graphicText = graphicTextService.GetGraphicTextFromModel(textModel.GraphicText);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, textModel.ElementHoverCursorName);
+			var graphicText = graphicTextService.GetGraphicTextFromModel(textModel.Text);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, textModel.HoverCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 
 			return new UiText
@@ -350,7 +350,7 @@ namespace Common.UserInterface.Services
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			var graphicText = graphicTextService.GetGraphicTextFromModel(buttonModel.GraphicText);
+			var graphicText = graphicTextService.GetGraphicTextFromModel(buttonModel.Text);
 			var clickableArea = new Vector2
 			{
 				X = area.X * buttonModel.ClickableAreaScaler.X,
@@ -361,7 +361,7 @@ namespace Common.UserInterface.Services
 				X = (area.X - clickableArea.X) / 2,
 				Y = (area.Y - clickableArea.Y) / 2
 			};
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, buttonModel.ElementHoverCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, buttonModel.HoverCursorName);
 			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
 			var button = new UiButton
@@ -381,7 +381,7 @@ namespace Common.UserInterface.Services
 			button.ClickConfig?.AddSubscription(this.TriggerUiButtonClickAnimation);
 
 			// LOGGING
-			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ButtonClickEventName, out var clickAction))
+			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ClickEventName, out var clickAction))
 			{
 				button.ClickConfig?.AddSubscription(clickAction);
 			}

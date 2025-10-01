@@ -13,35 +13,40 @@ namespace Common.UserInterface.Models.Contracts
     /// </summary>
     public interface IAmAUiElement : IAmSubDrawable, IHaveASubArea, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
 	{
-        /// <summary>
+		/// <summary>
         /// Gets or sets the user interface element name.
         /// </summary>
         public string UiElementName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the left padding.
+		/// Gets the inside width.
 		/// </summary>
-		public float LeftPadding { get; set; }
+		public float InsideWidth { get; }
 
 		/// <summary>
-		/// Gets or sets the right padding.
+		/// Gets the inside height.
 		/// </summary>
-		public float RightPadding { get; set; }
+		public float InsideHeight { get; }
 
 		/// <summary>
-		/// Gets or sets the user interface element type.
+		/// Gets or sets the horizontal user interface size type.
 		/// </summary>
-		public UiElementTypes ElementType { get; set; }
+		public UiElementSizeTypes HorizontalSizeType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface size type.
+		/// Gets or sets the vertical user interface size type.
 		/// </summary>
-		public UiElementSizeTypes SizeType { get; set; }
+		public UiElementSizeTypes  VerticalSizeType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the area.
+		/// Gets or sets the cached element offset.
 		/// </summary>
-		new public Vector2 Area { get; set; }
+		public Vector2? CachedElementOffset { get; set; }
+
+		/// <summary>
+		/// Gets or sets the inside user interface padding. 
+		/// </summary>
+		public UiPadding InsidePadding { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.

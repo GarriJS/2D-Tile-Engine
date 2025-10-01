@@ -143,7 +143,7 @@ namespace LevelEditor.Scenes.Services
 							{
 								UiElementName = "Create Element Label",
 								RightPadding = 5,
-								GraphicText = new GraphicalTextModel
+								Text = new GraphicalTextModel
 								{
 									Text = "Toggle Tile Grid",
 									TextColor = PalletColors.Hex_BF6F4A,
@@ -192,7 +192,7 @@ namespace LevelEditor.Scenes.Services
 									X = 1,
 									Y = 1
 								},
-								ButtonClickEventName = UiEventName.ToggleTileGrid
+								ClickEventName = UiEventName.ToggleTileGrid
 							},
 						]
 					}

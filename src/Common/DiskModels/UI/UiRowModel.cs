@@ -13,25 +13,22 @@ namespace Common.DiskModels.UI
 		[DataMember(Name = "resizeTexture", Order = 2)]
 		public bool ResizeTexture { get; set; }
 
-		[DataMember(Name = "topPadding", Order = 3)]
-		public int TopPadding { get; set; }
+		[DataMember(Name = "insidePadding", Order = 3)]
+		public UiPaddingModel InsidePadding { get; set; }
 
-		[DataMember(Name = "bottomPadding", Order = 4)]
-		public int BottomPadding { get; set; }
-
-		[DataMember(Name = "horizontalJustificationType", Order = 5)]
+		[DataMember(Name = "horizontalJustificationType", Order = 4)]
 		public int HorizontalJustificationType { get; set; }
 
-		[DataMember(Name = "verticalJustificationType", Order = 6)]
+		[DataMember(Name = "verticalJustificationType", Order = 5)]
 		public int VerticalJustificationType { get; set; }
 
-		[DataMember(Name = "rowHoverCursorName", Order = 7)]
+		[DataMember(Name = "rowHoverCursorName", Order = 6)]
 		public string RowHoverCursorName { get; set; }
 
-		[DataMember(Name = "backgroundTexture", Order = 8)]
+		[DataMember(Name = "backgroundTexture", Order = 7)]
 		public ImageModel BackgroundTexture { get; set; }
 
-		[DataMember(Name = "subElements", Order = 9)]
+		[DataMember(Name = "subElements", Order = 8)]
 		public IAmAUiElementModel[] SubElements { get; set; }
 	}
 }

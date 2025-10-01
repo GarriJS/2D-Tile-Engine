@@ -104,7 +104,7 @@ namespace Common.UserInterface.Models
 				return;
 			}
 
-			var height = this.ElementRows.Sum(e => e.Height + e.BottomPadding + e.TopPadding);
+			var height = this.ElementRows.Sum(e => e.InsideHeight + e.BottomPadding + e.TopPadding);
 			var rowVerticalOffset = this.JustificationType switch
 			{
 				UiZoneJustificationTypes.None => 0,
@@ -128,8 +128,32 @@ namespace Common.UserInterface.Models
 					Y = rowVerticalOffset
 				};
 				elementRow.Draw(gameTime, gameServices, this.Position, offset);
-				rowVerticalOffset += (elementRow.BottomPadding + elementRow.Height);
+				rowVerticalOffset += (elementRow.BottomPadding + elementRow.InsideHeight);
 			}
+		}
+
+		/// <summary>
+		/// Updates the zone rows offset.
+		/// </summary>
+		private void UpdateZoneRowsOffset()
+		{
+			if (0 == this.ElementRows.Count)
+			{
+				return;
+			}
+
+			var rowHorizontalJustificationOffset = this.HorizontalJustificationType switch
+			{
+				UiRowHorizontalJustificationTypes.Center => (this.Area.X - this.InsideWidth) / 2,
+				UiRowHorizontalJustificationTypes.Right => this.Area.X - this.InsideWidth,
+				_ => 0
+			};
+			var rowVerticalJustificationOffset = this.VerticalJustificationType switch
+			{
+				UiRowVerticalJustificationTypes.Center => (this.Area.Y - this.InsideHeight) / 2,
+				UiRowVerticalJustificationTypes.Top => this.Area.Y - this.InsideHeight,
+				_ => 0
+			};
 		}
 
 		/// <summary>

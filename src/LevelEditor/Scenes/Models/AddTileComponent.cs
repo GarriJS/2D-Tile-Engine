@@ -73,8 +73,8 @@ namespace LevelEditor.Scenes.Models
 
 			//	var FillBox = new Vector2
 			//	{
-			//		X = graphicDeviceService.GraphicsDevice.Viewport.Width,
-			//		Y = graphicDeviceService.GraphicsDevice.Viewport.Height
+			//		X = graphicDeviceService.GraphicsDevice.Viewport.InsideWidth,
+			//		Y = graphicDeviceService.GraphicsDevice.Viewport.InsideHeight
 			//	};
 
 			//	if (fillImage.FillBox != FillBox)

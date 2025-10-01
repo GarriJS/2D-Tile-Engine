@@ -1,24 +1,29 @@
-﻿using Common.UserInterface.Models.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Models.Abstract;
+using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Physics.Models;
+using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.Controls.CursorInteraction.Models.Abstract;
-using Common.Controls.CursorInteraction.Models;
 
 namespace Common.UserInterface.Models
 {
-    /// <summary>
-    /// Represents a user interface row.
-    /// </summary>
-    public class UiRow : IAmSubDrawable, ICanBeHovered<UiRow>, IDisposable
+	/// <summary>
+	/// Represents a user interface row.
+	/// </summary>
+	public class UiRow : IAmSubDrawable, IHaveASubArea, ICanBeHovered<UiRow>, IDisposable
 	{
+		/// <summary>
+		/// Gets or sets the cached element offset.
+		/// </summary>
+		private Vector2? CachedRowOffset { get; set; }
+
 		/// <summary>
 		/// Gets or sets the user interface row name.
 		/// </summary>
@@ -30,24 +35,19 @@ namespace Common.UserInterface.Models
 		public bool Flex { get; set; }
 
 		/// <summary>
-		/// Gets or sets the width.
+		/// Get the width.
 		/// </summary>
-		public float Width { get; set; }
+		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.SubElements.Sum(e => e.InsideWidth) + this.InsidePadding.RightPadding; }
 
 		/// <summary>
-		/// Gets or sets the height.
+		/// Gets the height.
 		/// </summary>
-		public float Height { get; set; }
+		public float InsideHeight { get => this.InsidePadding.TopPadding + this.SubElements.Max(e => e.InsideHeight) + this.InsidePadding.BottomPadding; }
 
 		/// <summary>
-		/// Gets or sets the top padding.
+		/// Gets or sets the inside user interface padding. 
 		/// </summary>
-		public float TopPadding { get; set; }
-
-		/// <summary>
-		/// Gets or sets the bottom padding.
-		/// </summary>
-		public float BottomPadding { get; set; }
+		public UiPadding InsidePadding { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface row horizontal justification type. 
@@ -58,6 +58,16 @@ namespace Common.UserInterface.Models
 		/// Gets or sets the user interface row vertical justification type.
 		/// </summary>
 		public UiRowVerticalJustificationTypes VerticalJustificationType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the cached element offset.
+		/// </summary>
+		public Vector2? CachedElementOffset { get; set; }
+
+		/// <summary>
+		/// Gets or sets the area.
+		/// </summary>
+		public Vector2 Area { get; set; }
 
 		/// <summary>
 		/// Gets the image.
@@ -97,63 +107,56 @@ namespace Common.UserInterface.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var drawingService = gameServices.GetService<IDrawingService>();
-			var spritebatch = drawingService.SpriteBatch;
- 
-			this.Image?.Draw(gameTime, gameServices, position, new Vector2(offset.X, offset.Y - this.TopPadding));
+			this.Image?.Draw(gameTime, gameServices, position, new Vector2(offset.X, offset.Y + this.InsidePadding.TopPadding));
 
+			if (true == this.SubElements.Any(e => false == e.CachedElementOffset.HasValue))
+			{ 
+				this.UpdateRowElementsOffset();
+			}
+
+			foreach (var element in this.SubElements)
+			{
+				element.Draw(gameTime, gameServices, position, offset + element.CachedElementOffset.Value);
+			}
+		}
+
+		/// <summary>
+		/// Updates the rows elements offset.
+		/// </summary>
+		private void UpdateRowElementsOffset()
+		{
 			if (0 == this.SubElements.Count)
 			{
 				return;
 			}
 
-			var width = this.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
-			var elementHorizontalOffset = this.HorizontalJustificationType switch
+			var rowHorizontalJustificationOffset = this.HorizontalJustificationType switch
 			{
-				UiRowHorizontalJustificationTypes.None => 0,
-				UiRowHorizontalJustificationTypes.Center => (this.Width - width) / 2,
-				UiRowHorizontalJustificationTypes.Left => 0,
-				UiRowHorizontalJustificationTypes.Right => this.Width - width,
-				_ => 0,
+				UiRowHorizontalJustificationTypes.Center => (this.Area.X - this.InsideWidth) / 2,
+				UiRowHorizontalJustificationTypes.Right => this.Area.X - this.InsideWidth,
+				_ => 0
 			};
-
-			if (0 > elementHorizontalOffset)
+			var rowVerticalJustificationOffset = this.VerticalJustificationType switch
 			{
-				elementHorizontalOffset = 0;
-			}
-
-			var largestHeight = this.SubElements.OrderByDescending(e => e.Area.Y)
-												 .FirstOrDefault().Area.Y;
+				UiRowVerticalJustificationTypes.Center => (this.Area.Y - this.InsideHeight) / 2,
+				UiRowVerticalJustificationTypes.Top => this.Area.Y - this.InsideHeight,
+				_ => 0
+			};
+			var elementOffset = new Vector2
+			{
+				X = rowHorizontalJustificationOffset,
+				Y = rowVerticalJustificationOffset
+			};
 
 			foreach (var element in this.SubElements)
 			{
-				var verticallyCenterOffset = 0f;
-
-				switch (this.VerticalJustificationType)
-				{
-					case UiRowVerticalJustificationTypes.Bottom:
-						verticallyCenterOffset = (largestHeight - element.Area.Y);
-						break;
-					case UiRowVerticalJustificationTypes.Center:
-						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
-						break;
-					case UiRowVerticalJustificationTypes.None:
-					case UiRowVerticalJustificationTypes.Top:
-						break;
+				if (UiRowVerticalJustificationTypes.Center == this.VerticalJustificationType)
+				{ 
+					//will need to do something additional here
 				}
 
-				switch (this.HorizontalJustificationType)
-				{
-					case UiRowHorizontalJustificationTypes.Right:
-					case UiRowHorizontalJustificationTypes.Center:
-					case UiRowHorizontalJustificationTypes.None:
-					case UiRowHorizontalJustificationTypes.Left:
-					default:
-						var elementOffset = new Vector2(elementHorizontalOffset, offset.Y + verticallyCenterOffset);
-						element.Draw(gameTime, gameServices, position, elementOffset);
-						elementHorizontalOffset += (element.LeftPadding + element.RightPadding + element.Area.X);
-						break;
-				}
+				element.CachedElementOffset = elementOffset;
+				elementOffset.X += element.InsideWidth;
 			}
 		}
 
@@ -163,12 +166,12 @@ namespace Common.UserInterface.Models
 		public void Dispose()
 		{
 			if (0 == this.SubElements.Count)
-			{ 
+			{
 				return;
 			}
 
 			foreach (var subElement in this.SubElements)
-			{ 
+			{
 				subElement?.Dispose();
 			}
 		}

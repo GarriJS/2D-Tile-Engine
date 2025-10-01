@@ -12,28 +12,28 @@ namespace Common.DiskModels.UI.Contracts
 		[DataMember(Name = "resizeTexture", Order = 2)]
 		public bool ResizeTexture { get; set; }
 
-		[DataMember(Name = "leftPadding", Order = 3)]
-		public float LeftPadding { get; set; }
+		[DataMember(Name = "insidePadding", Order = 3)]
+		public UiPaddingModel InsidePadding { get; set; }
 
-		[DataMember(Name = "rightPadding", Order = 4)]
-		public float RightPadding { get; set; }
-
-		[DataMember(Name = "sizeType", Order = 5)]
-		public int? SizeType { get; set; }
+		[DataMember(Name = "horizontalSizeType", Order = 4)]
+		public int? HorizontalSizeType { get; set; }
+		
+		[DataMember(Name = "verticalSizeType", Order = 5)]
+		public int? VerticalSizeType { get; set; }
 
 		[DataMember(Name = "fixedSized", Order = 6)]
 		public Vector2? FixedSized { get; set; }
 
-		[DataMember(Name = "elementHoverEventName", Order = 7)]
-		public string ElementHoverCursorName { get; set; }
+		[DataMember(Name = "hoverEventName", Order = 7)]
+		public string HoverCursorName { get; set; }
 
-		[DataMember(Name = "elementHoverEventName", Order = 8)]
-		public string ElementHoverEventName { get; set; }
+		[DataMember(Name = "hoverEventName", Order = 8)]
+		public string HoverEventName { get; set; }
 
-		[DataMember(Name = "elementPressEventName", Order = 9)]
-		public string ElementPressEventName { get; set; }
+		[DataMember(Name = "pressEventName", Order = 9)]
+		public string pressEventName { get; set; }
 
-		[DataMember(Name = "backgroundTexture", Order = 10)]
-		public ImageModel BackgroundTexture { get; set; }
+		[DataMember(Name = "texture", Order = 10)]
+		public ImageModel Texture { get; set; }
 	}
 }

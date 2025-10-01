@@ -20,24 +20,29 @@ namespace Common.UserInterface.Models.Elements
 		public string UiElementName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the left padding.
+		/// Gets the inside width.
 		/// </summary>
-		public float LeftPadding { get; set; }
+		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.Area.X + this.InsidePadding.RightPadding; }
 
 		/// <summary>
-		/// Gets or sets the right padding.
+		/// Gets the inside height.
 		/// </summary>
-		public float RightPadding { get; set; }
+		public float InsideHeight { get => this.InsidePadding.TopPadding + this.Area.Y + this.InsidePadding.BottomPadding; }
 
 		/// <summary>
-		/// Gets or sets the user interface element type.
+		/// Gets or sets the horizontal user interface size type.
 		/// </summary>
-		public UiElementTypes ElementType { get; set; }
+		public UiElementSizeTypes HorizontalSizeType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface size type.
+		/// Gets or sets the vertical user interface size type.
 		/// </summary>
-		public UiElementSizeTypes SizeType { get; set; }
+		public UiElementSizeTypes VerticalSizeType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the cached element offset.
+		/// </summary>
+		public Vector2? CachedElementOffset { get; set; }
 
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
@@ -48,6 +53,11 @@ namespace Common.UserInterface.Models.Elements
 		/// Gets or sets the area.
 		/// </summary>
 		public Vector2 Area { get; set; }
+
+		/// <summary>
+		/// Gets or sets the inside user interface padding. 
+		/// </summary>
+		public UiPadding InsidePadding { get; set; }
 
 		/// <summary>
 		/// Gets or sets the graphic text.
@@ -129,8 +139,8 @@ namespace Common.UserInterface.Models.Elements
 			var textMeasurements = this.GraphicText?.GetTextDimensions() ?? default;
 			var finalOffset = new Vector2
 			{
-				X = offset.X + (this.Area.X / 2) - (textMeasurements.X / 2) + this.LeftPadding,
-				Y = offset.Y + (this.Area.Y / 2) - (textMeasurements.Y / 2)
+				X = offset.X + (this.Area.X / 2) - (textMeasurements.X / 2) + this.InsidePadding.LeftPadding,
+				Y = offset.Y + (this.Area.Y / 2) - (textMeasurements.Y / 2) + this.InsidePadding.TopPadding
 			};
 			this.Graphic?.Draw(gameTime, gameServices, position, offset);
 			this.GraphicText?.Draw(gameTime, gameServices, position, finalOffset);
