@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace Engine.Physics.Models.Contracts
+﻿namespace Engine.Physics.Models.Contracts
 {
 	/// <summary>
 	/// Represents a sub area. 
@@ -10,6 +8,6 @@ namespace Engine.Physics.Models.Contracts
 		/// <summary>
 		/// Gets the area.
 		/// </summary>
-		public Vector2 Area { get; }
+		public SubArea Area { get; set; }
 	}
 }

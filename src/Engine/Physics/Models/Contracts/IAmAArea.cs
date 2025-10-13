@@ -20,7 +20,12 @@ namespace Engine.Physics.Models.Contracts
 		/// <summary>
 		/// The area to its dimensions.
 		/// </summary>
-		public Vector2 ToDimensions { get => new(this.Width, this.Height); }
+		public Vector2 ToVectorDimensions { get => new() { X = this.Width, Y = this.Height }; }
+
+		/// <summary>
+		/// The area to a sub area.
+		/// </summary>
+		public SubArea ToSubArea { get => new() { Width = this.Width, Height = this.Height }; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.

@@ -1,4 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
+using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
 
 namespace Common.Controls.CursorInteraction.Services.Contracts
@@ -16,7 +17,7 @@ namespace Common.Controls.CursorInteraction.Services.Contracts
 		/// <param name="hoverCursorName">The hover cursor name.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns>The hover configuration.</returns>
-		public HoverConfiguration<T> GetHoverConfiguration<T>(Vector2 area, string hoverCursorName, Vector2 offset = default);
+		public HoverConfiguration<T> GetHoverConfiguration<T>(SubArea area, string hoverCursorName, Vector2 offset = default);
 
 		/// <summary>
 		/// Gets the press configuration.
@@ -25,7 +26,7 @@ namespace Common.Controls.CursorInteraction.Services.Contracts
 		/// <param name="area">The area.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns>The press configuration.</returns>
-		public PressConfiguration<T> GetPressConfiguration<T>(Vector2 area, Vector2 offset = default);
+		public PressConfiguration<T> GetPressConfiguration<T>(SubArea area, Vector2 offset = default);
 
 		/// <summary>
 		/// Gets the click configuration.
@@ -34,6 +35,6 @@ namespace Common.Controls.CursorInteraction.Services.Contracts
 		/// <param name="area">The area.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns>The click configuration.</returns>
-		public ClickConfiguration<T> GetClickConfiguration<T>(Vector2 area, Vector2 offset = default);
+		public ClickConfiguration<T> GetClickConfiguration<T>(SubArea area, Vector2 offset = default);
 	}
 }

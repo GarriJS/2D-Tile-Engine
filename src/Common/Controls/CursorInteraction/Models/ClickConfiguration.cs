@@ -1,4 +1,5 @@
-﻿using Engine.Physics.Models.Contracts;
+﻿using Engine.Physics.Models;
+using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -13,7 +14,7 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Vector2 Area { get; set; }
+		public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets or sets the offset;

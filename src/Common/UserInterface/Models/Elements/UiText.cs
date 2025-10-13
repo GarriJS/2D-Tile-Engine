@@ -21,12 +21,12 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets the inside width.
 		/// </summary>
-		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.Area.X + this.InsidePadding.RightPadding; }
+		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.Area.Width + this.InsidePadding.RightPadding; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => this.InsidePadding.TopPadding + this.Area.Y + this.InsidePadding.BottomPadding; }
+		public float InsideHeight { get => this.InsidePadding.TopPadding + this.Area.Height + this.InsidePadding.BottomPadding; }
 
 		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
@@ -46,7 +46,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Vector2 Area { get; set; }
+		public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets or sets the inside user interface padding. 
@@ -109,8 +109,8 @@ namespace Common.UserInterface.Models.Elements
 			var textMeasurements = this.GraphicText?.GetTextDimensions() ?? default;
 			var finalOffset = new Vector2
 			{
-				X = offset.X + (this.Area.X / 2) - (textMeasurements.X / 2) + this.InsidePadding.LeftPadding,
-				Y = offset.Y + (this.Area.Y / 2) - (textMeasurements.Y / 2) + this.InsidePadding.TopPadding
+				X = offset.X + (this.Area.Width / 2) - (textMeasurements.X / 2) + this.InsidePadding.LeftPadding,
+				Y = offset.Y + (this.Area.Height / 2) - (textMeasurements.Y / 2) + this.InsidePadding.TopPadding
 			};
 			this.Graphic?.Draw(gameTime, gameServices, position, offset);
 			this.GraphicText?.Draw(gameTime, gameServices, position, finalOffset);

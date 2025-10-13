@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents a user interface padding.
 	/// </summary>
-	public struct UiPadding
+	public class UiPadding
 	{
 		/// <summary>
 		/// Gets or sets the top padding.

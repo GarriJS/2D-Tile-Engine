@@ -42,7 +42,19 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
-		public float InsideHeight { get => this.InsidePadding.TopPadding + this.SubElements.Max(e => e.InsideHeight) + this.InsidePadding.BottomPadding; }
+		public float InsideHeight 
+		{ 
+			get => this.InsidePadding.TopPadding + this.SubElements.Max(e => e.InsideHeight) + this.InsidePadding.BottomPadding; 
+			set {
+				var heightDifference = value - this.InsideHeight;
+				var area = new SubArea
+				{
+					Width = this.Area.Width,
+					Height = this.Area.Height - heightDifference
+				};
+				this.Area = area;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the inside user interface padding. 
@@ -67,7 +79,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Vector2 Area { get; set; }
+		public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets the image.
@@ -109,6 +121,11 @@ namespace Common.UserInterface.Models
 		{
 			this.Image?.Draw(gameTime, gameServices, position, new Vector2(offset.X, offset.Y + this.InsidePadding.TopPadding));
 
+			if (0 == this.SubElements.Count)
+			{
+				return;
+			}
+
 			if (true == this.SubElements.Any(e => false == e.CachedElementOffset.HasValue))
 			{ 
 				this.UpdateRowElementsOffset();
@@ -132,16 +149,27 @@ namespace Common.UserInterface.Models
 
 			var rowHorizontalJustificationOffset = this.HorizontalJustificationType switch
 			{
-				UiRowHorizontalJustificationTypes.Center => (this.Area.X - this.InsideWidth) / 2,
-				UiRowHorizontalJustificationTypes.Right => this.Area.X - this.InsideWidth,
+				UiRowHorizontalJustificationTypes.Center => (this.Area.Width - this.InsideWidth) / 2,
+				UiRowHorizontalJustificationTypes.Right => this.Area.Width - this.InsideWidth,
 				_ => 0
 			};
 			var rowVerticalJustificationOffset = this.VerticalJustificationType switch
 			{
-				UiRowVerticalJustificationTypes.Center => (this.Area.Y - this.InsideHeight) / 2,
-				UiRowVerticalJustificationTypes.Top => this.Area.Y - this.InsideHeight,
+				UiRowVerticalJustificationTypes.Center => (this.Area.Height - this.InsideHeight) / 2,
+				UiRowVerticalJustificationTypes.Top => this.Area.Height - this.InsideHeight,
 				_ => 0
 			};
+
+			if (0 > rowHorizontalJustificationOffset)
+			{
+				rowHorizontalJustificationOffset = 0;
+			}
+
+			if (0 > rowVerticalJustificationOffset)
+			{
+				rowVerticalJustificationOffset = 0;
+			}
+
 			var elementOffset = new Vector2
 			{
 				X = rowHorizontalJustificationOffset,

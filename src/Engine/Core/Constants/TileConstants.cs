@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Physics.Models;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Core.Constants
 {
@@ -15,10 +16,10 @@ namespace Engine.Core.Constants
 		/// <summary>
 		/// Gets the tile area.
 		/// </summary>
-		public static Vector2 TILE_AREA { get; } = new Vector2
+		public static SubArea TILE_AREA { get; } = new SubArea
 		{
-			X = TILE_SIZE,
-			Y = TILE_SIZE,
+			Width = TILE_SIZE,
+			Height = TILE_SIZE,
 		};
 	}
 }

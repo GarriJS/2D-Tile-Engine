@@ -178,7 +178,7 @@ namespace Common.UserInterface.Services
 				};
 			}
 
-			var height = uiZone.ElementRows.Sum(e => e.InsideHeight + e.BottomPadding + e.TopPadding);
+			var height = uiZone.ElementRows.Sum(e => e.InsideHeight);
 			var rowVerticalOffset = uiZone.JustificationType switch
 			{
 				UiZoneJustificationTypes.None => 0,
@@ -193,8 +193,8 @@ namespace Common.UserInterface.Services
 				var rowTop = 0f;
 				var rowBottom = 0f;
 
-				rowTop =  uiZone.Position.Y + rowVerticalOffset;
-				rowBottom = rowTop + elementRow.TopPadding + elementRow.InsideHeight + elementRow.BottomPadding;
+				rowTop = uiZone.Position.Y + rowVerticalOffset;
+				rowBottom = rowTop + elementRow.InsideHeight;
 
 				if ((rowTop > location.Y) ||
 					(rowBottom < location.Y))
@@ -209,7 +209,7 @@ namespace Common.UserInterface.Services
 					topHoverCursorConfiguration = elementRow.BaseHoverConfig;
 				}
 
-				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.TopPadding, location);
+				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.InsidePadding.TopPadding, location);
 
 				if (true == uiElementWithLocation.HasValue)
 				{
@@ -265,7 +265,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface element at the location if one is found.</returns>
 		private LocationExtender<IAmAUiElement>? GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
 		{
-			var width = uiRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
+			var width = uiRow.SubElements.Sum(e => e.InsideWidth);
 			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
 			{
 				UiRowHorizontalJustificationTypes.None => 0,
@@ -275,8 +275,9 @@ namespace Common.UserInterface.Services
 				_ => 0,
 			};
 
-			var largestHeight = uiRow.SubElements.OrderByDescending(e => e.Area.Y)
-												 .FirstOrDefault().Area.Y;
+			var largestHeight = uiRow.SubElements.Select(e => e.InsideHeight)
+												 .OrderDescending()
+												 .FirstOrDefault();
 
 			foreach (var element in uiRow.SubElements)
 			{
@@ -285,10 +286,10 @@ namespace Common.UserInterface.Services
 				switch (uiRow.VerticalJustificationType)
 				{
 					case UiRowVerticalJustificationTypes.Bottom:
-						verticallyCenterOffset = (largestHeight - element.Area.Y);
+						verticallyCenterOffset = (largestHeight - element.Area.Height);
 						break;
 					case UiRowVerticalJustificationTypes.Center:
-						verticallyCenterOffset = (largestHeight - element.Area.Y) / 2;
+						verticallyCenterOffset = (largestHeight - element.Area.Height) / 2;
 						break;
 					case UiRowVerticalJustificationTypes.None:
 					case UiRowVerticalJustificationTypes.Top:
@@ -305,11 +306,11 @@ namespace Common.UserInterface.Services
 					case UiRowHorizontalJustificationTypes.None:
 					case UiRowHorizontalJustificationTypes.Left:
 					default:
-						elementHorizontalOffset += element.LeftPadding;
+						elementHorizontalOffset += element.InsidePadding.LeftPadding;
 						elementLeft = elementHorizontalOffset + position.X;
-						elementHorizontalOffset += element.Area.X;
+						elementHorizontalOffset += element.Area.Width;
 						elementRight = elementHorizontalOffset + position.X;
-						elementHorizontalOffset += element.RightPadding;
+						elementHorizontalOffset += element.InsidePadding.RightPadding;
 						break;
 				}
 
@@ -317,7 +318,7 @@ namespace Common.UserInterface.Services
 					(elementRight >= location.X))
 				{
 					var elementTop = verticallyCenterOffset + heightOffset;
-					var elementBottom = elementTop + element.Area.Y;
+					var elementBottom = elementTop + element.Area.Height;
 
 					if ((elementTop <= location.Y) &&
 						(elementBottom >= location.Y))
@@ -401,11 +402,11 @@ namespace Common.UserInterface.Services
 				if ((true == uiZoneModel.ResizeTexture) ||
 					(background is FillImage))
 				{
-					background.SetDrawDimensions(uiScreenZone.Area.ToDimensions);
+					background.SetDrawDimensions(uiScreenZone.Area.ToVectorDimensions);
 				}
 			}
 
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToDimensions, uiZoneModel.ZoneHoverCursorName);
+			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToSubArea, uiZoneModel.ZoneHoverCursorName);
 			var uiZone = new UiZone
 			{
 				UiZoneName = uiZoneModel.UiZoneName,
@@ -445,13 +446,13 @@ namespace Common.UserInterface.Services
 
 			foreach (var elementRow in elementRowsFirstPass)
 			{
-				var rowRealWidth = elementRow.SubElements.Sum(e => e.Area.X + e.LeftPadding + e.RightPadding);
+				var rowRealWidth = elementRow.SubElements.Sum(e => e.InsideWidth);
 
 				if ((true == elementRow.Flex) &&
 					(currentTotalHeight < uiScreenZone.Area.Height) &&
 					(elementRow.InsideWidth < rowRealWidth))
 				{
-					var flexedElementRows = this.GetFlexedUiRows(elementRow);
+					var flexedElementRows = GetFlexedUiRows(elementRow);
 					var newHeight = (currentTotalHeight - elementRow.InsideHeight) + flexedElementRows.Sum(e => e.InsideHeight);
 
 					if (newHeight < uiScreenZone.Area.Height)
@@ -466,7 +467,7 @@ namespace Common.UserInterface.Services
 				elementRowsSecondPass.Add(elementRow);
 			}
 
-			var fillRows = elementRowsSecondPass.Where(e => true == e.SubElements.Any(s => s.Area.Y == 0))
+			var fillRows = elementRowsSecondPass.Where(e => true == e.SubElements.Any(s => s.Area.Height == 0))
 												.ToList();
 
 			if (0 < fillRows.Count)
@@ -479,7 +480,7 @@ namespace Common.UserInterface.Services
 				}
 
 				var fillElements = fillRows.SelectMany(e => e.SubElements)
-										   .Where(e => e.Area.Y == 0);
+										   .Where(e => e.Area.Height == 0);
 
 				foreach (var fillElement in fillElements)
 				{
@@ -488,8 +489,9 @@ namespace Common.UserInterface.Services
 
 				foreach (var fillRow in fillRows)
 				{
-					fillRow.Height = fillRow.SubElements.OrderByDescending(e => e.Area.Y)
-														.FirstOrDefault().Area.Y;
+					fillRow.InsideHeight = fillRow.SubElements.Select(e => e.InsideHeight)
+															  .OrderDescending()
+															  .FirstOrDefault();
 				}
 			}
 
@@ -522,12 +524,12 @@ namespace Common.UserInterface.Services
 
 			foreach (var elementModel in uiRowModel.SubElements)
 			{
-				var elementMinWidth = elementModel.LeftPadding + elementModel.RightPadding;
+				var elementMinWidth = elementModel.InsidePadding.LeftPadding + elementModel.InsidePadding.RightPadding;
 				var elementSize = uiElementService.GetElementDimensions(uiZone, elementModel);
 
-				if (true == elementSize.HasValue)
+				if (0 < elementSize.X)
 				{
-					elementMinWidth += elementSize.Value.X;
+					elementMinWidth += elementSize.X;
 				}
 				else
 				{
@@ -552,7 +554,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var height = subElements.Where(e => null != e)
-									.Select(e => e.Area.Y)
+									.Select(e => e.Area.Height)
 									.OrderDescending()
 									.FirstOrDefault();
 
@@ -568,27 +570,31 @@ namespace Common.UserInterface.Services
 					var dimensions = new Vector2
 					{
 						X = uiZone.Area.Width,
-						Y = height + uiRowModel.TopPadding + uiRowModel.BottomPadding
+						Y = height + uiRowModel.InsidePadding.TopPadding + uiRowModel.InsidePadding.BottomPadding
 					};
 					background.SetDrawDimensions(dimensions);
 				}
 			}
 
-			var rowArea = new Vector2
+			var rowArea = new SubArea
 			{
-				X = uiZone.Area.Width,
-				Y = height
+				Width = uiZone.Area.Width,
+				Height = height
 			};
 			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, uiRowModel.RowHoverCursorName);
+			var area = new SubArea
+			{
+				Width = uiZone.Area.Width,
+				Height = height,
+			};
+			var insidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.InsidePadding);
 
 			return new UiRow
 			{
 				UiRowName = uiRowModel.UiRowName,
 				Flex = true,
-				Width = uiZone.Area.Width,
-				Height = height,
-				TopPadding = uiRowModel.TopPadding,
-				BottomPadding = uiRowModel.BottomPadding,
+				Area = area,
+				InsidePadding = insidePadding,
 				HorizontalJustificationType = (UiRowHorizontalJustificationTypes)uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = (UiRowVerticalJustificationTypes)uiRowModel.VerticalJustificationType,
 				Image = background,
@@ -602,7 +608,7 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		/// <param name="uiRow">The user interface rows.</param>
 		/// <returns>The flexed user interface rows.</returns>
-		private IList<UiRow> GetFlexedUiRows(UiRow uiRow)
+		private static List<UiRow> GetFlexedUiRows(UiRow uiRow)
 		{
 			if (0 == uiRow.SubElements.Count)
 			{
@@ -615,9 +621,16 @@ namespace Common.UserInterface.Services
 			{
 				UiRowName = uiRow.UiRowName,
 				Flex = true,
-				Width = uiRow.InsideWidth,
-				TopPadding = uiRow.TopPadding,
-				BottomPadding = 1,
+				Area = new SubArea
+				{
+					Width = uiRow.InsideWidth,
+					Height = 0
+				},
+				InsidePadding = new UiPadding
+				{
+					TopPadding = uiRow.InsidePadding.TopPadding,
+					BottomPadding = 1
+				},
 				HorizontalJustificationType = uiRow.HorizontalJustificationType,
 				VerticalJustificationType = uiRow.VerticalJustificationType,
 				Image = uiRow.Image,
@@ -626,21 +639,30 @@ namespace Common.UserInterface.Services
 
 			foreach (var element in uiRow.SubElements)
 			{
-				var elementWidth = element.Area.X + element.LeftPadding + element.RightPadding;
+				var elementWidth = element.InsideWidth;
 
 				if (currentWidth + elementWidth > uiRow.InsideWidth)
 				{
-					currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
-															  .FirstOrDefault().Area.Y;
+					currentRow.InsideHeight = currentRow.SubElements.Select(e => e.Area.Height)
+																	.OrderDescending()
+																	.FirstOrDefault();
+					
 					currentWidth = 0;
 					flexedRows.Add(currentRow);
 					currentRow = new UiRow
 					{
 						UiRowName = uiRow.UiRowName,
 						Flex = true,
-						Width = uiRow.InsideWidth,
-						TopPadding = 1,
-						BottomPadding = 0,
+						Area = new SubArea
+						{
+							Width = uiRow.InsideWidth,
+							Height = 0
+						},
+						InsidePadding = new UiPadding
+						{
+							TopPadding = uiRow.InsidePadding.TopPadding,
+							BottomPadding = 1
+						},
 						HorizontalJustificationType = uiRow.HorizontalJustificationType,
 						VerticalJustificationType = uiRow.VerticalJustificationType,
 						Image = uiRow.Image,
@@ -652,12 +674,13 @@ namespace Common.UserInterface.Services
 				currentWidth += elementWidth;
 			}
 
-			currentRow.BottomPadding = uiRow.BottomPadding;
+			currentRow.InsidePadding.BottomPadding = uiRow.InsidePadding.BottomPadding;
 
 			if (0 < currentRow.SubElements.Count)
 			{
-				currentRow.Height = currentRow.SubElements.OrderByDescending(e => e.Area.Y)
-														  .FirstOrDefault().Area.Y;
+				currentRow.Area.Height = currentRow.SubElements.Select(e => e.Area.Height)
+															   .OrderDescending()
+														       .FirstOrDefault();
 
 				flexedRows.Add(currentRow);
 			}

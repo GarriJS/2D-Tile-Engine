@@ -3,6 +3,7 @@ using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Controls;
 using Common.DiskModels.UI;
 using Common.Tiling.Services.Contracts;
+using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -22,6 +23,7 @@ namespace Common.DiskModels
 		public static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var tileService = gameServices.GetService<ITileService>();
+			var uiElementService = gameServices.GetService<IUserInterfaceElementService>();
 			var uiService = gameServices.GetService<IUserInterfaceService>();
 			var cursorService = gameServices.GetService<ICursorService>();
 
@@ -31,6 +33,7 @@ namespace Common.DiskModels
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayer),
 				(typeof(TileMapModel), tileService.GetTileMap),
 				(typeof(TileModel), tileService.GetTile),
+				(typeof(UiPadding), uiElementService.GetUiPaddingFromModel),
 				(typeof(UiGroupModel), uiService.GetUiGroup),
 				(typeof(CursorModel), cursorService.GetCursor)
 			];

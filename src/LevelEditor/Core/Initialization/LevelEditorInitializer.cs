@@ -141,16 +141,20 @@ namespace LevelEditor.Core.Initialization
 									UiRowName = "Level Editor Label Row",
 									ResizeTexture = true,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,                                 
+									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
 									SubElements =
 									[
 										new UiTextModel
 										{
 											UiElementName = "Level Editor Label Element",
 											HoverCursorName = CommonCursorNames.BasicCursorName,
-											LeftPadding = 10,
-											RightPadding = 10,
-											SizeType = (int)UiElementSizeTypes.Fit,
+											InsidePadding = new UiPaddingModel
+											{
+												LeftPadding = 10,
+												RightPadding = 10,
+											},
+											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+											VerticalSizeType = (int)UiElementSizeTypes.Fit,
 											Text = new GraphicalTextModel
 											{
 												Text = "Level Editor",
@@ -178,7 +182,10 @@ namespace LevelEditor.Core.Initialization
 								new UiRowModel
 								{
 									UiRowName = "Create Level",
-									TopPadding = 10,
+									InsidePadding = new UiPaddingModel
+									{
+										TopPadding = 10,
+									},
 									ResizeTexture = true,
 									BackgroundTexture = new FillImageModel
 									{
@@ -193,20 +200,25 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Create Element Label",
-											LeftPadding = 10,
-											RightPadding = 5,
+											InsidePadding = new UiPaddingModel
+											{
+												LeftPadding = 10,
+												RightPadding = 5,
+											},
 											Text = new GraphicalTextModel
 											{
 												Text = "Create Level",
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											SizeType = (int)UiElementSizeTypes.Fit
+											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+											VerticalSizeType = (int)UiElementSizeTypes.Fit
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Create Element Button",
-											SizeType = (int)UiElementSizeTypes.Fit,
+											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+											VerticalSizeType = (int)UiElementSizeTypes.Fit,
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -248,20 +260,25 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Save Element Label",
-											LeftPadding = 10,
-											RightPadding = 5,
+											InsidePadding = new UiPaddingModel
+											{
+												LeftPadding = 10,
+												RightPadding = 5,
+											},
 											Text = new GraphicalTextModel
 											{
 												Text = "Save Level",
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											SizeType = (int)UiElementSizeTypes.Fit
+											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+											VerticalSizeType = (int)UiElementSizeTypes.Fit
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Save Element Button",
-											SizeType = (int)UiElementSizeTypes.Fit,
+											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+											VerticalSizeType = (int)UiElementSizeTypes.Fit,
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -324,7 +341,8 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											SizeType = (int)UiElementSizeTypes.Fit
+											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+											VerticalSizeType = (int)UiElementSizeTypes.Fit
 										}
 									]
 								}

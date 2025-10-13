@@ -126,9 +126,12 @@ namespace LevelEditor.Scenes.Services
 					new UiRowModel
 					{
 						UiRowName = "Toggle Tile Grid Row",
-						TopPadding = 10,
-						BottomPadding = 5,
-						RowHoverCursorName = CommonCursorNames.BasicCursorName,               
+						InsidePadding = new UiPaddingModel
+						{
+							TopPadding = 10,
+							BottomPadding = 5,
+						},
+						RowHoverCursorName = CommonCursorNames.BasicCursorName,
 						ResizeTexture = true,
 						BackgroundTexture = new FillImageModel
 						{
@@ -142,20 +145,28 @@ namespace LevelEditor.Scenes.Services
 							new UiTextModel
 							{
 								UiElementName = "Create Element Label",
-								RightPadding = 5,
+								InsidePadding = new UiPaddingModel
+								{
+									RightPadding = 5
+								},
 								Text = new GraphicalTextModel
 								{
 									Text = "Toggle Tile Grid",
 									TextColor = PalletColors.Hex_BF6F4A,
 									FontName = FontNames.MonoBold
 								},
-								SizeType = (int)UiElementSizeTypes.Fit
+								HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+								VerticalSizeType = (int)UiElementSizeTypes.Fit,
 							},
 							new UiButtonModel
 							{
 								UiElementName = "Toggle Tile Grid Button",
-								RightPadding = 10,
-								SizeType = (int)UiElementSizeTypes.Fit,
+								InsidePadding = new UiPaddingModel
+								{
+									RightPadding = 10
+								},
+								HorizontalSizeType = (int)UiElementSizeTypes.Fit,
+								VerticalSizeType = (int)UiElementSizeTypes.Fit,
 								ClickableAreaAnimation = new TriggeredAnimationModel
 								{
 									CurrentFrameIndex = 0,

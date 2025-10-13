@@ -49,7 +49,7 @@ namespace Common.Tiling.Models
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public Vector2 Area { get; set; }
+		public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.

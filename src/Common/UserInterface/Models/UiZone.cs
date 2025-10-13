@@ -7,7 +7,6 @@ using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -91,49 +90,26 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			var drawingService = gameServices.GetService<IDrawingService>();
-			var spritebatch = drawingService.SpriteBatch;
-
-			if (null != this.Image)
-			{
-				spritebatch.Draw(this.Image.Texture, this.Position.Coordinates, this.Image.TextureBox, Color.White);
-			}
+			this.Image?.Draw(gameTime, gameServices, this.Position);
 
 			if (0 == this.ElementRows.Count)
 			{
 				return;
 			}
 
-			var height = this.ElementRows.Sum(e => e.InsideHeight + e.BottomPadding + e.TopPadding);
-			var rowVerticalOffset = this.JustificationType switch
-			{
-				UiZoneJustificationTypes.None => 0,
-				UiZoneJustificationTypes.Center => (this.Area.Height - height) / 2,
-				UiZoneJustificationTypes.Top => 0,
-				UiZoneJustificationTypes.Bottom => this.Area.Height - height,
-				_ => 0,
-			};
-
-			if (0 > rowVerticalOffset)
-			{
-				rowVerticalOffset = 0;
+			if (true == this.ElementRows.Any(e => false == e.CachedElementOffset.HasValue))
+			{ 
+				this.UpdateZoneRowsOffset();
 			}
 
 			foreach (var elementRow in this.ElementRows)
 			{
-				rowVerticalOffset += elementRow.TopPadding;
-				var offset = new Vector2
-				{
-					X = 0,
-					Y = rowVerticalOffset
-				};
-				elementRow.Draw(gameTime, gameServices, this.Position, offset);
-				rowVerticalOffset += (elementRow.BottomPadding + elementRow.InsideHeight);
+				elementRow.Draw(gameTime, gameServices, this.Position, elementRow.CachedElementOffset.Value);
 			}
 		}
 
 		/// <summary>
-		/// Updates the zone rows offset.
+		/// Updates the zone rows rowOffset.
 		/// </summary>
 		private void UpdateZoneRowsOffset()
 		{
@@ -142,18 +118,37 @@ namespace Common.UserInterface.Models
 				return;
 			}
 
-			var rowHorizontalJustificationOffset = this.HorizontalJustificationType switch
+			var height = this.ElementRows.Sum(e => e.InsideHeight + e.InsidePadding.BottomPadding + e.InsidePadding.TopPadding);
+			var rowVerticalJustificationOffset = this.JustificationType switch
 			{
-				UiRowHorizontalJustificationTypes.Center => (this.Area.X - this.InsideWidth) / 2,
-				UiRowHorizontalJustificationTypes.Right => this.Area.X - this.InsideWidth,
-				_ => 0
+				UiZoneJustificationTypes.None => 0,
+				UiZoneJustificationTypes.Center => (this.Area.Height - height) / 2,
+				UiZoneJustificationTypes.Top => 0,
+				UiZoneJustificationTypes.Bottom => this.Area.Height - height,
+				_ => 0,
 			};
-			var rowVerticalJustificationOffset = this.VerticalJustificationType switch
+
+			if (0 > rowVerticalJustificationOffset)
 			{
-				UiRowVerticalJustificationTypes.Center => (this.Area.Y - this.InsideHeight) / 2,
-				UiRowVerticalJustificationTypes.Top => this.Area.Y - this.InsideHeight,
-				_ => 0
+				rowVerticalJustificationOffset = 0;
+			}
+
+			var rowOffset = new Vector2
+			{
+				X = 0,
+				Y = rowVerticalJustificationOffset
 			};
+
+			foreach (var elementRow in this.ElementRows)
+			{
+				if (UiZoneJustificationTypes.Center == this.JustificationType)
+				{ 
+					//will need to do something additional here?
+				}
+
+				elementRow.CachedElementOffset = rowOffset;
+				rowOffset.Y += elementRow.InsideHeight;
+			}
 		}
 
 		/// <summary>
