@@ -8,7 +8,7 @@
 		/// <summary>
 		/// The none type.
 		/// </summary>
-		None = 0,
+		Unknown = 0,
 		
 		/// <summary>
 		/// The first row and first col.

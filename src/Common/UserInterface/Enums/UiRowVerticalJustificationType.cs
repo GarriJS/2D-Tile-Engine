@@ -3,26 +3,21 @@
 	/// <summary>
 	/// Represents user interface row vertical justification types.
 	/// </summary>
-	public enum UiRowVerticalJustificationTypes
+	public enum UiRowVerticalJustificationType
 	{
-		/// <summary>
-		/// The none type.
-		/// </summary>
-		None = 0,
-
 		/// <summary>
 		/// The center type.
 		/// </summary>
-		Center = 1,
+		Center = 0,
 
 		/// <summary>
 		/// The left type.
 		/// </summary>
-		Top = 2,
+		Top = 1,
 
 		/// <summary>
 		/// The right reverse wrap type.
 		/// </summary>
-		Bottom = 3,
+		Bottom = 2,
 	}
 }

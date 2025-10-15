@@ -1,4 +1,5 @@
 ﻿using Common.DiskModels.UI.Contracts;
+using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
 using System.Runtime.Serialization;
 
@@ -17,10 +18,10 @@ namespace Common.DiskModels.UI
 		public UiPaddingModel InsidePadding { get; set; }
 
 		[DataMember(Name = "horizontalJustificationType", Order = 4)]
-		public int HorizontalJustificationType { get; set; }
+		public UiRowHorizontalJustificationType HorizontalJustificationType { get; set; }
 
 		[DataMember(Name = "verticalJustificationType", Order = 5)]
-		public int VerticalJustificationType { get; set; }
+		public UiRowVerticalJustificationType VerticalJustificationType { get; set; }
 
 		[DataMember(Name = "rowHoverCursorName", Order = 6)]
 		public string RowHoverCursorName { get; set; }

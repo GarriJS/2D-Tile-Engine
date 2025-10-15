@@ -10,9 +10,9 @@ namespace Common.Controls.CursorInteraction.Models.Contracts
 	public interface ICanBePressed<T> : IDisposable
     {
         /// <summary>
-        /// Gets the press configuration.
+        /// Gets or sets the press configuration.
         /// </summary>
-        public PressConfiguration<T> PressConfig { get; }
+        public PressConfiguration<T> PressConfig { get; set; }
 
         /// <summary>
         /// Raises the press event.

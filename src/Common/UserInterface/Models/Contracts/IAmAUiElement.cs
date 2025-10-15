@@ -1,7 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
 using Engine.Graphics.Models;
-using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -20,6 +19,16 @@ namespace Common.UserInterface.Models.Contracts
         public string UiElementName { get; set; }
 
 		/// <summary>
+		/// Gets the total width.
+		/// </summary>
+		public float TotalWidth { get; }
+
+		/// <summary>
+		/// Gets the total height.
+		/// </summary>
+		public float TotalHeight { get; }
+
+		/// <summary>
 		/// Gets the inside width.
 		/// </summary>
 		public float InsideWidth { get; }
@@ -32,17 +41,22 @@ namespace Common.UserInterface.Models.Contracts
 		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
 		/// </summary>
-		public UiElementSizeTypes HorizontalSizeType { get; set; }
+		public UiElementSizeType HorizontalSizeType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the vertical user interface size type.
 		/// </summary>
-		public UiElementSizeTypes  VerticalSizeType { get; set; }
+		public UiElementSizeType  VerticalSizeType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the cached element offset.
 		/// </summary>
 		public Vector2? CachedElementOffset { get; set; }
+
+		/// <summary>
+		/// Gets or sets the outside user interface padding.
+		/// </summary>
+		public UiPadding OutsidePadding { get; set; }
 
 		/// <summary>
 		/// Gets or sets the inside user interface padding. 

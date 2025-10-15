@@ -16,9 +16,9 @@ namespace Common.Controls.CursorInteraction.Models.Contracts
         new public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
 
         /// <summary>
-        /// Gets the hover configuration.
+        /// Gets or sets the hover configuration.
         /// </summary>
-        public HoverConfiguration<T> HoverConfig { get; }
+        public HoverConfiguration<T> HoverConfig { get; set; }
 
         /// <summary>
         /// Raises the hover event.

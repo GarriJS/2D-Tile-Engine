@@ -1,4 +1,5 @@
 ﻿using Common.DiskModels.UI.Contracts;
+using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
 using Microsoft.Xna.Framework;
 using System.Runtime.Serialization;
@@ -18,10 +19,10 @@ namespace Common.DiskModels.UI.Elements
 		public UiPaddingModel InsidePadding { get; set; }
 
 		[DataMember(Name = "horizontalSizeType", Order = 4)]
-		public int? HorizontalSizeType { get; set; }
+		public UiElementSizeType HorizontalSizeType { get; set; }
 
 		[DataMember(Name = "verticalSizeType", Order = 5)]
-		public int? VerticalSizeType { get; set; }
+		public UiElementSizeType VerticalSizeType { get; set; }
 
 		[DataMember(Name = "fixedSized", Order = 6)]
 		public Vector2? FixedSized { get; set; }
@@ -33,7 +34,7 @@ namespace Common.DiskModels.UI.Elements
 		public string HoverEventName { get; set; }
 
 		[DataMember(Name = "pressEventName", Order = 9)]
-		public string pressEventName { get; set; }
+		public string PressEventName { get; set; }
 
 		[DataMember(Name = "text", Order = 10)]
 		public GraphicalTextModel Text { get; set; }

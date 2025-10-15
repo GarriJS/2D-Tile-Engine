@@ -12,21 +12,6 @@ namespace Common.UserInterface.Services.Contracts
 	public interface IUserInterfaceElementService
 	{
 		/// <summary>
-		/// Gets the element dimensions.
-		/// </summary>
-		/// <param name="uiScreenZone">The user interface screen zone.</param>
-		/// <param name="elementModel">The user interface element model.</param>
-		/// <returns>The element dimensions.</returns>
-		public Vector2 GetElementDimensions(UiScreenZone uiScreenZone, IAmAUiElementModel elementModel);
-
-		/// <summary>
-		/// Updates the element height.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="height">The height.</param>
-		public void UpdateElementHeight(IAmAUiElement element, float height);
-
-		/// <summary>
 		/// Checks the user interface element for a click.
 		/// </summary>
 		/// <param name="element">The element.</param>
@@ -35,19 +20,24 @@ namespace Common.UserInterface.Services.Contracts
 		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation);
 
 		/// <summary>
-		/// Gets the user interface element.
-		/// </summary>
-		/// <param name="uiElementModel">The user interface element model.</param>
-		/// <param name="uiZone">The user interface zone.</param>
-		/// <param name="fillWidth">The fill width of the user interface element.</param>
-		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth);
-
-		/// <summary>
 		/// Gets the user interface padding from the model.
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <returns>The user interface padding model.</returns>
 		public UiPadding GetUiPaddingFromModel(UiPaddingModel model);
+
+		/// <summary>
+		/// Gets the user interface element.
+		/// </summary>
+		/// <param name="uiElementModel">The user interface element model.</param>
+		/// <returns>The user interface element.</returns>
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel);
+
+		/// <summary>
+		/// Updates the element height.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="height">The height.</param>
+		public void UpdateElementHeight(IAmAUiElement element, float height);
 	}
 }

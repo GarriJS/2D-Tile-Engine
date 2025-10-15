@@ -25,6 +25,11 @@ namespace Common.UserInterface.Models
 		public string UiZoneName { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
+		/// </summary>
+		public bool ResetCalculateCachedOffsets { get; set; }
+
+		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
 		public int DrawLayer { get; set; }
@@ -92,39 +97,27 @@ namespace Common.UserInterface.Models
 		{
 			this.Image?.Draw(gameTime, gameServices, this.Position);
 
-			if (0 == this.ElementRows.Count)
-			{
-				return;
-			}
-
-			if (true == this.ElementRows.Any(e => false == e.CachedElementOffset.HasValue))
+			if (true == this.ResetCalculateCachedOffsets)
 			{ 
-				this.UpdateZoneRowsOffset();
+				this.UpdateZoneOffsets();
 			}
 
-			foreach (var elementRow in this.ElementRows)
+			foreach (var elementRow in this.ElementRows ?? Enumerable.Empty<UiRow>())
 			{
-				elementRow.Draw(gameTime, gameServices, this.Position, elementRow.CachedElementOffset.Value);
+				elementRow.Draw(gameTime, gameServices, this.Position);
 			}
 		}
 
 		/// <summary>
-		/// Updates the zone rows rowOffset.
+		/// Updates the zone offsets.
 		/// </summary>
-		private void UpdateZoneRowsOffset()
+		public void UpdateZoneOffsets()
 		{
-			if (0 == this.ElementRows.Count)
-			{
-				return;
-			}
-
-			var height = this.ElementRows.Sum(e => e.InsideHeight + e.InsidePadding.BottomPadding + e.InsidePadding.TopPadding);
+			var contentHeight = this.ElementRows.Sum(e => e.TotalHeight);
 			var rowVerticalJustificationOffset = this.JustificationType switch
 			{
-				UiZoneJustificationTypes.None => 0,
-				UiZoneJustificationTypes.Center => (this.Area.Height - height) / 2,
-				UiZoneJustificationTypes.Top => 0,
-				UiZoneJustificationTypes.Bottom => this.Area.Height - height,
+				UiZoneJustificationTypes.Center => (this.Area.Height - contentHeight) / 2,
+				UiZoneJustificationTypes.Bottom => this.Area.Height - contentHeight,
 				_ => 0,
 			};
 
@@ -139,16 +132,14 @@ namespace Common.UserInterface.Models
 				Y = rowVerticalJustificationOffset
 			};
 
-			foreach (var elementRow in this.ElementRows)
+			foreach (var elementRow in this.ElementRows ?? [])
 			{
-				if (UiZoneJustificationTypes.Center == this.JustificationType)
-				{ 
-					//will need to do something additional here?
-				}
-
-				elementRow.CachedElementOffset = rowOffset;
-				rowOffset.Y += elementRow.InsideHeight;
+				elementRow.CachedRowOffset = rowOffset;
+				rowOffset.Y += elementRow.TotalHeight;
+				elementRow.UpdateRowOffsets();
 			}
+
+			this.ResetCalculateCachedOffsets = false;
 		}
 
 		/// <summary>
@@ -158,12 +149,7 @@ namespace Common.UserInterface.Models
 		{
 			this.HoverConfig?.Dispose();
 
-			if (0 == this.ElementRows.Count)
-			{
-				return;
-			}
-
-			foreach (var elementRow in this.ElementRows)
+			foreach (var elementRow in this.ElementRows ?? [])
 			{
 				elementRow?.Dispose();
 			}

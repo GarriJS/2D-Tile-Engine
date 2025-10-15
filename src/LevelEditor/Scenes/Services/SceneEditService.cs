@@ -138,8 +138,8 @@ namespace LevelEditor.Scenes.Services
 							TextureName = "pallet",
 							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 						},
-						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Right,
-						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+						HorizontalJustificationType =  UiRowHorizontalJustificationType.Right,
+						VerticalJustificationType = UiRowVerticalJustificationType.Center,
 						SubElements =
 						[
 							new UiTextModel
@@ -155,8 +155,8 @@ namespace LevelEditor.Scenes.Services
 									TextColor = PalletColors.Hex_BF6F4A,
 									FontName = FontNames.MonoBold
 								},
-								HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-								VerticalSizeType = (int)UiElementSizeTypes.Fit,
+								HorizontalSizeType = UiElementSizeType.FitContent,
+								VerticalSizeType = UiElementSizeType.FitContent,
 							},
 							new UiButtonModel
 							{
@@ -165,8 +165,8 @@ namespace LevelEditor.Scenes.Services
 								{
 									RightPadding = 10
 								},
-								HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-								VerticalSizeType = (int)UiElementSizeTypes.Fit,
+								HorizontalSizeType = UiElementSizeType.FitContent,
+								VerticalSizeType = UiElementSizeType.FitContent,
 								ClickableAreaAnimation = new TriggeredAnimationModel
 								{
 									CurrentFrameIndex = 0,

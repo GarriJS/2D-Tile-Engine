@@ -3,22 +3,22 @@
 	/// <summary>
 	/// Represents user interface element size types.
 	/// </summary>
-	public enum UiElementSizeTypes
+	public enum UiElementSizeType
 	{
 		/// <summary>
-		/// The none type.
+		/// The fit content type.
 		/// </summary>
-		//None = 0,
+		FitContent = 0,
 
 		/// <summary>
-		/// The fill type.
+		/// The flex type.
 		/// </summary>
-		Fill = 1,
+		Flex = 1,
 
 		/// <summary>
-		/// The fit type.
+		/// The fixed type.
 		/// </summary>
-		Fit = 2,
+		Fixed = 2,
 
 		/// <summary>
 		/// The extra small type.
@@ -43,11 +43,6 @@
 		/// <summary>
 		/// The extra large type.
 		/// </summary>
-		ExtraLarge = 7,
-
-		/// <summary>
-		/// The full type.
-		/// </summary>
-		Full = 8,
+		ExtraLarge = 7
 	}
 }

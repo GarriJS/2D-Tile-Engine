@@ -140,8 +140,8 @@ namespace LevelEditor.Core.Initialization
 								{
 									UiRowName = "Level Editor Label Row",
 									ResizeTexture = true,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Right,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									HorizontalJustificationType = UiRowHorizontalJustificationType.Right,
+									VerticalJustificationType = UiRowVerticalJustificationType.Center,
 									SubElements =
 									[
 										new UiTextModel
@@ -153,8 +153,8 @@ namespace LevelEditor.Core.Initialization
 												LeftPadding = 10,
 												RightPadding = 10,
 											},
-											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-											VerticalSizeType = (int)UiElementSizeTypes.Fit,
+											HorizontalSizeType = (int)UiElementSizeType.FitContent,
+											VerticalSizeType = (int)UiElementSizeType.FitContent,
 											Text = new GraphicalTextModel
 											{
 												Text = "Level Editor",
@@ -193,13 +193,13 @@ namespace LevelEditor.Core.Initialization
 										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									HorizontalJustificationType = (int)UiRowHorizontalJustificationType.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationType.Center,
 									SubElements =
 									[
 										new UiTextModel
 										{
-											UiElementName = "Create Element Label",
+											UiElementName = "Create Level Label",
 											InsidePadding = new UiPaddingModel
 											{
 												LeftPadding = 10,
@@ -211,14 +211,18 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-											VerticalSizeType = (int)UiElementSizeTypes.Fit
+											HorizontalSizeType = (int)UiElementSizeType.FitContent,
+											VerticalSizeType = (int)UiElementSizeType.FitContent
 										},
 										new UiButtonModel
 										{
-											UiElementName = "Create Element Button",
-											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-											VerticalSizeType = (int)UiElementSizeTypes.Fit,
+											UiElementName = "Create Level Button",
+											HorizontalSizeType = (int)UiElementSizeType.FitContent,
+											VerticalSizeType = (int)UiElementSizeType.FitContent,
+											InsidePadding = new UiPaddingModel
+											{ 
+												TopPadding = 10
+											},
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -271,14 +275,14 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-											VerticalSizeType = (int)UiElementSizeTypes.Fit
+											HorizontalSizeType = (int)UiElementSizeType.FitContent,
+											VerticalSizeType = (int)UiElementSizeType.FitContent
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Save Element Button",
-											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-											VerticalSizeType = (int)UiElementSizeTypes.Fit,
+											HorizontalSizeType = (int)UiElementSizeType.FitContent,
+											VerticalSizeType = (int)UiElementSizeType.FitContent,
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -328,8 +332,8 @@ namespace LevelEditor.Core.Initialization
 										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationTypes.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Center,
+									HorizontalJustificationType = (int)UiRowHorizontalJustificationType.Center,
+									VerticalJustificationType = (int)UiRowVerticalJustificationType.Center,
 									SubElements =
 									[
 										new UiTextModel
@@ -341,8 +345,8 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											HorizontalSizeType = (int)UiElementSizeTypes.Fit,
-											VerticalSizeType = (int)UiElementSizeTypes.Fit
+											HorizontalSizeType = (int)UiElementSizeType.FitContent,
+											VerticalSizeType = (int)UiElementSizeType.FitContent
 										}
 									]
 								}

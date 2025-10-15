@@ -1,6 +1,7 @@
-﻿using Common.UserInterface.Models;
-using Common.UserInterface.Enums;
+﻿using Common.UserInterface.Enums;
+using Common.UserInterface.Models;
 using Engine.Core.Contracts;
+using Engine.Physics.Models;
 using System.Collections.Generic;
 
 namespace Common.UserInterface.Services.Contracts
@@ -10,6 +11,11 @@ namespace Common.UserInterface.Services.Contracts
 	/// </summary>
 	public interface IUserInterfaceScreenZoneService : INeedInitialization
 	{
+		/// <summary>
+		/// Gets or sets the screen zone size.
+		/// </summary>
+		public SubArea ScreenZoneSize { get; set; }
+
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>

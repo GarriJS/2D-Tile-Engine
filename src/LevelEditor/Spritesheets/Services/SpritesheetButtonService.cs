@@ -161,8 +161,8 @@ namespace LevelEditor.Spritesheets.Services
 							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
-						HorizontalJustificationType =  (int)UiRowHorizontalJustificationTypes.Center,
-						VerticalJustificationType = (int)UiRowVerticalJustificationTypes.Bottom,
+						HorizontalJustificationType =  UiRowHorizontalJustificationType.Center,
+						VerticalJustificationType = UiRowVerticalJustificationType.Bottom,
 						SubElements = flattenedButtons
 					}
 				]

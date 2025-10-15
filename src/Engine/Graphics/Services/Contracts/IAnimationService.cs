@@ -19,9 +19,9 @@ namespace Engine.Graphics.Services.Contracts
 		/// Gets the fixed animation.
 		/// </summary>
 		/// <param name="animationModel">The animation model.</param>
-		/// <param name="frameSetWidth">The frame set width.</param>
-		/// <param name="frameSetHeight">The frame set height.</param>
+		/// <param name="frameWidth">The frame width.</param>
+		/// <param name="frameHeight">The frame height.</param>
 		/// <returns>The fixed animation.</returns>
-		public Animation GetFixedAnimationFromModel(AnimationModel animationModel, int frameSetWidth, int frameSetHeight);
+		public Animation GetFixedAnimationFromModel(AnimationModel animationModel, int frameWidth, int frameHeight);
 	}
 }

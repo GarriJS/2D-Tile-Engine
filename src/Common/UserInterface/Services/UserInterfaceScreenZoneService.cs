@@ -2,6 +2,7 @@
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.DiskModels.Physics;
+using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +20,11 @@ namespace Common.UserInterface.Services
 	public class UserInterfaceScreenZoneService(GameServiceContainer gameServices) : IUserInterfaceScreenZoneService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// Gets or sets the screen zone size.
+		/// </summary>
+		public SubArea ScreenZoneSize { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface zones.
@@ -60,15 +66,18 @@ namespace Common.UserInterface.Services
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var areaService = this._gameServices.GetService<IAreaService>();
 
-			var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
-			var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
-
-			for (int y = 0; y < screenHeight; y += screenHeight / 3)
+			this.ScreenZoneSize = new SubArea
 			{
-				for (int x = 0; x < screenWidth; x += screenWidth / 4)
+				Width = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth / 4,
+				Height = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight / 3
+			};
+
+			for (int y = 0; y < this.ScreenZoneSize.Height * 3; y += (int)this.ScreenZoneSize.Height)
+			{
+				for (int x = 0; x < this.ScreenZoneSize.Width * 4; x += (int)this.ScreenZoneSize.Width)
 				{
-					var row = y / (screenHeight / 3) + 1;
-					var col = x / (screenWidth / 4) + 1;
+					var row = (y / (int)this.ScreenZoneSize.Height) + 1;
+					var col = (x / (int)this.ScreenZoneSize.Width) + 1;
 
 					if ((false == this.ZoneTypeMapper.TryGetValue((row, col), out var zoneType)) ||
 						(true == this.UserInterfaceScreenZones.ContainsKey(zoneType)))
@@ -83,8 +92,8 @@ namespace Common.UserInterface.Services
 							X = x,
 							Y = y,
 						},
-						Width = screenWidth / 4,
-						Height = screenHeight / 3,
+						Width = this.ScreenZoneSize.Width,
+						Height = this.ScreenZoneSize.Height,
 					};
 
 					var area = areaService.GetAreaFromModel(areaModel);
@@ -105,18 +114,18 @@ namespace Common.UserInterface.Services
 					X = default,
 					Y = default,
 				},
-				Width = screenWidth / 4,
-				Height = screenHeight / 3,
+				Width = this.ScreenZoneSize.Width,
+				Height = this.ScreenZoneSize.Height,
 			};
 
 			var noneArea = areaService.GetAreaFromModel(noneAreaModel);
 			var noneZone = new UiScreenZone
 			{
-				UiZoneType = UiScreenZoneTypes.None,
+				UiZoneType = UiScreenZoneTypes.Unknown,
 				Area = noneArea
 			};
 
-			this.UserInterfaceScreenZones.TryAdd(UiScreenZoneTypes.None, noneZone);
+			this.UserInterfaceScreenZones.TryAdd(UiScreenZoneTypes.Unknown, noneZone);
 		}
 	}
 }

@@ -10,9 +10,9 @@ namespace Common.Controls.CursorInteraction.Models.Contracts
 	public interface ICanBeClicked<T> : IDisposable
     {
         /// <summary>
-        /// Gets the click configuration.
+        /// Gets or sets the click configuration.
         /// </summary>
-        public ClickConfiguration<T> ClickConfig { get; }
+        public ClickConfiguration<T> ClickConfig { get; set; }
 
         /// <summary>
         /// Raises the click event.

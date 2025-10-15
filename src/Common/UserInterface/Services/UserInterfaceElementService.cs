@@ -1,4 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.DiskModels.UI;
 using Common.DiskModels.UI.Contracts;
 using Common.DiskModels.UI.Elements;
@@ -11,6 +12,7 @@ using Common.UserInterface.Services.Contracts;
 using Engine.Core.Fonts.Contracts;
 using Engine.Core.Initialization.Contracts;
 using Engine.Graphics.Models;
+using Engine.Graphics.Services;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
@@ -30,135 +32,93 @@ namespace Common.UserInterface.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the element dimensions.
+		/// Gets the user interface insidePadding from the model.
 		/// </summary>
-		/// <param name="uiScreenZone">The user interface screen zone.</param>
-		/// <param name="elementModel">The user interface element model.</param>
-		/// <returns>The element dimensions.</returns>
-		public Vector2 GetElementDimensions(UiScreenZone uiScreenZone, IAmAUiElementModel elementModel)
+		/// <param name="model">The model.</param>
+		/// <returns>The user interface insidePadding model.</returns>
+		public UiPadding GetUiPaddingFromModel(UiPaddingModel model)
 		{
-			if (true == elementModel.FixedSized.HasValue)
+			return new UiPadding
 			{
-				return elementModel.FixedSized.Value;
-			}
-
-			if ((null == uiScreenZone?.Area) ||
-				(false == elementModel.VerticalSizeType.HasValue))
-			{
-				return default;
-			}
-
-			var uiElementHorizontalSizeType = Enum.IsDefined(typeof(UiElementSizeTypes), elementModel.HorizontalSizeType)
-									? (UiElementSizeTypes)elementModel.HorizontalSizeType
-									: UiElementSizeTypes.Fit;
-			var uiElementVerticalSizeType = Enum.IsDefined(typeof(UiElementSizeTypes), elementModel.VerticalSizeType)
-									? (UiElementSizeTypes)elementModel.VerticalSizeType
-									: UiElementSizeTypes.Fit;
-			Vector2 elementFitDimensions = default;
-			
-			if ((UiElementSizeTypes.Fit == uiElementHorizontalSizeType) ||
-				(UiElementSizeTypes.Fit == uiElementVerticalSizeType))
-			{
-				elementFitDimensions = this.GetElementFitDimensions(elementModel);
-			}
-
-			var uiElementHorizontalSize = uiElementHorizontalSizeType switch
-			{
-				UiElementSizeTypes.ExtraSmall => uiScreenZone.Area.Width * ElementSizesScalars.ExtraSmall.Y,
-				UiElementSizeTypes.Small => uiScreenZone.Area.Width * ElementSizesScalars.Small.Y,
-				UiElementSizeTypes.Medium => uiScreenZone.Area.Width * ElementSizesScalars.Medium.Y,
-				UiElementSizeTypes.Large => uiScreenZone.Area.Width * ElementSizesScalars.Large.Y,
-				UiElementSizeTypes.ExtraLarge => uiScreenZone.Area.Width * ElementSizesScalars.ExtraLarge.Y,
-				UiElementSizeTypes.Full => uiScreenZone.Area.Width,
-				UiElementSizeTypes.Fit => elementFitDimensions.X,
-				_ => 0
-			};
-			var uiElementVerticalSize = uiElementVerticalSizeType switch
-			{
-				UiElementSizeTypes.ExtraSmall => uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y,
-				UiElementSizeTypes.Small => uiScreenZone.Area.Height * ElementSizesScalars.Small.Y,
-				UiElementSizeTypes.Medium => uiScreenZone.Area.Height * ElementSizesScalars.Medium.Y,
-				UiElementSizeTypes.Large => uiScreenZone.Area.Height * ElementSizesScalars.Large.Y,
-				UiElementSizeTypes.ExtraLarge => uiScreenZone.Area.Height * ElementSizesScalars.ExtraLarge.Y,
-				UiElementSizeTypes.Full => uiScreenZone.Area.Height,
-				UiElementSizeTypes.Fit => elementFitDimensions.Y,
-				_ => 0
-			};
-
-			return new Vector2
-			{
-				X = uiElementHorizontalSize,
-				Y = uiElementVerticalSize
+				TopPadding = model.TopPadding,
+				BottomPadding = model.BottomPadding,
+				LeftPadding = model.LeftPadding,
+				RightPadding = model.RightPadding,
 			};
 		}
 
 		/// <summary>
-		/// Gets the element fit dimensions.
+		/// Gets the user interface element.
 		/// </summary>
-		/// <param name="elementModel">The element model.</param>
-		/// <returns>The element fit dimensions.</returns>
-		private Vector2 GetElementFitDimensions(IAmAUiElementModel elementModel)
+		/// <param name="uiElementModel">The user interface element model.</param>
+		/// <returns>The user interface element.</returns>
+		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel)
 		{
-			Vector2? textDimensions = null;
+			var imageService = this._gameServices.GetService<IImageService>();
+			var functionService = this._gameServices.GetService<IFunctionService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 
-			if (elementModel is IAmAUiElementWithTextModel elementTextModel)
+			var area = this.GetElementArea(uiElementModel);
+			Image background = null;
+
+			if (null != uiElementModel.Texture)
 			{
-				var fontService = this._gameServices.GetService<IFontService>();
+				background = imageService.GetImageFromModel(uiElementModel.Texture);
 
-				if (false == string.IsNullOrEmpty(elementTextModel.Text?.FontName))
+				if ((true == uiElementModel.ResizeTexture) ||
+					(background is FillImage))
 				{
-					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
-					textDimensions = font.MeasureString(elementTextModel.Text.Text);
+					var textureWidth = area.Width + uiElementModel.InsidePadding.LeftPadding + uiElementModel.InsidePadding.RightPadding;
+					var dimensions = new Vector2
+					{
+						X = textureWidth,
+						Y = area.Height
+					};
+					background.SetDrawDimensions(dimensions);
 				}
 			}
 
-			switch (elementModel)
+			IAmAUiElement uiElement = uiElementModel switch
 			{
-				case UiButtonModel uiButton:
+				UiTextModel textModel => new UiText { },
+				UiButtonModel buttonModel => this.GetUiButton(buttonModel, area),
+				_ => null,
+			};
 
-					if ((false == textDimensions.HasValue) &&
-						(null == uiButton.ClickableAreaAnimation))
-					{
-						break;
-					}
+			if (null == uiElement)
+			{
+				// LOGGING
 
-					var restingFrame = uiButton.ClickableAreaAnimation?.Frames[uiButton.ClickableAreaAnimation.RestingFrameIndex];
-					int width = 0;
-					int height = 0;
-
-					if (null != restingFrame)
-					{
-						width = restingFrame.TextureBox.Width;
-						height = restingFrame.TextureBox.Height;
-					}
-
-					if (true == textDimensions.HasValue)
-					{
-						width = (int)Math.Max(textDimensions.Value.X, width);
-						height = (int)Math.Max(textDimensions.Value.Y, height);
-					}
-
-					return new Vector2
-					{
-						X = width,
-						Y = height
-					};
-
-				case UiTextModel uiText:
-
-					if (true == textDimensions.HasValue)
-					{
-						return textDimensions.Value;
-					}
-
-					break;
+				return null;
 			}
 
-			return new Vector2
+			uiElement.InsidePadding = this.GetUiPaddingFromModel(uiElementModel.InsidePadding);
+			uiElement.OutsidePadding = new();
+			uiElement.Area = area;
+			uiElement.HorizontalSizeType = uiElementModel.HorizontalSizeType;
+			uiElement.VerticalSizeType = uiElementModel.VerticalSizeType;
+			uiElement.Graphic = background;
+			uiElement.PressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
+			uiElement.PressConfig.AddSubscription(this.CheckForUiElementClick);
+
+			if ((uiElement is IAmAUiElementWithText uiElementWithText) &&
+				(uiElementModel is IAmAUiElementWithTextModel uiElementWithTextModel))
 			{
-				X = -1,
-				Y = -1
-			};
+				uiElementWithText.GraphicText = graphicTextService.GetGraphicTextFromModel(uiElementWithTextModel.Text);
+			}
+
+			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.HoverCursorName, out var hoverAction))
+			{
+				uiElement.HoverConfig?.AddSubscription(hoverAction);
+			}
+
+			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.PressEventName, out var pressAction))
+			{
+				uiElement.PressConfig?.AddSubscription(pressAction);
+			}
+
+			return uiElement;
 		}
 
 		/// <summary>
@@ -211,6 +171,146 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
+		/// Gets the element area.
+		/// </summary>
+		/// <param name="elementModel">The user interface element model.</param>
+		/// <returns>The element area.</returns>
+		private SubArea GetElementArea(IAmAUiElementModel elementModel)
+		{
+			var uiScreenZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
+
+			if (true == elementModel.FixedSized.HasValue)
+			{
+				var fixedSize = elementModel.FixedSized.Value;
+
+				if (0 > fixedSize.X)
+				{ 
+					fixedSize.X = 0;
+				}
+
+				if (0 > fixedSize.Y)
+				{
+					fixedSize.Y = 0;
+				}
+
+				return new SubArea
+				{ 
+					Width = fixedSize.X,
+					Height = fixedSize.Y,
+				};
+			}
+
+			if (null == uiScreenZoneService?.ScreenZoneSize)
+			{
+				return default;
+			}
+
+			Vector2 elementFitDimensions = default;
+
+			if ((UiElementSizeType.FitContent == elementModel.HorizontalSizeType) ||
+				(UiElementSizeType.FitContent == elementModel.VerticalSizeType))
+			{
+				elementFitDimensions = this.GetElementFitDimensions(elementModel);
+			}
+
+			var uiElementHorizontalSize = elementModel.HorizontalSizeType switch
+			{
+				UiElementSizeType.ExtraSmall => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.ExtraSmall.X,
+				UiElementSizeType.Small => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Small.X,
+				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Medium.X,
+				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Large.X,
+				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.ExtraLarge.X,
+				UiElementSizeType.FitContent => elementFitDimensions.X,
+				_ => 0
+			};
+			var uiElementVerticalSize = elementModel.VerticalSizeType switch
+			{
+				UiElementSizeType.ExtraSmall => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y,
+				UiElementSizeType.Small => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Small.Y,
+				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Medium.Y,
+				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Large.Y,
+				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.ExtraLarge.Y,
+				UiElementSizeType.FitContent => elementFitDimensions.Y,
+				_ => 0
+			};
+
+			return new SubArea
+			{
+				Width = uiElementHorizontalSize,
+				Height = uiElementVerticalSize
+			};
+		}
+
+		/// <summary>
+		/// Gets the element fit dimensions.
+		/// </summary>
+		/// <param name="elementModel">The element model.</param>
+		/// <returns>The element fit dimensions.</returns>
+		private Vector2 GetElementFitDimensions(IAmAUiElementModel elementModel)
+		{
+			Vector2? textDimensions = null;
+
+			if (elementModel is IAmAUiElementWithTextModel elementTextModel)
+			{
+				var fontService = this._gameServices.GetService<IFontService>();
+
+				if (false == string.IsNullOrEmpty(elementTextModel.Text?.FontName))
+				{
+					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
+					textDimensions = font.MeasureString(elementTextModel.Text.Text);
+				}
+			}
+
+			switch (elementModel)
+			{
+				case UiButtonModel uiButton:
+
+					if ((false == textDimensions.HasValue) &&
+						(null == uiButton.ClickableAreaAnimation))
+					{
+						break;
+					}
+
+					var restingFrame = uiButton.ClickableAreaAnimation?.Frames[uiButton.ClickableAreaAnimation.RestingFrameIndex];
+					var width = 0;
+					var height = 0;
+
+					if (null != restingFrame)
+					{
+						width = restingFrame.TextureBox.Width;
+						height = restingFrame.TextureBox.Height;
+					}
+
+					if (true == textDimensions.HasValue)
+					{
+						width = (int)Math.Max(textDimensions.Value.X, width);
+						height = (int)Math.Max(textDimensions.Value.Y, height);
+					}
+
+					return new Vector2
+					{
+						X = width,
+						Y = height
+					};
+
+				case UiTextModel uiText:
+
+					if (true == textDimensions.HasValue)
+					{
+						return textDimensions.Value;
+					}
+
+					break;
+			}
+
+			return new Vector2
+			{
+				X = -1,
+				Y = -1
+			};
+		}
+
+		/// <summary>
 		/// Checks the user interface element for a click.
 		/// </summary>
 		/// <param name="element">The element.</param>
@@ -243,122 +343,6 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface element.
-		/// </summary>
-		/// <param name="uiElementModel">The user interface element model.</param>
-		/// <param name="uiZone">The user interface zone.</param>
-		/// <param name="fillWidth">The fill width of the user interface element.</param>
-		/// <returns>The user interface element.</returns>
-		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel, UiScreenZone uiZone, float fillWidth)
-		{
-			var imageService = this._gameServices.GetService<IImageService>();
-			var functionService = this._gameServices.GetService<IFunctionService>();
-			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-
-			var elementSize = this.GetElementDimensions(uiZone, uiElementModel);
-			var width = elementSize.X > 0
-				? elementSize.X
-				: fillWidth;
-			var height = elementSize.Y > 0
-				? elementSize.Y
-				: 0;
-
-			Image background = null;
-
-			if (null != uiElementModel.Texture)
-			{
-				background = imageService.GetImageFromModel(uiElementModel.Texture);
-
-				if ((true == uiElementModel.ResizeTexture) ||
-					(background is FillImage))
-				{
-					var textureWidth = width + uiElementModel.InsidePadding.LeftPadding + uiElementModel.InsidePadding.RightPadding;
-					var dimensions = new Vector2(textureWidth, height);
-					background.SetDrawDimensions(dimensions);
-				}
-			}
-
-			var area = new SubArea
-			{
-				Width = width,
-				Height = height
-			};
-			IAmAUiElement uiElement = uiElementModel switch
-			{
-				UiTextModel textModel => this.GetUiText(textModel, area),
-				UiButtonModel buttonModel => this.GetUiButton(buttonModel, area),
-				_ => null,
-			};
-
-			if (null != uiElement)
-			{
-				uiElement.Graphic = background;
-				uiElement.PressConfig?.AddSubscription(this.CheckForUiElementClick);
-
-				// LOGGING
-				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.HoverCursorName, out var hoverAction))
-				{
-					uiElement.HoverConfig?.AddSubscription(hoverAction);
-				}
-
-				// LOGGING
-				if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.pressEventName, out var pressAction))
-				{
-					uiElement.PressConfig?.AddSubscription(pressAction);
-				}
-			}
-
-			return uiElement;
-		}
-
-		/// <summary>
-		/// Gets the user interface insidePadding from the model.
-		/// </summary>
-		/// <param name="model">The model.</param>
-		/// <returns>The user interface insidePadding model.</returns>
-		public UiPadding GetUiPaddingFromModel(UiPaddingModel model)
-		{
-			return new UiPadding
-			{
-				TopPadding = model.TopPadding,
-				BottomPadding = model.BottomPadding,
-				LeftPadding = model.LeftPadding,
-				RightPadding = model.RightPadding,
-			};
-		}
-
-		/// <summary>
-		/// Gets the user interface text.
-		/// </summary>
-		/// <param name="textModel">The text model.</param>
-		/// <param name="area">The area.</param>
-		/// <returns>The user interface text.</returns>
-		private UiText GetUiText(UiTextModel textModel, SubArea area)
-		{
-			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
-			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-
-			var graphicText = graphicTextService.GetGraphicTextFromModel(textModel.Text);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, textModel.HoverCursorName);
-			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
-			var insidePadding = this.GetUiPaddingFromModel(textModel.InsidePadding);
-
-			return new UiText
-			{
-				UiElementName = textModel.UiElementName,
-				GraphicText = graphicText,
-				InsidePadding = insidePadding,
-				Area = new SubArea
-				{ 
-					Width = area.Width,
-					Height = area.Height					
-				},
-				HoverConfig = hoverConfig,
-				PressConfig = pressConfig
-			};
-		}
-
-		/// <summary>
 		/// Gets the user interface button.
 		/// </summary>
 		/// <param name="buttonModel">The user interface button model.</param>
@@ -382,23 +366,12 @@ namespace Common.UserInterface.Services
 				X = (area.Width - clickableArea.Width) / 2,
 				Y = (area.Height - clickableArea.Height) / 2
 			};
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<IAmAUiElement>(area, buttonModel.HoverCursorName);
-			var pressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
-			var insidePadding = this.GetUiPaddingFromModel(buttonModel.InsidePadding);
 			var button = new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
 				GraphicText = graphicText,
-				InsidePadding = insidePadding,
-				Area = new SubArea
-				{
-					Width = area.Width,
-					Height = area.Height
-				},
 				ClickableAreaScaler = buttonModel.ClickableAreaScaler,
-				HoverConfig = hoverConfig,
-				PressConfig = pressConfig,
 				ClickConfig = clickConfig
 			};
 

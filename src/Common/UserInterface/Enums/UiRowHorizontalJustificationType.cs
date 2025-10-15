@@ -3,26 +3,21 @@
 	/// <summary>
 	/// Represents user interface row horizontal justification types.
 	/// </summary>
-	public enum UiRowHorizontalJustificationTypes
+	public enum UiRowHorizontalJustificationType
 	{
-		/// <summary>
-		/// The none type.
-		/// </summary>
-		None = 0,
-
 		/// <summary>
 		/// The center type.
 		/// </summary>
-		Center = 1,
+		Center = 0,
 
 		/// <summary>
 		/// The left type.
 		/// </summary>
-		Left = 2,
+		Left = 1,
 
 		/// <summary>
 		/// The right type.
 		/// </summary>
-		Right = 3
+		Right = 2
 	}
 }

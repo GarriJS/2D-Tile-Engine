@@ -6,23 +6,18 @@
 	public enum UiZoneJustificationTypes
 	{
 		/// <summary>
-		/// The none type.
-		/// </summary>
-		None = 0,
-
-		/// <summary>
 		/// The center type.
 		/// </summary>
-		Center = 1,
+		Center = 0,
 
 		/// <summary>
 		/// The top type.
 		/// </summary>
-		Top = 2,
+		Top = 1,
 
 		/// <summary>
 		/// The bottom type.
 		/// </summary>
-		Bottom = 3,
+		Bottom = 2,
 	}
 }

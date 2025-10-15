@@ -20,9 +20,9 @@ namespace Common.UserInterface.Models
 	public class UiRow : IAmSubDrawable, IHaveASubArea, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
-		/// Gets or sets the cached element offset.
+		/// Gets or sets the cached element totalOffset.
 		/// </summary>
-		private Vector2? CachedRowOffset { get; set; }
+		public Vector2? CachedRowOffset { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface row name.
@@ -35,26 +35,29 @@ namespace Common.UserInterface.Models
 		public bool Flex { get; set; }
 
 		/// <summary>
-		/// Get the width.
+		/// Gets the total width.
 		/// </summary>
-		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.SubElements.Sum(e => e.InsideWidth) + this.InsidePadding.RightPadding; }
+		public float TotalWidth { get => this.OutsidePadding.LeftPadding + this.InsideWidth + this.OutsidePadding.RightPadding; }
 
 		/// <summary>
-		/// Gets the height.
+		/// Gets the total height.
 		/// </summary>
-		public float InsideHeight 
-		{ 
-			get => this.InsidePadding.TopPadding + this.SubElements.Max(e => e.InsideHeight) + this.InsidePadding.BottomPadding; 
-			set {
-				var heightDifference = value - this.InsideHeight;
-				var area = new SubArea
-				{
-					Width = this.Area.Width,
-					Height = this.Area.Height - heightDifference
-				};
-				this.Area = area;
-			}
-		}
+		public float TotalHeight { get => this.OutsidePadding.TopPadding + this.InsideHeight + this.OutsidePadding.BottomPadding; }
+
+		/// <summary>
+		/// Get the inside width.
+		/// </summary>
+		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.Area.Width + this.InsidePadding.RightPadding; }
+
+		/// <summary>
+		/// Gets the inside height.
+		/// </summary>
+		public float InsideHeight { get => this.InsidePadding.TopPadding + this.Area.Height + this.InsidePadding.BottomPadding; }
+
+		/// <summary>
+		/// Gets or sets the outside user interface padding.
+		/// </summary>
+		public UiPadding OutsidePadding { get; set; }
 
 		/// <summary>
 		/// Gets or sets the inside user interface padding. 
@@ -64,17 +67,12 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface row horizontal justification type. 
 		/// </summary>
-		public UiRowHorizontalJustificationTypes HorizontalJustificationType { get; set; }
+		public UiRowHorizontalJustificationType HorizontalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface row vertical justification type.
 		/// </summary>
-		public UiRowVerticalJustificationTypes VerticalJustificationType { get; set; }
-
-		/// <summary>
-		/// Gets or sets the cached element offset.
-		/// </summary>
-		public Vector2? CachedElementOffset { get; set; }
+		public UiRowVerticalJustificationType VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.
@@ -114,77 +112,65 @@ namespace Common.UserInterface.Models
 		/// Draws the sub drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="position">The position.</param>
 		/// <param name="gameServices">The game services.</param>
+		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			this.Image?.Draw(gameTime, gameServices, position, new Vector2(offset.X, offset.Y + this.InsidePadding.TopPadding));
-
-			if (0 == this.SubElements.Count)
-			{
-				return;
-			}
-
-			if (true == this.SubElements.Any(e => false == e.CachedElementOffset.HasValue))
+			var totalOffset = offset + (this.CachedRowOffset ?? default) + new Vector2
 			{ 
-				this.UpdateRowElementsOffset();
-			}
+				X = this.InsidePadding.LeftPadding,
+				Y = this.InsidePadding.TopPadding,
+			};
+			this.Image?.Draw(gameTime, gameServices, position, totalOffset);
 
-			foreach (var element in this.SubElements)
+			foreach (var element in this.SubElements ?? [])
 			{
-				element.Draw(gameTime, gameServices, position, offset + element.CachedElementOffset.Value);
+				element.Draw(gameTime, gameServices, position, totalOffset + (element.CachedElementOffset ?? default));
 			}
 		}
 
 		/// <summary>
-		/// Updates the rows elements offset.
+		/// Updates the rows offsets.
 		/// </summary>
-		private void UpdateRowElementsOffset()
+		public void UpdateRowOffsets()
 		{
-			if (0 == this.SubElements.Count)
-			{
-				return;
-			}
-
+			var contentWidth = this.SubElements.Sum(e => e.TotalWidth);
 			var rowHorizontalJustificationOffset = this.HorizontalJustificationType switch
 			{
-				UiRowHorizontalJustificationTypes.Center => (this.Area.Width - this.InsideWidth) / 2,
-				UiRowHorizontalJustificationTypes.Right => this.Area.Width - this.InsideWidth,
-				_ => 0
-			};
-			var rowVerticalJustificationOffset = this.VerticalJustificationType switch
-			{
-				UiRowVerticalJustificationTypes.Center => (this.Area.Height - this.InsideHeight) / 2,
-				UiRowVerticalJustificationTypes.Top => this.Area.Height - this.InsideHeight,
+				UiRowHorizontalJustificationType.Center => (this.Area.Width - contentWidth) / 2,
+				UiRowHorizontalJustificationType.Right => this.Area.Width - contentWidth,
 				_ => 0
 			};
 
 			if (0 > rowHorizontalJustificationOffset)
 			{
-				rowHorizontalJustificationOffset = 0;
-			}
-
-			if (0 > rowVerticalJustificationOffset)
-			{
-				rowVerticalJustificationOffset = 0;
+				rowHorizontalJustificationOffset = default;
 			}
 
 			var elementOffset = new Vector2
 			{
 				X = rowHorizontalJustificationOffset,
-				Y = rowVerticalJustificationOffset
+				Y = 0
 			};
 
-			foreach (var element in this.SubElements)
+			foreach (var element in this.SubElements ?? [])
 			{
-				if (UiRowVerticalJustificationTypes.Center == this.VerticalJustificationType)
-				{ 
-					//will need to do something additional here
+				var rowVerticalJustificationOffset = this.VerticalJustificationType switch
+				{
+					UiRowVerticalJustificationType.Center => (this.Area.Height - element.TotalHeight) / 2,
+					UiRowVerticalJustificationType.Bottom => this.Area.Height - element.TotalHeight,
+					_ => 0
+				};
+
+				if (0 > rowVerticalJustificationOffset)
+				{
+					rowVerticalJustificationOffset = 0;
 				}
 
+				elementOffset.Y = rowVerticalJustificationOffset;
 				element.CachedElementOffset = elementOffset;
-				elementOffset.X += element.InsideWidth;
+				elementOffset.X += element.TotalWidth;
 			}
 		}
 
@@ -193,12 +179,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			if (0 == this.SubElements.Count)
-			{
-				return;
-			}
-
-			foreach (var subElement in this.SubElements)
+			foreach (var subElement in this.SubElements ?? Enumerable.Empty<IAmAUiElement>())
 			{
 				subElement?.Dispose();
 			}

@@ -56,13 +56,15 @@ namespace Engine.Core.Initialization
 			functionName ??= string.Empty;
 			var found = this.Functions.TryGetValue(functionName, out var function);
 
-			if (true == found &&
-				function is T)
+			if ((true == found) &&
+				(function is T))
 			{
 				typedFunction = function as T;
 
 				return true;	
 			}
+
+			// LOGGING
 
 			typedFunction = null;
 
