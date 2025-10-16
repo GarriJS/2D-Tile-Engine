@@ -505,10 +505,9 @@ namespace Common.UserInterface.Services
 				dynamicWidthElement.Area.Width = dynamicWidth;
 			}
 
-			var finalWidth = subElements.Sum(e => e.TotalWidth);
 			var rowArea = new SubArea
 			{
-				Width = finalWidth,
+				Width = zoneArea.Width,
 				Height = contentHeight
 			};
 			Image background = null;
