@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Engine.Core.Files.Contracts
+namespace Engine.Core.Files.Services.Contracts
 {
 	/// <summary>
 	/// Represents a JSON service.
