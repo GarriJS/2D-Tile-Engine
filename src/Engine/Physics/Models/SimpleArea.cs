@@ -1,4 +1,6 @@
-﻿using Engine.Physics.Models.Contracts;
+﻿using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Physics;
+using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models
@@ -6,7 +8,7 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a simple area.
 	/// </summary>
-	public class SimpleArea : IAmAArea
+	public class SimpleArea : IAmAArea, ICanBeSerialized<SimpleAreaModel>
 	{
 		/// <summary>
 		/// Get or sets the width.
@@ -30,10 +32,28 @@ namespace Engine.Physics.Models
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
 		public bool Contains(Vector2 coordinate)
 		{ 
-			return this.Position.X <= coordinate.X &&
-				   this.Position.X + this.Width >= coordinate.X &&
-				   this.Position.Y <= coordinate.Y &&
-				   this.Position.Y + this.Height >= coordinate.Y;
+			var result = this.Position.X <= coordinate.X &&
+						 this.Position.X + this.Width >= coordinate.X &&
+						 this.Position.Y <= coordinate.Y &&
+						 this.Position.Y + this.Height >= coordinate.Y;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		public SimpleAreaModel ToModel()
+		{ 
+			var positionModel = this.Position.ToModel();
+
+			return new SimpleAreaModel
+			{
+				Width = this.Width,
+				Height = this.Height,
+				Position = positionModel
+			};
 		}
 	}
 }

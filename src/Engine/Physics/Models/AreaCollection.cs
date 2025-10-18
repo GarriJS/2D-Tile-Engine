@@ -1,4 +1,6 @@
-﻿using Engine.Physics.Models.Contracts;
+﻿using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Physics;
+using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models
@@ -6,7 +8,7 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a area collection
 	/// </summary>
-	public class AreaCollection(float width, float height) : IAmAArea
+	public class AreaCollection(float width, float height) : IAmAArea, ICanBeSerialized<AreaCollectionModel>
 	{
 		/// <summary>
 		/// Gets the width.
@@ -26,7 +28,7 @@ namespace Engine.Physics.Models
 		/// <summary>
 		/// Gets or sets the areas.
 		/// </summary>
-		public (Vector2 offset, Vector2 dimensions)[] Areas { get; set; }
+		public OffsetSubArea[] Areas { get; set; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.
@@ -37,18 +39,45 @@ namespace Engine.Physics.Models
 		{
 			foreach (var area in Areas)
 			{
-				var truePosition = this.Position.Coordinates + area.offset;
+				var truePosition = this.Position.Coordinates + new Vector2
+				{
+					X = area.HorizontalOffset,
+					Y = area.VerticalOffset
+				};
 
 				if (truePosition.X <= coordinate.X &&
-					truePosition.X + area.dimensions.X >= coordinate.X &&
+					truePosition.X + area.Width >= coordinate.X &&
 					truePosition.Y <= coordinate.Y &&
-					truePosition.Y + area.dimensions.Y >= coordinate.Y)
+					truePosition.Y + area.Height >= coordinate.Y)
 				{
 					return true;
 				}
 			}
 			
 			return false;
+		}
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		public AreaCollectionModel ToModel()
+		{
+			var positionModel = this.Position.ToModel();
+			var offsetSubArea = new OffsetSubAreaModel[this.Areas.Length];
+
+			for (int i = 0; i < this.Areas.Length; i++)
+			{
+				offsetSubArea[i] = this.Areas[i].ToModel();
+			}
+
+			return new AreaCollectionModel
+			{
+				Width = this.Width,
+				Height = this.Height,
+				Position = positionModel,
+				Areas = offsetSubArea
+			};
 		}
 	}
 }

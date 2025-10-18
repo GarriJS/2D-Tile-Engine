@@ -1,11 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Physics;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models
 {
 	/// <summary>
 	/// Represents a offset area.
 	/// </summary>
-	public class OffsetArea : SimpleArea
+	public class OffsetArea : SimpleArea, ICanBeSerialized<OffsetAreaModel>
 	{
 		/// <summary>
 		/// Gets or sets the offset position.
@@ -30,11 +32,30 @@ namespace Engine.Physics.Models
 		new public bool Contains(Vector2 coordinate)
 		{
 			var offsetPosition = this.OffsetPosition;	
+			var result = offsetPosition.X <= coordinate.X &&
+						 offsetPosition.X + this.Width >= coordinate.X &&
+						 offsetPosition.Y <= coordinate.Y &&
+						 offsetPosition.Y + this.Height >= coordinate.Y;
+		
+			return result;
+		}
 
-			return offsetPosition.X <= coordinate.X &&
-				   offsetPosition.X + this.Width >= coordinate.X &&
-				   offsetPosition.Y <= coordinate.Y &&
-				   offsetPosition.Y + this.Height >= coordinate.Y;
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		new public OffsetAreaModel ToModel()
+		{
+			var positionModel = this.Position.ToModel();
+
+			return new OffsetAreaModel
+			{
+				Width = this.Width,
+				Height = this.Height,
+				Position = positionModel,
+				HorizontalOffset = this.HorizontalOffset,
+				VerticalOffset = this.VerticalOffset	
+			};
 		}
 	}
 }

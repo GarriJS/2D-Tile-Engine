@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Physics;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models
 {
@@ -6,7 +8,7 @@ namespace Engine.Physics.Models
 	/// Represents a position.
 	/// </summary>
 	/// <param name="coordinates">The coordinates.</param>
-	public class Position(Vector2 coordinates = default)
+	public class Position(Vector2 coordinates = default) : ICanBeSerialized<PositionModel>
 	{
 		private Vector2 _coordinates = coordinates;
 
@@ -29,6 +31,19 @@ namespace Engine.Physics.Models
 		/// Gets or sets the Y coordinate.
 		/// </summary>
 		public float Y { get => this._coordinates.Y; set => this._coordinates.Y = value; }
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		public PositionModel ToModel()
+		{
+			return new PositionModel
+			{
+				X = this.X,
+				Y = this.Y,
+			};
+		}
 	}
 }
 
