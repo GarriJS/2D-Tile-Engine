@@ -55,7 +55,7 @@ namespace Engine.RunTime.Services
 		/// <param name="color">The color.</param>
 		public void Draw(SpriteFont font, string text, Vector2 position, Color color)
 		{
-			SpriteBatch.DrawString(font, text, position, color);
+			this.SpriteBatch.DrawString(font, text, position, color);
 		}
 	}
 }

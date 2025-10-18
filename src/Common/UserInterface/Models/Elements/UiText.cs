@@ -121,13 +121,18 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var finalOffset = offset + new Vector2
+			var graphicOffset = offset + new Vector2
 			{
-				X = this.OutsidePadding.LeftPadding + this.InsidePadding.LeftPadding,
-				Y = this.OutsidePadding.TopPadding + this.InsidePadding.TopPadding
+				X = this.OutsidePadding.LeftPadding,
+				Y = this.OutsidePadding.TopPadding
 			};
-			this.Graphic?.Draw(gameTime, gameServices, position, finalOffset);
-			this.GraphicText?.Draw(gameTime, gameServices, position, finalOffset);
+			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
+			var graphicTextOffset = graphicOffset + new Vector2
+			{ 
+				X = this.InsidePadding.LeftPadding,
+				Y = this.InsidePadding.TopPadding
+			};
+			this.GraphicText?.Draw(gameTime, gameServices, position, graphicTextOffset);
 		}
 
 		/// <summary>

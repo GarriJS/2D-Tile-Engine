@@ -219,10 +219,6 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Create Level Button",
 											HorizontalSizeType = (int)UiElementSizeType.FitContent,
 											VerticalSizeType = (int)UiElementSizeType.FitContent,
-											InsidePadding = new UiPaddingModel
-											{ 
-												TopPadding = 10
-											},
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -234,8 +230,6 @@ namespace LevelEditor.Core.Initialization
 														TextureName = "dark_blue_buttons",
 														TextureBox = new Rectangle
 														{
-															X = 0,
-															Y = 0,
 															Width = 64,
 															Height = 64,
 														}
@@ -246,7 +240,6 @@ namespace LevelEditor.Core.Initialization
 														TextureBox = new Rectangle
 														{
 															X = 64,
-															Y = 0,
 															Width = 64,
 															Height = 64,
 														}

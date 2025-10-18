@@ -20,7 +20,7 @@ namespace Common.UserInterface.Models
 	public class UiRow : IAmSubDrawable, IHaveASubArea, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
-		/// Gets or sets the cached element totalOffset.
+		/// Gets or sets the cached element graphicOffset.
 		/// </summary>
 		public Vector2? CachedRowOffset { get; set; }
 
@@ -117,16 +117,21 @@ namespace Common.UserInterface.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var totalOffset = offset + (this.CachedRowOffset ?? default) + new Vector2
+			var graphicOffset = offset + (this.CachedRowOffset ?? default) + new Vector2
 			{ 
-				X = this.InsidePadding.LeftPadding,
-				Y = this.InsidePadding.TopPadding,
+				X = this.OutsidePadding.LeftPadding,
+				Y = this.OutsidePadding.TopPadding,
 			};
-			this.Image?.Draw(gameTime, gameServices, position, totalOffset);
+			this.Image?.Draw(gameTime, gameServices, position, graphicOffset);
+			var contentOffset = graphicOffset + new Vector2
+			{
+				X = this.InsidePadding.LeftPadding,
+				Y = this.InsidePadding.TopPadding
+			};
 
 			foreach (var element in this.SubElements ?? [])
 			{
-				element.Draw(gameTime, gameServices, position, totalOffset + (element.CachedElementOffset ?? default));
+				element.Draw(gameTime, gameServices, position, contentOffset + (element.CachedElementOffset ?? default));
 			}
 		}
 

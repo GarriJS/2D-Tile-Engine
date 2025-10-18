@@ -528,6 +528,7 @@ namespace Common.UserInterface.Services
 				}
 			}
 
+			var outsidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.OutsidePadding);
 			var insidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.InsidePadding);
 			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, uiRowModel.RowHoverCursorName);
 
@@ -536,7 +537,7 @@ namespace Common.UserInterface.Services
 				UiRowName = uiRowModel.UiRowName,
 				Flex = true,
 				Area = rowArea,
-				OutsidePadding = new(),
+				OutsidePadding = outsidePadding,
 				InsidePadding = insidePadding,
 				HorizontalJustificationType = uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = uiRowModel.VerticalJustificationType,
@@ -553,6 +554,13 @@ namespace Common.UserInterface.Services
 		/// <param name="dynamicHeight">The dynamic height.</param>
 		private void UpdateRowDynamicHeight(UiRow uiRow, float dynamicHeight)
 		{
+			var dimensions = new Vector2
+			{
+				X = uiRow.InsideWidth,
+				Y = dynamicHeight + uiRow.InsidePadding.TopPadding + uiRow.InsidePadding.BottomPadding
+			};
+			uiRow.Image?.SetDrawDimensions(dimensions);
+
 			if (0 == uiRow.SubElements.Count)
 			{
 				return;

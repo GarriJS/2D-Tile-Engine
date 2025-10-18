@@ -60,25 +60,6 @@ namespace Common.UserInterface.Services
 			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 
 			var area = this.GetElementArea(uiElementModel);
-			Image background = null;
-
-			if (null != uiElementModel.Texture)
-			{
-				background = imageService.GetImageFromModel(uiElementModel.Texture);
-
-				if ((true == uiElementModel.ResizeTexture) ||
-					(background is FillImage))
-				{
-					var textureWidth = area.Width + uiElementModel.InsidePadding.LeftPadding + uiElementModel.InsidePadding.RightPadding;
-					var dimensions = new Vector2
-					{
-						X = textureWidth,
-						Y = area.Height
-					};
-					background.SetDrawDimensions(dimensions);
-				}
-			}
-
 			IAmAUiElement uiElement = uiElementModel switch
 			{
 				UiTextModel textModel => new UiText { },
@@ -93,12 +74,29 @@ namespace Common.UserInterface.Services
 				return null;
 			}
 
+			uiElement.OutsidePadding = this.GetUiPaddingFromModel(uiElementModel.OutsidePadding);
 			uiElement.InsidePadding = this.GetUiPaddingFromModel(uiElementModel.InsidePadding);
-			uiElement.OutsidePadding = new();
 			uiElement.Area = area;
+
+			if (null != uiElementModel.Texture)
+			{
+				uiElement.Graphic = imageService.GetImageFromModel(uiElementModel.Texture);
+
+				if ((true == uiElementModel.ResizeTexture) ||
+					(uiElement.Graphic is FillImage))
+				{
+					var textureWidth = area.Width + uiElement.InsidePadding.LeftPadding + uiElement.InsidePadding.RightPadding;
+					var dimensions = new Vector2
+					{
+						X = textureWidth,
+						Y = area.Height
+					};
+					uiElement.Graphic.SetDrawDimensions(dimensions);
+				}
+			}
+
 			uiElement.HorizontalSizeType = uiElementModel.HorizontalSizeType;
 			uiElement.VerticalSizeType = uiElementModel.VerticalSizeType;
-			uiElement.Graphic = background;
 			uiElement.PressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
 			uiElement.PressConfig.AddSubscription(this.CheckForUiElementClick);
 
