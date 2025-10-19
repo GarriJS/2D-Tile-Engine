@@ -1,4 +1,6 @@
-﻿using Engine.RunTime.Services.Contracts;
+﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Graphics.Models
@@ -60,7 +62,7 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		protected override void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
+		override protected void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
 			if ((null == this.FrameStartTime) ||
 				(this.CurrentFrameIndex == this.RestingFrameIndex))
@@ -91,6 +93,30 @@ namespace Engine.Graphics.Models
 
 				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
 			}
+		}
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		override public IAmAGraphicModel ToModel()
+		{
+			var frameModels = new ImageModel[this.Frames.Length];
+
+			for (int i = 0; i < this.Frames.Length; i++)
+			{
+				frameModels[i] = (ImageModel)this.Frames[i].ToModel();
+			}
+
+			return new TriggeredAnimationModel
+			{
+				CurrentFrameIndex = this.CurrentFrameIndex,
+				FrameDuration = this.FrameDuration,
+				FrameMinDuration = this.FrameMinDuration,
+				FrameMaxDuration = this.FrameMaxDuration,
+				Frames = frameModels,
+				RestingFrameIndex = this.RestingFrameIndex,
+			};
 		}
 	}
 }

@@ -1,7 +1,9 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Engine.Physics.Models
 {
@@ -64,19 +66,15 @@ namespace Engine.Physics.Models
 		public AreaCollectionModel ToModel()
 		{
 			var positionModel = this.Position.ToModel();
-			var offsetSubArea = new OffsetSubAreaModel[this.SubAreas.Length];
-
-			for (int i = 0; i < this.SubAreas.Length; i++)
-			{
-				offsetSubArea[i] = this.SubAreas[i].ToModel();
-			}
+			var offsetSubAreaModels = this.SubAreas.Select(e => e.ToModel())
+												   .ToArray();
 
 			return new AreaCollectionModel
 			{
 				Width = this.Width,
 				Height = this.Height,
 				Position = positionModel,
-				SubAreas = offsetSubArea
+				SubAreas = offsetSubAreaModels
 			};
 		}
 	}

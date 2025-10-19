@@ -2,7 +2,7 @@
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.DiskModels.Physics;
-using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -85,7 +85,7 @@ namespace Common.UserInterface.Services
 						continue;
 					}
 
-					var areaModel = new SimpleAreaModel
+					var areaModel = new AreaModel
 					{
 						Position = new PositionModel
 						{
@@ -107,7 +107,7 @@ namespace Common.UserInterface.Services
 				}
 			}
 
-			var noneAreaModel = new SimpleAreaModel
+			var noneAreaModel = new AreaModel
 			{
 				Position = new PositionModel
 				{

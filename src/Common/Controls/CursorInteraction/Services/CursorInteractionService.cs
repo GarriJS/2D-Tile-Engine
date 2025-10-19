@@ -2,7 +2,7 @@
 using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Services.Contracts;
-using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
 namespace Common.Controls.CursorInteraction.Services

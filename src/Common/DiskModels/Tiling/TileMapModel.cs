@@ -10,6 +10,6 @@ namespace Common.DiskModels.Common.Tiling
         public string TileMapName { get; set; }
 
         [DataMember(Name = "tileMapLayers", Order = 2)]
-        public List<TileMapLayerModel> TileMapLayers { get; set; }
+        public TileMapLayerModel[] TileMapLayers { get; set; }
     }
 }

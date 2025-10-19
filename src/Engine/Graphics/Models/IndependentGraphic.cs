@@ -1,4 +1,6 @@
-﻿using Engine.Graphics.Models.Contracts;
+﻿using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Drawing;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -8,7 +10,7 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents a independent graphic.
 	/// </summary>
-	public class IndependentGraphic : IHaveAGraphic, IAmDrawable
+	public class IndependentGraphic : IHaveAGraphic, IAmDrawable, ICanBeSerialized<IndependentGraphicModel>
 	{
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -41,6 +43,22 @@ namespace Engine.Graphics.Models
 		public void Dispose()
 		{
 			this.Graphic?.Dispose();
+		}
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		public IndependentGraphicModel ToModel()
+		{ 
+			var positionModel = this.Position.ToModel();
+			var graphicModel = this.Graphic.ToModel();
+
+			return new IndependentGraphicModel
+			{
+				Position = positionModel,
+				Graphic = graphicModel
+			};
 		}
 	}
 }

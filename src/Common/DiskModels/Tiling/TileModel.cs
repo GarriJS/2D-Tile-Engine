@@ -13,7 +13,7 @@ namespace Common.DiskModels.Common.Tiling
         [DataMember(Name = "column", Order = 2)]
         public int Column { get; set; }
 
-        [DataMember(Name = "sprite", Order = 3)]
-        public ImageModel Sprite { get; set; }
+        [DataMember(Name = "image", Order = 3)]
+        public ImageModel Image { get; set; }
     }
 }

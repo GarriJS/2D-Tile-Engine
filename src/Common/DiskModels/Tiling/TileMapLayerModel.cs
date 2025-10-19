@@ -1,5 +1,4 @@
 ﻿using Common.DiskModels.Common.Tiling.Contracts;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Common.DiskModels.Common.Tiling
@@ -11,6 +10,6 @@ namespace Common.DiskModels.Common.Tiling
         public int Layer { get; set; }
 
         [DataMember(Name = "tiles", Order = 2)]
-        public List<IAmATileModel> Tiles { get; set; }
+        public IAmATileModel[] Tiles { get; set; }
     }
 }

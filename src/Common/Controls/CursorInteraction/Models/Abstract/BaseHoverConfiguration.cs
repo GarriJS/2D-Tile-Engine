@@ -1,6 +1,6 @@
 ﻿using Common.Controls.Cursors.Models;
-using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using System;
 

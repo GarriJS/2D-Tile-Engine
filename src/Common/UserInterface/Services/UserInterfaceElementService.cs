@@ -14,7 +14,7 @@ using Engine.Core.Initialization.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services;
 using Engine.Graphics.Services.Contracts;
-using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using System;
 

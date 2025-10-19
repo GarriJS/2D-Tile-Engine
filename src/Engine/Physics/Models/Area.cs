@@ -8,7 +8,7 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a simple area.
 	/// </summary>
-	public class SimpleArea : IAmAArea, ICanBeSerialized<SimpleAreaModel>
+	public class SimpleArea : IAmAArea, ICanBeSerialized<AreaModel>
 	{
 		/// <summary>
 		/// Get or sets the width.
@@ -30,7 +30,7 @@ namespace Engine.Physics.Models
 		/// </summary>
 		/// <param name="coordinate">The coordinate.</param>
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
-		public bool Contains(Vector2 coordinate)
+		virtual public bool Contains(Vector2 coordinate)
 		{ 
 			var result = this.Position.X <= coordinate.X &&
 						 this.Position.X + this.Width >= coordinate.X &&
@@ -44,11 +44,11 @@ namespace Engine.Physics.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		public SimpleAreaModel ToModel()
+		virtual public AreaModel ToModel()
 		{ 
 			var positionModel = this.Position.ToModel();
 
-			return new SimpleAreaModel
+			return new AreaModel
 			{
 				Width = this.Width,
 				Height = this.Height,

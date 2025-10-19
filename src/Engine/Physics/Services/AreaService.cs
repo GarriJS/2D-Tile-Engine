@@ -2,6 +2,7 @@
 using Engine.DiskModels.Physics.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -85,7 +86,7 @@ namespace Engine.Physics.Services
 
 					break;
 
-				case SimpleAreaModel simpleAreaModel:
+				case AreaModel simpleAreaModel:
 
 					var simpleArea = new SimpleArea
 					{

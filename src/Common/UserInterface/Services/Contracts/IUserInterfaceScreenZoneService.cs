@@ -1,7 +1,7 @@
 ﻿using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Engine.Core.Contracts;
-using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using System.Collections.Generic;
 
 namespace Common.UserInterface.Services.Contracts

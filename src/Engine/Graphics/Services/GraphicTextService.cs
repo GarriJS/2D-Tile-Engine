@@ -62,6 +62,7 @@ namespace Engine.Graphics.Services
 
 			return new GraphicalText
 			{
+				FontName = graphicalTextModel.FontName,
 				Text = graphicalTextModel.Text,
 				TextColor = graphicalTextModel.TextColor,
 				Font = font

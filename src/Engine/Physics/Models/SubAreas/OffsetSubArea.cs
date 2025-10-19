@@ -1,7 +1,7 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
 
-namespace Engine.Physics.Models
+namespace Engine.Physics.Models.SubAreas
 {
 	/// <summary>
 	/// Represents a offset sub area.
@@ -22,7 +22,7 @@ namespace Engine.Physics.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		new public OffsetSubAreaModel ToModel()
+		override public OffsetSubAreaModel ToModel()
 		{
 			return new OffsetSubAreaModel
 			{

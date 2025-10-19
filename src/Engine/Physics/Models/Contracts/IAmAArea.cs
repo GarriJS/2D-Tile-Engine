@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Physics.Models.SubAreas;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models.Contracts
 {

@@ -3,7 +3,7 @@
 namespace Engine.DiskModels.Physics
 {
 	[DataContract(Name = "offsetArea")]
-	public class OffsetAreaModel : SimpleAreaModel
+	public class OffsetAreaModel : AreaModel
 	{
 		[DataMember(Name = "horizontalOffset", Order = 4)]
 		public float HorizontalOffset { get; set; }

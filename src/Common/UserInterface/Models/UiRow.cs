@@ -6,6 +6,7 @@ using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System;

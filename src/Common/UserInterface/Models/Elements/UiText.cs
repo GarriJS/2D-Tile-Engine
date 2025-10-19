@@ -4,6 +4,7 @@ using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Models.Elements

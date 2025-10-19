@@ -225,7 +225,7 @@ namespace LevelEditor.Scenes.Services
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
 
-			var areaModel = new SimpleAreaModel
+			var areaModel = new AreaModel
 			{
 				Position = new PositionModel
 				{

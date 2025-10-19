@@ -1,4 +1,4 @@
-﻿using Engine.Physics.Models;
+﻿using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Core.Constants

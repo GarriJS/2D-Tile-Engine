@@ -1,4 +1,6 @@
-﻿namespace Engine.Physics.Models.Contracts
+﻿using Engine.Physics.Models.SubAreas;
+
+namespace Engine.Physics.Models.Contracts
 {
 	/// <summary>
 	/// Represents a sub area. 

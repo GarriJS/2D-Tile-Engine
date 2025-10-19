@@ -2,6 +2,7 @@
 using Engine.DiskModels.Physics.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 
 namespace Engine.Physics.Services.Contracts
 {

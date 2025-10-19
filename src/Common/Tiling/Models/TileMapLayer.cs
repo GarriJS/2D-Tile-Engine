@@ -1,15 +1,19 @@
-﻿using Common.Tiling.Models.Contracts;
+﻿using Common.DiskModels.Common.Tiling;
+using Common.DiskModels.Common.Tiling.Contracts;
+using Common.Tiling.Models.Contracts;
+using Engine.Core.Files.Models.Contract;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Tiling.Models
 {
 	/// <summary>
 	/// Represents a tile map layer.
 	/// </summary>
-	public class TileMapLayer: IAmSubDrawable
+	public class TileMapLayer: IAmSubDrawable, ICanBeSerialized<TileMapLayerModel>
 	{
 		/// <summary>
 		/// Gets or sets the layer.
@@ -43,6 +47,22 @@ namespace Common.Tiling.Models
 			{
 				tile.Draw(gameTime, gameServices, position);
 			}
+		}
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		public TileMapLayerModel ToModel()
+		{ 
+			var tileModels = this.Tiles.Values.Select(e => e.ToModel())
+											  .ToArray();
+
+			return new TileMapLayerModel
+			{
+				Layer = this.Layer,
+				Tiles = tileModels
+			};
 		}
 	}
 }

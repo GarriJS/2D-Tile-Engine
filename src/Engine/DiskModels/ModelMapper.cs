@@ -6,6 +6,7 @@ using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
@@ -58,7 +59,7 @@ namespace Engine.DiskModels
 			return
 			[
 				(typeof(PositionModel), positionService.GetPositionFromModel),
-				(typeof(SimpleAreaModel), areaService.GetAreaFromModel<SimpleArea>),
+				(typeof(AreaModel), areaService.GetAreaFromModel<SimpleArea>),
 				(typeof(OffsetAreaModel), areaService.GetAreaFromModel<OffsetArea>),
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
 				(typeof(SubArea), areaService.GetSubArea),

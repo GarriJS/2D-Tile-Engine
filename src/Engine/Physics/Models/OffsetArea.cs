@@ -12,7 +12,14 @@ namespace Engine.Physics.Models
 		/// <summary>
 		/// Gets or sets the offset position.
 		/// </summary>
-		public Vector2 OffsetPosition { get => new(this.Position.X + this.HorizontalOffset, this.Position.Y + this.VerticalOffset); }
+		public Vector2 OffsetPosition
+		{
+			get => new()
+			{
+				X = this.Position.X + HorizontalOffset,
+				Y = this.Position.Y + VerticalOffset
+			};
+		}
 
 		/// <summary>
 		/// Gets or sets the vertical offset.
@@ -29,14 +36,14 @@ namespace Engine.Physics.Models
 		/// </summary>
 		/// <param name="coordinate">The coordinate.</param>
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
-		new public bool Contains(Vector2 coordinate)
+		override public bool Contains(Vector2 coordinate)
 		{
-			var offsetPosition = this.OffsetPosition;	
+			var offsetPosition = this.OffsetPosition;
 			var result = offsetPosition.X <= coordinate.X &&
-						 offsetPosition.X + this.Width >= coordinate.X &&
+						 offsetPosition.X + Width >= coordinate.X &&
 						 offsetPosition.Y <= coordinate.Y &&
-						 offsetPosition.Y + this.Height >= coordinate.Y;
-		
+						 offsetPosition.Y + Height >= coordinate.Y;
+
 			return result;
 		}
 
@@ -44,17 +51,17 @@ namespace Engine.Physics.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		new public OffsetAreaModel ToModel()
+		override public OffsetAreaModel ToModel()
 		{
-			var positionModel = this.Position.ToModel();
+			var positionModel = Position.ToModel();
 
 			return new OffsetAreaModel
 			{
-				Width = this.Width,
-				Height = this.Height,
+				Width = Width,
+				Height = Height,
 				Position = positionModel,
-				HorizontalOffset = this.HorizontalOffset,
-				VerticalOffset = this.VerticalOffset	
+				HorizontalOffset = HorizontalOffset,
+				VerticalOffset = VerticalOffset
 			};
 		}
 	}

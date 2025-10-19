@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Engine.DiskModels.Physics
 {
 	[DataContract(Name = "simpleArea")]
-	public class SimpleAreaModel : IAmAAreaModel
+	public class AreaModel : IAmAAreaModel
 	{
 		[DataMember(Name = "width", Order = 1)]
 		public float Width { get; set; }

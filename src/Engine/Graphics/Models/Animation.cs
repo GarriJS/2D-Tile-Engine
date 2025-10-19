@@ -1,16 +1,18 @@
-﻿using Engine.Graphics.Models.Contracts;
+﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using System.Linq;
 
 namespace Engine.Graphics.Models
 {
 	/// <summary>
 	/// Represents the animation.
 	/// </summary>
-	public class Animation : IAmAGraphic, IDisposable
+	public class Animation : IAmAGraphic
 	{
 		/// <summary>
 		/// Gets or sets the current frame index.
@@ -87,7 +89,7 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		protected virtual void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
+		virtual protected void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
 			if (null == this.FrameStartTime)
 			{
@@ -120,16 +122,30 @@ namespace Engine.Graphics.Models
 		}
 
 		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		virtual public IAmAGraphicModel ToModel()
+		{
+			var frameModels = this.Frames.Select(e => (ImageModel)e.ToModel())
+										 .ToArray();
+
+			return new AnimationModel
+			{
+				CurrentFrameIndex = this.CurrentFrameIndex,
+				FrameDuration = this.FrameDuration,
+				FrameMinDuration = this.FrameMinDuration,
+				FrameMaxDuration = this.FrameMaxDuration,
+				Frames = frameModels
+			};
+		}
+
+		/// <summary>
 		/// Disposes of the draw data texture.
 		/// </summary>
 		public void Dispose()
 		{
-			if (0 == this.Frames.Length)
-			{
-				return;
-			}
-
-			foreach (var frame in this.Frames)
+			foreach (var frame in this.Frames ?? [])
 			{ 
 				frame?.Dispose();
 			}
