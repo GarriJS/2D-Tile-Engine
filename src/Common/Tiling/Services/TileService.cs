@@ -10,6 +10,7 @@ using Common.Tiling.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Common.Tiling.Services
 {
@@ -76,11 +77,13 @@ namespace Common.Tiling.Services
 			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
 			var row = (int)coordinates.Y / TileConstants.TILE_SIZE;
 
-			return new Vector2
+			var result = new Vector2
 			{
 				X = (col + gridOffset) * TileConstants.TILE_SIZE,
 				Y = (row + gridOffset) * TileConstants.TILE_SIZE
 			};
+				
+			return result;
 		}
 
 		/// <summary>
@@ -99,6 +102,19 @@ namespace Common.Tiling.Services
 			if (null == tileMapModel.TileMapLayers)
 			{
 				return tileMap;
+			}
+
+			var imageModels = tileMapModel.Images;
+			var tileModels = tileMapModel.TileMapLayers.SelectMany(e => e.Tiles)
+													   .ToArray();
+
+			foreach (var tileModel in tileModels)
+			{
+				if ((tileModel is TileModel staticTileModel) &&
+					(true == tileMapModel.Images.TryGetValue(staticTileModel.ImageId, out var tileImage)))
+				{
+					staticTileModel.Image = tileImage;
+				}
 			}
 
 			foreach (var tileMapLayerModel in tileMapModel.TileMapLayers)
