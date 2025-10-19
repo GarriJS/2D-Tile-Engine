@@ -15,7 +15,7 @@ namespace Engine.DiskModels
 		/// <param name="fileStream">The file stream.</param>
 		/// <returns>The deserializes result.</returns>
 		public T Deserialize(FileStream fileStream)
-		{ 
+		{
 			return JsonSerializer.Deserialize<T>(fileStream);
 		}
 
@@ -37,7 +37,8 @@ namespace Engine.DiskModels
 		/// </summary>
 		/// <param name="filePath">The JSON file path.</param>
 		/// <param name="data">The data to serialize.</param>
-		public void Serialize(string filePath, T data)
+		/// <param name="options">The options.</param>
+		public void Serialize(string filePath, T data, JsonSerializerOptions options)
 		{
 			var folder = Path.GetDirectoryName(filePath);
 
@@ -47,7 +48,7 @@ namespace Engine.DiskModels
 			}
 
 			using var stream = File.Create(filePath);
-			JsonSerializer.Serialize(stream, data);
+			JsonSerializer.Serialize(stream, data, options);
 		}
 	}
 }

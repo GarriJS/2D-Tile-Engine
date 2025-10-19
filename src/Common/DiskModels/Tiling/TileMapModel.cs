@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using Engine.DiskModels.Drawing;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Tiling
 {
@@ -9,5 +11,8 @@ namespace Common.DiskModels.Tiling
 
         [JsonPropertyName("tileMapLayers")]
         public TileMapLayerModel[] TileMapLayers { get; set; }
-    }
+
+		[JsonPropertyName("images")]
+		public Dictionary<int, ImageModel> Images { get; set; }
+	}
 }

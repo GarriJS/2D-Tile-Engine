@@ -1,6 +1,8 @@
 ﻿using Common.DiskModels.Tiling;
 using Common.Tiling.Models.Contracts;
 using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Comparers;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
@@ -84,11 +86,32 @@ namespace Common.Tiling.Models
 		{
 			var tileMapLayerModels = this.TileMapLayers.Values.Select(e => e.ToModel())
 															  .ToArray();
+			var tileModels = tileMapLayerModels.SelectMany(e => e.Tiles)
+											   .ToArray(); 
+			var uniqueImages = new Dictionary<ImageModel, int>(new ImageModelComparer());
+			var tileImageMappings = new Dictionary<int, ImageModel>();
+			var nextId = 1;
+
+			foreach (var tileModel in tileModels)
+			{
+				if (tileModel is TileModel staticTileModel)
+				{
+					if (false == uniqueImages.TryGetValue(staticTileModel.Image, out var imageId))
+					{
+						imageId = nextId++;
+						uniqueImages[staticTileModel.Image] = imageId;
+						tileImageMappings[imageId] = staticTileModel.Image;
+					}
+
+					staticTileModel.ImageId = imageId;
+				}
+			}
 
 			return new TileMapModel
 			{
 				TileMapName = this.TileMapName,
-				TileMapLayers = tileMapLayerModels
+				TileMapLayers = tileMapLayerModels,
+				Images = tileImageMappings,
 			};
 		}
 	}

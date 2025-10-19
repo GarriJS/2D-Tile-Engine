@@ -12,7 +12,10 @@ namespace Common.DiskModels.Tiling
         [JsonPropertyName("column")]
         public int Column { get; set; }
 
-        [JsonPropertyName("image")]
-        public ImageModel Image { get; set; }
+		[JsonPropertyName("imageId")]
+		public int ImageId { get; set; }
+
+		[JsonIgnore]
+		public ImageModel Image { get; set; }
     }
 }

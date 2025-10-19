@@ -2,6 +2,7 @@
 using BaseContent.BaseContentConstants.Images;
 using Common.Controls.Cursors.Constants;
 using Common.DiskModels.Tiling;
+using Common.DiskModels.Tiling.Options;
 using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
 using Common.Scenes.Models;
@@ -245,7 +246,7 @@ namespace LevelEditor.Scenes.Services
 			var area = areaService.GetAreaFromModel(areaModel);
 			var tileMap = new TileMap
 			{
-				TileMapName = $"{sceneName} TileMap",
+				TileMapName = $"Test TileMap",
 				Area = area,
 				DrawLayer = 1,
 			};
@@ -280,7 +281,7 @@ namespace LevelEditor.Scenes.Services
 			var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", "TestMap", createDirectoryIfDoesNotExist: true);
 			var serializer = new ModelSerializer<TileMapModel>();
 			var tileMapModel = this.CurrentScene.TileMap.ToModel();
-			serializer.Serialize(filePath, tileMapModel);
+			serializer.Serialize(filePath, tileMapModel, TilingOptions.TileMapOptions);
 		}
 	}
 }
