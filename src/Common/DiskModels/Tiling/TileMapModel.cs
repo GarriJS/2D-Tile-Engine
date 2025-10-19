@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.Common.Tiling
+namespace Common.DiskModels.Tiling
 {
-    [DataContract(Name = "tileMapModel")]
     public class TileMapModel
     {
-        [DataMember(Name = "tileMapName", Order = 1)]
+        [JsonPropertyName("tileMapName")]
         public string TileMapName { get; set; }
 
-        [DataMember(Name = "tileMapLayers", Order = 2)]
+        [JsonPropertyName("tileMapLayers")]
         public TileMapLayerModel[] TileMapLayers { get; set; }
     }
 }

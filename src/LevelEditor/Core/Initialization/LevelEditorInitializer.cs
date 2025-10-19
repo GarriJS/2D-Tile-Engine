@@ -104,6 +104,7 @@ namespace LevelEditor.Core.Initialization
 			{
 				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
 				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,
+				[UiEventName.SaveSceneClick] = sceneEditService.SaveScene,
 				[UiEventName.ToggleTileGrid] = sceneEditService.ToggleTileGridClickEventProcessor,
 			};
 		}
@@ -273,7 +274,7 @@ namespace LevelEditor.Core.Initialization
 										},
 										new UiButtonModel
 										{
-											UiElementName = "Save Element Button",
+											UiElementName = "Save Level Button",
 											HorizontalSizeType = (int)UiElementSizeType.FitContent,
 											VerticalSizeType = (int)UiElementSizeType.FitContent,
 											ClickableAreaAnimation = new TriggeredAnimationModel
@@ -312,6 +313,7 @@ namespace LevelEditor.Core.Initialization
 												X = 1,
 												Y = 1
 											},
+											ClickEventName = UiEventName.SaveSceneClick
 										}
 									]
 								},

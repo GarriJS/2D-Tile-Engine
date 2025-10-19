@@ -1,14 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Physics
 {
-	[DataContract(Name = "position")]
 	public class PositionModel
 	{
-		[DataMember(Name = "x", Order = 1)]
+		[JsonPropertyName("x")]
 		public float X { get; set; }
 
-		[DataMember(Name = "y", Order = 2)]
+		[JsonPropertyName("y")]
 		public float Y { get; set; }
 	}
 }

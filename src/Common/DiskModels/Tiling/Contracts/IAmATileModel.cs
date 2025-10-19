@@ -1,13 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.Common.Tiling.Contracts
+namespace Common.DiskModel.Tiling.Contracts
 {
 	public interface IAmATileModel
     {
-        [DataMember(Name = "row", Order = 1)]
+        [JsonPropertyName("row")]
         public int Row { get; set; }
 
-        [DataMember(Name = "column", Order = 2)]
+        [JsonPropertyName("column")]
         public int Column { get; set; }
     }
 }

@@ -1,18 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	[DataContract(Name = "graphicalText")]
 	public class GraphicalTextModel
 	{
-		[DataMember(Name = "text", Order = 1)]
+		[JsonPropertyName("text")]
 		public string Text { get; set; }
 
-		[DataMember(Name = "textColor", Order = 2)]
+		[JsonPropertyName("textColor")]
 		public Color TextColor { get; set; }
 
-		[DataMember(Name = "fontName", Order = 3)]
+		[JsonPropertyName("fontName")]
 		public string FontName { get; set; }
 	}
 }

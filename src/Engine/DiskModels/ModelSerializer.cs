@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Runtime.Serialization.Json;
+using System.Text.Json;
 
 namespace Engine.DiskModels
 {
@@ -10,18 +10,13 @@ namespace Engine.DiskModels
 	public class ModelSerializer<T>
 	{
 		/// <summary>
-		/// Gets the serializer.
-		/// </summary>
-		private DataContractJsonSerializer Serializer { get; } = new DataContractJsonSerializer(typeof(T));
-
-		/// <summary>
 		/// Deserializes the file stream.
 		/// </summary>
 		/// <param name="fileStream">The file stream.</param>
 		/// <returns>The deserializes result.</returns>
 		public T Deserialize(FileStream fileStream)
 		{ 
-			return (T)this.Serializer.ReadObject(fileStream);
+			return JsonSerializer.Deserialize<T>(fileStream);
 		}
 
 		/// <summary>
@@ -32,7 +27,9 @@ namespace Engine.DiskModels
 		public T Deserialize(string filePath)
 		{
 			using var stream = File.OpenRead(filePath);
-			return Deserialize(stream);
+			{
+				return Deserialize(stream);
+			}
 		}
 
 		/// <summary>
@@ -50,7 +47,7 @@ namespace Engine.DiskModels
 			}
 
 			using var stream = File.Create(filePath);
-			this.Serializer.WriteObject(stream, data);
+			JsonSerializer.Serialize(stream, data);
 		}
 	}
 }

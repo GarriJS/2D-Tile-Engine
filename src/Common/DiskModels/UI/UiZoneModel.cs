@@ -1,33 +1,32 @@
 ﻿using Engine.DiskModels.Drawing;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UI
 {
-	[DataContract(Name = "uiZone")]
 	public class UiZoneModel
 	{
-		[DataMember(Name = "uiZoneName", Order = 1)]
+		[JsonPropertyName("uiZoneName")]
 		public string UiZoneName { get; set; }
 
-		[DataMember(Name = "resizeTexture", Order = 2)]
+		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
-		[DataMember(Name = "justificationType", Order = 3)]
+		[JsonPropertyName("justificationType")]
 		public int JustificationType { get; set; }
 
-		[DataMember(Name = "uiZoneType", Order = 4)]
+		[JsonPropertyName("uiZoneType")]
 		public int UiZoneType { get; set; }
 
-		[DataMember(Name = "zoneHoverCursorName", Order = 5)]
+		[JsonPropertyName("zoneHoverCursorName")]
 		public string ZoneHoverCursorName { get; set; }
 
-		[DataMember(Name = "zoneHoverEventName", Order = 6)]
+		[JsonPropertyName("zoneHoverEventName")]
 		public string ZoneHoverEventName { get; set; }
 
-		[DataMember(Name = "backgroundTexture", Order = 7)]
+		[JsonPropertyName("backgroundTexture")]
 		public ImageModel BackgroundTexture { get; set; }
 
-		[DataMember(Name = "elementRows", Order = 8)]
+		[JsonPropertyName("elementRows")]
 		public UiRowModel[] ElementRows { get; set; }
 	}
 }

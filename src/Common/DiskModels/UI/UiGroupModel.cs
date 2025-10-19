@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UI
 {
-	[DataContract(Name = "uiGroup")]
 	public class UiGroupModel
 	{
-		[DataMember(Name = "uiGroupName", Order = 1)]
+		[JsonPropertyName("uiGroupName")]
 		public string UiGroupName { get; set; }
 
-		[DataMember(Name = "visibilityGroupId", Order = 2)]
+		[JsonPropertyName("visibilityGroupId")]
 		public int VisibilityGroupId { get; set; }
 
-		[DataMember(Name = "isVisible", Order = 3)]
+		[JsonPropertyName("isVisible")]
 		public bool IsVisible { get; set; }
 
-		[DataMember(Name = "uiZoneElements", Order = 4)]
+		[JsonPropertyName("uiZoneElements")]
 		public IList<UiZoneModel> UiZoneElements { get; set; }
 	}
 }

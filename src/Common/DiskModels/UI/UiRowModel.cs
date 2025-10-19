@@ -1,38 +1,37 @@
 ﻿using Common.DiskModels.UI.Contracts;
 using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UI
 {
-	[DataContract(Name = "uiRow")]
 	public class UiRowModel
 	{
-		[DataMember(Name = "uiRowName", Order = 1)]
+		[JsonPropertyName("uiRowName")]
 		public string UiRowName { get; set; }
 
-		[DataMember(Name = "resizeTexture", Order = 2)]
+		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
-		[DataMember(Name = "outsidePadding", Order = 3)]
+		[JsonPropertyName("outsidePadding")]
 		public UiPaddingModel OutsidePadding { get; set; }
 
-		[DataMember(Name = "insidePadding", Order = 4)]
+		[JsonPropertyName("insidePadding")]
 		public UiPaddingModel InsidePadding { get; set; }
 
-		[DataMember(Name = "horizontalJustificationType", Order = 5)]
+		[JsonPropertyName("horizontalJustificationType")]
 		public UiRowHorizontalJustificationType HorizontalJustificationType { get; set; }
 
-		[DataMember(Name = "verticalJustificationType", Order = 6)]
+		[JsonPropertyName("verticalJustificationType")]
 		public UiRowVerticalJustificationType VerticalJustificationType { get; set; }
 
-		[DataMember(Name = "rowHoverCursorName", Order = 7)]
+		[JsonPropertyName("rowHoverCursorName")]
 		public string RowHoverCursorName { get; set; }
 
-		[DataMember(Name = "backgroundTexture", Order = 8)]
+		[JsonPropertyName("backgroundTexture")]
 		public ImageModel BackgroundTexture { get; set; }
 
-		[DataMember(Name = "subElements", Order = 9)]
+		[JsonPropertyName("subElements")]
 		public IAmAUiElementModel[] SubElements { get; set; }
 	}
 }

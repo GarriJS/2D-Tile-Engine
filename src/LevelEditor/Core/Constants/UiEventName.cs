@@ -15,10 +15,15 @@
         /// </summary>
         public static string CreateSceneClick { get; } = "CREATE_SCENE_CLICK";
 
-        /// <summary>
-        /// Gets the toggle tile grid click event name.
-        /// </summary>
-        public static string ToggleTileGrid { get; } = "TOGGLE_TILE_GRID";
+		/// <summary>
+		/// Gets the create scene click event name.
+		/// </summary>
+		public static string SaveSceneClick { get; } = "SAVE_SCENE_CLICK";
+
+		/// <summary>
+		/// Gets the toggle tile grid click event name.
+		/// </summary>
+		public static string ToggleTileGrid { get; } = "TOGGLE_TILE_GRID";
 
 	}
 }

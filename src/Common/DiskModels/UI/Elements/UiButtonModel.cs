@@ -2,56 +2,55 @@
 using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
 using Microsoft.Xna.Framework;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UI.Elements
 {
-	[DataContract(Name = "uiButton")]
 	public class UiButtonModel : IAmAUiElementWithTextModel
 	{
-		[DataMember(Name = "uiElementName", Order = 1)]
+		[JsonPropertyName("uiElementName")]
 		public string UiElementName { get; set; }
 
-		[DataMember(Name = "resizeTexture", Order = 2)]
+		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
-		[DataMember(Name = "horizontalSizeType", Order = 3)]
+		[JsonPropertyName("horizontalSizeType")]
 		public UiElementSizeType HorizontalSizeType { get; set; }
 
-		[DataMember(Name = "verticalSizeType", Order = 4)]
+		[JsonPropertyName("verticalSizeType")]
 		public UiElementSizeType VerticalSizeType { get; set; }
 
-		[DataMember(Name = "outsidePadding", Order = 5)]
+		[JsonPropertyName("outsidePadding")]
 		public UiPaddingModel OutsidePadding { get; set; }
 
-		[DataMember(Name = "insidePadding", Order = 6)]
+		[JsonPropertyName("insidePadding")]
 		public UiPaddingModel InsidePadding { get; set; }
 
-		[DataMember(Name = "fixedSized", Order = 7)]
+		[JsonPropertyName("fixedSized")]
 		public Vector2? FixedSized { get; set; }
 
-		[DataMember(Name = "hoverCursorName", Order = 8)]
+		[JsonPropertyName("hoverCursorName")]
 		public string HoverCursorName { get; set; }
 
-		[DataMember(Name = "hoverEventName", Order = 9)]
+		[JsonPropertyName("hoverEventName")]
 		public string HoverEventName { get; set; }
 
-		[DataMember(Name = "pressEventName", Order = 10)]
+		[JsonPropertyName("pressEventName")]
 		public string PressEventName { get; set; }
 
-		[DataMember(Name = "texture", Order = 11)]
+		[JsonPropertyName("texture")]
 		public ImageModel Texture { get; set; }
 
-		[DataMember(Name = "text", Order = 12)]
+		[JsonPropertyName("text")]
 		public GraphicalTextModel Text { get; set; }
 
-		[DataMember(Name = "clickableAreaAnimation", Order = 13)]
+		[JsonPropertyName("clickableAreaAnimation")]
 		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }
 
-		[DataMember(Name = "clickableAreaScaler", Order = 14)]
+		[JsonPropertyName("clickableAreaScaler")]
 		public Vector2 ClickableAreaScaler { get; set; }
 
-		[DataMember(Name = "clickEventName", Order = 15)]
+		[JsonPropertyName("clickEventName")]
 		public string ClickEventName { get; set; }
 	}
 }

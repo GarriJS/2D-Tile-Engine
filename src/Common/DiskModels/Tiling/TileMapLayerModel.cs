@@ -1,15 +1,14 @@
-﻿using Common.DiskModels.Common.Tiling.Contracts;
-using System.Runtime.Serialization;
+﻿using Common.DiskModel.Tiling.Contracts;
+using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.Common.Tiling
+namespace Common.DiskModels.Tiling
 {
-    [DataContract(Name = "tileMapLayer")]
     public class TileMapLayerModel
     {
-        [DataMember(Name = "layer", Order = 1)]
+        [JsonPropertyName("layer")]
         public int Layer { get; set; }
 
-        [DataMember(Name = "tiles", Order = 2)]
+        [JsonPropertyName("tiles")]
         public IAmATileModel[] Tiles { get; set; }
     }
 }

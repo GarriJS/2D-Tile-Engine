@@ -2,7 +2,7 @@
 using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
-using Common.DiskModels.Common.Tiling;
+using Common.DiskModels.Tiling;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Models;
 using Engine.Controls.Models;
@@ -107,7 +107,7 @@ namespace LevelEditor.Scenes.Models
 			{
 				Row = (int)tilePosition.Y / TileConstants.TILE_SIZE,
 				Column = (int)tilePosition.X / TileConstants.TILE_SIZE,
-				Sprite = this.AddTileParameters.Sprite,
+				Image = this.AddTileParameters.Image,
 			};
 
 			var tile = tileService.GetTile(tileModel);

@@ -10,6 +10,6 @@ namespace LevelEditor.Scenes.Models
 		/// <summary>
 		/// Gets or sets the sprite.
 		/// </summary>
-		public ImageModel Sprite { get; set; }
+		public ImageModel Image { get; set; }
 	}
 }

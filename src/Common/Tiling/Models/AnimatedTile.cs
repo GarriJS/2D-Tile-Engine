@@ -1,5 +1,5 @@
-﻿using Common.DiskModels.Common.Tiling;
-using Common.DiskModels.Common.Tiling.Contracts;
+﻿using Common.DiskModel.Tiling.Contracts;
+using Common.DiskModels.Tiling;
 using Common.Tiling.Models.Contracts;
 using Engine.Core.Constants;
 using Engine.DiskModels.Drawing;
@@ -7,7 +7,6 @@ using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Models

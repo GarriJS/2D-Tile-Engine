@@ -1,11 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	[DataContract(Name = "triggeredAnimationModel")]
 	public class TriggeredAnimationModel : AnimationModel
 	{
-		[DataMember(Name = "restingFrameIndex", Order = 6)]
+		[JsonPropertyName("restingFrameIndex")]
 		public int RestingFrameIndex { get; set; }
 	}
 }

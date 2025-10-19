@@ -1,17 +1,16 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Controls
 {
-	[DataContract(Name = "actionControl")]
 	public class ActionControlModel
 	{
-		[DataMember(Name = "actionName", Order = 1)]
+		[JsonPropertyName("actionName")]
 		public string ActionName { get; set; }
 
-		[DataMember(Name = "controlKeys", Order = 2)]
+		[JsonPropertyName("controlKeys")]
 		public int[] ControlKeys { get; set; }
 
-		[DataMember(Name = "controlMouseButtons", Order = 3)]
+		[JsonPropertyName("controlMouseButtons")]
 		public int[] ControlMouseButtons { get; set; }
 	}
 }

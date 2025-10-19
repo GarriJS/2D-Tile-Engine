@@ -1,31 +1,30 @@
 ﻿using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	[DataContract(Name = "animation")]
 	public class AnimationModel : IAmAGraphicModel
 	{
-		[DataMember(Name = "textureName", Order = 1)]
+		[JsonPropertyName("textureName")]
 		public string TextureName { get => this.Frames[this.CurrentFrameIndex].TextureName; }
 
-		[DataMember(Name = "textureBox", Order = 2)]
+		[JsonPropertyName("textureBox")]
 		public Rectangle TextureBox { get => this.Frames[this.CurrentFrameIndex].TextureBox; }
 
-		[DataMember(Name = "currentFrameIndex", Order = 3)]
+		[JsonPropertyName("currentFrameIndex")]
 		public int CurrentFrameIndex { get; set; }
 
-		[DataMember(Name = "frameDuration", Order = 4)]
+		[JsonPropertyName("frameDuration")]
 		public int? FrameDuration { get; set; }
 
-		[DataMember(Name = "frameMinDuration", Order = 5)]
+		[JsonPropertyName("frameMinDuration")]
 		public int? FrameMinDuration { get; set; }
 
-		[DataMember(Name = "frameMaxDuration", Order = 6)]
+		[JsonPropertyName("frameMaxDuration")]
 		public int? FrameMaxDuration { get; set; }
 
-		[DataMember(Name = "frames", Order = 7)]
+		[JsonPropertyName("frames")]
 		public ImageModel[] Frames { get; set; }
 	}
 }

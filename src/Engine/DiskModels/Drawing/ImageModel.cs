@@ -1,16 +1,15 @@
 ﻿using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	[DataContract(Name = "image")]
 	public class ImageModel : IAmAGraphicModel
 	{
-		[DataMember(Name = "textureName", Order = 1)]
+		[JsonPropertyName("textureName")]
 		public string TextureName { get; set; }
 
-		[DataMember(Name = "textureBox", Order = 2)]
+		[JsonPropertyName("textureBox")]
 		public Rectangle TextureBox { get; set; }
 	}
 }

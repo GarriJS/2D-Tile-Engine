@@ -49,5 +49,12 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// <param name="sceneName">The scene name.</param>
 		/// <returns>The new scene.</returns>
 		public Scene CreateNewScene(bool setCurrent, string sceneName = null);
+
+		/// <summary>
+		/// Saves the scene.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="elementLocation">The element location.</param>
+		public void SaveScene(IAmAUiElement element, Vector2 elementLocation);
 	}
 }

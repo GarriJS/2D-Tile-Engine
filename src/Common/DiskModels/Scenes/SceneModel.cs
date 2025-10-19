@@ -1,15 +1,14 @@
-﻿using Common.DiskModels.Common.Tiling;
-using System.Runtime.Serialization;
+﻿using Common.DiskModels.Tiling;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Scenes
 {
-    [DataContract(Name = "scene")]
 	public class SceneModel
 	{
-		[DataMember(Name = "sceneName", Order = 1)]
+		[JsonPropertyName("sceneName")]
 		public string SceneName { get; set; }
 
-		[DataMember(Name = "tileMap", Order = 2)]
+		[JsonPropertyName("tileMap")]
 		public TileMapModel TileMap { get; set; }
 	}
 }

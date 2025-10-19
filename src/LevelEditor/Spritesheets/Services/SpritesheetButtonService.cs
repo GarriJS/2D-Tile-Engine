@@ -98,7 +98,7 @@ namespace LevelEditor.Spritesheets.Services
 			
 			var addTileParams = new AddTileParams
 			{
-				Sprite = new ImageModel
+				Image = new ImageModel
 				{
 					TextureName = element.Graphic.TextureName,
 					TextureBox = element.Graphic.TextureBox

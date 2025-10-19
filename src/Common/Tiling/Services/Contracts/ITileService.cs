@@ -1,6 +1,6 @@
 ﻿using Common.Controls.Cursors.Models;
-using Common.DiskModels.Common.Tiling;
-using Common.DiskModels.Common.Tiling.Contracts;
+using Common.DiskModel.Tiling.Contracts;
+using Common.DiskModels.Tiling;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Engine.Core.Contracts;

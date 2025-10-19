@@ -1,13 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Physics
 {
 	public class SubAreaModel
 	{
-		[DataMember(Name = "width", Order = 1)]
+		[JsonPropertyName("width")]
 		public float Width { get; set; }
 
-		[DataMember(Name = "height", Order = 2)]
+		[JsonPropertyName("height")]
 		public float Height { get; set; }
 	}
 }

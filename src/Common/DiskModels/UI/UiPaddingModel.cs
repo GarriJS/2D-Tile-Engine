@@ -1,20 +1,19 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UI
 {
-	[DataContract(Name = "uiPadding")]
 	public struct UiPaddingModel
 	{
-		[DataMember(Name = "topPadding", Order = 1)]
+		[JsonPropertyName("topPadding")]
 		public float TopPadding { get; set; }
 
-		[DataMember(Name = "bottomPadding", Order = 2)]
+		[JsonPropertyName("bottomPadding")]
 		public float BottomPadding { get; set; }
 
-		[DataMember(Name = "leftPadding", Order = 3)]
+		[JsonPropertyName("leftPadding")]
 		public float LeftPadding { get; set; }
 
-		[DataMember(Name = "rightPadding", Order = 4)]
+		[JsonPropertyName("rightPadding")]
 		public float RightPadding { get; set; }
 	}
 }

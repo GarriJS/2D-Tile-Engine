@@ -1,13 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Physics
 {
 	public class OffsetSubAreaModel : SubAreaModel
 	{
-		[DataMember(Name = "horizontalOffset", Order = 3)]
+		[JsonPropertyName("horizontalOffset")]
 		public float HorizontalOffset { get; set; }
 
-		[DataMember(Name = "verticalOffset", Order = 4)]
+		[JsonPropertyName("verticalOffset")]
 		public float VerticalOffset { get; set; }
 	}
 }

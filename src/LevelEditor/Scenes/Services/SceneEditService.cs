@@ -1,6 +1,7 @@
 ﻿using BaseContent.BaseContentConstants.Fonts;
 using BaseContent.BaseContentConstants.Images;
 using Common.Controls.Cursors.Constants;
+using Common.DiskModels.Tiling;
 using Common.DiskModels.UI;
 using Common.DiskModels.UI.Elements;
 using Common.Scenes.Models;
@@ -10,17 +11,22 @@ using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
+using Engine.Core.Files.Services.Contracts;
+using Engine.DiskModels;
+using Engine.DiskModels.Controls;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
 using LevelEditor.Core.Constants;
+using LevelEditor.LevelEditorContent;
 using LevelEditor.Scenes.Models;
 using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace LevelEditor.Scenes.Services
 {
@@ -237,14 +243,12 @@ namespace LevelEditor.Scenes.Services
 			};
 
 			var area = areaService.GetAreaFromModel(areaModel);
-
 			var tileMap = new TileMap
 			{
 				TileMapName = $"{sceneName} TileMap",
 				Area = area,
 				DrawLayer = 1,
 			};
-
 			var scene = new Scene
 			{
 				TileMap = tileMap,
@@ -257,6 +261,26 @@ namespace LevelEditor.Scenes.Services
 			}
 
 			return scene;
+		}
+
+		/// <summary>
+		/// Saves the scene.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="elementLocation">The element location.</param>
+		public void SaveScene(IAmAUiElement element, Vector2 elementLocation)
+		{
+			if (null == this.CurrentScene)
+			{ 
+				return;
+			}
+
+			var jsonService = this._gameServices.GetService<IJsonService>();
+
+			var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", "TestMap", createDirectoryIfDoesNotExist: true);
+			var serializer = new ModelSerializer<TileMapModel>();
+			var tileMapModel = this.CurrentScene.TileMap.ToModel();
+			serializer.Serialize(filePath, tileMapModel);
 		}
 	}
 }

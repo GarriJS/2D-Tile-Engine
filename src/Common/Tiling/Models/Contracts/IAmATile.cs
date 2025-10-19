@@ -1,4 +1,4 @@
-﻿using Common.DiskModels.Common.Tiling.Contracts;
+﻿using Common.DiskModel.Tiling.Contracts;
 using Engine.Core.Files.Models.Contract;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.Contracts;

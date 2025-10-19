@@ -1,9 +1,9 @@
 ﻿using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
-using Common.DiskModels.Common.Tiling;
-using Common.DiskModels.Common.Tiling.Contracts;
+using Common.DiskModel.Tiling.Contracts;
 using Common.DiskModels.Controls;
+using Common.DiskModels.Tiling;
 using Common.Tiling.Models;
 using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
@@ -174,12 +174,12 @@ namespace Common.Tiling.Services
 			}
 
 			var basicTileModel = tileModel as TileModel;
-			var sprite = imageService.GetImageFromModel(basicTileModel.Sprite);
+			var image = imageService.GetImageFromModel(basicTileModel.Image);
 			var tile = new Tile
 			{
 				Row = tileModel.Row,
 				Column = tileModel.Column,
-				Image = sprite,
+				Image = image,
 				Area = TileConstants.TILE_AREA
 			};
 

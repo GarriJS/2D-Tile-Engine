@@ -82,7 +82,7 @@ namespace Engine.Controls.Managers
             var mouseState = Mouse.GetState();
             var pressedMouseButtons = this.GetPressedMouseButtons(Mouse.GetState());
             var actionControlNames = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
-                                                                 (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
+                                                                    (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
                                                      .Select(e => e.ActionName)
                                                      .ToList();
 

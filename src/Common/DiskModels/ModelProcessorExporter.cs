@@ -1,6 +1,6 @@
 ﻿using Common.Controls.Cursors.Services.Contracts;
-using Common.DiskModels.Common.Tiling;
 using Common.DiskModels.Controls;
+using Common.DiskModels.Tiling;
 using Common.DiskModels.UI;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Models;

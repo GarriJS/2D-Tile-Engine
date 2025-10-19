@@ -1,19 +1,18 @@
-﻿using Common.DiskModels.Common.Tiling.Contracts;
+﻿using Common.DiskModel.Tiling.Contracts;
 using Engine.DiskModels.Drawing;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.Common.Tiling
+namespace Common.DiskModels.Tiling
 {
-	[DataContract(Name = "animatedTile")]
     public class AnimatedTileModel : IAmATileModel
     {
-        [DataMember(Name = "row", Order = 1)]
+        [JsonPropertyName("row")]
         public int Row { get; set; }
 
-        [DataMember(Name = "column", Order = 2)]
+        [JsonPropertyName("column")]   
         public int Column { get; set; }
 
-        [DataMember(Name = "animation", Order = 3)]
+        [JsonPropertyName("animation")]
         public AnimationModel Animation { get; set; }
     }
 }
