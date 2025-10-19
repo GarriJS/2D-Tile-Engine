@@ -15,10 +15,10 @@ using System.Linq;
 namespace Common.Tiling.Services
 {
     /// <summary>
-    /// Represents a tile service.
+    /// Represents a mapTile service.
     /// </summary>
     /// <remarks>
-    /// Initializes the tile service.
+    /// Initializes the mapTile service.
     /// </remarks>
     /// <param name="gameServices">The game services.</param>
     public class TileService(GameServiceContainer gameServices) : ITileService
@@ -52,7 +52,7 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Updates the tile grid cursor position.
+		/// Updates the mapTile grid cursor position.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
@@ -67,11 +67,11 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Gets the local tile coordinates.
+		/// Gets the local mapTile coordinates.
 		/// </summary>
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="gridOffset">The grid offset.</param>
-		/// <returns>The local tile coordinates.</returns>
+		/// <returns>The local mapTile coordinates.</returns>
 		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0)
 		{
 			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
@@ -87,10 +87,10 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Gets the tile map.
+		/// Gets the mapTile map.
 		/// </summary>
-		/// <param name="tileMapModel">The tile map model.</param>
-		/// <returns>The tile map.</returns>
+		/// <param name="tileMapModel">The mapTile map model.</param>
+		/// <returns>The mapTile map.</returns>
 		public TileMap GetTileMap(TileMapModel tileMapModel)
 		{
 			var tileMap = new TileMap
@@ -102,19 +102,6 @@ namespace Common.Tiling.Services
 			if (null == tileMapModel.TileMapLayers)
 			{
 				return tileMap;
-			}
-
-			var imageModels = tileMapModel.Images;
-			var tileModels = tileMapModel.TileMapLayers.SelectMany(e => e.Tiles)
-													   .ToArray();
-
-			foreach (var tileModel in tileModels)
-			{
-				if ((tileModel is TileModel staticTileModel) &&
-					(true == tileMapModel.Images.TryGetValue(staticTileModel.ImageId, out var tileImage)))
-				{
-					staticTileModel.Image = tileImage;
-				}
 			}
 
 			foreach (var tileMapLayerModel in tileMapModel.TileMapLayers)
@@ -129,14 +116,26 @@ namespace Common.Tiling.Services
 				tileMap.TileMapLayers.Add(tileMapLayer.Layer, tileMapLayer);
 			}
 
+			var mapTileModels = tileMapModel.TileMapLayers.SelectMany(e => e.Tiles)
+														  .ToArray();
+
+			foreach (var mapTile in mapTileModels)
+			{
+				if ((mapTile is TileModel tileModel) &&
+					(true == tileMapModel.Images.TryGetValue(tileModel.ImageId, out var tileImage)))
+				{
+					tileModel.Image = tileImage;
+				}
+			}
+
 			return tileMap;
 		}
 
 		/// <summary>
-		/// Gets the tile map layer.
+		/// Gets the mapTile map layer.
 		/// </summary>
-		/// <param name="tileMapLayerModel">The tile map layer model.</param>
-		/// <returns>The tile map layer.</returns>
+		/// <param name="tileMapLayerModel">The mapTile map layer model.</param>
+		/// <returns>The mapTile map layer.</returns>
 		public TileMapLayer GetTileMapLayer(TileMapLayerModel tileMapLayerModel)
 		{
 			var tileMapLayer = new TileMapLayer
@@ -166,10 +165,10 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Gets the tile.
+		/// Gets the mapTile.
 		/// </summary>
-		/// <param name="tileModel">The tile model.</param>
-		/// <returns>The tile.</returns>
+		/// <param name="tileModel">The mapTile model.</param>
+		/// <returns>The mapTile.</returns>
 		public IAmATile GetTile(IAmATileModel tileModel)
 		{
 			var imageService = this._gameServices.GetService<IImageService>();

@@ -159,12 +159,23 @@ namespace Common.UserInterface.Models.Elements
 			};
 			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
 			this.ClickAnimation?.Draw(gameTime, gameServices, position, graphicOffset);
-			var graphicTextOffset = graphicOffset + new Vector2
+
+			if (null != this.GraphicText)
 			{
-				X = this.InsidePadding.LeftPadding,
-				Y = this.InsidePadding.TopPadding
-			};
-			this.GraphicText?.Draw(gameTime, gameServices, position, graphicTextOffset);
+				var graphicTextOffset = graphicOffset + new Vector2
+				{
+					X = this.InsidePadding.LeftPadding,
+					Y = this.InsidePadding.TopPadding
+				};
+
+				var textDimensions = this.GraphicText.GetTextDimensions();
+				var centeredOffset = new Vector2(
+					(this.Area.Width - textDimensions.X) / 2f,
+					(this.Area.Height - textDimensions.Y) / 2f
+				);
+
+				this.GraphicText.Draw(gameTime, gameServices, position, graphicTextOffset + centeredOffset);
+			}
 		}
 
 		/// <summary>

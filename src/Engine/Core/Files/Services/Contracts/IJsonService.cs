@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace Engine.Core.Files.Services.Contracts
 {
@@ -33,6 +32,6 @@ namespace Engine.Core.Files.Services.Contracts
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <param name="folderName">The folder name.</param>
 		/// <returns>The JSON file names.</returns>
-		public IList<string> GetJsonFileNames(string contentManagerName, string folderName);
+		public string[] GetJsonFileNames(string contentManagerName, string folderName);
 	}
 }

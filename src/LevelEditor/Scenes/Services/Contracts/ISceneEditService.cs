@@ -1,4 +1,5 @@
-﻿using Common.Scenes.Models;
+﻿using Common.DiskModels.UI;
+using Common.Scenes.Models;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Core.Contracts;
@@ -41,6 +42,12 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// </summary>
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetTileGridUserInterfaceZone();
+
+		/// <summary>
+		/// Gets the saved tile map user interface rows.
+		/// </summary>
+		/// <returns>The saved tile map user interface rows.</returns>
+		public UiRowModel[] GetSavedTileMapUserInterfaceRows();
 
 		/// <summary>
 		/// Creates a new scene.

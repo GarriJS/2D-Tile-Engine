@@ -1,6 +1,5 @@
 ﻿using Engine.Core.Files.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Engine.Core.Files
@@ -67,7 +66,7 @@ namespace Engine.Core.Files
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <param name="folderName">The folder name.</param>
 		/// <returns>The JSON file names.</returns>
-		public IList<string> GetJsonFileNames(string contentManagerName, string folderName)
+		public string[] GetJsonFileNames(string contentManagerName, string folderName)
 		{
 			var folderPath = Path.Combine(this.CurrentDirectory, contentManagerName, folderName);
 
@@ -77,11 +76,11 @@ namespace Engine.Core.Files
 			}
 
 			var files = Directory.GetFiles(folderPath, "*.json");
-			var fileNames = new List<string>(files.Length);
+			var fileNames = new string[files.Length];
 
-			foreach (var file in files)
+			for (int i = 0; i < files.Length; i++)
 			{
-				fileNames.Add(Path.GetFileNameWithoutExtension(file));
+				fileNames[i] = Path.GetFileNameWithoutExtension(files[i]);
 			}
 
 			return fileNames;

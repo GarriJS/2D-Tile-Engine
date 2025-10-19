@@ -13,7 +13,7 @@ using System.Linq;
 namespace Common.Tiling.Models
 {
 	/// <summary>
-	/// Represents a tile map.
+	/// Represents a mapTile map.
 	/// </summary>
 	public class TileMap : IAmDrawable, IHaveArea, ICanBeSerialized<TileMapModel>
 	{
@@ -23,7 +23,7 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the tile map name.
+		/// Gets or sets the mapTile map name.
 		/// </summary>
 		public string TileMapName { get; set; }
 
@@ -38,15 +38,15 @@ namespace Common.Tiling.Models
 		public IAmAArea Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the tile map layer.
+		/// Gets or sets the mapTile map layer.
 		/// </summary>
 		public Dictionary<int, TileMapLayer> TileMapLayers { get; set; } = [];
 
 		/// <summary>
-		/// Adds the tile. 
+		/// Adds the mapTile. 
 		/// </summary>
-		/// <param name="layer">The layer of the tile.</param>
-		/// <param name="tile">The tile.</param>
+		/// <param name="layer">The layer of the mapTile.</param>
+		/// <param name="tile">The mapTile.</param>
 		public void AddTile(int layer, IAmATile tile)
 		{
 			if (true == this.TileMapLayers.TryGetValue(layer, out var tileMapLayer))
@@ -86,24 +86,24 @@ namespace Common.Tiling.Models
 		{
 			var tileMapLayerModels = this.TileMapLayers.Values.Select(e => e.ToModel())
 															  .ToArray();
-			var tileModels = tileMapLayerModels.SelectMany(e => e.Tiles)
+			var mapTileModels = tileMapLayerModels.SelectMany(e => e.Tiles)
 											   .ToArray(); 
 			var uniqueImages = new Dictionary<ImageModel, int>(new ImageModelComparer());
 			var tileImageMappings = new Dictionary<int, ImageModel>();
 			var nextId = 1;
 
-			foreach (var tileModel in tileModels)
+			foreach (var mapTile in mapTileModels)
 			{
-				if (tileModel is TileModel staticTileModel)
+				if (mapTile is TileModel tileModel)
 				{
-					if (false == uniqueImages.TryGetValue(staticTileModel.Image, out var imageId))
+					if (false == uniqueImages.TryGetValue(tileModel.Image, out var imageId))
 					{
 						imageId = nextId++;
-						uniqueImages[staticTileModel.Image] = imageId;
-						tileImageMappings[imageId] = staticTileModel.Image;
+						uniqueImages[tileModel.Image] = imageId;
+						tileImageMappings[imageId] = tileModel.Image;
 					}
 
-					staticTileModel.ImageId = imageId;
+					tileModel.ImageId = imageId;
 				}
 			}
 

@@ -117,8 +117,11 @@ namespace LevelEditor.Core.Initialization
 		public static IList<object> GetInitialUiModels(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
+			var sceneEditService = gameServices.GetService<ISceneEditService>();
+
 			var spritesheetButtons = spritesheetButtonService.GetUiButtonsForSpritesheet("dark_grass_simplified", new Point(32, 32));
 			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();
+			var savedTileMapsRowModel = sceneEditService.GetSavedTileMapUserInterfaceRows();
 
 			return
 			[
@@ -344,7 +347,8 @@ namespace LevelEditor.Core.Initialization
 											VerticalSizeType = (int)UiElementSizeType.FitContent
 										}
 									]
-								}
+								},
+								..savedTileMapsRowModel
 							]
 						}
 					]

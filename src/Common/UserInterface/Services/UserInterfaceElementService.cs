@@ -85,11 +85,10 @@ namespace Common.UserInterface.Services
 				if ((true == uiElementModel.ResizeTexture) ||
 					(uiElement.Graphic is FillImage))
 				{
-					var textureWidth = area.Width + uiElement.InsidePadding.LeftPadding + uiElement.InsidePadding.RightPadding;
 					var dimensions = new Vector2
 					{
-						X = textureWidth,
-						Y = area.Height
+						X = uiElement.InsideWidth,
+						Y = uiElement.InsideHeight
 					};
 					uiElement.Graphic.SetDrawDimensions(dimensions);
 				}

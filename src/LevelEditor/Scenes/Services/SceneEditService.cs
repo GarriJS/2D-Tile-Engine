@@ -14,7 +14,6 @@ using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Files.Services.Contracts;
 using Engine.DiskModels;
-using Engine.DiskModels.Controls;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Physics.Services.Contracts;
@@ -27,7 +26,6 @@ using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace LevelEditor.Scenes.Services
 {
@@ -223,6 +221,68 @@ namespace LevelEditor.Scenes.Services
 		}
 
 		/// <summary>
+		/// Gets the saved tile map user interface rows.
+		/// </summary>
+		/// <returns>The saved tile map user interface rows.</returns>
+		public UiRowModel[] GetSavedTileMapUserInterfaceRows()
+		{
+			var savedTileMapNames = this.GetSavedTileMapNames();
+			var uiRowModels = new UiRowModel[savedTileMapNames.Length];
+
+			for (int i = 0; i < savedTileMapNames.Length; i++)
+			{
+				var rowModel = new UiRowModel
+				{
+					UiRowName = $"{savedTileMapNames[i]} row",
+					ResizeTexture = true,
+					InsidePadding = new UiPaddingModel
+					{
+						TopPadding = 10,
+						BottomPadding = 10,
+					},
+					HorizontalJustificationType = UiRowHorizontalJustificationType.Center,
+					VerticalJustificationType = UiRowVerticalJustificationType.Center,
+					BackgroundTexture = new FillImageModel
+					{
+						TextureName = "pallet",
+						TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+					},
+					SubElements =
+					[
+						new UiButtonModel
+						{
+							UiElementName = savedTileMapNames[i],
+							ResizeTexture = true,
+							HorizontalSizeType = UiElementSizeType.FitContent,
+							VerticalSizeType = UiElementSizeType.FitContent,
+							InsidePadding = new UiPaddingModel
+							{
+								TopPadding = 10,
+								BottomPadding = 10,
+							},
+							Texture = new FillImageModel
+							{
+								TextureName = "pallet",
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932)
+							},
+							Text = new GraphicalTextModel
+							{ 
+								Text = savedTileMapNames[i],
+								TextColor = PalletColors.Hex_3D3D3D,
+								FontName = FontNames.MonoBold
+							},
+							//ClickEventName = 
+						}
+					]
+				};
+
+				uiRowModels[i] = rowModel;
+			}
+
+			return uiRowModels;
+		}
+
+		/// <summary>
 		/// Creates a new scene.
 		/// </summary>
 		/// <param name="setCurrent">A value indicating whether to set the new scene as the current scene.</param>
@@ -272,7 +332,7 @@ namespace LevelEditor.Scenes.Services
 		public void SaveScene(IAmAUiElement element, Vector2 elementLocation)
 		{
 			if (null == this.CurrentScene)
-			{ 
+			{
 				return;
 			}
 
@@ -282,6 +342,17 @@ namespace LevelEditor.Scenes.Services
 			var serializer = new ModelSerializer<TileMapModel>();
 			var tileMapModel = this.CurrentScene.TileMap.ToModel();
 			serializer.Serialize(filePath, tileMapModel, TilingOptions.TileMapOptions);
+		}
+
+		/// <summary>
+		/// Gets the saved tile map names.
+		/// </summary>
+		/// <returns></returns>
+		public string[] GetSavedTileMapNames()
+		{
+			var jsonService = this._gameServices.GetService<IJsonService>();
+
+			return jsonService.GetJsonFileNames(ContentManagerParams.ContentManagerName, "TileMaps");
 		}
 	}
 }
