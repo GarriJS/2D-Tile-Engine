@@ -26,9 +26,9 @@ namespace Engine.Physics.Models
 		public Position Position { get; set; }
 
 		/// <summary>
-		/// Gets or sets the areas.
+		/// Gets or sets the sub areas.
 		/// </summary>
-		public OffsetSubArea[] Areas { get; set; }
+		public OffsetSubArea[] SubAreas { get; set; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.
@@ -37,7 +37,7 @@ namespace Engine.Physics.Models
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
 		public bool Contains(Vector2 coordinate)
 		{
-			foreach (var area in Areas)
+			foreach (var area in SubAreas)
 			{
 				var truePosition = this.Position.Coordinates + new Vector2
 				{
@@ -64,11 +64,11 @@ namespace Engine.Physics.Models
 		public AreaCollectionModel ToModel()
 		{
 			var positionModel = this.Position.ToModel();
-			var offsetSubArea = new OffsetSubAreaModel[this.Areas.Length];
+			var offsetSubArea = new OffsetSubAreaModel[this.SubAreas.Length];
 
-			for (int i = 0; i < this.Areas.Length; i++)
+			for (int i = 0; i < this.SubAreas.Length; i++)
 			{
-				offsetSubArea[i] = this.Areas[i].ToModel();
+				offsetSubArea[i] = this.SubAreas[i].ToModel();
 			}
 
 			return new AreaCollectionModel
@@ -76,7 +76,7 @@ namespace Engine.Physics.Models
 				Width = this.Width,
 				Height = this.Height,
 				Position = positionModel,
-				Areas = offsetSubArea
+				SubAreas = offsetSubArea
 			};
 		}
 	}

@@ -45,14 +45,19 @@ namespace Engine.Physics.Services
 			{
 				case AreaCollectionModel areaCollectionModel:
 
-					var areas = new OffsetArea[areaCollectionModel.Areas?.Length ?? 0];
-					var width = 0f;
+					var width = 0f; // TODO calculate width and length
 					var height = 0f;
+					var areas = new OffsetSubArea[areaCollectionModel.SubAreas?.Length ?? 0];
+
+					for (int i = 0; i < areas.Length; i++)
+					{
+						areas[i] = this.GetOffSetSubArea(areaCollectionModel.SubAreas[i]);
+					}
 
 					var areaCollection = new AreaCollection(width, height)
 					{
 						Position = position,
-						Areas = areaCollectionModel.Areas
+						SubAreas = areas
 					};
 
 					if (areaCollection is T resultCollection)
@@ -98,6 +103,36 @@ namespace Engine.Physics.Services
 			}
 
 			throw new InvalidCastException($"Cannot cast the area model of type {areaModel.GetType()} to {typeof(T)}.");
+		}
+
+		/// <summary>
+		/// Gets the sub area.
+		/// </summary>
+		/// <param name="subAreaModel">The sub area model.</param>
+		/// <returns>The sub area.</returns>
+		public SubArea GetSubArea(SubAreaModel subAreaModel)
+		{
+			return new SubArea
+			{
+				Width = subAreaModel.Width,
+				Height = subAreaModel.Height
+			};
+		}
+
+		/// <summary>
+		/// Gets the offset sub area.
+		/// </summary>
+		/// <param name="offsetSubAreaModel">The off set sub area model.</param>
+		/// <returns>The offset sub area.</returns>
+		public OffsetSubArea GetOffSetSubArea(OffsetSubAreaModel offsetSubAreaModel)
+		{
+			return new OffsetSubArea
+			{
+				Width = offsetSubAreaModel.Width,
+				Height = offsetSubAreaModel.Height,
+				HorizontalOffset = offsetSubAreaModel.HorizontalOffset,
+				VerticalOffset = offsetSubAreaModel.VerticalOffset
+			};
 		}
 	}
 }

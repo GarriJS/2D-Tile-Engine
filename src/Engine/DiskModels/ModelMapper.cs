@@ -61,6 +61,8 @@ namespace Engine.DiskModels
 				(typeof(SimpleAreaModel), areaService.GetAreaFromModel<SimpleArea>),
 				(typeof(OffsetAreaModel), areaService.GetAreaFromModel<OffsetArea>),
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
+				(typeof(SubArea), areaService.GetSubArea),
+				(typeof(OffsetSubArea), areaService.GetOffSetSubArea),
 				(typeof(ImageModel), imageService.GetImageFromModel<Image>),
 				(typeof(TiledImageModel), imageService.GetImageFromModel<TiledImage>),
 				(typeof(FillImageModel), imageService.GetImageFromModel<FillImage>),

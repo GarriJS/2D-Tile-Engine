@@ -1,5 +1,4 @@
 ﻿using Engine.DiskModels.Physics.Contracts;
-using Engine.Physics.Models;
 using System.Runtime.Serialization;
 
 namespace Engine.DiskModels.Physics
@@ -15,7 +14,7 @@ namespace Engine.DiskModels.Physics
 		[DataMember(Name = "position", Order = 3)]
 		public PositionModel Position { get; set; }
 
-		[DataMember(Name = "areas", Order = 4)]
-		public OffsetSubAreaModel[] Areas { get; set; }
+		[DataMember(Name = "subAreas", Order = 4)]
+		public OffsetSubAreaModel[] SubAreas { get; set; }
 	}
 }
