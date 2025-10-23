@@ -2,9 +2,9 @@
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Contracts;
-using Engine.Core.Fonts.Contracts;
-using Engine.Core.Initialization;
-using Engine.Core.Initialization.Contracts;
+using Engine.Core.Fonts.Services.Contracts;
+using Engine.Core.Initialization.Services;
+using Engine.Core.Initialization.Services.Contracts;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
 using Engine.Graphics.Services.Contracts;

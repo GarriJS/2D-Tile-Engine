@@ -10,7 +10,7 @@ using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
-using Engine.Core.Initialization.Contracts;
+using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;

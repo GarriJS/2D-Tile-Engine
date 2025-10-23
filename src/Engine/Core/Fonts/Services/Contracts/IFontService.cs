@@ -1,7 +1,7 @@
 ﻿using Engine.Core.Contracts;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Core.Fonts.Contracts
+namespace Engine.Core.Fonts.Services.Contracts
 {
 	/// <summary>
 	/// Represents a font service.

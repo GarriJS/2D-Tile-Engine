@@ -21,6 +21,7 @@ using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
 using LevelEditor.Core.Constants;
 using LevelEditor.LevelEditorContent;
+using LevelEditor.LevelEditorContent.Images.Manifests;
 using LevelEditor.Scenes.Models;
 using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
@@ -178,28 +179,8 @@ namespace LevelEditor.Scenes.Services
 									FrameDuration = 500,
 									Frames =
 									[
-										new ImageModel
-										{
-											TextureName = "dark_blue_buttons",
-											TextureBox = new Rectangle
-											{
-												X = 0,
-												Y = 128,
-												Width = 64,
-												Height = 64,
-											}
-										},
-										new ImageModel
-										{
-											TextureName = "dark_blue_buttons",
-											TextureBox = new Rectangle
-											{
-												X = 64,
-												Y = 128,
-												Width = 64,
-												Height = 64,
-											}
-										}
+										DarkBlueButtonsManifest.UnpressedTabButton,
+										DarkBlueButtonsManifest.PressedTabButton
 									],
 									RestingFrameIndex = 0,
 								},

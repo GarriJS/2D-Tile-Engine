@@ -1,9 +1,9 @@
-﻿using Engine.Core.Initialization.Contracts;
+﻿using Engine.Core.Initialization.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Engine.Core.Initialization
+namespace Engine.Core.Initialization.Services
 {
 	/// <summary>
 	/// Represents a function service.

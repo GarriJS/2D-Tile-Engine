@@ -1,4 +1,4 @@
-﻿using Engine.Core.Fonts.Contracts;
+﻿using Engine.Core.Fonts.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

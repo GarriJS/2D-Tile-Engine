@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Engine.Core.Initialization
+namespace Engine.Core.Initialization.Services
 {
 	/// <summary>
 	/// Represents a model processor

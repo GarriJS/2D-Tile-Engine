@@ -1,5 +1,6 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.Graphics.Models;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Graphics.Services.Contracts
 {
@@ -30,5 +31,19 @@ namespace Engine.Graphics.Services.Contracts
 		/// <param name="height">The height.</param>
 		/// <returns>The image.</returns>
 		public Image GetImage(string textureName, int width, int height);
+
+		/// <summary>
+		/// Gets the image from the image by parts model.
+		/// </summary>
+		/// <param name="imageByPartsModel">The image by parts model.</param>
+		/// <returns>The image.</returns>
+		public Image GetImageFromImageByPartsModel(ImageByPartsModel imageByPartsModel);
+
+		/// <summary>
+		/// Combines the textures into one texture.
+		/// </summary>
+		/// <param name="images">The image.</param>
+		/// <returns>The combined texture.</returns>
+		public Texture2D CombineTextures(Image[][] images);
 	}
 }

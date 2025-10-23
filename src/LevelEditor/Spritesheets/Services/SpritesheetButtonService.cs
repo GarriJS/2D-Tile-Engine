@@ -11,7 +11,7 @@ using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
-using Engine.Core.Textures.Contracts;
+using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;

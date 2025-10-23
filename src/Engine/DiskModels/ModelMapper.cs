@@ -1,6 +1,6 @@
 ﻿using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
-using Engine.Core.Initialization;
+using Engine.Core.Initialization.Services;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
@@ -67,6 +67,7 @@ namespace Engine.DiskModels
 				(typeof(ImageModel), imageService.GetImageFromModel<Image>),
 				(typeof(TiledImageModel), imageService.GetImageFromModel<TiledImage>),
 				(typeof(FillImageModel), imageService.GetImageFromModel<FillImage>),
+				(typeof(ImageByPartsModel), imageService.GetImageFromImageByPartsModel),
 				(typeof(IndependentGraphicModel), independentGraphicService.GetIndependentGraphicFromModel),
 				(typeof(GraphicalText), graphicTextService.GetGraphicTextFromModel),
 				(typeof(Animation), animationService.GetAnimationFromModel),

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Core.Initialization.Contracts
+namespace Engine.Core.Initialization.Services.Contracts
 {
 	/// <summary>
 	/// Represents a function service.

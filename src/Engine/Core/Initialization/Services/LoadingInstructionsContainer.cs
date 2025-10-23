@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Engine.Core.Initialization
+namespace Engine.Core.Initialization.Services
 {
 	/// <summary>
 	/// Represents a loading instructions container.

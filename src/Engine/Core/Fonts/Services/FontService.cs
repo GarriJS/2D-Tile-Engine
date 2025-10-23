@@ -1,10 +1,10 @@
-﻿using Engine.Core.Fonts.Contracts;
-using Engine.Core.Initialization;
+﻿using Engine.Core.Fonts.Services.Contracts;
+using Engine.Core.Initialization.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Engine.Core.Fonts
+namespace Engine.Core.Fonts.Services
 {
 	/// <summary>s
 	/// Represents a font service.

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.IO;
 
-namespace Engine.Core.Files
+namespace Engine.Core.Files.Services
 {
 	/// <summary>
 	/// Represents a JSON service.

@@ -9,6 +9,7 @@ using Common.UserInterface.Models.Contracts;
 using Engine.DiskModels.Drawing;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
+using LevelEditor.LevelEditorContent.Images.Manifests;
 using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -229,25 +230,8 @@ namespace LevelEditor.Core.Initialization
 												FrameDuration = 500,
 												Frames =
 												[
-													new ImageModel
-													{
-														TextureName = "dark_blue_buttons",
-														TextureBox = new Rectangle
-														{
-															Width = 64,
-															Height = 64,
-														}
-													},
-													new ImageModel
-													{
-														TextureName = "dark_blue_buttons",
-														TextureBox = new Rectangle
-														{
-															X = 64,
-															Width = 64,
-															Height = 64,
-														}
-													}
+													DarkBlueButtonsManifest.UnpressedPlusButton,
+													DarkBlueButtonsManifest.PressedPlusButton
 												],
 												RestingFrameIndex = 0,
 											},
@@ -286,28 +270,8 @@ namespace LevelEditor.Core.Initialization
 												FrameDuration = 500,
 												Frames =
 												[
-													new ImageModel
-													{
-														TextureName = "dark_blue_buttons",
-														TextureBox = new Rectangle
-														{
-															X = 0,
-															Y = 64,
-															Width = 64,
-															Height = 64,
-														}
-													},
-													new ImageModel
-													{
-														TextureName = "dark_blue_buttons",
-														TextureBox = new Rectangle
-														{
-															X = 64,
-															Y = 64,
-															Width = 64,
-															Height = 64,
-														}
-													}
+													DarkBlueButtonsManifest.UnpressedEnterButton,
+													DarkBlueButtonsManifest.PressedEnterButton
 												],
 												RestingFrameIndex = 0,
 											},

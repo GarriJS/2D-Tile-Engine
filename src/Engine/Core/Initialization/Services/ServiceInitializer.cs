@@ -2,13 +2,13 @@
 using Engine.Controls.Services;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Contracts;
-using Engine.Core.Files;
+using Engine.Core.Files.Services;
 using Engine.Core.Files.Services.Contracts;
-using Engine.Core.Fonts;
-using Engine.Core.Fonts.Contracts;
-using Engine.Core.Initialization.Contracts;
-using Engine.Core.Textures;
-using Engine.Core.Textures.Contracts;
+using Engine.Core.Fonts.Services;
+using Engine.Core.Fonts.Services.Contracts;
+using Engine.Core.Initialization.Services.Contracts;
+using Engine.Core.Textures.Services;
+using Engine.Core.Textures.Services.Contracts;
 using Engine.Debugging.Services;
 using Engine.Debugging.Services.Contracts;
 using Engine.Graphics.Services;
@@ -24,7 +24,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Engine.Core.Initialization
+namespace Engine.Core.Initialization.Services
 {
 	/// <summary>
 	/// Represents a service initializer.
