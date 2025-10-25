@@ -46,19 +46,16 @@ namespace Engine.Graphics.Services
 
 			var image = imageModel switch
 			{   
-				TiledImageModel fillImageModel => new TiledImage
+				TextureRegionImageModel => new TextureRegionImage
 				{
 					TextureName = imageModel.TextureName,
 					TextureBox = imageModel.TextureBox,
 					Texture = texture,
-					FillBox = fillImageModel.FillBox,
 				},
-				FillImageModel stretchImageModel => new FillImage
+				ImageByPartsModel => new ImageByParts
 				{
 					TextureName = imageModel.TextureName,
 					TextureBox = imageModel.TextureBox,
-					Texture = texture,
-					FillBox = stretchImageModel.FillBox,
 				},
 				_ => new Image
 				{
@@ -107,55 +104,11 @@ namespace Engine.Graphics.Services
 		}
 
 		/// <summary>
-		/// Gets the image from the image by parts model.
-		/// </summary>
-		/// <param name="imageByPartsModel">The image by parts model.</param>
-		/// <returns>The image.</returns>
-		public Image GetImageFromImageByPartsModel(ImageByPartsModel imageByPartsModel)
-		{
-			if ((imageByPartsModel?.Images is null) ||
-				(0 == imageByPartsModel.Images.Length) ||
-				(true == imageByPartsModel.Images.Any(e => e is null || 0 == e.Length)) ||
-				(false == imageByPartsModel.Images.All(e => e.Length == imageByPartsModel.Images[0].Length)))
-			{
-				return null;
-			}
-
-			var images = new Image[imageByPartsModel.Images.Length][];
-
-			for (int i = 0; i < images.Length; i++)
-			{
-				images[i] = new Image[imageByPartsModel.Images[i].Length];
-
-				for (int j = 0; j < images[i].Length; j++)
-				{
-					images[i][j] = this.GetImageFromModel(imageByPartsModel.Images[i][j]);
-				}
-			}
-
-			var combinedTexture = this.CombineTextures(images);
-			var result = new Image
-			{
-				TextureName = "Combined_Image",
-				TextureBox = new Rectangle
-				{
-					X = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-					Y = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-					Width = combinedTexture.Width - (TextureConstants.TEXTURE_EXTENSION_AMOUNT * 2),
-					Height = combinedTexture.Height - (TextureConstants.TEXTURE_EXTENSION_AMOUNT * 2)
-				},
-				Texture = combinedTexture
-			};
-
-			return result;
-		}
-
-		/// <summary>
-		/// Combines the textures into one texture.
+		/// Combines the image textures into one texture.
 		/// </summary>
 		/// <param name="images">The image.</param>
 		/// <returns>The combined texture.</returns>
-		public Texture2D CombineTextures(Image[][] images)
+		public Texture2D CombineImageTextures(Image[][] images)
 		{
 			if ((images is null) || 
 				(0 == images.Length) || 

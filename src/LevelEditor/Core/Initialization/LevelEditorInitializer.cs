@@ -166,7 +166,7 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											Texture = new FillImageModel
+											Texture = new TextureRegionImageModel
 											{
 												TextureName = "pallet",
 												TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
@@ -192,7 +192,7 @@ namespace LevelEditor.Core.Initialization
 										TopPadding = 10,
 									},
 									ResizeTexture = true,
-									BackgroundTexture = new FillImageModel
+									BackgroundTexture = new TextureRegionImageModel
 									{
 										TextureName = "pallet",
 										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
@@ -288,7 +288,7 @@ namespace LevelEditor.Core.Initialization
 								{
 									UiRowName = "Levels Header",
 									ResizeTexture = true,
-									BackgroundTexture = new FillImageModel
+									BackgroundTexture = new TextureRegionImageModel
 									{
 										TextureName = "pallet",
 										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)

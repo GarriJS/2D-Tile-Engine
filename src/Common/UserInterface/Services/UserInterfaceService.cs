@@ -442,7 +442,7 @@ namespace Common.UserInterface.Services
 				background = imageService.GetImageFromModel(uiZoneModel.BackgroundTexture);
 
 				if ((true == uiZoneModel.ResizeTexture) ||
-					(background is FillImage))
+					(background is TextureRegionImage))
 				{
 					background.SetDrawDimensions(uiScreenZone.Area.ToVectorDimensions);
 				}
@@ -518,7 +518,7 @@ namespace Common.UserInterface.Services
 				background = imageService.GetImageFromModel(uiRowModel.BackgroundTexture);
 
 				if ((true == uiRowModel.ResizeTexture) ||
-					(background is FillImage))
+					(background is TextureRegionImage))
 				{
 					var dimensions = new Vector2
 					{

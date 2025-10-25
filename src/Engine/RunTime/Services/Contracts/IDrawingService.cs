@@ -29,28 +29,20 @@ namespace Engine.RunTime.Services.Contracts
 		/// Draws the texture. 
 		/// </summary>
 		/// <param name="texture">The texture.</param>
-		/// <param name="coordinates">The coordinates.</param>
-		/// <param name="sourceRectangle">The source rectangle.</param>
-		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle);
-
-		/// <summary>
-		/// Draws the texture. 
-		/// </summary>
-		/// <param name="texture">The texture.</param>
-		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="drawCoordinates">The draw coordinates.</param>
 		/// <param name="sourceRectangle">The source rectangle.</param>
 		/// <param name="color">The color.</param>
-		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Color color);
+		public void Draw(Texture2D texture, Vector2 drawCoordinates, Rectangle sourceRectangle, Color color);
 
 		/// <summary>
 		/// Draws the texture. 
 		/// </summary>
 		/// <param name="texture">The texture.</param>
-		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="drawCoordinates">The draw coordinates.</param>
 		/// <param name="sourceRectangle">The source rectangle.</param>
 		/// <param name="stretchBox">The stretch box.</param>
 		/// <param name="color">The color.</param>
-		public void Draw(Texture2D texture, Vector2 coordinates, Rectangle sourceRectangle, Vector2 stretchBox, Color color);
+		public void Draw(Texture2D texture, Vector2 drawCoordinates, Rectangle sourceRectangle, Vector2 stretchBox, Color color);
 
 		/// <summary>
 		/// Draws the sub drawable. 

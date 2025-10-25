@@ -2,9 +2,9 @@
 
 namespace Engine.DiskModels.Drawing
 {
-	public class ImageByPartsModel
+	public class ImageByPartsModel : ImageModel
 	{
-		[JsonPropertyName("images")]
-		public ImageModel[][] Images { get; set; }
+		[JsonPropertyName("textureRegions")]
+		public TextureRegionModel[][] TextureRegions { get; set; }
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models.SubAreas
 {
@@ -19,16 +20,23 @@ namespace Engine.Physics.Models.SubAreas
 		public float Height;
 
 		/// <summary>
+		/// Gets the sub area as a vector.
+		/// </summary>
+		public Vector2 ToVector => new() { X = Width, Y = Height };
+
+		/// <summary>
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
 		virtual public SubAreaModel ToModel()
 		{
-			return new SubAreaModel
+			var result =  new SubAreaModel
 			{
 				Width = Width,
 				Height = Height
 			};
+
+			return result;
 		}
 	}
 }

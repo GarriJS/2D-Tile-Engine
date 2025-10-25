@@ -40,7 +40,7 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		/// <param name="dimensions">The dimensions.</param>
 		virtual public void SetDrawDimensions(Vector2 dimensions)
-		{ 
+		{
 			this._textureBox.Width = (int)dimensions.X;
 			this._textureBox.Height = (int)dimensions.Y;
 		}
@@ -65,11 +65,13 @@ namespace Engine.Graphics.Models
 		/// <returns>The serialization model.</returns>
 		virtual public IAmAGraphicModel ToModel()
 		{
-			return new ImageModel
+			var result = new ImageModel
 			{
 				TextureName = this.TextureName,
 				TextureBox = this.TextureBox
 			};
+
+			return result;
 		}
 
 		/// <summary>

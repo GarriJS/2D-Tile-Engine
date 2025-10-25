@@ -16,6 +16,7 @@ using Engine.Core.Files.Services.Contracts;
 using Engine.DiskModels;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
+using Engine.Graphics.Enum;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
@@ -79,7 +80,7 @@ namespace LevelEditor.Scenes.Services
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
 			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
 			runTimeDrawService.AddDrawable(scene.TileMap);
-			var fillImageModel = new TiledImageModel
+			var textureRegionImageModel = new TextureRegionImageModel
 			{
 				TextureName = "tile_grid_light",
 				TextureBox = new Rectangle
@@ -89,13 +90,24 @@ namespace LevelEditor.Scenes.Services
 					Width = 320,
 					Height = 320
 				},
-				FillBox = new Vector2
-				{
-					X = graphicDeviceService.GraphicsDevice.Viewport.Width,
-					Y = graphicDeviceService.GraphicsDevice.Viewport.Height
+				TextureRegion = new TextureRegionModel
+				{ 
+					TextureRegionType = TextureRegionType.Fill,
+					TextureArea = new Rectangle
+					{
+						X = 0,
+						Y = 0,
+						Width = 320,
+						Height = 320
+					},
+					DisplayArea = new SubAreaModel
+					{
+						Width = graphicDeviceService.GraphicsDevice.Viewport.Width,
+						Height = graphicDeviceService.GraphicsDevice.Viewport.Height
+					}
 				}
 			};
-			this.AddTileComponent.SetBackgroundGraphic(fillImageModel);
+			this.AddTileComponent.SetBackgroundGraphic(textureRegionImageModel);
 
 			if (false == this.AddTileComponent.BackgroundGraphicActive)
 			{
@@ -139,7 +151,7 @@ namespace LevelEditor.Scenes.Services
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
 						ResizeTexture = true,
-						BackgroundTexture = new FillImageModel
+						BackgroundTexture = new TextureRegionImageModel
 						{
 							TextureName = "pallet",
 							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
@@ -223,7 +235,7 @@ namespace LevelEditor.Scenes.Services
 					},
 					HorizontalJustificationType = UiRowHorizontalJustificationType.Center,
 					VerticalJustificationType = UiRowVerticalJustificationType.Center,
-					BackgroundTexture = new FillImageModel
+					BackgroundTexture = new TextureRegionImageModel
 					{
 						TextureName = "pallet",
 						TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
@@ -241,7 +253,7 @@ namespace LevelEditor.Scenes.Services
 								TopPadding = 10,
 								BottomPadding = 10,
 							},
-							Texture = new FillImageModel
+							Texture = new TextureRegionImageModel
 							{
 								TextureName = "pallet",
 								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932)

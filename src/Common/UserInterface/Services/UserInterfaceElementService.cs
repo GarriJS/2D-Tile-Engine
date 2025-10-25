@@ -81,7 +81,7 @@ namespace Common.UserInterface.Services
 				uiElement.Graphic = imageService.GetImageFromModel(uiElementModel.Texture);
 
 				if ((true == uiElementModel.ResizeTexture) ||
-					(uiElement.Graphic is FillImage))
+					(uiElement.Graphic is TextureRegionImage))
 				{
 					var dimensions = new Vector2
 					{

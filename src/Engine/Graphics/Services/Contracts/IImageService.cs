@@ -33,17 +33,10 @@ namespace Engine.Graphics.Services.Contracts
 		public Image GetImage(string textureName, int width, int height);
 
 		/// <summary>
-		/// Gets the image from the image by parts model.
-		/// </summary>
-		/// <param name="imageByPartsModel">The image by parts model.</param>
-		/// <returns>The image.</returns>
-		public Image GetImageFromImageByPartsModel(ImageByPartsModel imageByPartsModel);
-
-		/// <summary>
-		/// Combines the textures into one texture.
+		/// Combines the image textures into one texture.
 		/// </summary>
 		/// <param name="images">The image.</param>
 		/// <returns>The combined texture.</returns>
-		public Texture2D CombineTextures(Image[][] images);
+		public Texture2D CombineImageTextures(Image[][] images);
 	}
 }

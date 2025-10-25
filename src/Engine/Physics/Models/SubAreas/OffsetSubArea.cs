@@ -24,13 +24,15 @@ namespace Engine.Physics.Models.SubAreas
 		/// <returns>The serialization model.</returns>
 		override public OffsetSubAreaModel ToModel()
 		{
-			return new OffsetSubAreaModel
+			var result = new OffsetSubAreaModel
 			{
 				Width = Width,
 				Height = Height,
 				HorizontalOffset = HorizontalOffset,
 				VerticalOffset = VerticalOffset
 			};
+
+			return result;
 		}
 	}
 }

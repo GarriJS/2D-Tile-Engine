@@ -7,14 +7,14 @@ using Microsoft.Xna.Framework;
 namespace Engine.Graphics.Models
 {
 	/// <summary>
-	/// Represents a fill image.
+	/// Represents a texture region image.
 	/// </summary>
-	public class FillImage : Image
+	public class TextureRegionImage : Image
 	{
 		/// <summary>
-		/// Gets or sets the fill box.
+		/// Gets or sets the texture region.
 		/// </summary>
-		public Vector2 FillBox { get; set; }
+		public TextureRegion TextureRegion { get; set; }
 
 		/// <summary>
 		/// Sets the draw dimensions.
@@ -22,7 +22,7 @@ namespace Engine.Graphics.Models
 		/// <param name="dimensions">The dimensions.</param>
 		override public void SetDrawDimensions(Vector2 dimensions)
 		{
-			this.FillBox = dimensions;
+
 		}
 
 		/// <summary>
@@ -36,7 +36,8 @@ namespace Engine.Graphics.Models
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
-			drawingService.Draw(this.Texture, position.Coordinates + offset, this.TextureBox, this.FillBox, Color.White);
+			var drawCoordinates = position.Coordinates + offset;
+			this.TextureRegion.Draw(drawingService, this.Texture, drawCoordinates);
 		}
 
 		/// <summary>
@@ -45,12 +46,15 @@ namespace Engine.Graphics.Models
 		/// <returns>The serialization model.</returns>
 		override public IAmAGraphicModel ToModel()
 		{
-			return new FillImageModel
+			var textureRegionModel = this.TextureRegion.ToModel();
+			var result = new TextureRegionImageModel
 			{
 				TextureName = this.TextureName,
 				TextureBox = this.TextureBox,
-				FillBox = this.FillBox
+				TextureRegion = textureRegionModel
 			};
+
+			return result;
 		}
 	}
 }

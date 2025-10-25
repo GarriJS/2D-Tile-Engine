@@ -155,7 +155,7 @@ namespace LevelEditor.Spritesheets.Services
 							BottomPadding = 30,
 						},
 						ResizeTexture = true,
-						BackgroundTexture = new FillImageModel
+						BackgroundTexture = new TextureRegionImageModel
 						{
 							TextureName = "pallet",
 							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)

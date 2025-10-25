@@ -117,8 +117,8 @@ namespace LevelEditor.Scenes.Models
 		/// <summary>
 		/// Sets the background graphic.
 		/// </summary>
-		/// <param name="fillImageModel">The fill image model.</param>
-		public void SetBackgroundGraphic(TiledImageModel fillImageModel)
+		/// <param name="textureRegionImageModel">The texture region image model.</param>
+		public void SetBackgroundGraphic(TextureRegionImageModel textureRegionImageModel)
 		{
 			var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
@@ -130,7 +130,7 @@ namespace LevelEditor.Scenes.Models
 					X = 0,
 					Y = 0,
 				},
-				Graphic = fillImageModel
+				Graphic = textureRegionImageModel
 			};
 
 			if ((null != this.BackgroundGraphic) &&
