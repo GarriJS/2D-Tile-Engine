@@ -76,17 +76,17 @@ namespace Common.UserInterface.Services
 			uiElement.InsidePadding = this.GetUiPaddingFromModel(uiElementModel.InsidePadding);
 			uiElement.Area = area;
 
-			if (null != uiElementModel.Texture)
+			if (null != uiElementModel.Graphic)
 			{
-				uiElement.Graphic = imageService.GetImageFromModel(uiElementModel.Texture);
+				uiElement.Graphic = imageService.GetImageFromModel(uiElementModel.Graphic);
 
 				if ((true == uiElementModel.ResizeTexture) ||
 					(uiElement.Graphic is TextureRegionImage))
 				{
-					var dimensions = new Vector2
+					var dimensions = new SubArea
 					{
-						X = uiElement.InsideWidth,
-						Y = uiElement.InsideHeight
+						Width = uiElement.InsideWidth,
+						Height = uiElement.InsideHeight
 					};
 					uiElement.Graphic.SetDrawDimensions(dimensions);
 				}

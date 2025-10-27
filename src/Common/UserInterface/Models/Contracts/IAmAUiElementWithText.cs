@@ -8,7 +8,7 @@ namespace Common.UserInterface.Models.Contracts
 	public interface IAmAUiElementWithText : IAmAUiElement
 	{
 		/// <summary>
-		/// Gets or sets the graphic text.
+		/// Gets or sets the Graphic text.
 		/// </summary>
 		public GraphicalText GraphicText { get; set; }
 	}

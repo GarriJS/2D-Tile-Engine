@@ -64,8 +64,8 @@ namespace Common.UserInterface.Models.Contracts
 		public UiPadding InsidePadding { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the Graphic.
 		/// </summary>
-		public Image Graphic { get; set; }
+		public SimpleImage Graphic { get; set; }
 	}
 }

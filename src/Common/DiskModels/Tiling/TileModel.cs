@@ -1,5 +1,5 @@
 ﻿using Common.DiskModel.Tiling.Contracts;
-using Engine.DiskModels.Drawing;
+using Engine.Graphics.Models.Contracts;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Tiling
@@ -12,10 +12,10 @@ namespace Common.DiskModels.Tiling
         [JsonPropertyName("column")]
         public int Column { get; set; }
 
-		[JsonPropertyName("imageId")]
-		public int ImageId { get; set; }
+		[JsonPropertyName("graphicId")]
+		public int GraphicId { get; set; }
 
 		[JsonIgnore]
-		public ImageModel Image { get; set; }
+		public IAmAGraphic Graphic { get; set; }
     }
 }

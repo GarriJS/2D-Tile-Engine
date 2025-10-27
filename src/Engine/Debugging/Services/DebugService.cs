@@ -3,6 +3,7 @@ using Engine.Debugging.Models;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
+using Engine.Graphics.Enum;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services.Contracts;
@@ -87,15 +88,24 @@ namespace Engine.Debugging.Services
 							X = 0,
 							Y = i
 						},
-						Graphic = new ImageModel
+						Graphic = new SimpleImageModel
 						{
 							TextureName = "debug",
-							TextureBox = new Rectangle
+							TextureRegion = new TextureRegionModel
 							{
-								X = 0,
-								Y = 0,
-								Width = screenWidth,
-								Height = 1
+								TextureRegionType = TextureRegionType.Simple,
+								TextureBox = new Rectangle
+								{
+									X = 0,
+									Y = 0,
+									Width = screenWidth,
+									Height = 1
+								},
+								DisplayArea = new SubAreaModel
+								{ 
+									Width = screenWidth,
+									Height = i	
+								}
 							}
 						}
 					};
@@ -108,15 +118,24 @@ namespace Engine.Debugging.Services
 							X = 0,
 							Y = i + 1
 						},
-						Graphic = new ImageModel
+						Graphic = new SimpleImageModel
 						{
 							TextureName = "debug",
-							TextureBox = new Rectangle
+							TextureRegion = new TextureRegionModel
 							{
-								X = 0,
-								Y = 0,
-								Width = screenWidth,
-								Height = 1
+								TextureRegionType = TextureRegionType.Simple,
+								TextureBox = new Rectangle
+								{
+									X = 0,
+									Y = 0,
+									Width = screenWidth,
+									Height = 1
+								},
+								DisplayArea = new SubAreaModel
+								{
+									Width = screenWidth,
+									Height = i
+								}
 							}
 						}
 					};
@@ -137,15 +156,24 @@ namespace Engine.Debugging.Services
 							X = i,
 							Y = 0
 						},
-						Graphic = new ImageModel
+						Graphic = new SimpleImageModel
 						{
 							TextureName = "debug",
-							TextureBox = new Rectangle
+							TextureRegion = new TextureRegionModel
 							{
-								X = 0,
-								Y = 0,
-								Width = 1,
-								Height = screenHeight
+								TextureRegionType = TextureRegionType.Simple,
+								TextureBox = new Rectangle
+								{
+									X = 0,
+									Y = 0,
+									Width = 1,
+									Height = screenHeight
+								},
+								DisplayArea = new SubAreaModel
+								{
+									Width = 1,
+									Height = screenHeight
+								}
 							}
 						}
 					};
@@ -158,15 +186,24 @@ namespace Engine.Debugging.Services
 							X = i + 1,
 							Y = 0
 						},
-						Graphic = new ImageModel
+						Graphic = new SimpleImageModel
 						{
 							TextureName = "debug",
-							TextureBox = new Rectangle
+							TextureRegion = new TextureRegionModel
 							{
-								X = 0,
-								Y = 0,
-								Width = 1,
-								Height = screenHeight
+								TextureRegionType = TextureRegionType.Simple,
+								TextureBox = new Rectangle
+								{
+									X = 0,
+									Y = 0,
+									Width = 1,
+									Height = screenHeight
+								},
+								DisplayArea = new SubAreaModel
+								{
+									Width = 1,
+									Height = screenHeight
+								}
 							}
 						}
 					};

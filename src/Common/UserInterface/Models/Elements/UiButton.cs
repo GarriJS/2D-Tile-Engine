@@ -76,19 +76,19 @@ namespace Common.UserInterface.Models.Elements
 		public UiPadding InsidePadding { get; set; }
 
 		/// <summary>
-		/// Gets or sets the graphic text.
+		/// Gets or sets the Graphic text.
 		/// </summary>
 		public GraphicalText GraphicText { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the Graphic.
 		/// </summary>
-		public Image Graphic { get; set; }
+		public SimpleImage Graphic { get; set; }
 
 		/// <summary>
 		/// Gets or sets the clickable image.
 		/// </summary>
-		public Image ClickableImage { get => this.ClickAnimation?.CurrentFrame; }
+		public SimpleImage ClickableImage { get => this.ClickAnimation?.CurrentFrame; }
 
 		/// <summary>
 		/// Gets or sets the clickable animation.

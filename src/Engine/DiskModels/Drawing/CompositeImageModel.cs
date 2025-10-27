@@ -1,15 +1,14 @@
 ﻿using Engine.DiskModels.Drawing.Contracts;
-using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class ImageModel : IAmAGraphicModel
+	public class CompositeImageModel : IAmAImageModel
 	{
 		[JsonPropertyName("textureName")]
 		public string TextureName { get; set; }
 
-		[JsonPropertyName("textureBox")]
-		public Rectangle TextureBox { get; set; }
+		[JsonPropertyName("textureRegions")]
+		public TextureRegionModel[][] TextureRegions { get; set; }
 	}
 }

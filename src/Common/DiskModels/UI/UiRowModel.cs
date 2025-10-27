@@ -29,7 +29,7 @@ namespace Common.DiskModels.UI
 		public string RowHoverCursorName { get; set; }
 
 		[JsonPropertyName("backgroundTexture")]
-		public ImageModel BackgroundTexture { get; set; }
+		public SimpleImageModel BackgroundTexture { get; set; }
 
 		[JsonPropertyName("subElements")]
 		public IAmAUiElementModel[] SubElements { get; set; }

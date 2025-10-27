@@ -1,5 +1,6 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services;
 using Microsoft.Xna.Framework;
@@ -26,7 +27,7 @@ namespace Engine.Graphics.Services
 		{
 			var imageService = this._gameServices.GetService<IImageService>();
 
-			var frames = new Image[animationModel.Frames.Length];
+			var frames = new IAmAImage[animationModel.Frames.Length];
 
 			for (int i = 0; i < frames.Length; i++)
 			{
@@ -77,10 +78,10 @@ namespace Engine.Graphics.Services
 		{
 			foreach (var frameModel in animationModel.Frames)
 			{
-				frameModel.TextureBox = new Rectangle
+				frameModel.TextureRegion.TextureBox = new Rectangle
 				{
-					X = frameModel.TextureBox.X,
-					Y = frameModel.TextureBox.Y,
+					X = frameModel.TextureRegion.TextureBox.X,
+					Y = frameModel.TextureRegion.TextureBox.Y,
 					Width = frameWidth,
 					Height = frameHeight
 				};

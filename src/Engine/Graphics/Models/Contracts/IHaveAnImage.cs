@@ -13,6 +13,6 @@
 		/// <summary>
 		/// Gets the image.
 		/// </summary>
-		public Image Image { get; }
+		public SimpleImage Image { get; }
 	}
 }

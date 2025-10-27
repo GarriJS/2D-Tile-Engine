@@ -37,7 +37,7 @@ namespace Common.Tiling.Models
 		public int UpdateOrder { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the Graphic.
 		/// </summary>
 		public IAmAGraphic Graphic { get => this.Animation.CurrentFrame; }
 

@@ -10,8 +10,8 @@ namespace Engine.DiskModels.Drawing
 		[JsonPropertyName("textureRegionType")]
 		public TextureRegionType TextureRegionType { get; set; }
 
-		[JsonPropertyName("textureArea")]
-		public Rectangle TextureArea {  get; set; }
+		[JsonPropertyName("textureBox")]
+		public Rectangle TextureBox {  get; set; }
 
 		[JsonPropertyName("displayArea")]
 		public SubAreaModel DisplayArea { get; set; }

@@ -36,7 +36,7 @@ namespace Engine.Graphics.Services
 
 				graphic = animationService.GetAnimationFromModel(animationModel);
 			}
-			else if (independentGraphicModel.Graphic is ImageModel imageModel)
+			else if (independentGraphicModel.Graphic is SimpleImageModel imageModel)
 			{ 
 				var imageService = this._gameServices.GetService<IImageService>();
 

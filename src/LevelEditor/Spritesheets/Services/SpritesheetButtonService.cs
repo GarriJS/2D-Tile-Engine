@@ -13,6 +13,8 @@ using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
+using Engine.Graphics.Enum;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.Scenes.Models;
@@ -98,7 +100,7 @@ namespace LevelEditor.Spritesheets.Services
 			
 			var addTileParams = new AddTileParams
 			{
-				Image = new ImageModel
+				Image = new SimpleImageModel
 				{
 					TextureName = element.Graphic.TextureName,
 					TextureBox = element.Graphic.TextureBox
@@ -158,7 +160,17 @@ namespace LevelEditor.Spritesheets.Services
 						BackgroundTexture = new TextureRegionImageModel
 						{
 							TextureName = "pallet",
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent),
+							TextureRegion = new TextureRegionModel
+							{ 
+								TextureRegionType = TextureRegionType.Fill,
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent),
+								DisplayArea = new SubAreaModel
+								{
+									Width = 0,
+									Height = 0,
+								}
+							}
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
 						HorizontalJustificationType =  UiRowHorizontalJustificationType.Center,
@@ -201,7 +213,7 @@ namespace LevelEditor.Spritesheets.Services
 
 				for (var j = 0; j < verticalSize; j++)
 				{
-					var imageModel = new ImageModel
+					var imageModel = new SimpleImageModel
 					{
 						TextureName = spritesheetName,
 						TextureBox = new Rectangle
@@ -232,7 +244,7 @@ namespace LevelEditor.Spritesheets.Services
 							X = spriteDimensions.X,
 							Y = spriteDimensions.Y
 						},
-						Texture = imageModel,
+						Graphic = imageModel,
 						Text = null,
 						ClickableAreaScaler = new Vector2
 						{

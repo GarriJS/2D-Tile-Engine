@@ -101,11 +101,11 @@ namespace Engine.Graphics.Models
 		/// <returns>The serialization model.</returns>
 		override public IAmAGraphicModel ToModel()
 		{
-			var frameModels = new ImageModel[this.Frames.Length];
+			var frameModels = new SimpleImageModel[this.Frames.Length];
 
 			for (int i = 0; i < this.Frames.Length; i++)
 			{
-				frameModels[i] = (ImageModel)this.Frames[i].ToModel();
+				frameModels[i] = (SimpleImageModel)this.Frames[i].ToModel();
 			}
 
 			return new TriggeredAnimationModel

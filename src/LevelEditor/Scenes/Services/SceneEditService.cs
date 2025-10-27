@@ -91,9 +91,9 @@ namespace LevelEditor.Scenes.Services
 					Height = 320
 				},
 				TextureRegion = new TextureRegionModel
-				{ 
+				{
 					TextureRegionType = TextureRegionType.Fill,
-					TextureArea = new Rectangle
+					TextureBox = new Rectangle
 					{
 						X = 0,
 						Y = 0,
@@ -154,7 +154,17 @@ namespace LevelEditor.Scenes.Services
 						BackgroundTexture = new TextureRegionImageModel
 						{
 							TextureName = "pallet",
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+							TextureRegion = new TextureRegionModel
+							{
+								TextureRegionType = TextureRegionType.Fill,
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+								DisplayArea = new SubAreaModel
+								{
+									Width = 0,
+									Height = 0,
+								}
+							}
 						},
 						HorizontalJustificationType =  UiRowHorizontalJustificationType.Right,
 						VerticalJustificationType = UiRowVerticalJustificationType.Center,
@@ -238,7 +248,17 @@ namespace LevelEditor.Scenes.Services
 					BackgroundTexture = new TextureRegionImageModel
 					{
 						TextureName = "pallet",
-						TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+						TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+						TextureRegion = new TextureRegionModel
+						{
+							TextureRegionType = TextureRegionType.Fill,
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+							DisplayArea = new SubAreaModel
+							{
+								Width = 0,
+								Height = 0,
+							}
+						}
 					},
 					SubElements =
 					[
@@ -253,13 +273,23 @@ namespace LevelEditor.Scenes.Services
 								TopPadding = 10,
 								BottomPadding = 10,
 							},
-							Texture = new TextureRegionImageModel
+							Graphic = new TextureRegionImageModel
 							{
 								TextureName = "pallet",
-								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932)
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932),
+								TextureRegion = new TextureRegionModel
+								{
+									TextureRegionType = TextureRegionType.Fill,
+									TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932),
+									DisplayArea = new SubAreaModel
+									{
+										Width = 0,
+										Height = 0,
+									}
+								}
 							},
 							Text = new GraphicalTextModel
-							{ 
+							{
 								Text = savedTileMapNames[i],
 								TextColor = PalletColors.Hex_3D3D3D,
 								FontName = FontNames.MonoBold

@@ -6,13 +6,18 @@
 	public enum TextureRegionType
 	{
 		/// <summary>
+		/// The simple type.
+		/// </summary>
+		Simple = 0,
+
+		/// <summary>
 		/// The fill type.
 		/// </summary>
-		Fill = 0,
+		Fill = 1,
 
 		/// <summary>
 		/// The tile type.
 		/// </summary>
-		Tile = 1,
+		Tile = 2,
 	}
 }

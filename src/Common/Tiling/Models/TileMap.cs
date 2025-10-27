@@ -88,22 +88,22 @@ namespace Common.Tiling.Models
 															  .ToArray();
 			var mapTileModels = tileMapLayerModels.SelectMany(e => e.Tiles)
 											   .ToArray(); 
-			var uniqueImages = new Dictionary<ImageModel, int>(new ImageModelComparer());
-			var tileImageMappings = new Dictionary<int, ImageModel>();
+			var uniqueImages = new Dictionary<SimpleImageModel, int>(new ImageModelComparer());
+			var tileImageMappings = new Dictionary<int, SimpleImageModel>();
 			var nextId = 1;
 
 			foreach (var mapTile in mapTileModels)
 			{
 				if (mapTile is TileModel tileModel)
 				{
-					if (false == uniqueImages.TryGetValue(tileModel.Image, out var imageId))
+					if (false == uniqueImages.TryGetValue(tileModel.Graphic, out var imageId))
 					{
 						imageId = nextId++;
-						uniqueImages[tileModel.Image] = imageId;
-						tileImageMappings[imageId] = tileModel.Image;
+						uniqueImages[tileModel.Graphic] = imageId;
+						tileImageMappings[imageId] = tileModel.Graphic;
 					}
 
-					tileModel.ImageId = imageId;
+					tileModel.GraphicId = imageId;
 				}
 			}
 

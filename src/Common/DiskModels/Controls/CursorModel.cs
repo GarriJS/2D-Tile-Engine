@@ -1,11 +1,18 @@
 ﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Controls
 {
-	public class CursorModel : ImageModel
+	public class CursorModel : IAmAImageModel
 	{
+		[JsonPropertyName("textureName")]
+		public string TextureName { get; set; }
+
+		[JsonPropertyName("textureRegion")]
+		public TextureRegionModel TextureRegion { get; set; }
+
 		[JsonPropertyName("cursorName")]
 		public string CursorName { get; set; }
 

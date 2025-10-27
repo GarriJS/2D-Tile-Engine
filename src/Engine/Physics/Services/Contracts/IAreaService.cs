@@ -27,17 +27,17 @@ namespace Engine.Physics.Services.Contracts
 		public T GetAreaFromModel<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea;
 
 		/// <summary>
-		/// Gets the sub area.
+		/// Gets the sub area from the model.
 		/// </summary>
 		/// <param name="subAreaModel">The sub area model.</param>
 		/// <returns>The sub area.</returns>
-		public SubArea GetSubArea(SubAreaModel subAreaModel);
+		public SubArea GetSubAreaFromModel(SubAreaModel subAreaModel);
 
 		/// <summary>
-		/// Gets the offset sub area.
+		/// Gets the offset sub area from the model.
 		/// </summary>
 		/// <param name="offsetSubAreaModel">The off set sub area model.</param>
 		/// <returns>The offset sub area.</returns>
-		public OffsetSubArea GetOffSetSubArea(OffsetSubAreaModel offsetSubAreaModel);
+		public OffsetSubArea GetOffSetSubAreaFromModel(OffsetSubAreaModel offsetSubAreaModel);
 	}
 }

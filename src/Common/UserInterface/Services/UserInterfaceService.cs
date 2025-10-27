@@ -435,7 +435,7 @@ namespace Common.UserInterface.Services
 				this.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
 			}
 
-			Image background = null;
+			SimpleImage background = null;
 
 			if (null != uiZoneModel.BackgroundTexture)
 			{
@@ -444,7 +444,7 @@ namespace Common.UserInterface.Services
 				if ((true == uiZoneModel.ResizeTexture) ||
 					(background is TextureRegionImage))
 				{
-					background.SetDrawDimensions(uiScreenZone.Area.ToVectorDimensions);
+					background.SetDrawDimensions(uiScreenZone.Area.ToSubArea);
 				}
 			}
 
@@ -511,7 +511,7 @@ namespace Common.UserInterface.Services
 				Width = zoneArea.Width,
 				Height = contentHeight
 			};
-			Image background = null;
+			SimpleImage background = null;
 
 			if (null != uiRowModel.BackgroundTexture)
 			{
@@ -520,10 +520,10 @@ namespace Common.UserInterface.Services
 				if ((true == uiRowModel.ResizeTexture) ||
 					(background is TextureRegionImage))
 				{
-					var dimensions = new Vector2
+					var dimensions = new SubArea
 					{
-						X = zoneArea.Width,
-						Y = rowArea.Height + uiRowModel.InsidePadding.TopPadding + uiRowModel.InsidePadding.BottomPadding
+						Width = zoneArea.Width,
+						Height = rowArea.Height + uiRowModel.InsidePadding.TopPadding + uiRowModel.InsidePadding.BottomPadding
 					};
 					background.SetDrawDimensions(dimensions);
 				}
@@ -555,10 +555,10 @@ namespace Common.UserInterface.Services
 		/// <param name="dynamicHeight">The dynamic height.</param>
 		private void UpdateRowDynamicHeight(UiRow uiRow, float dynamicHeight)
 		{
-			var dimensions = new Vector2
+			var dimensions = new SubArea
 			{
-				X = uiRow.InsideWidth,
-				Y = dynamicHeight + uiRow.InsidePadding.TopPadding + uiRow.InsidePadding.BottomPadding
+				Width = uiRow.InsideWidth,
+				Height = dynamicHeight + uiRow.InsidePadding.TopPadding + uiRow.InsidePadding.BottomPadding
 			};
 			uiRow.Image?.SetDrawDimensions(dimensions);
 

@@ -7,6 +7,8 @@ using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
+using Engine.Graphics.Enum;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.LevelEditorContent.Images.Manifests;
@@ -166,10 +168,20 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											Texture = new TextureRegionImageModel
+											Graphic = new TextureRegionImageModel
 											{
 												TextureName = "pallet",
-												TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+												TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+												TextureRegion = new TextureRegionModel
+												{
+													TextureRegionType = TextureRegionType.Fill,
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+													DisplayArea = new SubAreaModel
+													{
+														Width = 0,
+														Height = 0,
+													}
+												}
 											}
 										}
 									]
@@ -195,7 +207,17 @@ namespace LevelEditor.Core.Initialization
 									BackgroundTexture = new TextureRegionImageModel
 									{
 										TextureName = "pallet",
-										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+										TextureRegion = new TextureRegionModel
+										{
+											TextureRegionType = TextureRegionType.Fill,
+											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+											DisplayArea = new SubAreaModel
+											{
+												Width = 0,
+												Height = 0,
+											}
+										}
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationType.Center,
@@ -291,7 +313,17 @@ namespace LevelEditor.Core.Initialization
 									BackgroundTexture = new TextureRegionImageModel
 									{
 										TextureName = "pallet",
-										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+										TextureRegion = new TextureRegionModel
+										{
+											TextureRegionType = TextureRegionType.Fill,
+											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
+											DisplayArea = new SubAreaModel
+											{
+												Width = 0,
+												Height = 0,
+											}
+										}
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
 									HorizontalJustificationType = (int)UiRowHorizontalJustificationType.Center,

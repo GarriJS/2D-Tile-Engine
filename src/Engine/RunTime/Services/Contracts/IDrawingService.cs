@@ -1,6 +1,4 @@
-﻿using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.RunTime.Services.Contracts
@@ -43,13 +41,5 @@ namespace Engine.RunTime.Services.Contracts
 		/// <param name="stretchBox">The stretch box.</param>
 		/// <param name="color">The color.</param>
 		public void Draw(Texture2D texture, Vector2 drawCoordinates, Rectangle sourceRectangle, Vector2 stretchBox, Color color);
-
-		/// <summary>
-		/// Draws the sub drawable. 
-		/// </summary>
-		/// <param name="graphic">The graphic.</param>
-		/// <param name="position">The position.</param>
-		/// <param name="offset">The offset.</param>
-		public void Draw(IAmAGraphic graphic, Position position, Vector2 offset = default);
 	}
 }

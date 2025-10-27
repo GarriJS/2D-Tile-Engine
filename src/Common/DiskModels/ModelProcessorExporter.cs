@@ -20,14 +20,14 @@ namespace Common.DiskModels
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>The model processing mappings.</returns>
-		public static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
+		public static (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var tileService = gameServices.GetService<ITileService>();
 			var uiElementService = gameServices.GetService<IUserInterfaceElementService>();
 			var uiService = gameServices.GetService<IUserInterfaceService>();
 			var cursorService = gameServices.GetService<ICursorService>();
 
-			return
+			(Type type, Delegate factory)[] result =
 			[
 				(typeof(AnimatedTileModel), tileService.GetTile),
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayer),
@@ -37,6 +37,8 @@ namespace Common.DiskModels
 				(typeof(UiGroupModel), uiService.GetUiGroup),
 				(typeof(CursorModel), cursorService.GetCursor)
 			];
+
+			return result;
 		}
 	}
 }

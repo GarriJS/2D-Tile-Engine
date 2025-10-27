@@ -26,7 +26,7 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <returns>The textureRegions model.</returns>
-		private static ImageModel Create(int x, int y, int width = ButtonWidth, int height = ButtonHeight) => new()
+		private static SimpleImageModel Create(int x, int y, int width = ButtonWidth, int height = ButtonHeight) => new()
 		{
 			TextureName = SpritesheetName,
 			TextureBox = new Rectangle
@@ -49,7 +49,7 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <returns>The textureRegions by parts.</returns>
-		static public ImageByPartsModel GetUnpressedEmptyButtonByParts(int width, int height)
+		static public CompositeImageModel GetUnpressedEmptyButtonByParts(int width, int height)
 		{
 			const int edgeLength = 7;
 
@@ -72,7 +72,7 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 				]
 			];
 
-			return new ImageByPartsModel
+			return new CompositeImageModel
 			{
 				//TextureRegions = textureRegions,
 			};
@@ -81,51 +81,51 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		/// <summary>
 		/// Gets the unpressed empty button textureRegions model.
 		/// </summary>
-		static public ImageModel UnpressedEmptyButton { get => Create(0, 0); }
+		static public SimpleImageModel UnpressedEmptyButton { get => Create(0, 0); }
 
 		/// <summary>
 		/// Gets the pressed empty button textureRegions model.
 		/// </summary>
-		static public ImageModel PressedEmptyButton { get => Create(64, 0); }
+		static public SimpleImageModel PressedEmptyButton { get => Create(64, 0); }
 
 		/// <summary>
 		/// Gets the unpressed enter button textureRegions model.
 		/// </summary>
-		static public ImageModel UnpressedEnterButton { get => Create(0, 64); }
+		static public SimpleImageModel UnpressedEnterButton { get => Create(0, 64); }
 
 		/// <summary>
 		/// Gets the pressed enter button textureRegions model.
 		/// </summary>
-		static public ImageModel PressedEnterButton { get => Create(64, 64); }
+		static public SimpleImageModel PressedEnterButton { get => Create(64, 64); }
 
 		/// <summary>
 		/// Gets the unpressed tab button textureRegions model.
 		/// </summary>
-		static public ImageModel UnpressedTabButton { get => Create(0, 128); }
+		static public SimpleImageModel UnpressedTabButton { get => Create(0, 128); }
 
 		/// <summary>
 		/// Gets the pressed tab button textureRegions model.
 		/// </summary>
-		static public ImageModel PressedTabButton { get => Create(64, 128); }
+		static public SimpleImageModel PressedTabButton { get => Create(64, 128); }
 
 		/// <summary>
 		/// Gets the unpressed plus button textureRegions model.
 		/// </summary>
-		static public ImageModel UnpressedPlusButton { get => Create(0, 192); }
+		static public SimpleImageModel UnpressedPlusButton { get => Create(0, 192); }
 
 		/// <summary>
 		/// Gets the pressed plus button textureRegions model.
 		/// </summary>
-		static public ImageModel PressedPlusButton { get => Create(64, 192); }
+		static public SimpleImageModel PressedPlusButton { get => Create(64, 192); }
 
 		/// <summary>
 		/// Gets the unpressed minus button textureRegions model.
 		/// </summary>
-		static public ImageModel UnpressedMinusButton { get => Create(0, 256); }
+		static public SimpleImageModel UnpressedMinusButton { get => Create(0, 256); }
 
 		/// <summary>
 		/// Gets the pressed minus button textureRegions model.
 		/// </summary>
-		static public ImageModel PressedMinusButton { get => Create(64, 256); }
+		static public SimpleImageModel PressedMinusButton { get => Create(64, 256); }
 	}
 }

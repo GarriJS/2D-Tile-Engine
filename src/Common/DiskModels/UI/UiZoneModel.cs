@@ -24,7 +24,7 @@ namespace Common.DiskModels.UI
 		public string ZoneHoverEventName { get; set; }
 
 		[JsonPropertyName("backgroundTexture")]
-		public ImageModel BackgroundTexture { get; set; }
+		public SimpleImageModel BackgroundTexture { get; set; }
 
 		[JsonPropertyName("elementRows")]
 		public UiRowModel[] ElementRows { get; set; }

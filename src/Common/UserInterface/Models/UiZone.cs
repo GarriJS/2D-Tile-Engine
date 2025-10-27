@@ -40,14 +40,14 @@ namespace Common.UserInterface.Models
 		public UiZoneJustificationTypes JustificationType { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the Graphic.
 		/// </summary>
 		public IAmAGraphic Graphic { get => this.Image; }
 
 		/// <summary>
 		/// Gets the image.
 		/// </summary>
-		public Image Image { get; set; }
+		public SimpleImage Image { get; set; }
 
 		/// <summary>
 		/// Gets the position.

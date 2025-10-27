@@ -1,10 +1,16 @@
 ﻿using Engine.Core.Constants;
 using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
+using Engine.Graphics.Enum;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Models.SubAreas;
+using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Linq;
 
 namespace Engine.Graphics.Services
@@ -25,9 +31,9 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
 		/// <returns>The image.</returns>
-		public Image GetImageFromModel(ImageModel imageModel)
+		public IAmAImage GetImageFromModel(IAmAImageModel imageModel)
 		{
-			return this.GetImageFromModel<Image>(imageModel);
+			return this.GetImageFromModel<SimpleImage>(imageModel);
 		}
 
 		/// <summary>
@@ -35,7 +41,7 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
 		/// <returns>The image.</returns>
-		public T GetImageFromModel<T>(ImageModel imageModel) where T : Image
+		public T GetImageFromModel<T>(IAmAImageModel imageModel) where T : IAmAImage
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
 
@@ -44,28 +50,77 @@ namespace Engine.Graphics.Services
 				texture = textureService.DebugTexture;
 			}
 
-			var image = imageModel switch
-			{   
-				TextureRegionImageModel => new TextureRegionImage
+			IAmAImage image = imageModel switch
+			{
+				CompositeImageModel => new CompositeImage
 				{
 					TextureName = imageModel.TextureName,
-					TextureBox = imageModel.TextureBox,
-					Texture = texture,
+					Texture = texture
 				},
-				ImageByPartsModel => new ImageByParts
+				_ => new SimpleImage
 				{
 					TextureName = imageModel.TextureName,
-					TextureBox = imageModel.TextureBox,
-				},
-				_ => new Image
-				{
-					TextureName = imageModel.TextureName,
-					TextureBox = imageModel.TextureBox,
 					Texture = texture
 				}
 			};
 
-			return image as T;
+			if (image is SimpleImage simpleImage)
+			{
+				var simpleImageModel = imageModel as SimpleImageModel;
+				simpleImage.TextureRegion = this.GetTextureRegionFromModel(simpleImageModel.TextureRegion);
+			}
+
+			if (image is CompositeImage imageByParts)
+			{
+				var imageByPartsModel = imageModel as DiskModels.Drawing.CompositeImageModel;
+
+				if ((imageByParts.TextureRegions is null) ||
+					(imageByParts.TextureRegions.Any(e => e is null || e.Length != imageByPartsModel.TextureRegions[0].Length)) ||
+					(imageByParts.TextureRegions.Length != imageByParts.TextureRegions[0].Length))
+				{
+					throw new ArgumentException("Image by parts does not have valid texture regions. Texture regions must have equal length columns and rows.");
+				}
+
+				var firstRowTotalWidth = imageByPartsModel.TextureRegions[0].Sum(e => e.DisplayArea.Width);
+
+				foreach (var textureRegionRow in imageByPartsModel.TextureRegions)
+				{
+					var rowWidth = textureRegionRow.Sum(e => e.DisplayArea.Width);
+
+					if (firstRowTotalWidth != rowWidth)
+					{
+						throw new ArgumentException("Image by parts does not have valid texture regions. Row widths are not equal.");
+					}
+				}
+
+				var firstColumnTotalHeight = imageByPartsModel.TextureRegions.Sum(e => e[0].DisplayArea.Height);
+
+				for (int col = 0; col < imageByPartsModel.TextureRegions[0].Length; col++)
+				{
+					var columnHeight = imageByPartsModel.TextureRegions.Sum(row => row[col].DisplayArea.Height);
+
+					if (firstColumnTotalHeight != columnHeight)
+					{
+						throw new ArgumentException("Image by parts does not have valid texture regions. Column heights are not equal.");
+					}
+				}
+
+				var textureRegions = new TextureRegion[imageByPartsModel.TextureRegions.Length][];
+
+				for (int i = 0; i < imageByPartsModel.TextureRegions.Length; i++)
+				{
+					textureRegions[i] = new TextureRegion[imageByPartsModel.TextureRegions[i].Length];
+
+					for (int j = 0; j < imageByPartsModel.TextureRegions.Length; j++)
+					{
+						textureRegions[i][j] = this.GetTextureRegionFromModel(imageByPartsModel.TextureRegions[i][j]);
+					}
+				}
+
+				imageByParts.TextureRegions = textureRegions;
+			}
+
+			return (T)image;
 		}
 
 		/// <summary>
@@ -75,7 +130,7 @@ namespace Engine.Graphics.Services
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <returns>The image.</returns>
-		public Image GetImage(string textureName, int width, int height)
+		public SimpleImage GetImage(string textureName, int width, int height)
 		{
 			if (true == string.IsNullOrEmpty(textureName))
 			{
@@ -89,18 +144,49 @@ namespace Engine.Graphics.Services
 				texture = textureService.DebugTexture;
 			}
 
-			return new Image
+			var result = new SimpleImage
 			{
 				TextureName = textureName,
-				TextureBox = new Rectangle
-				{
-					X = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-					Y = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
-					Width = width,
-					Height = height
+				TextureRegion = new TextureRegion
+				{ 
+					TextureRegionType = TextureRegionType.Simple,
+					TextureBox = new Rectangle
+					{
+						X = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+						Y = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+						Width = width,
+						Height = height
+					},
+					DisplayArea = new SubArea
+					{
+						Width = TextureConstants.TEXTURE_EXTENSION_AMOUNT,
+						Height = TextureConstants.TEXTURE_EXTENSION_AMOUNT
+					}
 				},
 				Texture = texture
 			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the texture region from the model.
+		/// </summary>
+		/// <param name="textureRegionModel">The texture region model.</param>
+		/// <returns>The texture region.</returns>
+		public TextureRegion GetTextureRegionFromModel(TextureRegionModel textureRegionModel)
+		{
+			var areaService = this._gameServices.GetService<IAreaService>();
+
+			var displayArea = areaService.GetSubAreaFromModel(textureRegionModel.DisplayArea);
+			var result = new TextureRegion
+			{
+				TextureRegionType = textureRegionModel.TextureRegionType,
+				TextureBox = textureRegionModel.TextureBox,
+				DisplayArea = displayArea
+			};
+
+			return result;
 		}
 
 		/// <summary>
@@ -108,10 +194,10 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="images">The image.</param>
 		/// <returns>The combined texture.</returns>
-		public Texture2D CombineImageTextures(Image[][] images)
+		public Texture2D CombineImageTextures(SimpleImage[][] images)
 		{
-			if ((images is null) || 
-				(0 == images.Length) || 
+			if ((images is null) ||
+				(0 == images.Length) ||
 				(true == images.Any(e => e is null || 0 == e.Length)) ||
 				(false == images.All(e => e.Length == images[0].Length)))
 			{
@@ -127,12 +213,12 @@ namespace Engine.Graphics.Services
 
 			for (int c = 0; c < images[0].Length; c++)
 			{
-				totalWidth += images[0][c].TextureBox.Width;
+				totalWidth += images[0][c].TextureRegion.TextureBox.Width;
 			}
 
 			for (int r = 0; r < images.Length; r++)
 			{
-				totalHeight += images[r][0].TextureBox.Height;
+				totalHeight += images[r][0].TextureRegion.TextureBox.Height;
 			}
 
 			var renderTarget = new RenderTarget2D(graphicsDevice, totalWidth, totalHeight);
@@ -153,7 +239,7 @@ namespace Engine.Graphics.Services
 
 					if (img?.Texture == null)
 					{
-						horizontalOffset += img?.TextureBox.Width ?? 0;
+						horizontalOffset += img?.TextureRegion.TextureBox.Width ?? 0;
 
 						continue;
 					}
@@ -162,19 +248,19 @@ namespace Engine.Graphics.Services
 					{
 						X = horizontalOffset,
 						Y = verticalOffset,
-						Width = img.TextureBox.Width,
-						Height = img.TextureBox.Height
+						Width = img.TextureRegion.TextureBox.Width,
+						Height = img.TextureRegion.TextureBox.Height
 					};
 					spriteBatch.Draw(
 						img.Texture,
 						destinationRectangle,
-						img.TextureBox,
+						img.TextureRegion.TextureBox,
 						Color.White
 					);
-					horizontalOffset += img.TextureBox.Width;
+					horizontalOffset += img.TextureRegion.TextureBox.Width;
 				}
 
-				verticalOffset += images[r][0].TextureBox.Height;
+				verticalOffset += images[r][0].TextureRegion.TextureBox.Height;
 			}
 
 			spriteBatch.End();

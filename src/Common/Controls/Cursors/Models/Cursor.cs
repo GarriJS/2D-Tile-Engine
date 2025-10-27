@@ -1,8 +1,6 @@
-﻿using Engine.Graphics.Models;
-using Engine.Graphics.Models.Contracts;
+﻿using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -11,7 +9,7 @@ namespace Common.Controls.Cursors.Models
 	/// <summary>
 	/// Represents a cursor.
 	/// </summary>
-	public class Cursor : Image, IHaveAnImage, IAmDrawable, IAmSubUpdateable
+	public class Cursor : IHaveAGraphic, IAmDrawable, IAmSubUpdateable
     {
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -39,9 +37,9 @@ namespace Common.Controls.Cursors.Models
 		public Position Position { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the Graphic.
 		/// </summary>
-		public Image Image { get => this; }
+		public IAmAGraphic Graphic { get; }
 
         /// <summary>
         /// Gets or sets the cursor updater.
@@ -55,9 +53,7 @@ namespace Common.Controls.Cursors.Models
 		/// <param name="gameServices">The game services.</param>\
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-            var drawingService = gameServices.GetService<IDrawingService>();
-
-            drawingService.Draw(this.Graphic, this.Position, this.Offset);
+			this.Graphic.Draw(gameTime, gameServices, this.Position, this.Offset);
 		}
 
         /// <summary>
@@ -73,9 +69,9 @@ namespace Common.Controls.Cursors.Models
         /// <summary>
         /// Disposes of the draw data texture.
         /// </summary>
-        new public void Dispose()
+        public void Dispose()
         {
-            this.Texture?.Dispose();
+            this.Graphic.Dispose();
         }
     }
 }

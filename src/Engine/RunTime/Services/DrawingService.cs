@@ -1,6 +1,4 @@
-﻿using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
-using Engine.RunTime.Services.Contracts;
+﻿using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -78,17 +76,6 @@ namespace Engine.RunTime.Services
 			};
 
 			this.SpriteBatch.Draw(texture, destinationRectangle, sourceRectangle, color);
-		}
-
-		/// <summary>
-		/// Draws the sub drawable. 
-		/// </summary>
-		/// <param name="graphic">The graphic.</param>
-		/// <param name="position">The position.</param>
-		/// <param name="offset">The offset.</param>
-		public void Draw(IAmAGraphic graphic, Position position, Vector2 offset = default)
-		{
-			this.SpriteBatch.Draw(graphic.Texture, position.Coordinates + offset, graphic.TextureBox, Color.White);
 		}
 	}
 }

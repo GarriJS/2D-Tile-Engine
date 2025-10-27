@@ -83,7 +83,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the image.
 		/// </summary>
-		public Image Image { get; set; }
+		public SimpleImage Image { get; set; }
 
 		/// <summary>
 		/// Gets the base hover configuration.

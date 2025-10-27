@@ -1,14 +1,29 @@
-﻿using Engine.Physics.Models;
+﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
+using Engine.Graphics.Models.Contracts;
+using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Graphics.Models
 {
 	/// <summary>
-	/// Represents a image by parts.
+	/// Represents a composite image.
 	/// </summary>
-	public class ImageByParts : Image
+	public class CompositeImage : IAmAImage
 	{
+		/// <summary>
+		/// Gets or sets the texture name.
+		/// </summary>
+		public string TextureName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the texture.
+		/// </summary>
+		public Texture2D Texture { get; set; }
+
 		/// <summary>
 		/// Gets or sets the texture regions.
 		/// </summary>
@@ -19,7 +34,7 @@ namespace Engine.Graphics.Models
 		/// Sets the draw dimensions.
 		/// </summary>
 		/// <param name="dimensions">The dimensions.</param>
-		override public void SetDrawDimensions(Vector2 dimensions)
+		public void SetDrawDimensions(SubArea dimensions)
 		{
 
 		}
@@ -31,7 +46,7 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
@@ -51,6 +66,30 @@ namespace Engine.Graphics.Models
 
 				verticalRowOffset += textureRegionRow[0].DisplayArea.Height;
 			}
+		}
+
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		virtual public IAmAGraphicModel ToModel()
+		{
+			var result = new SimpleImageModel
+			{
+				TextureName = this.TextureName,
+				//TextureBox = this.TextureBox
+			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Disposes of the draw data texture.
+		/// </summary>
+		public void Dispose()
+		{
+			this.Texture?.Dispose();
 		}
 	}
 }

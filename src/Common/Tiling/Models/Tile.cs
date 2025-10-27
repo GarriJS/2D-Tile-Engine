@@ -32,14 +32,14 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets the graphic.
+		/// Gets the Graphic.
 		/// </summary>
 		public IAmAGraphic Graphic { get => this.Image; }
 
 		/// <summary>
 		/// Gets the image.
 		/// </summary>
-		public Image Image { get; set; }
+		public SimpleImage Image { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.
@@ -69,13 +69,13 @@ namespace Common.Tiling.Models
 		/// <returns>The serialization model.</returns>
 		public IAmATileModel ToModel()
 		{
-			var imageModel = (ImageModel)this.Image.ToModel();
+			var imageModel = (SimpleImageModel)this.Image.ToModel();
 
 			return new TileModel
 			{
 				Row = this.Row,
 				Column = this.Column,
-				Image = imageModel,
+				Graphic = imageModel,
 			};
 		}
 	}

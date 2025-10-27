@@ -52,7 +52,7 @@ namespace Engine.Physics.Services
 
 					for (int i = 0; i < areas.Length; i++)
 					{
-						areas[i] = this.GetOffSetSubArea(areaCollectionModel.SubAreas[i]);
+						areas[i] = this.GetOffSetSubAreaFromModel(areaCollectionModel.SubAreas[i]);
 					}
 
 					var areaCollection = new AreaCollection(width, height)
@@ -107,33 +107,37 @@ namespace Engine.Physics.Services
 		}
 
 		/// <summary>
-		/// Gets the sub area.
+		/// Gets the sub area from the model.
 		/// </summary>
 		/// <param name="subAreaModel">The sub area model.</param>
 		/// <returns>The sub area.</returns>
-		public SubArea GetSubArea(SubAreaModel subAreaModel)
+		public SubArea GetSubAreaFromModel(SubAreaModel subAreaModel)
 		{
-			return new SubArea
+			var result = new SubArea
 			{
 				Width = subAreaModel.Width,
 				Height = subAreaModel.Height
 			};
+
+			return result;
 		}
 
 		/// <summary>
-		/// Gets the offset sub area.
+		/// Gets the offset sub area from the model.
 		/// </summary>
 		/// <param name="offsetSubAreaModel">The off set sub area model.</param>
 		/// <returns>The offset sub area.</returns>
-		public OffsetSubArea GetOffSetSubArea(OffsetSubAreaModel offsetSubAreaModel)
+		public OffsetSubArea GetOffSetSubAreaFromModel(OffsetSubAreaModel offsetSubAreaModel)
 		{
-			return new OffsetSubArea
+			var result = new OffsetSubArea
 			{
 				Width = offsetSubAreaModel.Width,
 				Height = offsetSubAreaModel.Height,
 				HorizontalOffset = offsetSubAreaModel.HorizontalOffset,
 				VerticalOffset = offsetSubAreaModel.VerticalOffset
 			};
+
+			return result;
 		}
 	}
 }

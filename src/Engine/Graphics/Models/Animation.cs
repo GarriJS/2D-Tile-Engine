@@ -2,9 +2,9 @@
 using Engine.DiskModels.Drawing.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
 namespace Engine.Graphics.Models
@@ -40,34 +40,23 @@ namespace Engine.Graphics.Models
 		public double? FrameStartTime { get; set; }
 
 		/// <summary>
-		/// Gets or sets the texture name.
-		/// </summary>
-		public string TextureName { get => this.Frames[this.CurrentFrameIndex].TextureName; }
-
-		/// <summary>
-		/// Gets or sets the texture box.
-		/// </summary>
-		public Rectangle TextureBox { get => this.Frames[this.CurrentFrameIndex].TextureBox; }
-
-		/// <summary>
-		/// Gets or sets the texture.
-		/// </summary>
-		public Texture2D Texture { get => this.Frames[this.CurrentFrameIndex].Texture; }
-
-		/// <summary>
-		/// Gets the graphic.
-		/// </summary>
-		public IAmAGraphic Graphic { get => this.Frames[this.CurrentFrameIndex]; }
-
-		/// <summary>
 		/// Gets the current frame.
 		/// </summary>
-		public Image CurrentFrame { get => this.Frames[this.CurrentFrameIndex]; }
+		public IAmAImage CurrentFrame { get => this.Frames[this.CurrentFrameIndex]; }
 
 		/// <summary>
 		/// Gets or sets the frames.
 		/// </summary>
-		public Image[] Frames { get; set; } = [];
+		public IAmAImage[] Frames { get; set; } = [];
+
+		/// <summary>
+		/// Sets the draw dimensions.
+		/// </summary>
+		/// <param name="dimensions">The dimensions.</param>
+		virtual public void SetDrawDimensions(SubArea dimensions)
+		{
+			
+		}
 
 		/// <summary>
 		/// Draws the sub drawable.
@@ -78,10 +67,8 @@ namespace Engine.Graphics.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var drawingService = gameServices.GetService<IDrawingService>();
-
 			this.UpdateFrame(gameTime, gameServices);
-			drawingService.Draw(this, position, offset);
+			this.CurrentFrame.Draw(gameTime, gameServices, position, offset);
 		}
 
 		/// <summary>
@@ -127,17 +114,19 @@ namespace Engine.Graphics.Models
 		/// <returns>The serialization model.</returns>
 		virtual public IAmAGraphicModel ToModel()
 		{
-			var frameModels = this.Frames.Select(e => (ImageModel)e.ToModel())
+			var frameModels = this.Frames.Select(e => e.ToModel())
 										 .ToArray();
 
-			return new AnimationModel
+			var result = new AnimationModel
 			{
 				CurrentFrameIndex = this.CurrentFrameIndex,
 				FrameDuration = this.FrameDuration,
 				FrameMinDuration = this.FrameMinDuration,
 				FrameMaxDuration = this.FrameMaxDuration,
-				Frames = frameModels
+				//Frames = frameModels
 			};
+
+			return result;
 		}
 
 		/// <summary>

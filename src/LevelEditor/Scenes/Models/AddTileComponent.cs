@@ -29,7 +29,7 @@ namespace LevelEditor.Scenes.Models
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets a value indicating whether the background graphic is active.
+		/// Gets a value indicating whether the background Graphic is active.
 		/// </summary>
 		public bool BackgroundGraphicActive { get; private set; }
 
@@ -39,7 +39,7 @@ namespace LevelEditor.Scenes.Models
 		public AddTileParams AddTileParameters { get; set; }
 
 		/// <summary>
-		/// Gets the background graphic.
+		/// Gets the background Graphic.
 		/// </summary>
 		public IndependentGraphic BackgroundGraphic { get; private set; }
 
@@ -107,7 +107,7 @@ namespace LevelEditor.Scenes.Models
 			{
 				Row = (int)tilePosition.Y / TileConstants.TILE_SIZE,
 				Column = (int)tilePosition.X / TileConstants.TILE_SIZE,
-				Image = this.AddTileParameters.Image,
+				Graphic = this.AddTileParameters.Image,
 			};
 
 			var tile = tileService.GetTile(tileModel);
@@ -115,7 +115,7 @@ namespace LevelEditor.Scenes.Models
 		}
 
 		/// <summary>
-		/// Sets the background graphic.
+		/// Sets the background Graphic.
 		/// </summary>
 		/// <param name="textureRegionImageModel">The texture region image model.</param>
 		public void SetBackgroundGraphic(TextureRegionImageModel textureRegionImageModel)
@@ -148,7 +148,7 @@ namespace LevelEditor.Scenes.Models
 		}
 
 		/// <summary>
-		/// Toggles the background graphic.
+		/// Toggles the background Graphic.
 		/// </summary>
 		public void ToggleBackgroundGraphic()
 		{

@@ -122,9 +122,9 @@ namespace Common.Tiling.Services
 			foreach (var mapTile in mapTileModels)
 			{
 				if ((mapTile is TileModel tileModel) &&
-					(true == tileMapModel.Images.TryGetValue(tileModel.ImageId, out var tileImage)))
+					(true == tileMapModel.Images.TryGetValue(tileModel.GraphicId, out var tileImage)))
 				{
-					tileModel.Image = tileImage;
+					tileModel.Graphic = tileImage;
 				}
 			}
 
@@ -189,7 +189,7 @@ namespace Common.Tiling.Services
 			}
 
 			var basicTileModel = tileModel as TileModel;
-			var image = imageService.GetImageFromModel(basicTileModel.Image);
+			var image = imageService.GetImageFromModel(basicTileModel.Graphic);
 			var tile = new Tile
 			{
 				Row = tileModel.Row,

@@ -46,7 +46,7 @@ namespace Engine.DiskModels
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>The model processing mappings.</returns>
-		private static (Type typeIn, Delegate)[] GetModelProcessingMappings(GameServiceContainer gameServices)
+		private static (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var positionService = gameServices.GetService<IPositionService>();
 			var areaService = gameServices.GetService<IAreaService>();
@@ -56,23 +56,25 @@ namespace Engine.DiskModels
 			var animationService = gameServices.GetService<IAnimationService>();
 			var actionControlService = gameServices.GetService<IActionControlServices>();
 
-			return
+			(Type type, Delegate factory)[] result =
 			[
 				(typeof(PositionModel), positionService.GetPositionFromModel),
 				(typeof(AreaModel), areaService.GetAreaFromModel<SimpleArea>),
 				(typeof(OffsetAreaModel), areaService.GetAreaFromModel<OffsetArea>),
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
-				(typeof(SubArea), areaService.GetSubArea),
-				(typeof(OffsetSubArea), areaService.GetOffSetSubArea),
-				(typeof(ImageModel), imageService.GetImageFromModel<Image>),
-				(typeof(TextureRegionImageModel), imageService.GetImageFromModel<TextureRegionImage>),
-				(typeof(ImageByPartsModel), imageService.GetImageFromModel<ImageByParts>),
+				(typeof(SubArea), areaService.GetSubAreaFromModel),
+				(typeof(OffsetSubArea), areaService.GetOffSetSubAreaFromModel),
+				(typeof(SimpleImageModel), imageService.GetImageFromModel<SimpleImage>),
+				(typeof(CompositeImageModel), imageService.GetImageFromModel<CompositeImage>),
+				(typeof(TextureRegionModel), imageService.GetTextureRegionFromModel),
 				(typeof(IndependentGraphicModel), independentGraphicService.GetIndependentGraphicFromModel),
 				(typeof(GraphicalText), graphicTextService.GetGraphicTextFromModel),
 				(typeof(Animation), animationService.GetAnimationFromModel),
 				(typeof(TriggeredAnimation), animationService.GetAnimationFromModel),
 				(typeof(ActionControl), actionControlService.GetActionControlFromModel),
 			];
+
+			return result;
 		}
 	}
 }
