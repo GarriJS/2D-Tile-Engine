@@ -1,5 +1,4 @@
-﻿using Common.DiskModel.Tiling.Contracts;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Tiling
 {
@@ -9,6 +8,6 @@ namespace Common.DiskModels.Tiling
         public int Layer { get; set; }
 
         [JsonPropertyName("tiles")]
-        public IAmATileModel[] Tiles { get; set; }
+        public TileModel[] Tiles { get; set; }
     }
 }

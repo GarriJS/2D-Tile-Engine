@@ -40,6 +40,11 @@ namespace Engine.Graphics.Models
 		public double? FrameStartTime { get; set; }
 
 		/// <summary>
+		/// Gets the dimensions.
+		/// </summary>
+		public SubArea Dimensions { get => this.CurrentFrame.Dimensions; }
+
+		/// <summary>
 		/// Gets the current frame.
 		/// </summary>
 		public IAmAImage CurrentFrame { get => this.Frames[this.CurrentFrameIndex]; }

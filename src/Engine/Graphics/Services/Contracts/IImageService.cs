@@ -35,13 +35,6 @@ namespace Engine.Graphics.Services.Contracts
 		public SimpleImage GetImage(string textureName, int width, int height);
 
 		/// <summary>
-		/// Gets the texture region from the model.
-		/// </summary>
-		/// <param name="textureRegionModel">The texture region model.</param>
-		/// <returns>The texture region.</returns>
-		public TextureRegion GetTextureRegionFromModel(TextureRegionModel textureRegionModel);
-
-		/// <summary>
 		/// Combines the image textures into one texture.
 		/// </summary>
 		/// <param name="images">The image.</param>

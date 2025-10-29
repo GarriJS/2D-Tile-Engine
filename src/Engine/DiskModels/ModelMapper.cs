@@ -4,6 +4,7 @@ using Engine.Core.Initialization.Services;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
@@ -16,13 +17,13 @@ namespace Engine.DiskModels
 	/// <summary>
 	/// Represents a model mappings.
 	/// </summary>
-	internal static class ModelMapper
+	static internal class ModelMapper
 	{
 		/// <summary>
 		/// Loads the engine model type mappings.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
-		internal static void LoadEngineModelProcessingMappings(GameServiceContainer gameServices)
+		static internal void LoadEngineModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			LoadModelProcessingMappings(gameServices, GetModelProcessingMappings);
 		}
@@ -31,7 +32,7 @@ namespace Engine.DiskModels
 		/// Loads the model processing mappings.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
-		internal static void LoadModelProcessingMappings(GameServiceContainer gameServices, Func<GameServiceContainer, (Type typeIn, Delegate)[]> modelProcessorMapProvider)
+		static internal void LoadModelProcessingMappings(GameServiceContainer gameServices, Func<GameServiceContainer, (Type typeIn, Delegate)[]> modelProcessorMapProvider)
 		{
 			var modelProcessingMappings = modelProcessorMapProvider.Invoke(gameServices);
 
@@ -46,10 +47,11 @@ namespace Engine.DiskModels
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>The model processing mappings.</returns>
-		private static (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
+		static private (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var positionService = gameServices.GetService<IPositionService>();
 			var areaService = gameServices.GetService<IAreaService>();
+			var graphicService = gameServices.GetService<IGraphicService>();
 			var imageService = gameServices.GetService<IImageService>();
 			var independentGraphicService = gameServices.GetService<IIndependentGraphicService>();
 			var graphicTextService = gameServices.GetService<IGraphicTextService>();
@@ -64,9 +66,10 @@ namespace Engine.DiskModels
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
 				(typeof(SubArea), areaService.GetSubAreaFromModel),
 				(typeof(OffsetSubArea), areaService.GetOffSetSubAreaFromModel),
+				(typeof(IAmAGraphic), graphicService.GetGraphicFromModel),
+				(typeof(TextureRegionModel), graphicService.GetTextureRegionFromModel),
 				(typeof(SimpleImageModel), imageService.GetImageFromModel<SimpleImage>),
 				(typeof(CompositeImageModel), imageService.GetImageFromModel<CompositeImage>),
-				(typeof(TextureRegionModel), imageService.GetTextureRegionFromModel),
 				(typeof(IndependentGraphicModel), independentGraphicService.GetIndependentGraphicFromModel),
 				(typeof(GraphicalText), graphicTextService.GetGraphicTextFromModel),
 				(typeof(Animation), animationService.GetAnimationFromModel),

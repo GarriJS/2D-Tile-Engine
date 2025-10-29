@@ -12,6 +12,7 @@ using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
@@ -435,14 +436,14 @@ namespace Common.UserInterface.Services
 				this.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
 			}
 
-			SimpleImage background = null;
+			IAmAGraphic background = null;
 
 			if (null != uiZoneModel.BackgroundTexture)
 			{
 				background = imageService.GetImageFromModel(uiZoneModel.BackgroundTexture);
 
 				if ((true == uiZoneModel.ResizeTexture) ||
-					(background is TextureRegionImage))
+					(background is CompositeImage))
 				{
 					background.SetDrawDimensions(uiScreenZone.Area.ToSubArea);
 				}
@@ -455,7 +456,7 @@ namespace Common.UserInterface.Services
 				UiZoneName = uiZoneModel.UiZoneName,
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
 				JustificationType = (UiZoneJustificationTypes)uiZoneModel.JustificationType,
-				Image = background,
+				Graphic = background,
 				HoverConfig = hoverConfig,
 				UserInterfaceScreenZone = uiScreenZone,
 				ElementRows = rows
@@ -511,14 +512,14 @@ namespace Common.UserInterface.Services
 				Width = zoneArea.Width,
 				Height = contentHeight
 			};
-			SimpleImage background = null;
+			IAmAGraphic background = null;
 
 			if (null != uiRowModel.BackgroundTexture)
 			{
 				background = imageService.GetImageFromModel(uiRowModel.BackgroundTexture);
 
 				if ((true == uiRowModel.ResizeTexture) ||
-					(background is TextureRegionImage))
+					(background is CompositeImage))
 				{
 					var dimensions = new SubArea
 					{
@@ -542,7 +543,7 @@ namespace Common.UserInterface.Services
 				InsidePadding = insidePadding,
 				HorizontalJustificationType = uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = uiRowModel.VerticalJustificationType,
-				Image = background,
+				Graphic = background,
 				HoverConfig = hoverConfig,
 				SubElements = subElements
 			};
@@ -560,7 +561,7 @@ namespace Common.UserInterface.Services
 				Width = uiRow.InsideWidth,
 				Height = dynamicHeight + uiRow.InsidePadding.TopPadding + uiRow.InsidePadding.BottomPadding
 			};
-			uiRow.Image?.SetDrawDimensions(dimensions);
+			uiRow.Graphic?.SetDrawDimensions(dimensions);
 
 			if (0 == uiRow.SubElements.Count)
 			{

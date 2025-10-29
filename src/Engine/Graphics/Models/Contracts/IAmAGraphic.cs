@@ -12,6 +12,11 @@ namespace Engine.Graphics.Models.Contracts
 	public interface IAmAGraphic : IAmSubDrawable, ICanBeSerialized<IAmAGraphicModel>, IDisposable
 	{
 		/// <summary>
+		/// Gets the dimensions.
+		/// </summary>
+		public SubArea Dimensions { get; }
+
+		/// <summary>
 		/// Sets the draw dimensions.
 		/// </summary>
 		/// <param name="dimensions">The dimensions.</param>

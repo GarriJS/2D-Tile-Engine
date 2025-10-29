@@ -2,7 +2,6 @@
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
-using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
@@ -17,7 +16,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IHaveAnImage, IHaveArea, ICanBeHovered<UiZone>, IDisposable
+	public class UiZone : IAmDrawable, IHaveArea, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -42,12 +41,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the Graphic.
 		/// </summary>
-		public IAmAGraphic Graphic { get => this.Image; }
-
-		/// <summary>
-		/// Gets the image.
-		/// </summary>
-		public SimpleImage Image { get; set; }
+		public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets the position.
@@ -95,7 +89,7 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			this.Image?.Draw(gameTime, gameServices, this.Position);
+			this.Graphic?.Draw(gameTime, gameServices, this.Position);
 
 			if (true == this.ResetCalculateCachedOffsets)
 			{ 

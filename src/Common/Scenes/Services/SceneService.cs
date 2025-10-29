@@ -65,7 +65,7 @@ namespace Common.Scenes.Services
 		public Scene GetScene(SceneModel scene)
 		{
 			var tileService = this._gameServices.GetService<ITileService>();
-			var tileMap = tileService.GetTileMap(scene.TileMap);
+			var tileMap = tileService.GetTileMapFromModel(scene.TileMap);
 
 			return new Scene
 			{

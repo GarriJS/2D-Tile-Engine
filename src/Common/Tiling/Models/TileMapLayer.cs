@@ -1,5 +1,4 @@
 ﻿using Common.DiskModels.Tiling;
-using Common.Tiling.Models.Contracts;
 using Engine.Core.Files.Models.Contract;
 using Engine.Physics.Models;
 using Engine.RunTime.Models.Contracts;
@@ -22,13 +21,13 @@ namespace Common.Tiling.Models
 		/// <summary>
 		/// Gets or sets the tiles.
 		/// </summary>
-		public Dictionary<(int row, int col), IAmATile> Tiles { get; set; } = [];
+		public Dictionary<(int row, int col), Tile> Tiles { get; set; } = [];
 
 		/// <summary>
 		/// Adds the tile.
 		/// </summary>
 		/// <param name="tile">The tile.</param>
-		public void AddTile(IAmATile tile)
+		public void AddTile(Tile tile)
 		{
 			this.Tiles[(tile.Row, tile.Column)] = tile;
 		}

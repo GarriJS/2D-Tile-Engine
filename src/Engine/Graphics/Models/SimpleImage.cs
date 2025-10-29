@@ -20,6 +20,11 @@ namespace Engine.Graphics.Models
 		public string TextureName { get; set; }
 
 		/// <summary>
+		/// Gets the dimensions.
+		/// </summary>
+		public SubArea Dimensions { get => this.TextureRegion.DisplayArea; }
+
+		/// <summary>
 		/// Gets or sets the texture.
 		/// </summary>
 		public Texture2D Texture { get; set; }

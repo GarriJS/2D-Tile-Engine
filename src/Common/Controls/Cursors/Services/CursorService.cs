@@ -7,7 +7,10 @@ using Common.DiskModels.Controls;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Core.Textures.Services.Contracts;
+using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
+using Engine.Graphics.Enum;
+using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -60,16 +63,25 @@ namespace Common.Controls.Cursors.Services
 			var cursorModel = new CursorModel
 			{
 				CursorName = CommonCursorNames.BasicCursorName,
-				TextureBox = new Rectangle
-				{ 
-					X = 0,
-					Y = 0,
-					Width = 18,
-					Height = 28	
-				},
 				AboveUi = true,
-				TextureName = "mouse",
-				Offset = default
+				Graphic = new SimpleImageModel
+				{
+					TextureName = "mouse",
+					TextureRegion = new TextureRegionModel
+					{
+						TextureRegionType = TextureRegionType.Simple,
+						TextureBox = new Rectangle
+						{
+							Width = 18,
+							Height = 28
+						},
+						DisplayArea = new SubAreaModel
+						{ 
+							Width = 18,
+							Height = 28
+						}
+					}
+				}
 			};
 
 			var cursor = this.GetCursor(cursorModel, addCursor: true);
@@ -90,29 +102,23 @@ namespace Common.Controls.Cursors.Services
 				return null;
 			}
 
-			var textureService = this._gameServices.GetService<ITextureService>();
+			var graphicSerivce = this._gameServices.GetService<IGraphicService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 
-			if (false == textureService.TryGetTexture(cursorModel.TextureName, out var texture))
-			{
-				texture = textureService.DebugTexture;
-			}
-
 			if (false == functionService.TryGetFunction<Action<Cursor, GameTime>>(cursorModel.CursorUpdaterName, out var cursorUpdater))
-			{ 
+			{
 				cursorUpdater = null;
 			}
 
-			var cursor =  new Cursor
+			var graphic = graphicSerivce.GetGraphicFromModel(cursorModel.Graphic);
+			var cursor = new Cursor
 			{
 				DrawLayer = (cursorModel.AboveUi ? RunTimeConstants.BaseAboveUiCursorDrawLayer : RunTimeConstants.BaseBelowUiCursorDrawLayer) + drawLayerOffset,
 				UpdateOrder = RunTimeConstants.BaseCursorUpdateOrder,
 				CursorName = cursorModel.CursorName,
-				TextureName = cursorModel.TextureName,
 				Offset = cursorModel.Offset,
 				Position = this.CursorControlComponent.CursorPosition,
-				TextureBox = cursorModel.TextureBox,
-				Texture = texture,
+				Graphic = graphic,
 				CursorUpdater = cursorUpdater
 			};
 

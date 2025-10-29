@@ -52,7 +52,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface element.</returns>
 		public IAmAUiElement GetUiElement(IAmAUiElementModel uiElementModel)
 		{
-			var imageService = this._gameServices.GetService<IImageService>();
+			var graphicService = this._gameServices.GetService<IGraphicService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
@@ -78,10 +78,10 @@ namespace Common.UserInterface.Services
 
 			if (null != uiElementModel.Graphic)
 			{
-				uiElement.Graphic = imageService.GetImageFromModel(uiElementModel.Graphic);
+				uiElement.Graphic = graphicService.GetGraphicFromModel(uiElementModel.Graphic);
 
 				if ((true == uiElementModel.ResizeTexture) ||
-					(uiElement.Graphic is TextureRegionImage))
+					(uiElement.Graphic is CompositeImage compositeImage))
 				{
 					var dimensions = new SubArea
 					{
@@ -124,13 +124,7 @@ namespace Common.UserInterface.Services
 		public void UpdateElementHeight(IAmAUiElement element, float height)
 		{
 			element.Area.Height = height;
-			element.Graphic.TextureBox = new Rectangle
-			{
-				X = element.Graphic.TextureBox.X,
-				Y = element.Graphic.TextureBox.Y,
-				Width = element.Graphic.TextureBox.Width,
-				Height = (int)height
-			};
+			element.Graphic.SetDrawDimensions(element.Area);
 
 			if (element is not UiButton uiButton)
 			{
@@ -155,13 +149,13 @@ namespace Common.UserInterface.Services
 
 			foreach (var frame in uiButton.ClickAnimation.Frames)
 			{
-				frame.TextureBox = new Rectangle
-				{
-					X = frame.TextureBox.X,
-					Y = frame.TextureBox.Y,
-					Width = frame.TextureBox.Width,
-					Height = (int)(element.Graphic.TextureBox.Height * uiButton.ClickableAreaScaler.Y)
+				var subArea = new SubArea
+				{ 
+					Width = frame.Dimensions.Width, 
+					Height = (int)(element.Graphic.Dimensions.Height * uiButton.ClickableAreaScaler.Y) 
 				};
+
+				frame.SetDrawDimensions(subArea);
 			}
 		}
 
@@ -272,8 +266,8 @@ namespace Common.UserInterface.Services
 
 					if (null != restingFrame)
 					{
-						width = restingFrame.TextureBox.Width;
-						height = restingFrame.TextureBox.Height;
+						width = restingFrame.TextureRegion.TextureBox.Width;
+						height = restingFrame.TextureRegion.TextureBox.Height;
 					}
 
 					if (true == textDimensions.HasValue)

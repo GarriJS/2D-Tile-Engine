@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Engine.DiskModels.Drawing.Contracts;
+using System;
 using System.Collections.Generic;
 
 namespace Engine.DiskModels.Drawing.Comparers
 {
-	public class ImageModelComparer : IEqualityComparer<SimpleImageModel>
+	public class ImageModelComparer : IEqualityComparer<IAmAImageModel>
 	{
-		public bool Equals(SimpleImageModel a, SimpleImageModel b)
+		public bool Equals(IAmAImageModel a, IAmAImageModel b)
 		{
 			if (true == ReferenceEquals(a, b))
 			{
@@ -18,15 +19,12 @@ namespace Engine.DiskModels.Drawing.Comparers
 				return false;
 			}
 
-			var result = ((true == string.Equals(a.TextureName, b.TextureName, StringComparison.Ordinal)) &&
-						  (a.TextureRegion.TextureRegionType == b.TextureRegion.TextureRegionType) &&
-						  (a.TextureRegion.TextureBox == b.TextureRegion.TextureBox) &&
-						  (a.TextureRegion.DisplayArea == b.TextureRegion.DisplayArea));
+			var result = (true == string.Equals(a.TextureName, b.TextureName, StringComparison.Ordinal));
 
 			return result;
 		}
 
-		public int GetHashCode(SimpleImageModel model)
+		public int GetHashCode(IAmAImageModel model)
 		{
 			if (model is null)
 			{
@@ -34,10 +32,7 @@ namespace Engine.DiskModels.Drawing.Comparers
 			}
 
 			var result = HashCode.Combine(
-				model.TextureName,
-				model.TextureRegion.TextureBox,
-				model.TextureRegion.DisplayArea.Width,
-				model.TextureRegion.DisplayArea.Height
+				model.TextureName
 			);
 
 			return result;

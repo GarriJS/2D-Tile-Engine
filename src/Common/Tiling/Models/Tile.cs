@@ -1,9 +1,5 @@
-﻿using Common.DiskModel.Tiling.Contracts;
-using Common.DiskModels.Tiling;
-using Common.Tiling.Models.Contracts;
+﻿using Common.DiskModels.Tiling;
 using Engine.Core.Constants;
-using Engine.DiskModels.Drawing;
-using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
@@ -14,7 +10,7 @@ namespace Common.Tiling.Models
 	/// <summary>
 	/// Represents a tile.
 	/// </summary>
-	public class Tile : IAmATile, IHaveAnImage
+	public class Tile
 	{
 		/// <summary>
 		/// Gets or sets the row.
@@ -32,19 +28,14 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets the Graphic.
-		/// </summary>
-		public IAmAGraphic Graphic { get => this.Image; }
-
-		/// <summary>
-		/// Gets the image.
-		/// </summary>
-		public SimpleImage Image { get; set; }
-
-		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
 		public SubArea Area { get; set; }
+
+		/// <summary>
+		/// Gets the Graphic.
+		/// </summary>
+		public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.
@@ -60,22 +51,22 @@ namespace Common.Tiling.Models
 				X = this.Column * TileConstants.TILE_SIZE,
 				Y = this.Row * TileConstants.TILE_SIZE
 			};
-			this.Image?.Draw(gameTime, gameServices, position, tileOffset);
+			this.Graphic?.Draw(gameTime, gameServices, position, tileOffset);
 		}
 
 		/// <summary>
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		public IAmATileModel ToModel()
+		public TileModel ToModel()
 		{
-			var imageModel = (SimpleImageModel)this.Image.ToModel();
+			var graphicModel = this.Graphic.ToModel();
 
 			return new TileModel
 			{
 				Row = this.Row,
 				Column = this.Column,
-				Graphic = imageModel,
+				Graphic = graphicModel,
 			};
 		}
 	}

@@ -1,13 +1,13 @@
 ﻿using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
-using Common.DiskModel.Tiling.Contracts;
 using Common.DiskModels.Controls;
 using Common.DiskModels.Tiling;
 using Common.Tiling.Models;
-using Common.Tiling.Models.Contracts;
 using Common.Tiling.Services.Contracts;
 using Engine.Core.Constants;
+using Engine.DiskModels.Drawing;
+using Engine.Graphics.Enum;
 using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -15,10 +15,10 @@ using System.Linq;
 namespace Common.Tiling.Services
 {
     /// <summary>
-    /// Represents a mapTile service.
+    /// Represents a tile service.
     /// </summary>
     /// <remarks>
-    /// Initializes the mapTile service.
+    /// Initializes the tile service.
     /// </remarks>
     /// <param name="gameServices">The game services.</param>
     public class TileService(GameServiceContainer gameServices) : ITileService
@@ -35,16 +35,21 @@ namespace Common.Tiling.Services
 			var cursorModel = new CursorModel
 			{
 				CursorName = CommonCursorNames.TileGridCursorName,
-				TextureBox = new Rectangle
-				{ 
-					X = 0, 
-					Y = 0,
-					Width = 160,
-					Height = 160
-				},
 				AboveUi = false,
-				TextureName = "tile_grid_dark",
 				Offset = default,
+				Graphic = new SimpleImageModel
+				{
+					TextureName = "tile_grid_dark",
+					TextureRegion = new TextureRegionModel
+					{
+						TextureRegionType = TextureRegionType.Simple,
+						TextureBox = new Rectangle
+						{
+							Width = 160,
+							Height = 160
+						}
+					}
+				},
 				CursorUpdaterName = CommonCursorUpdatersNames.TileGridCursorUpdater
 			};
 
@@ -52,7 +57,7 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Updates the mapTile grid cursor position.
+		/// Updates the tile map grid cursor position.
 		/// </summary>
 		/// <param name="cursor">The cursor.</param>
 		/// <param name="gameTime">The game time.</param>
@@ -61,17 +66,17 @@ namespace Common.Tiling.Services
 			var localTileLocation = this.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2
 			{
-				X = localTileLocation.X - cursor.Position.X - ((cursor.Image.Texture.Width / 2) - (TileConstants.TILE_SIZE / 2)),
-				Y = localTileLocation.Y - cursor.Position.Y - ((cursor.Image.Texture.Height / 2) - (TileConstants.TILE_SIZE / 2))
+				X = localTileLocation.X - cursor.Position.X - ((cursor.Graphic.Dimensions.Width / 2) - (TileConstants.TILE_SIZE / 2)),
+				Y = localTileLocation.Y - cursor.Position.Y - ((cursor.Graphic.Dimensions.Height / 2) - (TileConstants.TILE_SIZE / 2))
 			};
 		}
 
 		/// <summary>
-		/// Gets the local mapTile coordinates.
+		/// Gets the local tile map coordinates.
 		/// </summary>
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="gridOffset">The grid offset.</param>
-		/// <returns>The local mapTile coordinates.</returns>
+		/// <returns>The local tile map coordinates.</returns>
 		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0)
 		{
 			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
@@ -87,11 +92,11 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Gets the mapTile map.
+		/// Gets the tile map from the model.
 		/// </summary>
-		/// <param name="tileMapModel">The mapTile map model.</param>
-		/// <returns>The mapTile map.</returns>
-		public TileMap GetTileMap(TileMapModel tileMapModel)
+		/// <param name="tileMapModel">The tile map model.</param>
+		/// <returns>The tile map.</returns>
+		public TileMap GetTileMapFromModel(TileMapModel tileMapModel)
 		{
 			var tileMap = new TileMap
 			{
@@ -106,7 +111,7 @@ namespace Common.Tiling.Services
 
 			foreach (var tileMapLayerModel in tileMapModel.TileMapLayers)
 			{
-				var tileMapLayer = this.GetTileMapLayer(tileMapLayerModel);
+				var tileMapLayer = this.GetTileMapLayerFromModel(tileMapLayerModel);
 
 				if (null == tileMapLayer)
 				{
@@ -122,7 +127,7 @@ namespace Common.Tiling.Services
 			foreach (var mapTile in mapTileModels)
 			{
 				if ((mapTile is TileModel tileModel) &&
-					(true == tileMapModel.Images.TryGetValue(tileModel.GraphicId, out var tileImage)))
+					(true == tileMapModel.Graphics.TryGetValue(tileModel.GraphicId, out var tileImage)))
 				{
 					tileModel.Graphic = tileImage;
 				}
@@ -132,11 +137,11 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Gets the mapTile map layer.
+		/// Gets the tile map layer from the model.
 		/// </summary>
-		/// <param name="tileMapLayerModel">The mapTile map layer model.</param>
-		/// <returns>The mapTile map layer.</returns>
-		public TileMapLayer GetTileMapLayer(TileMapLayerModel tileMapLayerModel)
+		/// <param name="tileMapLayerModel">The tile map layer model.</param>
+		/// <returns>The tile map layer.</returns>
+		public TileMapLayer GetTileMapLayerFromModel(TileMapLayerModel tileMapLayerModel)
 		{
 			var tileMapLayer = new TileMapLayer
 			{
@@ -151,7 +156,7 @@ namespace Common.Tiling.Services
 
 			foreach (var tileModel in tileMapLayerModel.Tiles)
 			{
-				var tile = this.GetTile(tileModel);
+				var tile = this.GetTileFromModel(tileModel);
 
 				if (null == tile)
 				{
@@ -165,36 +170,20 @@ namespace Common.Tiling.Services
 		}
 
 		/// <summary>
-		/// Gets the mapTile.
+		/// Gets the tile from the model.
 		/// </summary>
-		/// <param name="tileModel">The mapTile model.</param>
-		/// <returns>The mapTile.</returns>
-		public IAmATile GetTile(IAmATileModel tileModel)
+		/// <param name="tileModel">The tile model.</param>
+		/// <returns>The tile.</returns>
+		public Tile GetTileFromModel(TileModel tileModel)
 		{
-			var imageService = this._gameServices.GetService<IImageService>();
+			var graphicService = this._gameServices.GetService<IGraphicService>();
 
-			if (tileModel is AnimatedTileModel animatedTileModel)
-			{
-				var animationService = this._gameServices.GetService<IAnimationService>();
-				var animation = animationService.GetAnimationFromModel(animatedTileModel.Animation);
-				var animatedTile = new AnimatedTile
-				{
-					Row = tileModel.Row,
-					Column = tileModel.Column,
-					Animation = animation,
-					Area = TileConstants.TILE_AREA
-				};
-
-				return animatedTile;
-			}
-
-			var basicTileModel = tileModel as TileModel;
-			var image = imageService.GetImageFromModel(basicTileModel.Graphic);
+			var graphic = graphicService.GetGraphicFromModel(tileModel.Graphic);
 			var tile = new Tile
 			{
 				Row = tileModel.Row,
 				Column = tileModel.Column,
-				Image = image,
+				Graphic = graphic,
 				Area = TileConstants.TILE_AREA
 			};
 

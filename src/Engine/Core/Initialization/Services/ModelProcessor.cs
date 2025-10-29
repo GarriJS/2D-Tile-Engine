@@ -8,19 +8,19 @@ namespace Engine.Core.Initialization.Services
 	/// <summary>
 	/// Represents a model processor
 	/// </summary>
-	internal static class ModelProcessor
+	static public class ModelProcessor
 	{
 		/// <summary>
 		/// Gets or sets the model processing mappings.
 		/// </summary>
-		internal static Dictionary<Type, Delegate> ModelProcessingMappings { get; set; } = [];
+		static public Dictionary<Type, Delegate> ModelProcessingMappings { get; set; } = [];
 
 		/// <summary>
 		/// Processes the initial models.
 		/// </summary>
 		/// <param name="initialModelsProvider">The initial models provider.</param>
 		/// <param name="gameService">The game services.</param>
-		internal static void ProcessInitialModels(Func<GameServiceContainer, IList<object>> initialModelsProvider, GameServiceContainer gameService)
+		static public void ProcessInitialModels(Func<GameServiceContainer, IList<object>> initialModelsProvider, GameServiceContainer gameService)
 		{
 			var initialModels = initialModelsProvider?.Invoke(gameService);
 
@@ -44,6 +44,18 @@ namespace Engine.Core.Initialization.Services
 
 				_ = func.DynamicInvoke(model);
 			}
+		}
+
+		/// <summary>
+		/// Gets the model processors for the given type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>A dictionary of the processors for the type.</returns>
+		static public Delegate GetModelProcessorsForType(Type type)
+		{
+			var result = ModelProcessingMappings.FirstOrDefault(e => e.Key == type);
+
+			return result.Value;
 		}
 	}
 }

@@ -7,7 +7,6 @@ using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
-using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -44,6 +43,7 @@ namespace Engine.Graphics.Services
 		public T GetImageFromModel<T>(IAmAImageModel imageModel) where T : IAmAImage
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
+			var graphicService = this._gameServices.GetService<IGraphicService>();
 
 			if (false == textureService.TryGetTexture(imageModel.TextureName, out var texture))
 			{
@@ -67,12 +67,12 @@ namespace Engine.Graphics.Services
 			if (image is SimpleImage simpleImage)
 			{
 				var simpleImageModel = imageModel as SimpleImageModel;
-				simpleImage.TextureRegion = this.GetTextureRegionFromModel(simpleImageModel.TextureRegion);
+				simpleImage.TextureRegion = graphicService.GetTextureRegionFromModel(simpleImageModel.TextureRegion);
 			}
 
 			if (image is CompositeImage imageByParts)
 			{
-				var imageByPartsModel = imageModel as DiskModels.Drawing.CompositeImageModel;
+				var imageByPartsModel = imageModel as CompositeImageModel;
 
 				if ((imageByParts.TextureRegions is null) ||
 					(imageByParts.TextureRegions.Any(e => e is null || e.Length != imageByPartsModel.TextureRegions[0].Length)) ||
@@ -113,7 +113,7 @@ namespace Engine.Graphics.Services
 
 					for (int j = 0; j < imageByPartsModel.TextureRegions.Length; j++)
 					{
-						textureRegions[i][j] = this.GetTextureRegionFromModel(imageByPartsModel.TextureRegions[i][j]);
+						textureRegions[i][j] = graphicService.GetTextureRegionFromModel(imageByPartsModel.TextureRegions[i][j]);
 					}
 				}
 
@@ -164,26 +164,6 @@ namespace Engine.Graphics.Services
 					}
 				},
 				Texture = texture
-			};
-
-			return result;
-		}
-
-		/// <summary>
-		/// Gets the texture region from the model.
-		/// </summary>
-		/// <param name="textureRegionModel">The texture region model.</param>
-		/// <returns>The texture region.</returns>
-		public TextureRegion GetTextureRegionFromModel(TextureRegionModel textureRegionModel)
-		{
-			var areaService = this._gameServices.GetService<IAreaService>();
-
-			var displayArea = areaService.GetSubAreaFromModel(textureRegionModel.DisplayArea);
-			var result = new TextureRegion
-			{
-				TextureRegionType = textureRegionModel.TextureRegionType,
-				TextureBox = textureRegionModel.TextureBox,
-				DisplayArea = displayArea
 			};
 
 			return result;

@@ -3,7 +3,7 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
-using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
@@ -81,9 +81,9 @@ namespace Common.UserInterface.Models
 		public SubArea Area { get; set; }
 
 		/// <summary>
-		/// Gets the image.
+		/// Gets the graphic.
 		/// </summary>
-		public SimpleImage Image { get; set; }
+		public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets the base hover configuration.
@@ -123,7 +123,7 @@ namespace Common.UserInterface.Models
 				X = this.OutsidePadding.LeftPadding,
 				Y = this.OutsidePadding.TopPadding,
 			};
-			this.Image?.Draw(gameTime, gameServices, position, graphicOffset);
+			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
 			var contentOffset = graphicOffset + new Vector2
 			{
 				X = this.InsidePadding.LeftPadding,

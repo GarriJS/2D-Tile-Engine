@@ -8,6 +8,7 @@ using Common.UserInterface.Models;
 using Engine.Controls.Models;
 using Engine.Core.Constants;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
@@ -110,7 +111,7 @@ namespace LevelEditor.Scenes.Models
 				Graphic = this.AddTileParameters.Image,
 			};
 
-			var tile = tileService.GetTile(tileModel);
+			var tile = tileService.GetTileFromModel(tileModel);
 			sceneEditService.CurrentScene.TileMap.AddTile(1, tile);
 		}
 
@@ -118,7 +119,7 @@ namespace LevelEditor.Scenes.Models
 		/// Sets the background Graphic.
 		/// </summary>
 		/// <param name="textureRegionImageModel">The texture region image model.</param>
-		public void SetBackgroundGraphic(TextureRegionImageModel textureRegionImageModel)
+		public void SetBackgroundGraphic(IAmAGraphicModel textureRegionImageModel)
 		{
 			var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();

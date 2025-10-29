@@ -1,8 +1,6 @@
 ﻿using Common.Controls.Cursors.Models;
-using Common.DiskModel.Tiling.Contracts;
 using Common.DiskModels.Tiling;
 using Common.Tiling.Models;
-using Common.Tiling.Models.Contracts;
 using Engine.Core.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -29,24 +27,24 @@ namespace Common.Tiling.Services.Contracts
 		public Vector2 GetLocalTileCoordinates(Vector2 coordinates, int gridOffset = 0);
 
 		/// <summary>
-		/// Gets the tile map.
+		/// Gets the tile map from the model.
 		/// </summary>
 		/// <param name="tileMapModel">The tile map model.</param>
 		/// <returns>The tile map.</returns>
-		public TileMap GetTileMap(TileMapModel tileMapModel);
+		public TileMap GetTileMapFromModel(TileMapModel tileMapModel);
 
 		/// <summary>
-		/// Gets the tile map layer.
+		/// Gets the tile map layer from the model.
 		/// </summary>
 		/// <param name="tileMapLayerModel">The tile map layer model.</param>
 		/// <returns>The tile map layer.</returns>
-		public TileMapLayer GetTileMapLayer(TileMapLayerModel tileMapLayerModel);
+		public TileMapLayer GetTileMapLayerFromModel(TileMapLayerModel tileMapLayerModel);
 
 		/// <summary>
-		/// Gets the tile.
+		/// Gets the tile from the model.
 		/// </summary>
 		/// <param name="tileModel">The tile model.</param>
 		/// <returns>The tile.</returns>
-		public IAmATile GetTile(IAmATileModel tileModel);
+		public Tile GetTileFromModel(TileModel tileModel);
 	}
 }

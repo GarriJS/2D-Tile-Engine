@@ -1,10 +1,9 @@
-﻿using Common.DiskModel.Tiling.Contracts;
-using Engine.Graphics.Models.Contracts;
+﻿using Engine.DiskModels.Drawing.Contracts;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Tiling
 {
-    public class TileModel : IAmATileModel
+    public class TileModel
     {
         [JsonPropertyName("row")]
         public int Row { get; set; }
@@ -16,6 +15,6 @@ namespace Common.DiskModels.Tiling
 		public int GraphicId { get; set; }
 
 		[JsonIgnore]
-		public IAmAGraphic Graphic { get; set; }
+		public IAmAGraphicModel Graphic { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
@@ -77,7 +78,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets the Graphic.
 		/// </summary>
-		public SimpleImage Graphic { get; set; }
+		public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets the base hover configuration.

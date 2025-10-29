@@ -1,6 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
-using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -66,6 +66,6 @@ namespace Common.UserInterface.Models.Contracts
 		/// <summary>
 		/// Gets the Graphic.
 		/// </summary>
-		public SimpleImage Graphic { get; set; }
+		public IAmAGraphic Graphic { get; set; }
 	}
 }

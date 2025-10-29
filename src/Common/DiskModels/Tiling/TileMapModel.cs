@@ -12,7 +12,7 @@ namespace Common.DiskModels.Tiling
         [JsonPropertyName("tileMapLayers")]
         public TileMapLayerModel[] TileMapLayers { get; set; }
 
-		[JsonPropertyName("images")]
-		public Dictionary<int, IAmAImageModel> Images { get; set; }
+		[JsonPropertyName("graphics")]
+		public Dictionary<int, IAmAGraphicModel> Graphics { get; set; }
 	}
 }

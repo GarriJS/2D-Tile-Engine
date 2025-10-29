@@ -39,7 +39,7 @@ namespace Common.Controls.Cursors.Models
 		/// <summary>
 		/// Gets the Graphic.
 		/// </summary>
-		public IAmAGraphic Graphic { get; }
+		public IAmAGraphic Graphic { get; set; }
 
         /// <summary>
         /// Gets or sets the cursor updater.

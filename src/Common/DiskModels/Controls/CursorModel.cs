@@ -1,18 +1,11 @@
-﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Controls
 {
-	public class CursorModel : IAmAImageModel
+	public class CursorModel
 	{
-		[JsonPropertyName("textureName")]
-		public string TextureName { get; set; }
-
-		[JsonPropertyName("textureRegion")]
-		public TextureRegionModel TextureRegion { get; set; }
-
 		[JsonPropertyName("cursorName")]
 		public string CursorName { get; set; }
 
@@ -21,6 +14,9 @@ namespace Common.DiskModels.Controls
 
 		[JsonPropertyName("offset")]
 		public Vector2 Offset { get; set; }
+
+		[JsonPropertyName("graphic")]
+		public IAmAGraphicModel Graphic {get; set; }
 
 		[JsonPropertyName("cursorUpdaterName")]
 		public string CursorUpdaterName { get; set; }

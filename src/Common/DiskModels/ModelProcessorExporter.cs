@@ -29,10 +29,9 @@ namespace Common.DiskModels
 
 			(Type type, Delegate factory)[] result =
 			[
-				(typeof(AnimatedTileModel), tileService.GetTile),
-				(typeof(TileMapLayerModel), tileService.GetTileMapLayer),
-				(typeof(TileMapModel), tileService.GetTileMap),
-				(typeof(TileModel), tileService.GetTile),
+				(typeof(TileMapModel), tileService.GetTileFromModel),
+				(typeof(TileMapLayerModel), tileService.GetTileMapLayerFromModel),
+				(typeof(TileModel), tileService.GetTileFromModel),
 				(typeof(UiPadding), uiElementService.GetUiPaddingFromModel),
 				(typeof(UiGroupModel), uiService.GetUiGroup),
 				(typeof(CursorModel), cursorService.GetCursor)
