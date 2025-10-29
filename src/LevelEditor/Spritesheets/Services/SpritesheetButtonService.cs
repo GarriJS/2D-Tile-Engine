@@ -60,13 +60,20 @@ namespace LevelEditor.Spritesheets.Services
 			var secondaryCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
-				TextureBox = element.Graphic.TextureBox,
 				AboveUi = false,
-				TextureName = element.Graphic.TextureName,
 				Offset = new Vector2
 				{
 					X = localTileLocation.X - position.X,
 					Y = localTileLocation.Y - position.Y
+				},
+				Graphic = new SimpleImageModel
+				{
+					TextureName = "debug",
+					TextureRegion = new TextureRegionModel
+					{
+						TextureRegionType = TextureRegionType.Fill,
+						TextureBox = new Rectangle(0, 0, 32, 32)
+					}
 				},
 				CursorUpdaterName = LevelEditorCursorUpdatersNames.SpritesheetButtonCursorUpdater
 			};
@@ -83,14 +90,21 @@ namespace LevelEditor.Spritesheets.Services
 			var secondaryHoverCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
-				TextureBox = element.Graphic.TextureBox,
 				AboveUi = true,
-				TextureName = element.Graphic.TextureName,
 				Offset = new Vector2
 				{
-					X = (primaryCursor?.TextureBox.Width ?? 25) + 3,
+					X = (primaryCursor?.Graphic.Dimensions.Width ?? 25) + 3,
 					Y = 0
-				}
+				},
+				Graphic = new SimpleImageModel
+				{
+					TextureName = "debug",
+					TextureRegion = new TextureRegionModel
+					{
+						TextureRegionType = TextureRegionType.Fill,
+						TextureBox = new Rectangle(0, 0, 32, 32)
+					}
+				},
 			};
 
 			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
@@ -102,8 +116,12 @@ namespace LevelEditor.Spritesheets.Services
 			{
 				Image = new SimpleImageModel
 				{
-					TextureName = element.Graphic.TextureName,
-					TextureBox = element.Graphic.TextureBox
+					TextureName = "debug",
+					TextureRegion = new TextureRegionModel
+					{
+						TextureRegionType = TextureRegionType.Fill,
+						TextureBox = new Rectangle(0, 0, 32, 32)
+					}
 				}
 			};
 
@@ -157,19 +175,13 @@ namespace LevelEditor.Spritesheets.Services
 							BottomPadding = 30,
 						},
 						ResizeTexture = true,
-						BackgroundTexture = new TextureRegionImageModel
+						BackgroundTexture = new SimpleImageModel
 						{
 							TextureName = "pallet",
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent),
 							TextureRegion = new TextureRegionModel
 							{ 
 								TextureRegionType = TextureRegionType.Fill,
-								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent),
-								DisplayArea = new SubAreaModel
-								{
-									Width = 0,
-									Height = 0,
-								}
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
 							}
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
@@ -216,15 +228,19 @@ namespace LevelEditor.Spritesheets.Services
 					var imageModel = new SimpleImageModel
 					{
 						TextureName = spritesheetName,
-						TextureBox = new Rectangle
+						TextureRegion = new TextureRegionModel
 						{
-							X = i * spriteDimensions.X,
-							Y = j * spriteDimensions.Y,
-							Width = spriteDimensions.X,
-							Height = spriteDimensions.Y
+							TextureRegionType = TextureRegionType.Simple,
+							TextureBox = new Rectangle
+							{
+								X = i * spriteDimensions.X,
+								Y = j * spriteDimensions.Y,
+								Width = spriteDimensions.X,
+								Height = spriteDimensions.Y
+							}
 						}
 					};
-					var textureName = textureService.GetTextureName(imageModel.TextureName, imageModel.TextureBox);
+					var textureName = textureService.GetTextureName(imageModel.TextureName, imageModel.TextureRegion.TextureBox);
 
 					if (false == textureService.TryGetTexture(textureName, out var buttonTexture))
 					{

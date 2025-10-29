@@ -1,4 +1,5 @@
 ﻿using Engine.DiskModels.Drawing;
+using Engine.Graphics.Enum;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.LevelEditorContent.Images.Manifests
@@ -29,12 +30,16 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		private static SimpleImageModel Create(int x, int y, int width = ButtonWidth, int height = ButtonHeight) => new()
 		{
 			TextureName = SpritesheetName,
-			TextureBox = new Rectangle
+			TextureRegion = new TextureRegionModel
 			{
-				X = x,
-				Y = y,
-				Width = width,
-				Height = height
+				TextureRegionType = TextureRegionType.Simple,
+				TextureBox = new Rectangle
+				{
+					X = x,
+					Y = y,
+					Width = width,
+					Height = height
+				}
 			}
 		};
 

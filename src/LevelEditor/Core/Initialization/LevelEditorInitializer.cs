@@ -168,19 +168,13 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											Graphic = new TextureRegionImageModel
+											Graphic = new SimpleImageModel
 											{
 												TextureName = "pallet",
-												TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
 												TextureRegion = new TextureRegionModel
 												{
 													TextureRegionType = TextureRegionType.Fill,
-													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
-													DisplayArea = new SubAreaModel
-													{
-														Width = 0,
-														Height = 0,
-													}
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 												}
 											}
 										}
@@ -204,19 +198,13 @@ namespace LevelEditor.Core.Initialization
 										TopPadding = 10,
 									},
 									ResizeTexture = true,
-									BackgroundTexture = new TextureRegionImageModel
+									BackgroundTexture = new SimpleImageModel
 									{
 										TextureName = "pallet",
-										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
 										TextureRegion = new TextureRegionModel
 										{
 											TextureRegionType = TextureRegionType.Fill,
-											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
-											DisplayArea = new SubAreaModel
-											{
-												Width = 0,
-												Height = 0,
-											}
+											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 										}
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
@@ -310,19 +298,13 @@ namespace LevelEditor.Core.Initialization
 								{
 									UiRowName = "Levels Header",
 									ResizeTexture = true,
-									BackgroundTexture = new TextureRegionImageModel
+									BackgroundTexture = new SimpleImageModel
 									{
 										TextureName = "pallet",
-										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
 										TextureRegion = new TextureRegionModel
 										{
 											TextureRegionType = TextureRegionType.Fill,
-											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
-											DisplayArea = new SubAreaModel
-											{
-												Width = 0,
-												Height = 0,
-											}
+											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 										}
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,

@@ -80,16 +80,9 @@ namespace LevelEditor.Scenes.Services
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
 			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
 			runTimeDrawService.AddDrawable(scene.TileMap);
-			var textureRegionImageModel = new TextureRegionImageModel
+			var textureRegionImageModel = new SimpleImageModel
 			{
 				TextureName = "tile_grid_light",
-				TextureBox = new Rectangle
-				{
-					X = 0,
-					Y = 0,
-					Width = 320,
-					Height = 320
-				},
 				TextureRegion = new TextureRegionModel
 				{
 					TextureRegionType = TextureRegionType.Fill,
@@ -151,19 +144,13 @@ namespace LevelEditor.Scenes.Services
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
 						ResizeTexture = true,
-						BackgroundTexture = new TextureRegionImageModel
+						BackgroundTexture = new SimpleImageModel
 						{
 							TextureName = "pallet",
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
 							TextureRegion = new TextureRegionModel
 							{
 								TextureRegionType = TextureRegionType.Fill,
-								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
-								DisplayArea = new SubAreaModel
-								{
-									Width = 0,
-									Height = 0,
-								}
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 							}
 						},
 						HorizontalJustificationType =  UiRowHorizontalJustificationType.Right,
@@ -245,19 +232,13 @@ namespace LevelEditor.Scenes.Services
 					},
 					HorizontalJustificationType = UiRowHorizontalJustificationType.Center,
 					VerticalJustificationType = UiRowVerticalJustificationType.Center,
-					BackgroundTexture = new TextureRegionImageModel
+					BackgroundTexture = new SimpleImageModel
 					{
 						TextureName = "pallet",
-						TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
 						TextureRegion = new TextureRegionModel
 						{
 							TextureRegionType = TextureRegionType.Fill,
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD),
-							DisplayArea = new SubAreaModel
-							{
-								Width = 0,
-								Height = 0,
-							}
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 						}
 					},
 					SubElements =
@@ -273,19 +254,13 @@ namespace LevelEditor.Scenes.Services
 								TopPadding = 10,
 								BottomPadding = 10,
 							},
-							Graphic = new TextureRegionImageModel
+							Graphic = new SimpleImageModel
 							{
 								TextureName = "pallet",
-								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932),
 								TextureRegion = new TextureRegionModel
 								{
 									TextureRegionType = TextureRegionType.Fill,
-									TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932),
-									DisplayArea = new SubAreaModel
-									{
-										Width = 0,
-										Height = 0,
-									}
+									TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932)
 								}
 							},
 							Text = new GraphicalTextModel

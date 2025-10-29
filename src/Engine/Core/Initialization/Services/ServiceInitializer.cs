@@ -110,6 +110,7 @@ namespace Engine.Core.Initialization.Services
 				(typeof(IFontService), new FontService(game.Services)),
 				(typeof(IDrawingService), new DrawingService(game.Services)),
 				(typeof(IWritingService), new WritingService(game.Services)),
+				(typeof(IGraphicService), new GraphicService(game.Services)),
 				(typeof(IImageService), new ImageService(game.Services)),
 				(typeof(IIndependentGraphicService), new IndependentGraphicService(game.Services)),
 				(typeof(IGraphicTextService), new GraphicTextService(game.Services)),
