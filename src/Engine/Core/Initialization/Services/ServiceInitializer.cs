@@ -93,7 +93,7 @@ namespace Engine.Core.Initialization.Services
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>The service contract pairs.</returns>
-		private static (Type type, object provider)[] GetEngineServiceContractPairs(Game game)
+		static private (Type type, object provider)[] GetEngineServiceContractPairs(Game game)
 		{
 			return
 			[

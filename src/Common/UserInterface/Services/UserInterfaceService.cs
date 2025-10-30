@@ -48,7 +48,7 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets the dynamic sized types.
 		/// </summary>
-		public static List<UiElementSizeType> DynamicSizedTypes { get; } =
+		static public List<UiElementSizeType> DynamicSizedTypes { get; } =
 		[
 			UiElementSizeType.Flex
 		];
@@ -56,7 +56,7 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets the fixed sized types.
 		/// </summary>
-		public static List<UiElementSizeType> FixedSizedTypes { get; } =
+		static public List<UiElementSizeType> FixedSizedTypes { get; } =
 		[
 			UiElementSizeType.FitContent,
 			UiElementSizeType.Fixed,

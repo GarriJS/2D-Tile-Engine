@@ -3,16 +3,16 @@
     /// <summary>
     /// Constants for common cursor names.
     /// </summary>
-    public static class CommonCursorNames
+    static public class CommonCursorNames
     {
         /// <summary>
         /// Gets the basic cursor name.
         /// </summary>
-        public static string BasicCursorName { get; } = "Basic_Cursor";
+        static public string BasicCursorName { get; } = "Basic_Cursor";
 
         /// <summary>
         /// Gets the tile grid cursor name.
         /// </summary>
-        public static string TileGridCursorName { get; } = "Tile_Grid_Cursor";
+        static public string TileGridCursorName { get; } = "Tile_Grid_Cursor";
     }
 }

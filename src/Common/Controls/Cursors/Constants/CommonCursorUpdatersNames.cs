@@ -8,6 +8,6 @@
 		/// <summary>
 		/// Gets the tile grid cursor updater name.
 		/// </summary>
-		public static string TileGridCursorUpdater { get; } = "Tile_Grid_Cursor_Updater";
+		static public string TileGridCursorUpdater { get; } = "Tile_Grid_Cursor_Updater";
 	}
 }

@@ -13,14 +13,14 @@ namespace Common.DiskModels
 	/// <summary>
 	/// Represents a model processor exporter.
 	/// </summary>
-	public static class ModelProcessorExporter
+	static public class ModelProcessorExporter
 	{
 		/// <summary>
 		/// Gets the model processing mappings.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>The model processing mappings.</returns>
-		public static (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
+		static public (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var tileService = gameServices.GetService<ITileService>();
 			var uiElementService = gameServices.GetService<IUserInterfaceElementService>();

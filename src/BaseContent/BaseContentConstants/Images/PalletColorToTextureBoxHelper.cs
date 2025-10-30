@@ -6,7 +6,7 @@ namespace BaseContent.BaseContentConstants.Images
 	/// <summary>
 	/// Represents a pallet color to texture box helper.
 	/// </summary>
-	public static class PalletColorToTextureBoxHelper
+	static public class PalletColorToTextureBoxHelper
 	{
 		/// <summary>
 		/// Tries to gets the pallet color texture.
@@ -14,7 +14,7 @@ namespace BaseContent.BaseContentConstants.Images
 		/// <param name="color">The color.</param>
 		/// <param name="textureBox">The texture box.</param>
 		/// <returns>A value indicating if a texture box for the color was found.</returns>
-		public static bool TryGetPalletColorTextureBox(Color color, out Rectangle textureBox)
+		static public bool TryGetPalletColorTextureBox(Color color, out Rectangle textureBox)
 		{
 			if (PalletColorTextureBoxMap.TryGetValue(color, out textureBox))
 			{
@@ -36,7 +36,7 @@ namespace BaseContent.BaseContentConstants.Images
 		/// </summary>
 		/// <param name="color">The color.</param>
 		/// <returns>The pallet color texture box.</returns>
-		public static Rectangle GetPalletColorTextureBox(Color color)
+		static public Rectangle GetPalletColorTextureBox(Color color)
 		{
 			TryGetPalletColorTextureBox(color, out var textureBox);
 
@@ -46,7 +46,7 @@ namespace BaseContent.BaseContentConstants.Images
 		/// <summary>
 		/// The pallet color texture box maps.
 		/// </summary>
-		private static Dictionary<Color, Rectangle> PalletColorTextureBoxMap { get; } = new()
+		static private Dictionary<Color, Rectangle> PalletColorTextureBoxMap { get; } = new()
 		{
 			{ PalletColors.Hex_FF0040, new Rectangle(0, 0, 1, 1) },
 			{ PalletColors.Hex_131313, new Rectangle(1, 0, 1, 1) },
@@ -117,7 +117,7 @@ namespace BaseContent.BaseContentConstants.Images
 		/// <summary>
 		/// The pallet color additions texture box maps.
 		/// </summary>
-		private static Dictionary<Color, Rectangle> PalletColorAdditionsTextureBoxMap { get; } = new()
+		static private Dictionary<Color, Rectangle> PalletColorAdditionsTextureBoxMap { get; } = new()
 		{
 			{ PalletColorAdditions.Hex_000000, new Rectangle(0, 1, 1, 1) },
 			{ PalletColorAdditions.Hex_FFFFFF, new Rectangle(1, 1, 1, 1) },

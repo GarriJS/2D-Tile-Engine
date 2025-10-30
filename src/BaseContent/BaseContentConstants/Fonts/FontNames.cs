@@ -3,22 +3,22 @@
 	/// <summary>
 	/// Represents font names.
 	/// </summary>
-	public static class FontNames
+	static public class FontNames
 	{
 		/// <summary>
 		/// Gets the MonoLight font name.
 		/// </summary>
-		public static string MonoLight { get; } = "Monolight";
+		static public string MonoLight { get; } = "Monolight";
 
 		/// <summary>
 		/// Gets the MonoRegular font name.
 		/// </summary>
-		public static string MonoRegular { get; } = "Monoregular";
+		static public string MonoRegular { get; } = "Monoregular";
 
 		/// <summary>
 		/// Gets the MonoBold font name.
 		/// </summary>
-		public static string MonoBold { get; } = "Monobold";
+		static public string MonoBold { get; } = "Monobold";
 
 	}
 }

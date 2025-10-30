@@ -7,7 +7,7 @@ namespace Engine.Controls.Models
 	/// <summary>
 	/// Represents a control context.
 	/// </summary>
-	public abstract class ControlContext
+	abstract public class ControlContext
 	{
 		/// <summary>
 		/// Gets or sets the control context components.
@@ -27,7 +27,7 @@ namespace Engine.Controls.Models
 		/// Initializes the control context.
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
-		public abstract void Initialize(GameServiceContainer gameServices);
+		abstract public void Initialize(GameServiceContainer gameServices);
 
 		/// <summary>
 		/// Processes the control state.
@@ -36,6 +36,6 @@ namespace Engine.Controls.Models
 		/// <param name="gameServices">The game service.</param>
 		/// <param name="controlState">The control state.</param>
 		/// <param name="priorControlState">The prior control state.</param>
-		public abstract void ProcessControlState(GameTime gameTime, GameServiceContainer gameServices, ControlState controlState, ControlState priorControlState);
+		abstract public void ProcessControlState(GameTime gameTime, GameServiceContainer gameServices, ControlState controlState, ControlState priorControlState);
 	}
 }

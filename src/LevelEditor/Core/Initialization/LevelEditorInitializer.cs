@@ -24,14 +24,14 @@ namespace LevelEditor.Core.Initialization
 	/// <summary>
 	/// Represents a level editor initializer.
 	/// </summary>
-	public static class LevelEditorInitializer
+	static public class LevelEditorInitializer
 	{
 		/// <summary>
 		/// Gets the function providers. 
 		/// </summary>
 		/// <param name="gameServices">The game service.</param>
 		/// <returns>The function providers.</returns>
-		public static Dictionary<string, Delegate> GetFunctionProviders(GameServiceContainer gameServices)
+		static public Dictionary<string, Delegate> GetFunctionProviders(GameServiceContainer gameServices)
 		{
 			var result = new Dictionary<string, Delegate>();
 
@@ -55,7 +55,7 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameService">The game service.</param>
 		/// <returns>A dictionary of the cursor updaters.</returns>
-		public static Dictionary<string, Action<Cursor, GameTime>> GetCursorUpdaters(GameServiceContainer gameService)
+		static public Dictionary<string, Action<Cursor, GameTime>> GetCursorUpdaters(GameServiceContainer gameService)
 		{
 			var spritesheetButtonService = gameService.GetService<ISpritesheetButtonService>();
 
@@ -70,7 +70,7 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the hover event processors.</returns>
-		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetHoverEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<IAmAUiElement, Vector2>> GetHoverEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 
@@ -85,7 +85,7 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the press event processors.</returns>
-		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetPressEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<IAmAUiElement, Vector2>> GetPressEventProcessors(GameServiceContainer gameServices)
 		{
 			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
 			{
@@ -98,7 +98,7 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the click event processors.</returns>
-		public static Dictionary<string, Action<LocationExtender<IAmAUiElement>>> GetClickEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<LocationExtender<IAmAUiElement>>> GetClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var sceneEditService = gameServices.GetService<ISceneEditService>();
@@ -117,7 +117,7 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>The user interface models.</returns>
-		public static IList<object> GetInitialUiModels(GameServiceContainer gameServices)
+		static public IList<object> GetInitialUiModels(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var sceneEditService = gameServices.GetService<ISceneEditService>();

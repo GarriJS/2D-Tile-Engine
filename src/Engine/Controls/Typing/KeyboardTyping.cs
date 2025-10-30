@@ -6,12 +6,12 @@ namespace Engine.Controls.Typing
 	/// <summary>
 	/// Provides methods typing with the keyboard.
 	/// </summary>
-	public static class KeyboardTyping
+	static public class KeyboardTyping
 	{
 		/// <summary>
 		/// Gets or sets the old pressed keys.
 		/// </summary>
-		public static Keys[] OldPressedKeys { get; set; } = Array.Empty<Keys>();
+		static public Keys[] OldPressedKeys { get; set; } = Array.Empty<Keys>();
 
 		/// <summary>
 		/// Gets the matching char for the key.
@@ -19,7 +19,7 @@ namespace Engine.Controls.Typing
 		/// <param name="key">The key.</param>
 		/// <param name="isShiftPressed">A value indicating whether the shift key is pressed.</param>
 		/// <returns>The matching char for the key.</returns>
-		public static char? ToChar(Keys key, bool isShiftPressed)
+		static public char? ToChar(Keys key, bool isShiftPressed)
 		{
 			if (key == Keys.A) return isShiftPressed ? 'A' : 'a';
 			if (key == Keys.B) return isShiftPressed ? 'B' : 'b';
@@ -112,7 +112,7 @@ namespace Engine.Controls.Typing
 		/// </summary>
 		/// <param name="text">The text.</param>
 		/// <returns>The formatted text.</returns>
-		public static string FormatForDrawString(string text)
+		static public string FormatForDrawString(string text)
 		{ 
 			return text.Replace("\t", "    ");
 		}

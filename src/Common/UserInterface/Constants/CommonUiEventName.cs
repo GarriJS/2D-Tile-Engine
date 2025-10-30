@@ -3,7 +3,7 @@
     /// <summary>
     /// Constants for user interface event names.
     /// </summary>
-    public static class CommonUiEventName
+    static public class CommonUiEventName
     {
 
     }

@@ -27,7 +27,7 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <returns>The textureRegions model.</returns>
-		private static SimpleImageModel Create(int x, int y, int width = ButtonWidth, int height = ButtonHeight) => new()
+		static private SimpleImageModel Create(int x, int y, int width = ButtonWidth, int height = ButtonHeight) => new()
 		{
 			TextureName = SpritesheetName,
 			TextureRegion = new TextureRegionModel

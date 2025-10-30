@@ -8,6 +8,6 @@
 		/// <summary>
 		/// Gets or sets the spritesheet button cursor updater name.
 		/// </summary>
-		public static string SpritesheetButtonCursorUpdater { get; } = "Spritesheet_Button_Cursor_Updater";
+		static public string SpritesheetButtonCursorUpdater { get; } = "Spritesheet_Button_Cursor_Updater";
 	}
 }

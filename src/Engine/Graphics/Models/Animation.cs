@@ -58,9 +58,12 @@ namespace Engine.Graphics.Models
 		/// Sets the draw dimensions.
 		/// </summary>
 		/// <param name="dimensions">The dimensions.</param>
-		virtual public void SetDrawDimensions(SubArea dimensions)
+		public void SetDrawDimensions(SubArea dimensions)
 		{
-			
+			foreach (var frame in this.Frames ?? [])
+			{ 
+				frame.SetDrawDimensions(dimensions);
+			}
 		}
 
 		/// <summary>

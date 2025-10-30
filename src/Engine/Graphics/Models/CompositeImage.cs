@@ -6,6 +6,7 @@ using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace Engine.Graphics.Models
 {
@@ -22,7 +23,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets the dimensions.
 		/// </summary>
-		public SubArea Dimensions { get => new SubArea(); }
+		public SubArea Dimensions { get => new() { Width = this.TextureRegions.Sum(e => e[0].DisplayArea.Width), Height = this.TextureRegions[0].Sum(e => e.DisplayArea.Height) }; }
 
 		/// <summary>
 		/// Gets or sets the texture.
@@ -32,7 +33,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the texture regions.
 		/// </summary>
-		/// <remarks>The rows and columns must each have the same height and width.</remarks>
+		/// <remarks>Each row must be the same width, and each column must be the same height.</remarks>
 		public TextureRegion[][] TextureRegions { get; set; }
 
 		/// <summary>
@@ -41,7 +42,39 @@ namespace Engine.Graphics.Models
 		/// <param name="dimensions">The dimensions.</param>
 		public void SetDrawDimensions(SubArea dimensions)
 		{
+			var topCornersWidth = this.TextureRegions[0][0].DisplayArea.Width + this.TextureRegions[0][this.TextureRegions[0].Length - 1].DisplayArea.Width;
+			var middleSetWidth = dimensions.Width - topCornersWidth;
 
+			if (0 >= middleSetWidth)
+			{
+				// LOGGING
+				middleSetWidth = 0;
+			}
+
+			for (int i = 1; i < this.TextureRegions.Length - 2; i++)
+			{
+				for (int j = 0; j < this.TextureRegions[0].Length; j++)
+				{
+					this.TextureRegions[i][j].DisplayArea.Width = middleSetWidth;
+				}
+			}
+
+			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[this.TextureRegions.Length][0].DisplayArea.Height;
+			var middleSetHeight = dimensions.Height - leftCornersHeight;
+
+			if (0 >= middleSetHeight)
+			{
+				// LOGGING
+				middleSetHeight = 0;
+			}
+
+			for (int j = 1; j < this.TextureRegions[0].Length - 2; j++)
+			{
+				for (int i = 0; i < this.TextureRegions.Length; i++)
+				{
+					this.TextureRegions[i][j].DisplayArea.Height = middleSetHeight;
+				}
+			}
 		}
 
 		/// <summary>

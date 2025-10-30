@@ -3,36 +3,36 @@
 	/// <summary>
 	/// Contains constants for the manager order.
 	/// </summary>
-	public static class ManagerOrderConstants
+	static public class ManagerOrderConstants
 	{
 		/// <summary>
 		/// Gets the early update order.
 		/// </summary>
-		public static int EarlyUpdateOrder { get; } = -100;
+		static public int EarlyUpdateOrder { get; } = -100;
 
 		/// <summary>
 		/// Gets the unused order.
 		/// </summary>
-		public static int UnusedOrder { get; } = 9999;
+		static public int UnusedOrder { get; } = 9999;
 
 		/// <summary>
 		/// Gets the control manager update order.
 		/// </summary>
-		public static int ControlManagerUpdateOrder { get; } = 1;
+		static public int ControlManagerUpdateOrder { get; } = 1;
 
 		/// <summary>
 		/// Gets the update manager update order.
 		/// </summary>
-		public static int UpdateManagerUpdateOrder { get; } = 2;
+		static public int UpdateManagerUpdateOrder { get; } = 2;
 
 		/// <summary>
 		/// Gets the draw manager draw order.
 		/// </summary>
-		public static int DrawMangerDrawOrder { get; } = 1;
+		static public int DrawMangerDrawOrder { get; } = 1;
 
 		/// <summary>
 		/// Gets the overlaid draw manager draw order.
 		/// </summary>
-		public static int OverlaidDrawMangerDrawOrder { get; } = 2;
+		static public int OverlaidDrawMangerDrawOrder { get; } = 2;
 	}
 }

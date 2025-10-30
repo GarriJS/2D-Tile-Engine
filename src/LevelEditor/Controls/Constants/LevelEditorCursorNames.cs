@@ -3,11 +3,11 @@
     /// <summary>
     /// Constants for level editor cursor names.
     /// </summary>
-    public static class LevelEditorCursorNames
+    static public class LevelEditorCursorNames
     {
         /// <summary>
         /// Gets or sets the spritesheet button cursor name.
         /// </summary>
-        public static string SpritesheetButtonCursorName { get; set; } = "Spritesheet_Button_Cursor";
+        static public string SpritesheetButtonCursorName { get; set; } = "Spritesheet_Button_Cursor";
     }
 }
