@@ -58,29 +58,32 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		{
 			const int edgeLength = 7;
 
-			Rectangle[][] textureRegions =
+			TextureRegionModel[][] textureRegions =
 			[
 				[
-					new Rectangle(0, 0, edgeLength, edgeLength),
-					new Rectangle(edgeLength, 0, width, edgeLength),
-					new Rectangle(width + edgeLength, 0, edgeLength, edgeLength)
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, 0, edgeLength, edgeLength) },
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength, 0, width, edgeLength) },
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(width + edgeLength, 0, edgeLength, edgeLength) }
 				],
 				[
-					new Rectangle(0, edgeLength, edgeLength, height),
-					new Rectangle(edgeLength, edgeLength, width, height),
-					new Rectangle(width + edgeLength, edgeLength, edgeLength, height)
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, edgeLength, edgeLength, height) } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength, edgeLength, width, height) } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(width + edgeLength, edgeLength, edgeLength, height) }
 				],
 				[
-					new Rectangle(0, height + edgeLength, edgeLength, edgeLength),
-					new Rectangle(edgeLength, height + edgeLength, width, edgeLength),
-					new Rectangle(width + edgeLength, height + edgeLength, edgeLength, edgeLength)
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, height + edgeLength, edgeLength, edgeLength) } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength, height + edgeLength, width, edgeLength) } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(width + edgeLength, height + edgeLength, edgeLength, edgeLength) }
 				]
 			];
 
-			return new CompositeImageModel
+			var result = new CompositeImageModel
 			{
-				//TextureRegions = textureRegions,
+				TextureName = SpritesheetName,
+				TextureRegions = textureRegions,
 			};
+
+			return result;
 		}
 
 		/// <summary>

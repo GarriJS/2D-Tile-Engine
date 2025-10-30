@@ -253,14 +253,16 @@ namespace LevelEditor.Scenes.Services
 								TopPadding = 10,
 								BottomPadding = 10,
 							},
-							Graphic = new SimpleImageModel
+							ClickableAreaAnimation = new TriggeredAnimationModel
 							{
-								TextureName = "pallet",
-								TextureRegion = new TextureRegionModel
-								{
-									TextureRegionType = TextureRegionType.Fill,
-									TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1A1932)
-								}
+								CurrentFrameIndex = 0,
+								FrameDuration = 500,
+								Frames =
+								[
+									DarkBlueButtonsManifest.GetUnpressedEmptyButtonByParts(64 - 14, 64 - 14),
+									DarkBlueButtonsManifest.PressedTabButton
+								],
+								RestingFrameIndex = 0
 							},
 							Text = new GraphicalTextModel
 							{
@@ -348,7 +350,9 @@ namespace LevelEditor.Scenes.Services
 		{
 			var jsonService = this._gameServices.GetService<IJsonService>();
 
-			return jsonService.GetJsonFileNames(ContentManagerParams.ContentManagerName, "TileMaps");
+			var result = jsonService.GetJsonFileNames(ContentManagerParams.ContentManagerName, "TileMaps");
+
+			return ["fake map"];
 		}
 	}
 }

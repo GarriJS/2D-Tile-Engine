@@ -70,54 +70,53 @@ namespace Engine.Graphics.Services
 				simpleImage.TextureRegion = graphicService.GetTextureRegionFromModel(simpleImageModel.TextureRegion);
 			}
 
-			if (image is CompositeImage imageByParts)
+			if (image is CompositeImage compositeImage)
 			{
-				var imageByPartsModel = imageModel as CompositeImageModel;
+				var compositeImageModel = imageModel as CompositeImageModel;
+				var textureRegions = new TextureRegion[compositeImageModel.TextureRegions.Length][];
 
-				if ((imageByParts.TextureRegions is null) ||
-					(imageByParts.TextureRegions.Any(e => e is null || e.Length != imageByPartsModel.TextureRegions[0].Length)) ||
-					(imageByParts.TextureRegions.Length != imageByParts.TextureRegions[0].Length))
+				for (int i = 0; i < compositeImageModel.TextureRegions.Length; i++)
 				{
-					throw new ArgumentException("Image by parts does not have valid texture regions. Texture regions must have equal length columns and rows.");
+					textureRegions[i] = new TextureRegion[compositeImageModel.TextureRegions[i].Length];
+
+					for (int j = 0; j < compositeImageModel.TextureRegions.Length; j++)
+					{
+						textureRegions[i][j] = graphicService.GetTextureRegionFromModel(compositeImageModel.TextureRegions[i][j]);
+					}
 				}
 
-				var firstRowTotalWidth = imageByPartsModel.TextureRegions[0].Sum(e => e.DisplayArea.Width);
+				if ((textureRegions is null) ||
+					(textureRegions.Any(e => e is null || e.Length != textureRegions[0].Length)) ||
+					(textureRegions.Length != textureRegions[0].Length))
+				{
+					throw new ArgumentException("Composite image does not have valid texture regions. Texture regions must have equal length columns and rows.");
+				}
 
-				foreach (var textureRegionRow in imageByPartsModel.TextureRegions)
+				var firstRowTotalWidth = textureRegions[0].Sum(e => e.DisplayArea.Width);
+
+				foreach (var textureRegionRow in textureRegions)
 				{
 					var rowWidth = textureRegionRow.Sum(e => e.DisplayArea.Width);
 
 					if (firstRowTotalWidth != rowWidth)
 					{
-						throw new ArgumentException("Image by parts does not have valid texture regions. Row widths are not equal.");
+						throw new ArgumentException("Composite image does not have valid texture regions. Row widths are not equal.");
 					}
 				}
 
-				var firstColumnTotalHeight = imageByPartsModel.TextureRegions.Sum(e => e[0].DisplayArea.Height);
+				var firstColumnTotalHeight = textureRegions.Sum(e => e[0].DisplayArea.Height);
 
-				for (int col = 0; col < imageByPartsModel.TextureRegions[0].Length; col++)
+				for (int col = 0; col < textureRegions.Length; col++)
 				{
-					var columnHeight = imageByPartsModel.TextureRegions.Sum(row => row[col].DisplayArea.Height);
+					var columnHeight = textureRegions.Sum(row => row[col].DisplayArea.Height);
 
 					if (firstColumnTotalHeight != columnHeight)
 					{
-						throw new ArgumentException("Image by parts does not have valid texture regions. Column heights are not equal.");
+						throw new ArgumentException("Composite image does not have valid texture regions. Column heights are not equal.");
 					}
 				}
 
-				var textureRegions = new TextureRegion[imageByPartsModel.TextureRegions.Length][];
-
-				for (int i = 0; i < imageByPartsModel.TextureRegions.Length; i++)
-				{
-					textureRegions[i] = new TextureRegion[imageByPartsModel.TextureRegions[i].Length];
-
-					for (int j = 0; j < imageByPartsModel.TextureRegions.Length; j++)
-					{
-						textureRegions[i][j] = graphicService.GetTextureRegionFromModel(imageByPartsModel.TextureRegions[i][j]);
-					}
-				}
-
-				imageByParts.TextureRegions = textureRegions;
+				compositeImage.TextureRegions = textureRegions;
 			}
 
 			return (T)image;

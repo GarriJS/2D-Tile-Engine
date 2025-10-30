@@ -18,6 +18,6 @@ namespace Engine.DiskModels.Drawing
 		public int? FrameMaxDuration { get; set; }
 
 		[JsonPropertyName("frames")]
-		public SimpleImageModel[] Frames { get; set; }
+		public IAmAImageModel[] Frames { get; set; }
 	}
 }

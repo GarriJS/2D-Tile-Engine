@@ -23,7 +23,11 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets the dimensions.
 		/// </summary>
-		public SubArea Dimensions { get => new() { Width = this.TextureRegions.Sum(e => e[0].DisplayArea.Width), Height = this.TextureRegions[0].Sum(e => e.DisplayArea.Height) }; }
+		public SubArea Dimensions => new()
+		{
+			Width = this.TextureRegions[0].Sum(e => e.DisplayArea.Width),
+			Height = this.TextureRegions.Sum(e => e[0].DisplayArea.Height)
+		};
 
 		/// <summary>
 		/// Gets or sets the texture.
@@ -42,6 +46,8 @@ namespace Engine.Graphics.Models
 		/// <param name="dimensions">The dimensions.</param>
 		public void SetDrawDimensions(SubArea dimensions)
 		{
+			return;
+
 			var topCornersWidth = this.TextureRegions[0][0].DisplayArea.Width + this.TextureRegions[0][this.TextureRegions[0].Length - 1].DisplayArea.Width;
 			var middleSetWidth = dimensions.Width - topCornersWidth;
 
@@ -51,7 +57,7 @@ namespace Engine.Graphics.Models
 				middleSetWidth = 0;
 			}
 
-			for (int i = 1; i < this.TextureRegions.Length - 2; i++)
+			for (int i = 1; i < this.TextureRegions.Length - 1; i++)
 			{
 				for (int j = 0; j < this.TextureRegions[0].Length; j++)
 				{
@@ -59,7 +65,7 @@ namespace Engine.Graphics.Models
 				}
 			}
 
-			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[this.TextureRegions.Length][0].DisplayArea.Height;
+			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[this.TextureRegions.Length - 1][0].DisplayArea.Height;
 			var middleSetHeight = dimensions.Height - leftCornersHeight;
 
 			if (0 >= middleSetHeight)
@@ -68,7 +74,7 @@ namespace Engine.Graphics.Models
 				middleSetHeight = 0;
 			}
 
-			for (int j = 1; j < this.TextureRegions[0].Length - 2; j++)
+			for (int j = 1; j < this.TextureRegions[0].Length - 1; j++)
 			{
 				for (int i = 0; i < this.TextureRegions.Length; i++)
 				{
@@ -97,7 +103,7 @@ namespace Engine.Graphics.Models
 
 				foreach (var textureRegion in textureRegionRow)
 				{
-					var textureRegionOffset = new Vector2 { X = verticalRowOffset, Y = horizontalRowOffset };
+					var textureRegionOffset = new Vector2 { X = horizontalRowOffset, Y = verticalRowOffset };
 					textureRegion.Draw(drawingService, this.Texture, textureRegionOffset + drawCoordinates);
 					horizontalRowOffset += textureRegion.DisplayArea.Width;
 				}
