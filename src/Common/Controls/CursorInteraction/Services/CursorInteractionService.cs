@@ -1,6 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;

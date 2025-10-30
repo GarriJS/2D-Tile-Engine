@@ -9,13 +9,13 @@ namespace Engine.Physics.Models
 	public struct LocationExtender<T>
 	{
 		/// <summary>
-		/// Gets or sets the object.
-		/// </summary>
-		public T Object { get; set; }
-
-		/// <summary>
 		/// Gets or sets the location.
 		/// </summary>
 		public Vector2 Location { get; set; }
+
+		/// <summary>
+		/// Gets or sets the object.
+		/// </summary>
+		public T Object { get; set; }
 	}
 }

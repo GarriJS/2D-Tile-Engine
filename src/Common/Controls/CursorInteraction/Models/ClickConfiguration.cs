@@ -1,6 +1,5 @@
-﻿using Engine.Physics.Models.Contracts;
-using Engine.Physics.Models.SubAreas;
-using Microsoft.Xna.Framework;
+﻿using Common.Controls.CursorInteraction.Models.Abstract;
+using Engine.Physics.Models;
 using System;
 
 namespace Common.Controls.CursorInteraction.Models
@@ -9,28 +8,18 @@ namespace Common.Controls.CursorInteraction.Models
 	/// Represents a click configuration.
 	/// </summary>
 	/// <typeparam name="T">The parent type.</typeparam>
-	public class ClickConfiguration<T> : IHaveASubArea, IDisposable
+	public class ClickConfiguration<T> : BaseClickConfiguration, IDisposable
 	{
-		/// <summary>
-		/// Gets or sets the area.
-		/// </summary>
-		public SubArea Area { get; set; }
-
-		/// <summary>
-		/// Gets or sets the offset;
-		/// </summary>
-		public Vector2 Offset { get; set; }
-
 		/// <summary>
 		/// Gets or set the click event.
 		/// </summary>
-		protected event Action<T, Vector2> ClickEvent;
+		protected event Action<LocationExtender<T>> ClickEvent;
 
 		/// <summary>
 		/// Adds the subscription.
 		/// </summary>
 		/// <param name="action">The action.</param>
-		public void AddSubscription(Action<T, Vector2> action)
+		public void AddSubscription(Action<LocationExtender<T>> action)
 		{
 			this.ClickEvent += action;
 		}
@@ -39,7 +28,7 @@ namespace Common.Controls.CursorInteraction.Models
 		/// Removes the subscription.
 		/// </summary>
 		/// <param name="action">The action.</param>
-		public void RemoveSubscription(Action<T, Vector2> action)
+		public void RemoveSubscription(Action<LocationExtender<T>> action)
 		{
 			this.ClickEvent -= action;
 		}
@@ -47,11 +36,10 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <summary>
 		/// Raises the click event.
 		/// </summary>
-		/// <param name="parent">The parent object being clicked.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaiseClickEvent(T parent, Vector2 elementLocation)
+		/// <param name="objectWithClickLocation">The element with click location.</param>
+		public void RaiseClickEvent(LocationExtender<T> objectWithClickLocation)
 		{
-			this.ClickEvent?.Invoke(parent, elementLocation);
+			this.ClickEvent?.Invoke(objectWithClickLocation);
 		}
 
 		/// <summary>

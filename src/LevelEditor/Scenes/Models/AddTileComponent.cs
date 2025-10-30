@@ -30,7 +30,7 @@ namespace LevelEditor.Scenes.Models
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets a value indicating whether the background Graphic is active.
+		/// Gets a value indicating whether the background TileGraphic is active.
 		/// </summary>
 		public bool BackgroundGraphicActive { get; private set; }
 
@@ -40,7 +40,7 @@ namespace LevelEditor.Scenes.Models
 		public AddTileParams AddTileParameters { get; set; }
 
 		/// <summary>
-		/// Gets the background Graphic.
+		/// Gets the background TileGraphic.
 		/// </summary>
 		public IndependentGraphic BackgroundGraphic { get; private set; }
 
@@ -68,7 +68,7 @@ namespace LevelEditor.Scenes.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
 			//if ((true == this.BackgroundGraphicActive) &&
-			//	(this.BackgroundGraphic.Graphic is TiledImage fillImage))
+			//	(this.BackgroundGraphic.TileGraphic is TiledImage fillImage))
 			//{
 			//	var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
@@ -108,7 +108,7 @@ namespace LevelEditor.Scenes.Models
 			{
 				Row = (int)tilePosition.Y / TileConstants.TILE_SIZE,
 				Column = (int)tilePosition.X / TileConstants.TILE_SIZE,
-				Graphic = this.AddTileParameters.Image,
+				Graphic = this.AddTileParameters.TileGraphic,
 			};
 
 			var tile = tileService.GetTileFromModel(tileModel);
@@ -116,7 +116,7 @@ namespace LevelEditor.Scenes.Models
 		}
 
 		/// <summary>
-		/// Sets the background Graphic.
+		/// Sets the background TileGraphic.
 		/// </summary>
 		/// <param name="textureRegionImageModel">The texture region image model.</param>
 		public void SetBackgroundGraphic(IAmAGraphicModel textureRegionImageModel)
@@ -149,7 +149,7 @@ namespace LevelEditor.Scenes.Models
 		}
 
 		/// <summary>
-		/// Toggles the background Graphic.
+		/// Toggles the background TileGraphic.
 		/// </summary>
 		public void ToggleBackgroundGraphic()
 		{

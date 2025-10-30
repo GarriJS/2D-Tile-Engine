@@ -64,10 +64,11 @@ namespace Engine.Graphics.Models
 		/// <returns>The serialization model.</returns>
 		public IAmAGraphicModel ToModel()
 		{
+			var textureRegionModel = this.TextureRegion.ToModel();
 			var result = new SimpleImageModel
 			{
 				TextureName = this.TextureName,
-				//TextureBox = this.TextureBox
+				TextureRegion = textureRegionModel
 			};
 
 			return result;

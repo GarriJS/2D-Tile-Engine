@@ -17,6 +17,7 @@ using Engine.DiskModels;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
+using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
@@ -63,9 +64,8 @@ namespace LevelEditor.Scenes.Services
 		/// <summary>
 		/// The create scene button click event processor.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void CreateSceneButtonClickEventProcessor(IAmAUiElement element, Vector2 elementLocation)
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void CreateSceneButtonClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation)
 		{
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
@@ -85,7 +85,7 @@ namespace LevelEditor.Scenes.Services
 				TextureName = "tile_grid_light",
 				TextureRegion = new TextureRegionModel
 				{
-					TextureRegionType = TextureRegionType.Fill,
+					TextureRegionType = TextureRegionType.Tile,
 					TextureBox = new Rectangle
 					{
 						X = 0,
@@ -111,9 +111,8 @@ namespace LevelEditor.Scenes.Services
 		/// <summary>
 		/// The toggle tile grid click event processor.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void ToggleTileGridClickEventProcessor(IAmAUiElement element, Vector2 elementLocation)
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void ToggleTileGridClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation)
 		{
 			this.AddTileComponent.ToggleBackgroundGraphic();
 		}
@@ -325,9 +324,8 @@ namespace LevelEditor.Scenes.Services
 		/// <summary>
 		/// Saves the scene.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void SaveScene(IAmAUiElement element, Vector2 elementLocation)
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void SaveScene(LocationExtender<IAmAUiElement> elementWithLocation)
 		{
 			if (null == this.CurrentScene)
 			{

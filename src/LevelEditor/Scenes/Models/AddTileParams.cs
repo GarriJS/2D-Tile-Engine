@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Drawing;
+﻿using Engine.DiskModels.Drawing.Contracts;
 
 namespace LevelEditor.Scenes.Models
 {
@@ -8,8 +8,8 @@ namespace LevelEditor.Scenes.Models
 	public class AddTileParams
 	{
 		/// <summary>
-		/// Gets or sets the sprite.
+		/// Gets or sets the tile graphic.
 		/// </summary>
-		public SimpleImageModel Image { get; set; }
+		public IAmAGraphicModel TileGraphic { get; set; }
 	}
 }

@@ -3,6 +3,7 @@ using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
+using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Spritesheets.Services.Contracts
@@ -15,9 +16,8 @@ namespace LevelEditor.Spritesheets.Services.Contracts
 		/// <summary>
 		/// The spritesheet button click event processor.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void SpritesheetButtonClickEventProcessor(IAmAUiElement element, Vector2 elementLocation);
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void SpritesheetButtonClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation);
 
 		/// <summary>
 		/// Updates the spritesheet button trailing cursor.

@@ -141,7 +141,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="elementLocation">The element location.</param>
 		public void RaiseClickEvent(Vector2 elementLocation)
 		{
-			this.ClickConfig?.RaiseClickEvent(this, elementLocation);
+			this.ClickConfig?.RaiseClickEvent(new LocationExtender<IAmAUiElement> { Location = elementLocation, Object = this});
 		}
 
 		/// <summary>

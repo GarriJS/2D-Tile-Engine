@@ -7,8 +7,8 @@ using Common.DiskModels.UI.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
+using Engine.Physics.Models;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.LevelEditorContent.Images.Manifests;
@@ -98,12 +98,12 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the click event processors.</returns>
-		public static Dictionary<string, Action<IAmAUiElement, Vector2>> GetClickEventProcessors(GameServiceContainer gameServices)
+		public static Dictionary<string, Action<LocationExtender<IAmAUiElement>>> GetClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var sceneEditService = gameServices.GetService<ISceneEditService>();
 
-			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
+			return new Dictionary<string, Action<LocationExtender<IAmAUiElement>>>
 			{
 				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
 				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,

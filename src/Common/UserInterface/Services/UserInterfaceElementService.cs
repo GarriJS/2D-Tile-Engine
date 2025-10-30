@@ -12,6 +12,7 @@ using Engine.Core.Fonts.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using System;
@@ -36,13 +37,15 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface insidePadding model.</returns>
 		public UiPadding GetUiPaddingFromModel(UiPaddingModel model)
 		{
-			return new UiPadding
+			var result = new UiPadding
 			{
 				TopPadding = model.TopPadding,
 				BottomPadding = model.BottomPadding,
 				LeftPadding = model.LeftPadding,
 				RightPadding = model.RightPadding,
 			};
+
+			return result;
 		}
 
 		/// <summary>
@@ -307,16 +310,14 @@ namespace Common.UserInterface.Services
 		/// <param name="pressLocation">The press location.</param>
 		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation)
 		{
-			//TODO this should possibly use inside width and height
-
 			switch (element)
 			{
 				case UiButton button:
 
 					var clickableLocation = new Vector2
 					{
-						X = elementLocation.X + ((element.Area.Width - button.ClickConfig.Area.Width) / 2),
-						Y = elementLocation.Y + ((element.Area.Height - button.ClickConfig.Area.Height) / 2)
+						X = elementLocation.X + button.ClickConfig.Offset.X + ((element.InsideWidth - button.ClickConfig.Area.Width) / 2),
+						Y = elementLocation.Y + button.ClickConfig.Offset.Y + ((element.InsideHeight - button.ClickConfig.Area.Height) / 2)
 					};
 
 					if ((clickableLocation.X <= pressLocation.X) &&
@@ -367,7 +368,7 @@ namespace Common.UserInterface.Services
 			button.ClickConfig?.AddSubscription(this.TriggerUiButtonClickAnimation);
 
 			// LOGGING
-			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(buttonModel.ClickEventName, out var clickAction))
+			if (true == functionService.TryGetFunction<Action<LocationExtender<IAmAUiElement>>>(buttonModel.ClickEventName, out var clickAction))
 			{
 				button.ClickConfig?.AddSubscription(clickAction);
 			}
@@ -388,11 +389,10 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Triggers the user interface elements click animation.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		private void TriggerUiButtonClickAnimation(IAmAUiElement element, Vector2 elementLocation)
+		/// <param name="elementWithLocation">The element with location.</param>
+		private void TriggerUiButtonClickAnimation(LocationExtender<IAmAUiElement> elementWithLocation)
 		{
-			if (element is UiButton button)
+			if (elementWithLocation.Object is UiButton button)
 			{
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);
 			}

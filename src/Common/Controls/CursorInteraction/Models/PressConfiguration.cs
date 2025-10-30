@@ -1,5 +1,4 @@
-﻿using Engine.Physics.Models.Contracts;
-using Engine.Physics.Models.SubAreas;
+﻿using Common.Controls.CursorInteraction.Models.Abstract;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -9,18 +8,8 @@ namespace Common.Controls.CursorInteraction.Models
 	/// Represents a press configuration.
 	/// </summary>
 	/// <typeparam name="T">The parent type.</typeparam>
-	public class PressConfiguration<T> : IHaveASubArea, IDisposable
+	public class PressConfiguration<T> : BasePressConfiguration, IDisposable
 	{
-		/// <summary>
-		/// Gets or sets the area.
-		/// </summary>
-		public SubArea Area { get; set; }
-
-		/// <summary>
-		/// Gets or sets the offset;
-		/// </summary>
-		public Vector2 Offset { get; set; }
-
 		/// <summary>
 		/// Gets or set the press event.
 		/// </summary>

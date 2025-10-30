@@ -13,8 +13,8 @@ using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
+using Engine.Physics.Models;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.Scenes.Models;
@@ -39,9 +39,8 @@ namespace LevelEditor.Spritesheets.Services
 		/// <summary>
 		/// The spritesheet button click event processor.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void SpritesheetButtonClickEventProcessor(IAmAUiElement element, Vector2 elementLocation)
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void SpritesheetButtonClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
@@ -57,6 +56,7 @@ namespace LevelEditor.Spritesheets.Services
 			cursorService.CursorControlComponent.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
+			var elementGraphicModel = elementWithLocation.Object.Graphic.ToModel();
 			var secondaryCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
@@ -66,15 +66,7 @@ namespace LevelEditor.Spritesheets.Services
 					X = localTileLocation.X - position.X,
 					Y = localTileLocation.Y - position.Y
 				},
-				Graphic = new SimpleImageModel
-				{
-					TextureName = "debug",
-					TextureRegion = new TextureRegionModel
-					{
-						TextureRegionType = TextureRegionType.Fill,
-						TextureBox = new Rectangle(0, 0, 32, 32)
-					}
-				},
+				Graphic = elementGraphicModel,
 				CursorUpdaterName = LevelEditorCursorUpdatersNames.SpritesheetButtonCursorUpdater
 			};
 
@@ -96,15 +88,7 @@ namespace LevelEditor.Spritesheets.Services
 					X = (primaryCursor?.Graphic.Dimensions.Width ?? 25) + 3,
 					Y = 0
 				},
-				Graphic = new SimpleImageModel
-				{
-					TextureName = "debug",
-					TextureRegion = new TextureRegionModel
-					{
-						TextureRegionType = TextureRegionType.Fill,
-						TextureBox = new Rectangle(0, 0, 32, 32)
-					}
-				},
+				Graphic = elementGraphicModel
 			};
 
 			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
@@ -114,15 +98,7 @@ namespace LevelEditor.Spritesheets.Services
 			
 			var addTileParams = new AddTileParams
 			{
-				Image = new SimpleImageModel
-				{
-					TextureName = "debug",
-					TextureRegion = new TextureRegionModel
-					{
-						TextureRegionType = TextureRegionType.Fill,
-						TextureBox = new Rectangle(0, 0, 32, 32)
-					}
-				}
+				TileGraphic = elementGraphicModel
 			};
 
 			sceneEditService.AddTileComponent.AddTileParameters = addTileParams;

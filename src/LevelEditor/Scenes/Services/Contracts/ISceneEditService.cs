@@ -3,8 +3,8 @@ using Common.Scenes.Models;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Core.Contracts;
+using Engine.Physics.Models;
 using LevelEditor.Scenes.Models;
-using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Scenes.Services.Contracts
 {
@@ -26,16 +26,14 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// <summary>
 		/// The create scene button click event processor.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void CreateSceneButtonClickEventProcessor(IAmAUiElement element, Vector2 elementLocation);
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void CreateSceneButtonClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation);
 
 		/// <summary>
 		/// The toggle tile grid click event processor.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void ToggleTileGridClickEventProcessor(IAmAUiElement element, Vector2 elementLocation);
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void ToggleTileGridClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation);
 
 		/// <summary>
 		/// Gets the tile grid user interface zone.
@@ -60,8 +58,7 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// <summary>
 		/// Saves the scene.
 		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		public void SaveScene(IAmAUiElement element, Vector2 elementLocation);
+		/// <param name="elementWithLocation">The element with location.</param>
+		public void SaveScene(LocationExtender<IAmAUiElement> elementWithLocation);
 	}
 }
