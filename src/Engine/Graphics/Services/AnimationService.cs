@@ -2,6 +2,7 @@
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services;
 using Microsoft.Xna.Framework;
 
@@ -76,15 +77,19 @@ namespace Engine.Graphics.Services
 		/// <returns>The fixed animation.</returns>
 		public Animation GetFixedAnimationFromModel(AnimationModel animationModel, int frameWidth, int frameHeight)
 		{
-			foreach (var frameModel in animationModel.Frames)
+			var imageService = this._gameServices.GetService<IImageService>();
+			
+			var frames = new IAmAImage[animationModel.Frames.Length];
+			
+			for (int i = 0; i < frames.Length; i++)
 			{
-				frameModel.TextureRegion.TextureBox = new Rectangle
+				frames[i] = imageService.GetImageFromModel(animationModel.Frames[i]);
+				var frameSubArea = new SubArea
 				{
-					X = frameModel.TextureRegion.TextureBox.X,
-					Y = frameModel.TextureRegion.TextureBox.Y,
 					Width = frameWidth,
-					Height = frameHeight
+					Height = frameHeight,
 				};
+				frames[i].SetDrawDimensions(frameSubArea);
 			}
 
 			return this.GetAnimationFromModel(animationModel);

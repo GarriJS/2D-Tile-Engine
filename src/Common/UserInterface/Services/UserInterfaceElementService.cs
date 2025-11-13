@@ -153,9 +153,9 @@ namespace Common.UserInterface.Services
 			foreach (var frame in uiButton.ClickAnimation.Frames)
 			{
 				var subArea = new SubArea
-				{ 
-					Width = frame.Dimensions.Width, 
-					Height = (int)(element.Graphic.Dimensions.Height * uiButton.ClickableAreaScaler.Y) 
+				{
+					Width = frame.Dimensions.Width,
+					Height = (int)(element.Graphic.Dimensions.Height * uiButton.ClickableAreaScaler.Y)
 				};
 
 				frame.SetDrawDimensions(subArea);
@@ -176,7 +176,7 @@ namespace Common.UserInterface.Services
 				var fixedSize = elementModel.FixedSized.Value;
 
 				if (0 > fixedSize.X)
-				{ 
+				{
 					fixedSize.X = 0;
 				}
 
@@ -186,7 +186,7 @@ namespace Common.UserInterface.Services
 				}
 
 				return new SubArea
-				{ 
+				{
 					Width = fixedSize.X,
 					Height = fixedSize.Y,
 				};
@@ -197,7 +197,7 @@ namespace Common.UserInterface.Services
 				return default;
 			}
 
-			Vector2 elementFitDimensions = default;
+			SubArea elementFitDimensions = null;
 
 			if ((UiElementSizeType.FitContent == elementModel.HorizontalSizeType) ||
 				(UiElementSizeType.FitContent == elementModel.VerticalSizeType))
@@ -212,7 +212,7 @@ namespace Common.UserInterface.Services
 				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Medium.X,
 				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Large.X,
 				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.ExtraLarge.X,
-				UiElementSizeType.FitContent => elementFitDimensions.X,
+				UiElementSizeType.FitContent => elementFitDimensions.Width,
 				_ => 0
 			};
 			var uiElementVerticalSize = elementModel.VerticalSizeType switch
@@ -222,15 +222,17 @@ namespace Common.UserInterface.Services
 				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Medium.Y,
 				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Large.Y,
 				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.ExtraLarge.Y,
-				UiElementSizeType.FitContent => elementFitDimensions.Y,
+				UiElementSizeType.FitContent => elementFitDimensions.Height,
 				_ => 0
 			};
 
-			return new SubArea
+			var result = new SubArea
 			{
 				Width = uiElementHorizontalSize,
 				Height = uiElementVerticalSize
 			};
+
+			return result;
 		}
 
 		/// <summary>
@@ -238,9 +240,50 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		/// <param name="elementModel">The element model.</param>
 		/// <returns>The element fit dimensions.</returns>
-		private Vector2 GetElementFitDimensions(IAmAUiElementModel elementModel)
+		private SubArea GetElementFitDimensions(IAmAUiElementModel elementModel)
 		{
-			Vector2? textDimensions = null;
+			var width = 0;
+			var height = 0;
+			var result = new SubArea
+			{
+				Width = -1,
+				Height = -1
+			};
+
+			if (null != elementModel.Graphic)
+			{
+				result = elementModel.Graphic.GetDimensions();
+			}
+
+			switch (elementModel)
+			{
+				case UiButtonModel uiButtonModel:
+
+					return new SubArea
+					{
+						Width = 64,
+						Height = 64
+					};
+
+
+					if (null == uiButtonModel.ClickableAreaAnimation)
+					{
+						break;
+					}
+
+					var restingFrame = uiButtonModel.ClickableAreaAnimation?.Frames[uiButtonModel.ClickableAreaAnimation.RestingFrameIndex];
+
+					if (null != restingFrame)
+					{
+						result = restingFrame.GetDimensions();
+					}
+
+					break;
+
+				case UiTextModel uiTextModel:
+
+					break;
+			}
 
 			if (elementModel is IAmAUiElementWithTextModel elementTextModel)
 			{
@@ -249,57 +292,13 @@ namespace Common.UserInterface.Services
 				if (false == string.IsNullOrEmpty(elementTextModel.Text?.FontName))
 				{
 					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
-					textDimensions = font.MeasureString(elementTextModel.Text.Text);
+					var textDimensions = font.MeasureString(elementTextModel.Text.Text);
+					result.Width = (int)Math.Max(textDimensions.X, width);
+					result.Height = (int)Math.Max(textDimensions.Y, height);
 				}
 			}
 
-			switch (elementModel)
-			{
-				case UiButtonModel uiButton:
-
-					if ((false == textDimensions.HasValue) &&
-						(null == uiButton.ClickableAreaAnimation))
-					{
-						break;
-					}
-
-					var restingFrame = uiButton.ClickableAreaAnimation?.Frames[uiButton.ClickableAreaAnimation.RestingFrameIndex];
-					var width = 0;
-					var height = 0;
-
-					if (null != restingFrame)
-					{
-						width = restingFrame.TextureRegion.TextureBox.Width;
-						height = restingFrame.TextureRegion.TextureBox.Height;
-					}
-
-					if (true == textDimensions.HasValue)
-					{
-						width = (int)Math.Max(textDimensions.Value.X, width);
-						height = (int)Math.Max(textDimensions.Value.Y, height);
-					}
-
-					return new Vector2
-					{
-						X = width,
-						Y = height
-					};
-
-				case UiTextModel uiText:
-
-					if (true == textDimensions.HasValue)
-					{
-						return textDimensions.Value;
-					}
-
-					break;
-			}
-
-			return new Vector2
-			{
-				X = -1,
-				Y = -1
-			};
+			return result;
 		}
 
 		/// <summary>

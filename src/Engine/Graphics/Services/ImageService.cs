@@ -32,7 +32,7 @@ namespace Engine.Graphics.Services
 		/// <returns>The image.</returns>
 		public IAmAImage GetImageFromModel(IAmAImageModel imageModel)
 		{
-			return this.GetImageFromModel<SimpleImage>(imageModel);
+			return this.GetImageFromModel<IAmAImage>(imageModel);
 		}
 
 		/// <summary>

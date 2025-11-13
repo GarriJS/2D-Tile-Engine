@@ -25,6 +25,21 @@ namespace Engine.Physics.Models.SubAreas
 		public Vector2 ToVector => new() { X = Width, Y = Height };
 
 		/// <summary>
+		/// Initializes the sub area.
+		/// </summary>
+		public SubArea() { }
+
+		/// <summary>
+		/// Initializes the sub area.
+		/// </summary>
+		/// <param name="vector">The vector.</param>
+		public SubArea(Vector2 vector)
+		{ 
+			this.Width = vector.X;
+			this.Height = vector.Y;
+		}
+
+		/// <summary>
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>

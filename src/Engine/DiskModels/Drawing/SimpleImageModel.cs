@@ -1,4 +1,5 @@
 ﻿using Engine.DiskModels.Drawing.Contracts;
+using Engine.Physics.Models.SubAreas;
 using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
@@ -10,5 +11,10 @@ namespace Engine.DiskModels.Drawing
 
 		[JsonPropertyName("textureRegion")]
 		public TextureRegionModel TextureRegion { get; set; }
+
+		public SubArea GetDimensions()
+		{
+			return new SubArea();
+		}
 	}
 }
