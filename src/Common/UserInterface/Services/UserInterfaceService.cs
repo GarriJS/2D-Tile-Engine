@@ -209,6 +209,7 @@ namespace Common.UserInterface.Services
 				UiZoneJustificationTypes.Bottom => uiZone.Area.Height - height,
 				_ => 0,
 			};
+			HoverState result = null;
 
 			foreach (var elementRow in uiZone.ElementRows)
 			{
@@ -240,7 +241,7 @@ namespace Common.UserInterface.Services
 						topHoverCursorConfiguration = uiElementWithLocation.Value.Object.BaseHoverConfig;
 					}
 
-					return new HoverState
+					result = new HoverState
 					{
 						TopHoverCursorConfiguration = topHoverCursorConfiguration,
 						HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
@@ -249,9 +250,11 @@ namespace Common.UserInterface.Services
 							Object = uiElementWithLocation.Value.Object
 						}
 					};
+
+					return result;
 				}
 
-				return new HoverState
+				result = new HoverState
 				{
 					TopHoverCursorConfiguration = topHoverCursorConfiguration,
 					HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
@@ -264,9 +267,11 @@ namespace Common.UserInterface.Services
 						Object = elementRow
 					}
 				};
+
+				return result;
 			}
 
-			return new HoverState
+			result = new HoverState
 			{
 				TopHoverCursorConfiguration = topHoverCursorConfiguration,
 				HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
@@ -275,6 +280,8 @@ namespace Common.UserInterface.Services
 					Object = uiZone
 				}
 			};
+
+			return result;
 		}
 
 		/// <summary>
@@ -341,7 +348,7 @@ namespace Common.UserInterface.Services
 					if ((elementTop <= location.Y) &&
 						(elementBottom >= location.Y))
 					{
-						return new LocationExtender<IAmAUiElement>
+						var result = new LocationExtender<IAmAUiElement>
 						{
 							Object = element,
 							Location = new Vector2
@@ -350,6 +357,8 @@ namespace Common.UserInterface.Services
 								Y = elementTop
 							}
 						};
+
+						return result;
 					}
 				}
 			}
@@ -432,7 +441,7 @@ namespace Common.UserInterface.Services
 			}
 
 			foreach (var dynamicRow in dynamicRows ?? [])
-			{ 
+			{
 				this.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
 			}
 
