@@ -533,8 +533,7 @@ namespace Common.UserInterface.Services
 			var outsidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.OutsidePadding);
 			var insidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.InsidePadding);
 			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, uiRowModel.RowHoverCursorName);
-
-			return new UiRow
+			var result = new UiRow
 			{
 				UiRowName = uiRowModel.UiRowName,
 				Flex = true,
@@ -547,6 +546,8 @@ namespace Common.UserInterface.Services
 				HoverConfig = hoverConfig,
 				SubElements = subElements
 			};
+
+			return result;
 		}
 
 		/// <summary>
