@@ -2,6 +2,7 @@
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.UI;
@@ -460,7 +461,10 @@ namespace Common.UserInterface.Services
 				}
 			}
 
-			if(false == cursorService.Cursors.TryGetValue(uiZoneModel.ZoneHoverCursorName, out var hoverCursor))
+			Cursor hoverCursor = null;
+
+			if ((false == string.IsNullOrEmpty(uiZoneModel.ZoneHoverCursorName)) &&
+				(false == cursorService.Cursors.TryGetValue(uiZoneModel.ZoneHoverCursorName, out hoverCursor)))
 			{
 				// LOGGING
 			}
@@ -550,8 +554,10 @@ namespace Common.UserInterface.Services
 
 			var outsidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.OutsidePadding);
 			var insidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.InsidePadding);
-			
-			if (false == cursorService.Cursors.TryGetValue(uiRowModel.RowHoverCursorName, out var hoverCursor))
+			Cursor hoverCursor = null;
+
+			if ((false == string.IsNullOrEmpty(uiRowModel.RowHoverCursorName)) &&
+				(false == cursorService.Cursors.TryGetValue(uiRowModel.RowHoverCursorName, out hoverCursor)))
 			{
 				// LOGGING
 			}
