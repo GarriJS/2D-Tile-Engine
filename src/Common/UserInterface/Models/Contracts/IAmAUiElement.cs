@@ -11,7 +11,7 @@ namespace Common.UserInterface.Models.Contracts
     /// <summary>
     /// Represents a user interface element.
     /// </summary>
-    public interface IAmAUiElement : IAmSubDrawable, IHaveASubArea, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
+    public interface IAmAUiElement : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
 	{
 		/// <summary>
         /// Gets or sets the user interface element name.

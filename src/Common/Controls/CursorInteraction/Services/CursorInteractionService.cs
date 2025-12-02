@@ -22,53 +22,13 @@ namespace Common.Controls.CursorInteraction.Services
 		/// </summary>
 		/// <typeparam name="T">The parent type.</typeparam>
 		/// <param name="area">The area.</param>
-		/// <param name="hoverCursorName">The hover cursor name.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns>The hover configuration.</returns>
-		public HoverConfiguration<T> GetHoverConfiguration<T>(SubArea area, string hoverCursorName, Vector2 offset = default)
+		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, Vector2 offset = default)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			hoverCursorName ??= string.Empty;
-			if (false == cursorService.Cursors.TryGetValue(hoverCursorName, out var cursor))
-			{
-				// LOGGING
-			}
-
-			return new HoverConfiguration<T>
-			{
-				Area = area,
-				Offset = offset,
-				HoverCursor = cursor,
-			};
-		}
-
-		/// <summary>
-		/// Gets the press configuration.
-		/// </summary>
-		/// <typeparam name="T">The parent type.</typeparam>
-		/// <param name="area">The area.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns>The press configuration.</returns>
-		public PressConfiguration<T> GetPressConfiguration<T>(SubArea area, Vector2 offset = default)
-		{
-			return new PressConfiguration<T>
-			{
-				Area = area,
-				Offset = offset
-			};
-		}
-
-		/// <summary>
-		/// Gets the click configuration.
-		/// </summary>
-		/// <typeparam name="T">The parent type.</typeparam>
-		/// <param name="area">The area.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns>The click configuration.</returns>
-		public ClickConfiguration<T> GetClickConfiguration<T>(SubArea area, Vector2 offset = default)
-		{
-			return new ClickConfiguration<T>
+			return new CursorConfiguration<T>
 			{
 				Area = area,
 				Offset = offset

@@ -10,13 +10,13 @@ namespace Common.Controls.CursorInteraction.Models
 	public class HoverState
 	{
 		/// <summary>
-		/// Gets or sets the hover cursor configuration.
+		/// Gets or sets the top cursor configuration.
 		/// </summary>
-		public BaseHoverConfiguration TopHoverCursorConfiguration { get; set; }
+		public BaseCursorConfiguration TopCursorConfiguration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the hover object location.
 		/// </summary>
-		public LocationExtender<IHaveAHoverConfiguration> HoverObjectLocation { get; set; }
+		public LocationExtender<IHaveAHoverCursor> HoverObjectLocation { get; set; }
 	}
 }

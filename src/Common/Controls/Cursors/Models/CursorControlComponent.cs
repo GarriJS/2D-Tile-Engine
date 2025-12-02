@@ -86,10 +86,10 @@ namespace Common.Controls.Cursors.Models
 
 			this.CursorPosition.Coordinates = controlState.MousePosition;
 
-			if (null != hoverState?.TopHoverCursorConfiguration?.HoverCursor)
+			if (null != hoverState?.HoverObjectLocation.Element?.HoverCursor)
 			{
 				this.SetHoverState();
-				this.SetPrimaryHoverCursor(hoverState.TopHoverCursorConfiguration.HoverCursor, clearSecondaryCursors: false);
+				this.SetPrimaryHoverCursor(hoverState.HoverObjectLocation.Element.HoverCursor, clearSecondaryCursors: false);
 
 				foreach (var secondaryCursor in this.SecondaryHoverCursors)
 				{
@@ -114,33 +114,52 @@ namespace Common.Controls.Cursors.Models
 				return;
 			}
 
-			var uiObject = hoverState.HoverObjectLocation.Object;
-			var location = hoverState.HoverObjectLocation.Location;
+			var uiObject = hoverState.HoverObjectLocation.Element;
+			var elementLocation = hoverState.HoverObjectLocation.Location;
 
 			switch (uiObject)
 			{
-				case IAmAUiElement uiElementWithLocation:
+				case IAmAUiElement uiElement:
+
+					var elementCursorInteraction = new CursorInteraction<IAmAUiElement>
+					{
+						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
+						ElementLocation = elementLocation,
+						Element = uiElement
+					};
 
 					if (true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick))
 					{
-						uiElementWithLocation.RaisePressEvent(location, this.CursorPosition.Coordinates);
+						uiElement.RaisePressEvent(elementCursorInteraction);
 					}
 					else
 					{
-						uiElementWithLocation.RaiseHoverEvent(location);
+						uiElement.RaiseHoverEvent(elementCursorInteraction);
 					}
 
 					break;
 
 				case UiRow uiRowWithLocation:
 
-					uiRowWithLocation.RaiseHoverEvent(location);
+					var rowCursorInteraction = new CursorInteraction<UiRow>
+					{
+						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
+						ElementLocation = elementLocation,
+						Element = uiRowWithLocation
+					};
+					uiRowWithLocation.RaiseHoverEvent(rowCursorInteraction);
 
 					break;
 
 				case UiZone uiZone:
 
-					uiZone.RaiseHoverEvent(location);
+					var zoneCursorInteraction = new CursorInteraction<UiZone>
+					{
+						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
+						ElementLocation = elementLocation,
+						Element = uiZone
+					};
+					uiZone.RaiseHoverEvent(zoneCursorInteraction);
 
 					break;
 			}

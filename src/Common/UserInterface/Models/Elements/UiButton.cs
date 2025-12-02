@@ -1,6 +1,7 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
@@ -97,51 +98,45 @@ namespace Common.UserInterface.Models.Elements
 		public TriggeredAnimation ClickAnimation { get; set; }
 
 		/// <summary>
-		/// Gets the base hover configuration.
+		/// Gets or sets the hover cursor.
 		/// </summary>
-		public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
+		public Cursor HoverCursor { get; set; }
 
 		/// <summary>
-		/// Gets or sets the hover configuration.
+		/// Gets the base cursor configuration.
 		/// </summary>
-		public HoverConfiguration<IAmAUiElement> HoverConfig { get; set; }
+		public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
 
 		/// <summary>
-		/// Gets or sets the press configuration.
+		/// Gets or sets the cursor configuration
 		/// </summary>
-		public PressConfiguration<IAmAUiElement> PressConfig { get; set; }
-
-		/// <summary>
-		/// Gets or sets the click configuration.
-		/// </summary>
-		public ClickConfiguration<IAmAUiElement> ClickConfig { get; set; }
+		public CursorConfiguration<IAmAUiElement> CursorConfiguration { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaiseHoverEvent(Vector2 elementLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void RaiseHoverEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
+			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
 
 		/// <summary>
 		/// Raises the press event.
 		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		/// <param name="pressLocation">The press location.</param>
-		public void RaisePressEvent(Vector2 elementLocation, Vector2 pressLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void RaisePressEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			this.PressConfig?.RaisePressEvent(this, elementLocation, pressLocation);
+			this.CursorConfiguration?.RaisePressEvent(cursorInteraction);
 		}
 
 		/// <summary>
 		/// Raises the click event.
 		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaiseClickEvent(Vector2 elementLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void RaiseClickEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			this.ClickConfig?.RaiseClickEvent(new LocationExtender<IAmAUiElement> { Location = elementLocation, Object = this});
+			this.CursorConfiguration?.RaiseClickEvent(cursorInteraction);
 		}
 
 		/// <summary>
@@ -184,9 +179,7 @@ namespace Common.UserInterface.Models.Elements
 		/// </summary>
 		public void Dispose()
 		{
-			this.HoverConfig?.Dispose();
-			this.PressConfig?.Dispose();
-			this.ClickConfig?.Dispose();
+			this.CursorConfiguration?.Dispose();
 		}
 	}
 }

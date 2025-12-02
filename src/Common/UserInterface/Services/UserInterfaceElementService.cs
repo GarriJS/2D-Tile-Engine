@@ -1,4 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.DiskModels.UI;
 using Common.DiskModels.UI.Contracts;
 using Common.DiskModels.UI.Elements;
@@ -97,8 +98,7 @@ namespace Common.UserInterface.Services
 
 			uiElement.HorizontalSizeType = uiElementModel.HorizontalSizeType;
 			uiElement.VerticalSizeType = uiElementModel.VerticalSizeType;
-			uiElement.PressConfig = cursorInteractionService.GetPressConfiguration<IAmAUiElement>(area);
-			uiElement.PressConfig.AddSubscription(this.CheckForUiElementClick);
+			uiElement.CursorConfiguration ??= cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area);
 
 			if ((uiElement is IAmAUiElementWithText uiElementWithText) &&
 				(uiElementModel is IAmAUiElementWithTextModel uiElementWithTextModel))
@@ -106,14 +106,14 @@ namespace Common.UserInterface.Services
 				uiElementWithText.GraphicText = graphicTextService.GetGraphicTextFromModel(uiElementWithTextModel.Text);
 			}
 
-			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2>>(uiElementModel.HoverCursorName, out var hoverAction))
+			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.HoverCursorName, out var hoverAction))
 			{
-				uiElement.HoverConfig?.AddSubscription(hoverAction);
+				uiElement.CursorConfiguration?.AddHoverSubscription(hoverAction);
 			}
 
-			if (true == functionService.TryGetFunction<Action<IAmAUiElement, Vector2, Vector2>>(uiElementModel.PressEventName, out var pressAction))
+			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.PressEventName, out var pressAction))
 			{
-				uiElement.PressConfig?.AddSubscription(pressAction);
+				uiElement.CursorConfiguration?.AddPressSubscription(pressAction);
 			}
 
 			return uiElement;
@@ -134,16 +134,18 @@ namespace Common.UserInterface.Services
 				return;
 			}
 
-			uiButton.ClickConfig.Area = new SubArea
+			uiButton.CursorConfiguration.Area = new SubArea
 			{
 				Width = uiButton.Area.Width * uiButton.ClickableAreaScaler.X,
 				Height = uiButton.Area.Height * uiButton.ClickableAreaScaler.Y
 			};
-			uiButton.ClickConfig.Offset = new Vector2
+			uiButton.CursorConfiguration.ClickOffset = new Vector2
 			{
-				X = (uiButton.Area.Width - uiButton.ClickConfig.Area.Width) / 2,
-				Y = (uiButton.Area.Height - uiButton.ClickConfig.Area.Height) / 2
+				X = (uiButton.Area.Width - uiButton.CursorConfiguration.ClickArea.Width) / 2,
+				Y = (uiButton.Area.Height - uiButton.CursorConfiguration.ClickArea.Height) / 2
 			};
+
+			//TODO updates press and hover areas?
 
 			if (null == uiButton.ClickAnimation?.Frames)
 			{
@@ -306,8 +308,8 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
-		/// <param name="pressLocation">The press location.</param>
-		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation)
+		/// <param name="cursorLocation">The cursor location.</param>
+		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 cursorLocation)
 		{
 			switch (element)
 			{
@@ -315,16 +317,23 @@ namespace Common.UserInterface.Services
 
 					var clickableLocation = new Vector2
 					{
-						X = elementLocation.X + button.ClickConfig.Offset.X + ((element.InsideWidth - button.ClickConfig.Area.Width) / 2),
-						Y = elementLocation.Y + button.ClickConfig.Offset.Y + ((element.InsideHeight - button.ClickConfig.Area.Height) / 2)
+						X = elementLocation.X + button.CursorConfiguration.ClickOffset.X + ((element.InsideWidth - button.CursorConfiguration.ClickArea.Width) / 2),
+						Y = elementLocation.Y + button.CursorConfiguration.ClickOffset.Y + ((element.InsideHeight - button.CursorConfiguration.ClickArea.Height) / 2)
 					};
 
-					if ((clickableLocation.X <= pressLocation.X) &&
-						(clickableLocation.X + button.ClickConfig.Area.Width >= pressLocation.X) &&
-						(clickableLocation.Y <= pressLocation.Y) &&
-						(clickableLocation.Y + button.ClickConfig.Area.Height >= pressLocation.Y))
+					if ((clickableLocation.X <= cursorLocation.X) &&
+						(clickableLocation.X + button.CursorConfiguration.ClickArea.Width >= cursorLocation.X) &&
+						(clickableLocation.Y <= cursorLocation.Y) &&
+						(clickableLocation.Y + button.CursorConfiguration.ClickArea.Height >= cursorLocation.Y))
 					{
-						button.RaiseClickEvent(elementLocation);
+						var cursorInteraction = new CursorInteraction<IAmAUiElement>
+						{
+							CursorLocation = cursorLocation,
+							ElementLocation = clickableLocation,
+							Element = button
+						};
+
+						button.RaiseClickEvent(cursorInteraction);
 					}
 
 					break;
@@ -355,21 +364,21 @@ namespace Common.UserInterface.Services
 				X = (area.Width - clickableArea.Width) / 2,
 				Y = (area.Height - clickableArea.Height) / 2
 			};
-			var clickConfig = cursorInteractionService.GetClickConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(clickableArea, clickableOffset);
 			var button = new UiButton
 			{
 				UiElementName = buttonModel.UiElementName,
 				GraphicText = graphicText,
 				ClickableAreaScaler = buttonModel.ClickableAreaScaler,
-				ClickConfig = clickConfig
+				CursorConfiguration = cursorConfiguration
 			};
 
-			button.ClickConfig?.AddSubscription(this.TriggerUiButtonClickAnimation);
+			button.CursorConfiguration?.AddClickSubscription(this.TriggerUiButtonClickAnimation);
 
 			// LOGGING
-			if (true == functionService.TryGetFunction<Action<LocationExtender<IAmAUiElement>>>(buttonModel.ClickEventName, out var clickAction))
+			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(buttonModel.ClickEventName, out var clickAction))
 			{
-				button.ClickConfig?.AddSubscription(clickAction);
+				button.CursorConfiguration?.AddClickSubscription(clickAction);
 			}
 
 			if (null != buttonModel.ClickableAreaAnimation)
@@ -388,10 +397,10 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Triggers the user interface elements click animation.
 		/// </summary>
-		/// <param name="elementWithLocation">The element with location.</param>
-		private void TriggerUiButtonClickAnimation(LocationExtender<IAmAUiElement> elementWithLocation)
+		/// <param name="cursorInteraction">The element with location.</param>
+		private void TriggerUiButtonClickAnimation(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			if (elementWithLocation.Object is UiButton button)
+			if (cursorInteraction.Element is UiButton button)
 			{
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);
 			}

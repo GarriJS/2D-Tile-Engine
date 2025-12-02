@@ -16,8 +16,8 @@ namespace Common.UserInterface.Services.Contracts
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementLocation">The element location.</param>
-		/// <param name="pressLocation">The press location.</param>
-		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 pressLocation);
+		/// <param name="cursorLocation">The cursor location.</param>
+		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 cursorLocation);
 
 		/// <summary>
 		/// Gets the user interface padding from the model.

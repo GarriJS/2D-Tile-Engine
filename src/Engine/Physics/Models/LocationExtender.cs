@@ -14,8 +14,8 @@ namespace Engine.Physics.Models
 		public Vector2 Location { get; set; }
 
 		/// <summary>
-		/// Gets or sets the object.
+		/// Gets or sets the element.
 		/// </summary>
-		public T Object { get; set; }
+		public T Element { get; set; }
 	}
 }

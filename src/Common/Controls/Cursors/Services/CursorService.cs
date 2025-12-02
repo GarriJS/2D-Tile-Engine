@@ -6,7 +6,6 @@ using Common.Core.Constants;
 using Common.DiskModels.Controls;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
-using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;

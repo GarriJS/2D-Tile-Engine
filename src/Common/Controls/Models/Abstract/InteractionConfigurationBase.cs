@@ -2,7 +2,7 @@
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
-namespace Common.Controls.CursorInteraction.Models.Abstract
+namespace Common.Controls.Models.Abstract
 {
 	/// <summary>
 	/// Represents a interaction configuration.
@@ -10,13 +10,23 @@ namespace Common.Controls.CursorInteraction.Models.Abstract
 	abstract public class InteractionConfigurationBase : IHaveASubArea
 	{
 		/// <summary>
+		/// Gets or sets the offset;
+		/// </summary>
+		public Vector2 Offset { get; set; }
+
+		/// <summary>
+		/// Gets or sets the click offset.
+		/// </summary>
+		public Vector2 ClickOffset { get; set; }
+
+		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
 		public SubArea Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the offset;
+		/// Gets or sets the click area.
 		/// </summary>
-		public Vector2 Offset { get; set; }
+		public SubArea ClickArea { get; set; }
 	}
 }

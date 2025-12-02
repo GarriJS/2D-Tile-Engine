@@ -1,6 +1,7 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
@@ -18,7 +19,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface row.
 	/// </summary>
-	public class UiRow : IAmSubDrawable, IHaveASubArea, ICanBeHovered<UiRow>, IDisposable
+	public class UiRow : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached element graphicOffset.
@@ -86,14 +87,19 @@ namespace Common.UserInterface.Models
 		public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
+		/// Gets or sets the hover cursor.
+		/// </summary>
+		public Cursor HoverCursor { get; set; }
+
+		/// <summary>
 		/// Gets the base hover configuration.
 		/// </summary>
-		public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
+		public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
 
 		/// <summary>
 		/// Gets or sets the hover configuration.
 		/// </summary>
-		public HoverConfiguration<UiRow> HoverConfig { get; set; }
+		public CursorConfiguration<UiRow> CursorConfiguration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sub elements.
@@ -103,10 +109,10 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaiseHoverEvent(Vector2 elementLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void RaiseHoverEvent(CursorInteraction<UiRow> cursorInteraction)
 		{
-			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
+			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
 
 		/// <summary>

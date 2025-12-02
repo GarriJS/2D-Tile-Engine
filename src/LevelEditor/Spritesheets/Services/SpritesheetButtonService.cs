@@ -56,7 +56,7 @@ namespace LevelEditor.Spritesheets.Services
 			cursorService.CursorControlComponent.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-			var elementGraphicModel = elementWithLocation.Object.Graphic.ToModel();
+			var elementGraphicModel = elementWithLocation.Element.Graphic.ToModel();
 			var secondaryCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,

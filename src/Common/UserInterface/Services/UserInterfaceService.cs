@@ -2,6 +2,7 @@
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.UI;
 using Common.UserInterface.Constants;
@@ -187,17 +188,17 @@ namespace Common.UserInterface.Services
 				return null;
 			}
 
-			BaseHoverConfiguration topHoverCursorConfiguration = uiZone.HoverConfig;
+			BaseCursorConfiguration topHoverCursorConfiguration = uiZone.BaseCursorConfiguration;
 
 			if (0 == uiZone.ElementRows.Count)
 			{
 				return new HoverState
 				{
-					TopHoverCursorConfiguration = topHoverCursorConfiguration,
-					HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+					TopCursorConfiguration = topHoverCursorConfiguration,
+					HoverObjectLocation = new LocationExtender<IHaveAHoverCursor>
 					{
 						Location = uiZone.Position.Coordinates,
-						Object = uiZone
+						Element = uiZone
 					}
 				};
 			}
@@ -227,27 +228,27 @@ namespace Common.UserInterface.Services
 
 				rowVerticalOffset += rowBottom;
 
-				if (null != elementRow.BaseHoverConfig?.HoverCursor)
+				if (null != elementRow.HoverCursor)
 				{
-					topHoverCursorConfiguration = elementRow.BaseHoverConfig;
+					topHoverCursorConfiguration = elementRow.BaseCursorConfiguration;
 				}
 
 				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.InsidePadding.TopPadding, location);
 
 				if (true == uiElementWithLocation.HasValue)
 				{
-					if (null != uiElementWithLocation.Value.Object.BaseHoverConfig?.HoverCursor)
+					if (null != uiElementWithLocation.Value.Element.HoverCursor)
 					{
-						topHoverCursorConfiguration = uiElementWithLocation.Value.Object.BaseHoverConfig;
+						topHoverCursorConfiguration = uiElementWithLocation.Value.Element.BaseCursorConfiguration;
 					}
 
 					result = new HoverState
 					{
-						TopHoverCursorConfiguration = topHoverCursorConfiguration,
-						HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+						TopCursorConfiguration = topHoverCursorConfiguration,
+						HoverObjectLocation = new LocationExtender<IHaveAHoverCursor>
 						{
 							Location = uiElementWithLocation.Value.Location,
-							Object = uiElementWithLocation.Value.Object
+							Element = uiElementWithLocation.Value.Element
 						}
 					};
 
@@ -256,15 +257,15 @@ namespace Common.UserInterface.Services
 
 				result = new HoverState
 				{
-					TopHoverCursorConfiguration = topHoverCursorConfiguration,
-					HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+					TopCursorConfiguration = topHoverCursorConfiguration,
+					HoverObjectLocation = new LocationExtender<IHaveAHoverCursor>
 					{
 						Location = uiZone.Position.Coordinates + new Vector2
 						{
 							X = 0,
 							Y = rowTop
 						},
-						Object = elementRow
+						Element = elementRow
 					}
 				};
 
@@ -273,11 +274,11 @@ namespace Common.UserInterface.Services
 
 			result = new HoverState
 			{
-				TopHoverCursorConfiguration = topHoverCursorConfiguration,
-				HoverObjectLocation = new LocationExtender<IHaveAHoverConfiguration>
+				TopCursorConfiguration = topHoverCursorConfiguration,
+				HoverObjectLocation = new LocationExtender<IHaveAHoverCursor>
 				{
 					Location = uiZone.Position.Coordinates,
-					Object = uiZone
+					Element = uiZone
 				}
 			};
 
@@ -350,7 +351,7 @@ namespace Common.UserInterface.Services
 					{
 						var result = new LocationExtender<IAmAUiElement>
 						{
-							Object = element,
+							Element = element,
 							Location = new Vector2
 							{
 								X = elementLeft,
@@ -413,6 +414,7 @@ namespace Common.UserInterface.Services
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var imageService = this._gameServices.GetService<IImageService>();
+			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
 			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
@@ -458,7 +460,12 @@ namespace Common.UserInterface.Services
 				}
 			}
 
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiZone>(uiScreenZone.Area.ToSubArea, uiZoneModel.ZoneHoverCursorName);
+			if(false == cursorService.Cursors.TryGetValue(uiZoneModel.ZoneHoverCursorName, out var hoverCursor))
+			{
+				// LOGGING
+			}
+
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiZone>(uiScreenZone.Area.ToSubArea);
 			var uiZone = new UiZone
 			{
 				ResetCalculateCachedOffsets = true,
@@ -466,7 +473,8 @@ namespace Common.UserInterface.Services
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
 				JustificationType = (UiZoneJustificationTypes)uiZoneModel.JustificationType,
 				Graphic = background,
-				HoverConfig = hoverConfig,
+				HoverCursor = hoverCursor,
+				CursorConfiguration = cursorConfiguration,
 				UserInterfaceScreenZone = uiScreenZone,
 				ElementRows = rows
 			};
@@ -483,6 +491,7 @@ namespace Common.UserInterface.Services
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
+			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 
@@ -541,7 +550,13 @@ namespace Common.UserInterface.Services
 
 			var outsidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.OutsidePadding);
 			var insidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.InsidePadding);
-			var hoverConfig = cursorInteractionService.GetHoverConfiguration<UiRow>(rowArea, uiRowModel.RowHoverCursorName);
+			
+			if (false == cursorService.Cursors.TryGetValue(uiRowModel.RowHoverCursorName, out var hoverCursor))
+			{
+				// LOGGING
+			}
+
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiRow>(rowArea);
 			var result = new UiRow
 			{
 				UiRowName = uiRowModel.UiRowName,
@@ -552,7 +567,8 @@ namespace Common.UserInterface.Services
 				HorizontalJustificationType = uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = uiRowModel.VerticalJustificationType,
 				Graphic = background,
-				HoverConfig = hoverConfig,
+				HoverCursor = hoverCursor,
+				CursorConfiguration = cursorConfiguration,
 				SubElements = subElements
 			};
 

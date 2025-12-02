@@ -1,6 +1,7 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
@@ -16,7 +17,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IHaveArea, ICanBeHovered<UiZone>, IDisposable
+	public class UiZone : IAmDrawable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -54,14 +55,19 @@ namespace Common.UserInterface.Models
 		public IAmAArea Area { get => this.UserInterfaceScreenZone?.Area; }
 
 		/// <summary>
-		/// Gets the base hover configuration.
+		/// Gets or sets the hover cursor.
 		/// </summary>
-		public BaseHoverConfiguration BaseHoverConfig { get => this.HoverConfig; }
+		public Cursor HoverCursor { get; set; }
 
 		/// <summary>
-		/// Gets or sets the hover configuration.
+		/// Gets the base cursor configuration.
 		/// </summary>
-		public HoverConfiguration<UiZone> HoverConfig { get; set; }
+		public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
+
+		/// <summary>
+		/// Gets or sets the cursor configuration
+		/// </summary>
+		public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface screen zone.
@@ -76,10 +82,10 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
-		/// <param name="elementLocation">The element location.</param>
-		public void RaiseHoverEvent(Vector2 elementLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void RaiseHoverEvent(CursorInteraction<UiZone> cursorInteraction)
 		{
-			this.HoverConfig?.RaiseHoverEvent(this, elementLocation);
+			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
 
 		/// <summary>
@@ -141,7 +147,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.HoverConfig?.Dispose();
+			this.CursorConfiguration?.Dispose();
 
 			foreach (var elementRow in this.ElementRows ?? [])
 			{
