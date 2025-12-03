@@ -53,7 +53,13 @@ namespace Engine.Core.Initialization.Services
 		public bool TryGetFunction<T>(string functionName, out T typedFunction)
 			where T : Delegate
 		{
-			functionName ??= string.Empty;
+			if (true == string.IsNullOrEmpty(functionName))
+			{
+				typedFunction = null;
+
+				return false;
+			}
+
 			var found = this.Functions.TryGetValue(functionName, out var function);
 
 			if ((true == found) &&

@@ -39,7 +39,7 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <param name="action">The action.</param>
 		public void AddPressSubscription(Action<CursorInteraction<T>> action)
 		{
-			this.ClickEvent += action;
+			this.PressEvent += action;
 		}
 
 		/// <summary>

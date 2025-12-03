@@ -1,5 +1,6 @@
 ﻿using BaseContent.BaseContentConstants.Fonts;
 using BaseContent.BaseContentConstants.Images;
+using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.UI;
@@ -8,7 +9,6 @@ using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.DiskModels.Drawing;
 using Engine.Graphics.Enum;
-using Engine.Physics.Models;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.LevelEditorContent.Images.Manifests;
@@ -59,10 +59,13 @@ namespace LevelEditor.Core.Initialization
 		{
 			var spritesheetButtonService = gameService.GetService<ISpritesheetButtonService>();
 
-			return new Dictionary<string, Action<Cursor, GameTime>>
+
+			var dict = new Dictionary<string, Action<Cursor, GameTime>>
 			{
 				[LevelEditorCursorUpdatersNames.SpritesheetButtonCursorUpdater] = spritesheetButtonService.SpritesheetButtonCursorUpdater,
 			};
+
+			return dict;
 		}
 
 		/// <summary>
@@ -70,14 +73,16 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the hover event processors.</returns>
-		static public Dictionary<string, Action<IAmAUiElement, Vector2>> GetHoverEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<CursorInteraction<IAmAUiElement>>> GetHoverEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 
-			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
+			var dict = new Dictionary<string, Action<CursorInteraction<IAmAUiElement>>>
 			{
 
 			};
+
+			return dict;
 		}
 
 		/// <summary>
@@ -85,12 +90,14 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the press event processors.</returns>
-		static public Dictionary<string, Action<IAmAUiElement, Vector2>> GetPressEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<CursorInteraction<IAmAUiElement>>> GetPressEventProcessors(GameServiceContainer gameServices)
 		{
-			return new Dictionary<string, Action<IAmAUiElement, Vector2>>
+			var dict = new Dictionary<string, Action<CursorInteraction<IAmAUiElement>>>
 			{
 
 			};
+
+			return dict;
 		}
 
 		/// <summary>
@@ -98,18 +105,20 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the click event processors.</returns>
-		static public Dictionary<string, Action<LocationExtender<IAmAUiElement>>> GetClickEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<CursorInteraction<IAmAUiElement>>> GetClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var sceneEditService = gameServices.GetService<ISceneEditService>();
 
-			return new Dictionary<string, Action<LocationExtender<IAmAUiElement>>>
+			var dict = new Dictionary<string, Action<CursorInteraction<IAmAUiElement>>>
 			{
 				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
 				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,
 				[UiEventName.SaveSceneClick] = sceneEditService.SaveScene,
 				[UiEventName.ToggleTileGrid] = sceneEditService.ToggleTileGridClickEventProcessor,
 			};
+
+			return dict;
 		}
 
 		/// <summary>
@@ -188,6 +197,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTexture = null,
 							JustificationType = (int)UiZoneJustificationTypes.Top,
+							ZoneHoverCursorName = CommonCursorNames.BasicCursorName,
 							ElementRows =
 							[
 								new UiRowModel

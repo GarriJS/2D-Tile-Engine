@@ -1,5 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.Cursors.Models;
 using Engine.Physics.Models;
 
 namespace Common.Controls.CursorInteraction.Models
@@ -15,8 +16,13 @@ namespace Common.Controls.CursorInteraction.Models
 		public BaseCursorConfiguration TopCursorConfiguration { get; set; }
 
 		/// <summary>
+		/// Gets or sets the top hover cursor.
+		/// </summary>
+		public Cursor TopHoverCursor { get; set; }
+
+		/// <summary>
 		/// Gets or sets the hover object location.
 		/// </summary>
-		public LocationExtender<IHaveAHoverCursor> HoverObjectLocation { get; set; }
+		public LocationExtender<IHaveACursorConfiguration> HoverObjectLocation { get; set; }
 	}
 }

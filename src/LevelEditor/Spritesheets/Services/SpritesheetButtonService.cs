@@ -1,4 +1,5 @@
 ﻿using BaseContent.BaseContentConstants.Images;
+using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
@@ -14,7 +15,6 @@ using Engine.Controls.Services.Contracts;
 using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
 using Engine.Graphics.Enum;
-using Engine.Physics.Models;
 using LevelEditor.Controls.Constants;
 using LevelEditor.Core.Constants;
 using LevelEditor.Scenes.Models;
@@ -39,8 +39,8 @@ namespace LevelEditor.Spritesheets.Services
 		/// <summary>
 		/// The spritesheet button click event processor.
 		/// </summary>
-		/// <param name="elementWithLocation">The element with location.</param>
-		public void SpritesheetButtonClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void SpritesheetButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
@@ -56,7 +56,7 @@ namespace LevelEditor.Spritesheets.Services
 			cursorService.CursorControlComponent.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-			var elementGraphicModel = elementWithLocation.Element.Graphic.ToModel();
+			var elementGraphicModel = cursorInteraction.Element.Graphic.ToModel();
 			var secondaryCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,

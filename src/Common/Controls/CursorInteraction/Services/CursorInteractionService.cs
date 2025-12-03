@@ -22,17 +22,23 @@ namespace Common.Controls.CursorInteraction.Services
 		/// </summary>
 		/// <typeparam name="T">The parent type.</typeparam>
 		/// <param name="area">The area.</param>
+		/// <param name="clickArea">The clickable area.</param>
 		/// <param name="offset">The offset.</param>
+		/// <param name="clickOffset">The clickable offset.</param>
 		/// <returns>The hover configuration.</returns>
-		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, Vector2 offset = default)
+		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, SubArea clickArea, Vector2 offset = default, Vector2 clickOffset = default)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
 
-			return new CursorConfiguration<T>
+			var cursorConfiguration = new CursorConfiguration<T>
 			{
 				Area = area,
-				Offset = offset
+				ClickArea = clickArea,
+				Offset = offset,
+				ClickOffset = clickOffset
 			};
+
+			return cursorConfiguration;
 		}
 	}
 }

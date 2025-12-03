@@ -1,5 +1,6 @@
 ﻿using BaseContent.BaseContentConstants.Fonts;
 using BaseContent.BaseContentConstants.Images;
+using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Constants;
 using Common.DiskModels.Tiling;
 using Common.DiskModels.Tiling.Options;
@@ -17,7 +18,6 @@ using Engine.DiskModels;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
-using Engine.Physics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Controls.Contexts;
@@ -64,8 +64,8 @@ namespace LevelEditor.Scenes.Services
 		/// <summary>
 		/// The create scene button click event processor.
 		/// </summary>
-		/// <param name="elementWithLocation">The element with location.</param>
-		public void CreateSceneButtonClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
@@ -111,8 +111,8 @@ namespace LevelEditor.Scenes.Services
 		/// <summary>
 		/// The toggle tile grid click event processor.
 		/// </summary>
-		/// <param name="elementWithLocation">The element with location.</param>
-		public void ToggleTileGridClickEventProcessor(LocationExtender<IAmAUiElement> elementWithLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void ToggleTileGridClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
 			this.AddTileComponent.ToggleBackgroundGraphic();
 		}
@@ -326,8 +326,8 @@ namespace LevelEditor.Scenes.Services
 		/// <summary>
 		/// Saves the scene.
 		/// </summary>
-		/// <param name="elementWithLocation">The element with location.</param>
-		public void SaveScene(LocationExtender<IAmAUiElement> elementWithLocation)
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void SaveScene(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
 			if (null == this.CurrentScene)
 			{
@@ -346,7 +346,7 @@ namespace LevelEditor.Scenes.Services
 		/// Gets the saved tile map names.
 		/// </summary>
 		/// <returns></returns>
-		public string[] GetSavedTileMapNames()
+		private string[] GetSavedTileMapNames()
 		{
 			var jsonService = this._gameServices.GetService<IJsonService>();
 

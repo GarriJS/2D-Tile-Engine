@@ -86,10 +86,10 @@ namespace Common.Controls.Cursors.Models
 
 			this.CursorPosition.Coordinates = controlState.MousePosition;
 
-			if (null != hoverState?.HoverObjectLocation.Element?.HoverCursor)
+			if (null != hoverState?.TopHoverCursor)
 			{
 				this.SetHoverState();
-				this.SetPrimaryHoverCursor(hoverState.HoverObjectLocation.Element.HoverCursor, clearSecondaryCursors: false);
+				this.SetPrimaryHoverCursor(hoverState.TopHoverCursor, clearSecondaryCursors: false);
 
 				foreach (var secondaryCursor in this.SecondaryHoverCursors)
 				{

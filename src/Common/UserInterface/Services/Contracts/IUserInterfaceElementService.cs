@@ -2,7 +2,6 @@
 using Common.DiskModels.UI.Contracts;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
-using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Services.Contracts
 {
@@ -11,14 +10,6 @@ namespace Common.UserInterface.Services.Contracts
 	/// </summary>
 	public interface IUserInterfaceElementService
 	{
-		/// <summary>
-		/// Checks the user interface element for a click.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementLocation">The element location.</param>
-		/// <param name="cursorLocation">The cursor location.</param>
-		public void CheckForUiElementClick(IAmAUiElement element, Vector2 elementLocation, Vector2 cursorLocation);
-
 		/// <summary>
 		/// Gets the user interface padding from the model.
 		/// </summary>
