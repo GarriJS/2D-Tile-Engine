@@ -1,4 +1,5 @@
 ﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
 using Microsoft.Xna.Framework;
 
@@ -49,31 +50,71 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 		static public string SpritesheetName { get; } = "dark_blue_buttons";
 
 		/// <summary>
-		/// Gets the unpressed empty button by parts.
+		/// Gets the unpressed composite empty button.
 		/// </summary>
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
-		/// <returns>The textureRegions by parts.</returns>
-		static public CompositeImageModel GetUnpressedEmptyButtonByParts(int width, int height)
+		/// <returns>The composite image model.</returns>
+		static public CompositeImageModel GetUnpressedCompositeEmptyButton(int width, int height)
 		{
-			const int edgeLength = 7;
+			const int cornerLength = 7;
+			const int edgeLength = 50;
 
 			TextureRegionModel[][] textureRegions =
 			[
 				[
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, 0, edgeLength, edgeLength) },
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength, 0, width, edgeLength) },
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(width + edgeLength, 0, edgeLength, edgeLength) }
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, 0, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength } },
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(cornerLength, 0, edgeLength, cornerLength), DisplayArea = new SubAreaModel{ Width = width, Height = cornerLength } },
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength + cornerLength, 0, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength} }
 				],
 				[
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, edgeLength, edgeLength, height) } ,
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength, edgeLength, width, height) } ,
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(width + edgeLength, edgeLength, edgeLength, height) }
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, cornerLength, cornerLength, edgeLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = height } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(cornerLength, cornerLength, edgeLength, edgeLength), DisplayArea = new SubAreaModel{ Width = width, Height = height } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength + cornerLength, cornerLength, cornerLength, edgeLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = height } }
 				],
 				[
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, height + edgeLength, edgeLength, edgeLength) } ,
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength, height + edgeLength, width, edgeLength) } ,
-					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(width + edgeLength, height + edgeLength, edgeLength, edgeLength) }
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(0, edgeLength + cornerLength, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(cornerLength, edgeLength + cornerLength, edgeLength, cornerLength), DisplayArea = new SubAreaModel{ Width = width, Height = cornerLength } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(edgeLength + cornerLength, edgeLength + cornerLength, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength }	 }
+				]
+			];
+
+			var result = new CompositeImageModel
+			{
+				TextureName = $"{SpritesheetName + "_" + "unpressed"}",
+				TextureRegions = textureRegions,
+			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the pressed composite empty button.
+		/// </summary>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <returns>The composite image model.</returns>
+		static public CompositeImageModel GetPressedCompositeEmptyButton(int width, int height)
+		{
+			const int cornerLength = 7;
+			const int edgeLength = 50;
+
+			TextureRegionModel[][] textureRegions =
+			[
+				[
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64, 0, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength } },
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64 + cornerLength, 0, edgeLength, cornerLength), DisplayArea = new SubAreaModel{ Width = width, Height = cornerLength } },
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64 + edgeLength + cornerLength, 0, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength} }
+				],
+				[
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64, cornerLength, cornerLength, edgeLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = height } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64 + cornerLength, cornerLength, edgeLength, edgeLength), DisplayArea = new SubAreaModel{ Width = width, Height = height } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64 + edgeLength + cornerLength, cornerLength, cornerLength, edgeLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = height } }
+				],
+				[
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64, edgeLength + cornerLength, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64 + cornerLength, edgeLength + cornerLength, edgeLength, cornerLength), DisplayArea = new SubAreaModel{ Width = width, Height = cornerLength } } ,
+					new TextureRegionModel{ TextureRegionType = TextureRegionType.Fill, TextureBox = new Rectangle(64 + edgeLength + cornerLength, edgeLength + cornerLength, cornerLength, cornerLength), DisplayArea = new SubAreaModel{ Width = cornerLength, Height = cornerLength }  }
 				]
 			];
 

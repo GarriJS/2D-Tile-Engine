@@ -266,14 +266,6 @@ namespace Common.UserInterface.Services
 			{
 				case UiButtonModel uiButtonModel:
 
-					//TODO fix this
-					return new SubArea
-					{
-						Width = 64,
-						Height = 64
-					};
-
-
 					if (null == uiButtonModel.ClickableAreaAnimation)
 					{
 						break;
@@ -301,8 +293,8 @@ namespace Common.UserInterface.Services
 				{
 					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
 					var textDimensions = font.MeasureString(elementTextModel.Text.Text);
-					result.Width = (int)Math.Max(textDimensions.X, width);
-					result.Height = (int)Math.Max(textDimensions.Y, height);
+					result.Width = (int)Math.Max(textDimensions.X + elementTextModel.InsidePadding.LeftPadding + elementTextModel.InsidePadding.RightPadding, width);
+					result.Height = (int)Math.Max(textDimensions.Y + elementTextModel.InsidePadding.TopPadding + elementTextModel.InsidePadding.BottomPadding, height);
 				}
 			}
 
@@ -376,8 +368,8 @@ namespace Common.UserInterface.Services
 
 					var clickableLocation = new Vector2
 					{
-						X = cursorInteraction.ElementLocation.X + button.CursorConfiguration.ClickOffset.X + ((cursorInteraction.Element.InsideWidth - button.CursorConfiguration.ClickArea.Width) / 2),
-						Y = cursorInteraction.ElementLocation.Y + button.CursorConfiguration.ClickOffset.Y + ((cursorInteraction.Element.InsideHeight - button.CursorConfiguration.ClickArea.Height) / 2)
+						X = cursorInteraction.ElementLocation.X + button.CursorConfiguration.ClickOffset.X + ((cursorInteraction.Element.Area.Width - button.CursorConfiguration.ClickArea.Width) / 2),
+						Y = cursorInteraction.ElementLocation.Y + button.CursorConfiguration.ClickOffset.Y + ((cursorInteraction.Element.Area.Height - button.CursorConfiguration.ClickArea.Height) / 2)
 					};
 
 					if ((clickableLocation.X <= cursorInteraction.CursorLocation.X) &&

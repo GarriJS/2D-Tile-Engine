@@ -19,7 +19,13 @@ namespace Engine.DiskModels.Drawing
 
 		public SubArea GetDimensions()
 		{
-			return new SubArea();
+			var result = new SubArea
+			{ 
+				Width = this.DisplayArea?.Width ?? this.TextureBox.Width,
+				Height = this.DisplayArea?.Height ?? this.TextureBox.Height
+			};
+
+			return result;
 		}
 	}
 }

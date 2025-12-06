@@ -286,15 +286,15 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface element at the location if one is found.</returns>
 		private LocationExtender<IAmAUiElement>? GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
 		{
-			var width = uiRow.SubElements.Sum(e => e.InsideWidth);
+			var width = uiRow.SubElements.Sum(e => e.TotalWidth);
 			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
 			{
-				UiRowHorizontalJustificationType.Center => (uiRow.InsideWidth - width) / 2,
-				UiRowHorizontalJustificationType.Right => uiRow.InsideWidth - width,
+				UiRowHorizontalJustificationType.Center => (uiRow.TotalWidth - width) / 2,
+				UiRowHorizontalJustificationType.Right => uiRow.TotalWidth - width,
 				_ => 0,
 			};
 
-			var largestHeight = uiRow.SubElements.Select(e => e.InsideHeight)
+			var largestHeight = uiRow.SubElements.Select(e => e.TotalHeight)
 												 .OrderDescending()
 												 .FirstOrDefault();
 
@@ -305,10 +305,10 @@ namespace Common.UserInterface.Services
 				switch (uiRow.VerticalJustificationType)
 				{
 					case UiRowVerticalJustificationType.Bottom:
-						verticallyCenterOffset = (largestHeight - element.Area.Height);
+						verticallyCenterOffset = (largestHeight - element.InsideHeight);
 						break;
 					case UiRowVerticalJustificationType.Center:
-						verticallyCenterOffset = (largestHeight - element.Area.Height) / 2;
+						verticallyCenterOffset = (largestHeight - element.InsideHeight) / 2;
 						break;
 					case UiRowVerticalJustificationType.Top:
 						break;
@@ -323,11 +323,11 @@ namespace Common.UserInterface.Services
 					case UiRowHorizontalJustificationType.Center:
 					case UiRowHorizontalJustificationType.Left:
 					default:
-						elementHorizontalOffset += element.InsidePadding.LeftPadding;
+						elementHorizontalOffset += element.OutsidePadding.LeftPadding;
 						elementLeft = elementHorizontalOffset + position.X;
 						elementHorizontalOffset += element.Area.Width;
 						elementRight = elementHorizontalOffset + position.X;
-						elementHorizontalOffset += element.InsidePadding.RightPadding;
+						elementHorizontalOffset += element.OutsidePadding.RightPadding;
 						break;
 				}
 

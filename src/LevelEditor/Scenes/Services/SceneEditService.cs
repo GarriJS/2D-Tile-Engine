@@ -250,8 +250,8 @@ namespace LevelEditor.Scenes.Services
 							VerticalSizeType = UiElementSizeType.FitContent,
 							InsidePadding = new UiPaddingModel
 							{
-								TopPadding = 10,
-								BottomPadding = 10,
+								TopPadding = 0,
+								BottomPadding = 0,
 							},
 							ClickableAreaAnimation = new TriggeredAnimationModel
 							{
@@ -259,16 +259,21 @@ namespace LevelEditor.Scenes.Services
 								FrameDuration = 500,
 								Frames =
 								[
-									DarkBlueButtonsManifest.GetUnpressedEmptyButtonByParts(64 - 14, 64 - 14),
-									DarkBlueButtonsManifest.PressedTabButton
+									DarkBlueButtonsManifest.GetUnpressedCompositeEmptyButton(75, 50),
+									DarkBlueButtonsManifest.GetPressedCompositeEmptyButton(75, 50),
 								],
 								RestingFrameIndex = 0
 							},
 							Text = new GraphicalTextModel
 							{
 								Text = savedTileMapNames[i],
-								TextColor = PalletColors.Hex_3D3D3D,
+								TextColor = PalletColors.Hex_BF6F4A,
 								FontName = FontNames.MonoBold
+							},
+							ClickableAreaScaler = new Vector2
+							{
+								X = 1,
+								Y = 1
 							},
 							//ClickEventName = 
 						}

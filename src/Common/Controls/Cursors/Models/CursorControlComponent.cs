@@ -77,7 +77,6 @@ namespace Common.Controls.Cursors.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
-			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (null == controlState)
 			{

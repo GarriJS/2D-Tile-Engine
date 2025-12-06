@@ -14,7 +14,9 @@ namespace Engine.DiskModels.Drawing
 
 		public SubArea GetDimensions()
 		{
-			return new SubArea();
+			var result = this.TextureRegion.GetDimensions();
+
+			return result;
 		}
 	}
 }

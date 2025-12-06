@@ -46,8 +46,6 @@ namespace Engine.Graphics.Models
 		/// <param name="dimensions">The dimensions.</param>
 		public void SetDrawDimensions(SubArea dimensions)
 		{
-			return;
-
 			var topCornersWidth = this.TextureRegions[0][0].DisplayArea.Width + this.TextureRegions[0][this.TextureRegions[0].Length - 1].DisplayArea.Width;
 			var middleSetWidth = dimensions.Width - topCornersWidth;
 
@@ -57,9 +55,9 @@ namespace Engine.Graphics.Models
 				middleSetWidth = 0;
 			}
 
-			for (int i = 1; i < this.TextureRegions.Length - 1; i++)
+			for (int i = 0; i < this.TextureRegions.Length - 1; i++)
 			{
-				for (int j = 0; j < this.TextureRegions[0].Length; j++)
+				for (int j = 1; j < this.TextureRegions[0].Length; j++)
 				{
 					this.TextureRegions[i][j].DisplayArea.Width = middleSetWidth;
 				}
@@ -74,9 +72,9 @@ namespace Engine.Graphics.Models
 				middleSetHeight = 0;
 			}
 
-			for (int j = 1; j < this.TextureRegions[0].Length - 1; j++)
+			for (int j = 0; j < this.TextureRegions[0].Length - 1; j++)
 			{
-				for (int i = 0; i < this.TextureRegions.Length; i++)
+				for (int i = 1; i < this.TextureRegions.Length; i++)
 				{
 					this.TextureRegions[i][j].DisplayArea.Height = middleSetHeight;
 				}

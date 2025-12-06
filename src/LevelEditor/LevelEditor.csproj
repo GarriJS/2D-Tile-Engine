@@ -16,9 +16,6 @@
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Spritesheets\Models\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="LevelEditorContent\**\*.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

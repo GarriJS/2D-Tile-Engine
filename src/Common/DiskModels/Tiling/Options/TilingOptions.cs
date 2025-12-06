@@ -1,5 +1,4 @@
-﻿using Common.DiskModels.Tiling.Converters;
-using Engine.DiskModels.Monogame.Converters;
+﻿using Engine.DiskModels.Monogame.Converters;
 using System.Text.Json;
 
 namespace Common.DiskModels.Tiling.Options
@@ -8,7 +7,7 @@ namespace Common.DiskModels.Tiling.Options
 	{
 		static private readonly JsonSerializerOptions _tileMapOptions = new()
 		{
-			Converters = { new RectangleJsonConverter(), new TileModelConverter() },
+			Converters = { new RectangleJsonConverter() },
 			WriteIndented = true
 		};
 
