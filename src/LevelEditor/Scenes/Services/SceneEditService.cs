@@ -250,8 +250,8 @@ namespace LevelEditor.Scenes.Services
 							VerticalSizeType = UiElementSizeType.FitContent,
 							InsidePadding = new UiPaddingModel
 							{
-								TopPadding = 0,
-								BottomPadding = 0,
+								TopPadding = 5,
+								BottomPadding = 5,
 							},
 							ClickableAreaAnimation = new TriggeredAnimationModel
 							{

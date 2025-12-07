@@ -1,4 +1,5 @@
 ﻿using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Physics;
 using Engine.Physics.Models.SubAreas;
 using System.Text.Json.Serialization;
 
@@ -24,6 +25,20 @@ namespace Engine.DiskModels.Drawing
 		public virtual SubArea GetDimensions()
 		{
 			return new SubArea();
+		}
+
+		public void SetDrawDimensions(SubAreaModel dimensions)
+		{
+			foreach (var frame in this.Frames ?? [])
+			{
+				var frameDimensions = new SubAreaModel
+				{
+					Width = dimensions.Width,
+					Height = dimensions.Height,
+				};
+
+				frame.SetDrawDimensions(frameDimensions);	
+			}
 		}
 	}
 }

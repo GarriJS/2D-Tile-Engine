@@ -47,12 +47,20 @@ namespace Engine.Graphics.Models
 		public void SetDrawDimensions(SubArea dimensions)
 		{
 			var topCornersWidth = this.TextureRegions[0][0].DisplayArea.Width + this.TextureRegions[0][this.TextureRegions[0].Length - 1].DisplayArea.Width;
+			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[this.TextureRegions.Length - 1][0].DisplayArea.Height;
 			var middleSetWidth = dimensions.Width - topCornersWidth;
+			var middleSetHeight = dimensions.Height - leftCornersHeight;
 
 			if (0 >= middleSetWidth)
 			{
 				// LOGGING
 				middleSetWidth = 0;
+			}
+
+			if (0 >= middleSetHeight)
+			{
+				// LOGGING
+				middleSetHeight = 0;
 			}
 
 			for (int i = 0; i < this.TextureRegions.Length - 1; i++)
@@ -63,18 +71,9 @@ namespace Engine.Graphics.Models
 				}
 			}
 
-			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[this.TextureRegions.Length - 1][0].DisplayArea.Height;
-			var middleSetHeight = dimensions.Height - leftCornersHeight;
-
-			if (0 >= middleSetHeight)
+			for (int i = 1; i < this.TextureRegions[0].Length - 1; i++)
 			{
-				// LOGGING
-				middleSetHeight = 0;
-			}
-
-			for (int j = 0; j < this.TextureRegions[0].Length - 1; j++)
-			{
-				for (int i = 1; i < this.TextureRegions.Length; i++)
+				for (int j = 0; j < this.TextureRegions.Length; j++)
 				{
 					this.TextureRegions[i][j].DisplayArea.Height = middleSetHeight;
 				}

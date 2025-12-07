@@ -81,7 +81,7 @@ namespace LevelEditor.LevelEditorContent.Images.Manifests
 
 			var result = new CompositeImageModel
 			{
-				TextureName = $"{SpritesheetName + "_" + "unpressed"}",
+				TextureName = SpritesheetName,
 				TextureRegions = textureRegions,
 			};
 

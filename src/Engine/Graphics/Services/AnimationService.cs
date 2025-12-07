@@ -1,8 +1,8 @@
 ﻿using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
-using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services;
 using Microsoft.Xna.Framework;
 
@@ -77,22 +77,15 @@ namespace Engine.Graphics.Services
 		/// <returns>The fixed animation.</returns>
 		public Animation GetFixedAnimationFromModel(AnimationModel animationModel, int frameWidth, int frameHeight)
 		{
-			var imageService = this._gameServices.GetService<IImageService>();
-			
-			var frames = new IAmAImage[animationModel.Frames.Length];
-			
-			for (int i = 0; i < frames.Length; i++)
+			var frameSubArea = new SubAreaModel
 			{
-				frames[i] = imageService.GetImageFromModel(animationModel.Frames[i]);
-				var frameSubArea = new SubArea
-				{
-					Width = frameWidth,
-					Height = frameHeight,
-				};
-				frames[i].SetDrawDimensions(frameSubArea);
-			}
+				Width = frameWidth,
+				Height = frameHeight,
+			};
+			animationModel.SetDrawDimensions(frameSubArea);
+			var result = this.GetAnimationFromModel(animationModel);
 
-			return this.GetAnimationFromModel(animationModel);
+			return result;
 		}
 	}
 }

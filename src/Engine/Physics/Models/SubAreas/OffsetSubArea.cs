@@ -34,5 +34,14 @@ namespace Engine.Physics.Models.SubAreas
 
 			return result;
 		}
+
+		/// <summary>
+		/// The offset sub area as a string.
+		/// </summary>
+		/// <returns>The offset sub area as a string.</returns>
+		override public string ToString()
+		{
+			return "{Width:" + this.Width + " Height:" + this.Height + "HorizontalOffset:" + this.HorizontalOffset + "VerticalOffset:" + this.VerticalOffset + "}";
+		}
 	}
 }
