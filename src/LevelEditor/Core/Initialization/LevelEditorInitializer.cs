@@ -227,8 +227,8 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Create Level Label",
 											Margin = new UiMarginModel
 											{
-												LeftMargin = 10,
-												RightMargin = 5,
+												LeftMargin = 0,
+												RightMargin = 0,
 											},
 											Text = new GraphicalTextModel
 											{

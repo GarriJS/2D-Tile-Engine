@@ -271,8 +271,10 @@ namespace LevelEditor.Scenes.Services
 								FontName = FontNames.MonoBold,
 								Margin = new UiMarginModel
 								{ 
-									TopMargin = 50,
-									BottomMargin = 10,
+									TopMargin = 10,
+									BottomMargin = 15,
+									LeftMargin = 50,
+									RightMargin = 50
 								}
 							},
 							ClickableAreaScaler = new Vector2

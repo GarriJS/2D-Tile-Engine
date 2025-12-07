@@ -43,6 +43,11 @@ namespace Common.UserInterface.Models.Elements
 		public float InsideHeight { get => this.Area.Height; }
 
 		/// <summary>
+		/// Gets or sets the pressed text offset. 
+		/// </summary>
+		public Vector2 PressedTextOffset { get; set; } = new Vector2(0, 5); 
+
+		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
 		/// </summary>
 		public UiElementSizeType HorizontalSizeType { get; set; }
@@ -154,7 +159,15 @@ namespace Common.UserInterface.Models.Elements
 					X = (this.Area.Width - textDimensions.X) / 2f,
 					Y = (this.Area.Height - textDimensions.Y) / 2f
 				};
-				this.GraphicText.Draw(gameTime, gameServices, position, offset + centeredOffset);
+
+				var animationOffset = Vector2.Zero;
+
+				if (true == this.ClickAnimation?.AnimationIsTrigged)
+				{ 
+					animationOffset = this.PressedTextOffset;
+				}
+
+				this.GraphicText.Draw(gameTime, gameServices, position, offset + centeredOffset + animationOffset);
 			}
 		}
 
