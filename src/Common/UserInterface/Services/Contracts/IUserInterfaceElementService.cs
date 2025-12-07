@@ -18,6 +18,13 @@ namespace Common.UserInterface.Services.Contracts
 		public UiMargin GetUiMarginFromModel(UiMarginModel model);
 
 		/// <summary>
+		/// Gets the graphical text with margin from the model.
+		/// </summary>
+		/// <param name="model">The graphical text with margin.</param>
+		/// <returns>The graphical text with margin.</returns>
+		public GraphicalTextWithMargin GetGraphicTextWithMarginFromModel(GraphicalTextWithMarginModel model);
+
+		/// <summary>
 		/// Gets the user interface element.
 		/// </summary>
 		/// <param name="uiElementModel">The user interface element model.</param>

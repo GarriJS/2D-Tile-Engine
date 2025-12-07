@@ -38,12 +38,40 @@ namespace Engine.Core.Initialization.Services
 
 				if (false == ModelProcessingMappings.TryGetValue(model.GetType(), out var func))
 				{
-					// LOGGING
 					continue;
 				}
 
 				_ = func.DynamicInvoke(model);
 			}
+		}
+
+		/// <summary>
+		/// Invokes the model.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="result">The result of invoking the model.</param>
+		/// <returns>A value indicating whether the model processor was found for the provided model.</returns>
+		public static bool InvokeModel(object model, out object result)
+		{
+			if (model is null)
+			{
+				result = null;
+
+				return false;
+			}
+
+			var modelProcessor = GetModelProcessorsForType(model.GetType());
+
+			if (modelProcessor is null)
+			{
+				result = null;
+
+				return false;
+			}
+
+			result = modelProcessor.DynamicInvoke(model);
+
+			return true;
 		}
 
 		/// <summary>

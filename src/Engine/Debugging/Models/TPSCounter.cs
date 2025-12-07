@@ -15,7 +15,7 @@ namespace Engine.Debugging.Models
 		/// <summary>
 		/// The draw offset.
 		/// </summary>
-		private readonly static Vector2 Offset = new Vector2
+		private readonly static Vector2 Offset = new()
 		{
 			X = 0,
 			Y = 20

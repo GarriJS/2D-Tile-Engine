@@ -1,7 +1,9 @@
 ﻿using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Initialization.Services;
+using Engine.DiskModels.Controls;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Contracts;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
@@ -64,17 +66,17 @@ namespace Engine.DiskModels
 				(typeof(AreaModel), areaService.GetAreaFromModel<SimpleArea>),
 				(typeof(OffsetAreaModel), areaService.GetAreaFromModel<OffsetArea>),
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
-				(typeof(SubArea), areaService.GetSubAreaFromModel),
-				(typeof(OffsetSubArea), areaService.GetOffSetSubAreaFromModel),
-				(typeof(IAmAGraphic), graphicService.GetGraphicFromModel),
+				(typeof(SubAreaModel), areaService.GetSubAreaFromModel),
+				(typeof(OffsetSubAreaModel), areaService.GetOffSetSubAreaFromModel),
+				(typeof(IAmAGraphicModel), graphicService.GetGraphicFromModel),
 				(typeof(TextureRegionModel), graphicService.GetTextureRegionFromModel),
 				(typeof(SimpleImageModel), imageService.GetImageFromModel<SimpleImage>),
 				(typeof(CompositeImageModel), imageService.GetImageFromModel<CompositeImage>),
 				(typeof(IndependentGraphicModel), independentGraphicService.GetIndependentGraphicFromModel),
-				(typeof(GraphicalText), graphicTextService.GetGraphicTextFromModel),
-				(typeof(Animation), animationService.GetAnimationFromModel),
-				(typeof(TriggeredAnimation), animationService.GetAnimationFromModel),
-				(typeof(ActionControl), actionControlService.GetActionControlFromModel),
+				(typeof(GraphicalTextModel), graphicTextService.GetGraphicTextFromModel),
+				(typeof(AnimationModel), animationService.GetAnimationFromModel),
+				(typeof(TriggeredAnimationModel), animationService.GetAnimationFromModel),
+				(typeof(ActionControlModel), actionControlService.GetActionControlFromModel),
 			];
 
 			return result;

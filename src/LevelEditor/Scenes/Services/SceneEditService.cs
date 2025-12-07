@@ -264,11 +264,16 @@ namespace LevelEditor.Scenes.Services
 								],
 								RestingFrameIndex = 0
 							},
-							Text = new GraphicalTextModel
+							Text = new GraphicalTextWithMarginModel
 							{
 								Text = savedTileMapNames[i],
 								TextColor = PalletColors.Hex_BF6F4A,
-								FontName = FontNames.MonoBold
+								FontName = FontNames.MonoBold,
+								Margin = new UiMarginModel
+								{ 
+									TopMargin = 50,
+									BottomMargin = 10,
+								}
 							},
 							ClickableAreaScaler = new Vector2
 							{

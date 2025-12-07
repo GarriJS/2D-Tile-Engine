@@ -32,7 +32,8 @@ namespace Common.DiskModels
 				(typeof(TileMapModel), tileService.GetTileFromModel),
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayerFromModel),
 				(typeof(TileModel), tileService.GetTileFromModel),
-				(typeof(UiMargin), uiElementService.GetUiMarginFromModel),
+				(typeof(UiMarginModel), uiElementService.GetUiMarginFromModel),
+				(typeof(GraphicalTextWithMarginModel), uiElementService.GetGraphicTextWithMarginFromModel),
 				(typeof(UiGroupModel), uiService.GetUiGroup),
 				(typeof(CursorModel), cursorService.GetCursor)
 			];

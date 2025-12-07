@@ -1,45 +1,30 @@
-﻿using Engine.Core.Files.Models.Contract;
-using Engine.DiskModels.Drawing;
-using Engine.Graphics.Models.Contracts;
+﻿using Common.DiskModels.UI;
+using Engine.Graphics.Models;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics.Models
+namespace Common.UserInterface.Models
 {
 	/// <summary>
-	/// Represents graphical text.
+	/// Represents graphical text with margin.
 	/// </summary>
-	public class GraphicalText : IAmGraphicalText, ICanBeSerialized<GraphicalTextModel>
+	public class GraphicalTextWithMargin : GraphicalText
 	{
 		/// <summary>
-		/// Gets or sets the font name.
+		/// Gets or sets the user interface margin.
 		/// </summary>
-		public string FontName { get; set; }
-
-		/// <summary>
-		/// Gets the text.
-		/// </summary>
-		public string Text { get; set; }
-
-		/// <summary>
-		/// Gets or sets the text color
-		/// </summary>
-		public Color TextColor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the font.
-		/// </summary>
-		public SpriteFont Font { get; set; }
+		public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets the text dimensions.
 		/// </summary>
 		/// <returns>The text dimensions.</returns>
-		virtual public Vector2 GetTextDimensions()
+		override public Vector2 GetTextDimensions()
 		{
 			var result = this.Font.MeasureString(this.Text);
+			result.X = result.X + this.Margin.LeftMargin + this.Margin.RightMargin;
+			result.Y = result.Y + this.Margin.TopMargin + this.Margin.BottomMargin;
 
 			return result;
 		}
@@ -51,7 +36,7 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		virtual public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
 			if (true == string.IsNullOrEmpty(this.Text))
 			{
@@ -59,22 +44,27 @@ namespace Engine.Graphics.Models
 			}
 
 			var writingService = gameServices.GetService<IWritingService>();
+			var contentOffset = position.Coordinates + offset + new Vector2
+			{
+				X = this.Margin.LeftMargin,
+				Y = this.Margin.TopMargin
+			};
 
-			writingService.Draw(this.Font, this.Text, position.Coordinates + offset, this.TextColor);
+			writingService.Draw(this.Font, this.Text, contentOffset, this.TextColor);
 		}
-
 
 		/// <summary>
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		virtual public GraphicalTextModel ToModel()
+		override public GraphicalTextWithMarginModel ToModel()
 		{
-			var result = new GraphicalTextModel
+			var result = new GraphicalTextWithMarginModel
 			{
 				Text = this.Text,
 				TextColor = this.TextColor,
 				FontName = this.FontName,
+				//Margin = 
 			};
 
 			return result;

@@ -34,10 +34,7 @@ namespace Engine.Graphics.Services
 				return null;
 			}
 
-			var modelProcessor = ModelProcessor.GetModelProcessorsForType(model.GetType());
-			var result = modelProcessor?.DynamicInvoke(model);
-
-			if (null == result)
+			if (false == ModelProcessor.InvokeModel(model, out var result))
 			{
 				// LOGGIGN
 

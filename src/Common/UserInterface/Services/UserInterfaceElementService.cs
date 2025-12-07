@@ -11,11 +11,13 @@ using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Fonts.Services.Contracts;
+using Engine.Core.Initialization.Services;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Common.UserInterface.Services
@@ -35,7 +37,7 @@ namespace Common.UserInterface.Services
 		/// Gets the user interface margin from the model.
 		/// </summary>
 		/// <param name="model">The user interface margin model.</param>
-		/// <returns>The user interface margin model.</returns>
+		/// <returns>The user interface margin.</returns>
 		public UiMargin GetUiMarginFromModel(UiMarginModel model)
 		{
 			var result = new UiMargin
@@ -50,6 +52,34 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
+		/// Gets the graphical text with margin from the model.
+		/// </summary>
+		/// <param name="model">The graphical text with margin.</param>
+		/// <returns>The graphical text with margin.</returns>
+		public GraphicalTextWithMargin GetGraphicTextWithMarginFromModel(GraphicalTextWithMarginModel model)
+		{
+			if (null == model)
+			{
+				return null;
+			}
+
+			var fontService = this._gameServices.GetService<IFontService>();
+
+			var font = fontService.GetSpriteFont(model.FontName);
+			font ??= fontService.DebugSpriteFont;
+			var margin = this.GetUiMarginFromModel(model.Margin);
+
+			return new GraphicalTextWithMargin
+			{
+				FontName = model.FontName,
+				Text = model.Text,
+				TextColor = model.TextColor,
+				Font = font,
+				Margin = margin
+			};
+		}
+
+		/// <summary>
 		/// Gets the user interface element.
 		/// </summary>
 		/// <param name="uiElementModel">The user interface element model.</param>
@@ -59,7 +89,6 @@ namespace Common.UserInterface.Services
 			var graphicService = this._gameServices.GetService<IGraphicService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 
 			var area = this.GetElementArea(uiElementModel);
 			IAmAUiElement uiElement = uiElementModel switch
@@ -100,9 +129,11 @@ namespace Common.UserInterface.Services
 			uiElement.CursorConfiguration ??= cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, null);
 
 			if ((uiElement is IAmAUiElementWithText uiElementWithText) &&
-				(uiElementModel is IAmAUiElementWithTextModel uiElementWithTextModel))
+				(uiElementModel is IAmAUiElementWithTextModel uiElementWithTextModel) &&
+				(true == ModelProcessor.InvokeModel(uiElementWithTextModel.Text, out var result)) &&
+				(result is GraphicalText graphicText))
 			{
-				uiElementWithText.GraphicText = graphicTextService.GetGraphicTextFromModel(uiElementWithTextModel.Text);
+				uiElementWithText.GraphicText = graphicText;
 			}
 
 			if (uiElement is ICanBeClicked<IAmAUiElement> clickableElement)
@@ -284,16 +315,23 @@ namespace Common.UserInterface.Services
 					break;
 			}
 
-			if (elementModel is IAmAUiElementWithTextModel elementTextModel)
+			if ((elementModel is IAmAUiElementWithTextModel elementTextModel) &&
+				(elementTextModel.Text is not null))
 			{
 				var fontService = this._gameServices.GetService<IFontService>();
 
-				if (false == string.IsNullOrEmpty(elementTextModel.Text?.FontName))
+				if (false == string.IsNullOrEmpty(elementTextModel.Text.FontName))
 				{
 					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
 					var textDimensions = font.MeasureString(elementTextModel.Text.Text);
 					result.Width = (int)Math.Max(textDimensions.X + elementTextModel.Margin.LeftMargin + elementTextModel.Margin.RightMargin, width);
 					result.Height = (int)Math.Max(textDimensions.Y + elementTextModel.Margin.TopMargin + elementTextModel.Margin.BottomMargin, height);
+				}
+
+				if (elementTextModel.Text is GraphicalTextWithMarginModel graphicalTextWithMarginModel)
+				{
+					result.Width += (graphicalTextWithMarginModel.Margin.LeftMargin + graphicalTextWithMarginModel.Margin.RightMargin);
+					result.Height += (graphicalTextWithMarginModel.Margin.TopMargin + graphicalTextWithMarginModel.Margin.BottomMargin);
 				}
 			}
 

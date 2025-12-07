@@ -1,5 +1,4 @@
 ﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
@@ -205,7 +204,7 @@ namespace Common.UserInterface.Services
 				return result;
 			}
 
-			var height = uiZone.ElementRows.Sum(e => e.InsideHeight);
+			var height = uiZone.ElementRows.Sum(e => e.TotalHeight);
 			var rowVerticalOffset = uiZone.JustificationType switch
 			{
 				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
@@ -305,10 +304,10 @@ namespace Common.UserInterface.Services
 				switch (uiRow.VerticalJustificationType)
 				{
 					case UiRowVerticalJustificationType.Bottom:
-						verticallyCenterOffset = (largestHeight - element.InsideHeight);
+						verticallyCenterOffset = (largestHeight - element.TotalHeight);
 						break;
 					case UiRowVerticalJustificationType.Center:
-						verticallyCenterOffset = (largestHeight - element.InsideHeight) / 2;
+						verticallyCenterOffset = (largestHeight - element.TotalHeight) / 2;
 						break;
 					case UiRowVerticalJustificationType.Top:
 						break;

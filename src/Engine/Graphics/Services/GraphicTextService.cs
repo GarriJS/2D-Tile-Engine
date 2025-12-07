@@ -29,6 +29,7 @@ namespace Engine.Graphics.Services
 			var fontService = _gameServices.GetService<IFontService>();
 
 			var font = fontService.GetSpriteFont(fontName);
+
 			return font.MeasureString(text);
 		}
 
@@ -40,33 +41,37 @@ namespace Engine.Graphics.Services
 		/// <returns>The string measurements.</returns>
 		public Vector2 MeasureString(SpriteFont font, string text)
 		{
-			return font.MeasureString(text);
+			var result = font.MeasureString(text);
+
+			return result;
 		}
 
 		/// <summary>
 		/// Gets the graphic text from the model.
 		/// </summary>
-		/// <param name="graphicalTextModel">The graphic text model.</param>
+		/// <param name="model">The graphic text model.</param>
 		/// <returns>The graphical text.</returns>
-		public GraphicalText GetGraphicTextFromModel(GraphicalTextModel graphicalTextModel)
+		public GraphicalText GetGraphicTextFromModel(GraphicalTextModel model)
 		{
-			if (null == graphicalTextModel)
+			if (null == model)
 			{
 				return null;
 			}
 
 			var fontService = this._gameServices.GetService<IFontService>();
 
-			var font = fontService.GetSpriteFont(graphicalTextModel.FontName);
+			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
 
-			return new GraphicalText
+			var result = new GraphicalText
 			{
-				FontName = graphicalTextModel.FontName,
-				Text = graphicalTextModel.Text,
-				TextColor = graphicalTextModel.TextColor,
+				FontName = model.FontName,
+				Text = model.Text,
+				TextColor = model.TextColor,
 				Font = font
 			};
+
+			return result;
 		}
 	}
 }

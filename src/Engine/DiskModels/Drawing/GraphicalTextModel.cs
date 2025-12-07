@@ -1,5 +1,4 @@
-﻿using Engine.Physics.Models.SubAreas;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
@@ -14,10 +13,5 @@ namespace Engine.DiskModels.Drawing
 
 		[JsonPropertyName("fontName")]
 		public string FontName { get; set; }
-
-		public SubArea GetDimensions()
-		{
-			return new SubArea();
-		}
 	}
 }
