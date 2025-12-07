@@ -1,7 +1,7 @@
 ﻿using Engine.DiskModels.Drawing;
 using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.UI.Contracts
+namespace Common.DiskModels.UserInterface.Contracts
 {
 	public interface IAmAUiElementWithTextModel : IAmAUiElementModel
 	{

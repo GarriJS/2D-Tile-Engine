@@ -1,7 +1,7 @@
 ﻿using Engine.DiskModels.Drawing;
 using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.UI
+namespace Common.DiskModels.UserInterface
 {
 	public class GraphicalTextWithMarginModel : GraphicalTextModel
 	{

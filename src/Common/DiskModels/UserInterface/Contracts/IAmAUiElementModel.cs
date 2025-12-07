@@ -1,13 +1,11 @@
-﻿using Common.DiskModels.UI.Contracts;
-using Common.UserInterface.Enums;
-using Engine.DiskModels.Drawing;
+﻿using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.UI.Elements
+namespace Common.DiskModels.UserInterface.Contracts
 {
-	public class UiTextModel : IAmAUiElementWithTextModel
+	public interface IAmAUiElementModel
 	{
 		[JsonPropertyName("uiElementName")]
 		public string UiElementName { get; set; }
@@ -21,10 +19,7 @@ namespace Common.DiskModels.UI.Elements
 		[JsonPropertyName("verticalSizeType")]
 		public UiElementSizeType VerticalSizeType { get; set; }
 
-		[JsonPropertyName("outsidePadding")]
-		public UiMarginModel OutsidePadding { get; set; }
-
-		[JsonPropertyName("insidePadding")]
+		[JsonPropertyName("margin")]
 		public UiMarginModel Margin { get; set; }
 
 		[JsonPropertyName("fixedSized")]
@@ -41,8 +36,5 @@ namespace Common.DiskModels.UI.Elements
 
 		[JsonPropertyName("graphic")]
 		public IAmAGraphicModel Graphic { get; set; }
-
-		[JsonPropertyName("text")]
-		public GraphicalTextModel Text { get; set; }
 	}
 }

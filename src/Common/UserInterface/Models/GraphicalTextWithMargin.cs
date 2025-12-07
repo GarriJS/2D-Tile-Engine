@@ -1,4 +1,4 @@
-﻿using Common.DiskModels.UI;
+﻿using Common.DiskModels.UserInterface;
 using Engine.Graphics.Models;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;

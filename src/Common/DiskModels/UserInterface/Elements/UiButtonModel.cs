@@ -1,11 +1,11 @@
-﻿using Common.DiskModels.UI.Contracts;
+﻿using Common.DiskModels.UserInterface.Contracts;
 using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.UI.Elements
+namespace Common.DiskModels.UserInterface.Elements
 {
 	public class UiButtonModel : IAmAUiElementWithTextModel
 	{

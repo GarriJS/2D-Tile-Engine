@@ -4,7 +4,7 @@ using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
-using Common.DiskModels.UI;
+using Common.DiskModels.UserInterface;
 using Common.UserInterface.Constants;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;

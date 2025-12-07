@@ -1,9 +1,9 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.DiskModels.UI;
-using Common.DiskModels.UI.Contracts;
-using Common.DiskModels.UI.Elements;
+using Common.DiskModels.UserInterface;
+using Common.DiskModels.UserInterface.Contracts;
+using Common.DiskModels.UserInterface.Elements;
 using Common.UserInterface.Constants;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;

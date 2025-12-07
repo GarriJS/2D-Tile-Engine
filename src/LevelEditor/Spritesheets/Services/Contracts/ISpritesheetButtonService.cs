@@ -1,6 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Models;
-using Common.DiskModels.UI.Elements;
+using Common.DiskModels.UserInterface.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;

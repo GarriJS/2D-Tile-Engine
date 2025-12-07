@@ -1,5 +1,5 @@
-﻿using Common.DiskModels.UI;
-using Common.DiskModels.UI.Contracts;
+﻿using Common.DiskModels.UserInterface;
+using Common.DiskModels.UserInterface.Contracts;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 

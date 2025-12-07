@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Common.DiskModels.UI
+namespace Common.DiskModels.UserInterface
 {
 	public struct UiMarginModel
 	{

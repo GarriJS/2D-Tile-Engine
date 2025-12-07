@@ -1,5 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
-using Common.DiskModels.UI;
+using Common.DiskModels.UserInterface;
 using Common.UserInterface.Models;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
