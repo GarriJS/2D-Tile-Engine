@@ -249,7 +249,7 @@ namespace Common.UserInterface.Services
 					result.TopHoverCursor = elementRow.HoverCursor;
 				}
 
-				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.InsidePadding.TopPadding, location);
+				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.Margin.TopMargin, location);
 
 				if (true == uiElementWithLocation.HasValue)
 				{
@@ -323,11 +323,11 @@ namespace Common.UserInterface.Services
 					case UiRowHorizontalJustificationType.Center:
 					case UiRowHorizontalJustificationType.Left:
 					default:
-						elementHorizontalOffset += element.OutsidePadding.LeftPadding;
+						elementHorizontalOffset += element.Margin.LeftMargin;
 						elementLeft = elementHorizontalOffset + position.X;
 						elementHorizontalOffset += element.Area.Width;
 						elementRight = elementHorizontalOffset + position.X;
-						elementHorizontalOffset += element.OutsidePadding.RightPadding;
+						elementHorizontalOffset += element.Margin.RightMargin;
 						break;
 				}
 
@@ -536,14 +536,13 @@ namespace Common.UserInterface.Services
 					var dimensions = new SubArea
 					{
 						Width = zoneArea.Width,
-						Height = rowArea.Height + uiRowModel.InsidePadding.TopPadding + uiRowModel.InsidePadding.BottomPadding
+						Height = rowArea.Height + uiRowModel.Margin.TopMargin + uiRowModel.Margin.BottomMargin
 					};
 					background.SetDrawDimensions(dimensions);
 				}
 			}
 
-			var outsidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.OutsidePadding);
-			var insidePadding = uiElementService.GetUiPaddingFromModel(uiRowModel.InsidePadding);
+			var margin = uiElementService.GetUiMarginFromModel(uiRowModel.Margin);
 			Cursor hoverCursor = null;
 
 			if ((false == string.IsNullOrEmpty(uiRowModel.RowHoverCursorName)) &&
@@ -558,8 +557,7 @@ namespace Common.UserInterface.Services
 				UiRowName = uiRowModel.UiRowName,
 				Flex = true,
 				Area = rowArea,
-				OutsidePadding = outsidePadding,
-				InsidePadding = insidePadding,
+				Margin = margin,
 				HorizontalJustificationType = uiRowModel.HorizontalJustificationType,
 				VerticalJustificationType = uiRowModel.VerticalJustificationType,
 				Graphic = background,
@@ -581,7 +579,7 @@ namespace Common.UserInterface.Services
 			var dimensions = new SubArea
 			{
 				Width = uiRow.InsideWidth,
-				Height = dynamicHeight + uiRow.InsidePadding.TopPadding + uiRow.InsidePadding.BottomPadding
+				Height = dynamicHeight + uiRow.Margin.TopMargin + uiRow.Margin.BottomMargin
 			};
 			uiRow.Graphic?.SetDrawDimensions(dimensions);
 

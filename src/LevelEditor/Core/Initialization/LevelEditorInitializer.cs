@@ -164,10 +164,10 @@ namespace LevelEditor.Core.Initialization
 										{
 											UiElementName = "Level Editor Label Element",
 											HoverCursorName = CommonCursorNames.BasicCursorName,
-											InsidePadding = new UiPaddingModel
+											Margin = new UiMarginModel
 											{
-												LeftPadding = 10,
-												RightPadding = 10,
+												LeftMargin = 10,
+												RightMargin = 10,
 											},
 											HorizontalSizeType = (int)UiElementSizeType.FitContent,
 											VerticalSizeType = (int)UiElementSizeType.FitContent,
@@ -203,9 +203,9 @@ namespace LevelEditor.Core.Initialization
 								new UiRowModel
 								{
 									UiRowName = "Create Level",
-									InsidePadding = new UiPaddingModel
+									Margin = new UiMarginModel
 									{
-										TopPadding = 10,
+										TopMargin = 10,
 									},
 									ResizeTexture = true,
 									BackgroundTexture = new SimpleImageModel
@@ -225,10 +225,10 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Create Level Label",
-											InsidePadding = new UiPaddingModel
+											Margin = new UiMarginModel
 											{
-												LeftPadding = 10,
-												RightPadding = 5,
+												LeftMargin = 10,
+												RightMargin = 5,
 											},
 											Text = new GraphicalTextModel
 											{
@@ -265,10 +265,10 @@ namespace LevelEditor.Core.Initialization
 										new UiTextModel
 										{
 											UiElementName = "Save Element Label",
-											InsidePadding = new UiPaddingModel
+											Margin = new UiMarginModel
 											{
-												LeftPadding = 10,
-												RightPadding = 5,
+												LeftMargin = 10,
+												RightMargin = 5,
 											},
 											Text = new GraphicalTextModel
 											{

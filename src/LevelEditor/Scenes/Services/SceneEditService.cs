@@ -136,10 +136,10 @@ namespace LevelEditor.Scenes.Services
 					new UiRowModel
 					{
 						UiRowName = "Toggle Tile Grid Row",
-						InsidePadding = new UiPaddingModel
+						Margin = new UiMarginModel
 						{
-							TopPadding = 10,
-							BottomPadding = 5,
+							TopMargin = 10,
+							BottomMargin = 5,
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
 						ResizeTexture = true,
@@ -159,9 +159,9 @@ namespace LevelEditor.Scenes.Services
 							new UiTextModel
 							{
 								UiElementName = "Create Element Label",
-								InsidePadding = new UiPaddingModel
+								Margin = new UiMarginModel
 								{
-									RightPadding = 5
+									RightMargin = 5
 								},
 								Text = new GraphicalTextModel
 								{
@@ -175,9 +175,9 @@ namespace LevelEditor.Scenes.Services
 							new UiButtonModel
 							{
 								UiElementName = "Toggle Tile Grid Button",
-								InsidePadding = new UiPaddingModel
+								Margin = new UiMarginModel
 								{
-									RightPadding = 10
+									RightMargin = 10
 								},
 								HorizontalSizeType = UiElementSizeType.FitContent,
 								VerticalSizeType = UiElementSizeType.FitContent,
@@ -224,10 +224,10 @@ namespace LevelEditor.Scenes.Services
 				{
 					UiRowName = $"{savedTileMapNames[i]} row",
 					ResizeTexture = true,
-					InsidePadding = new UiPaddingModel
+					Margin = new UiMarginModel
 					{
-						TopPadding = 10,
-						BottomPadding = 10,
+						TopMargin = 10,
+						BottomMargin = 10,
 					},
 					HorizontalJustificationType = UiRowHorizontalJustificationType.Center,
 					VerticalJustificationType = UiRowVerticalJustificationType.Center,
@@ -248,10 +248,10 @@ namespace LevelEditor.Scenes.Services
 							ResizeTexture = true,
 							HorizontalSizeType = UiElementSizeType.FitContent,
 							VerticalSizeType = UiElementSizeType.FitContent,
-							InsidePadding = new UiPaddingModel
+							Margin = new UiMarginModel
 							{
-								TopPadding = 5,
-								BottomPadding = 5,
+								TopMargin = 5,
+								BottomMargin = 5,
 							},
 							ClickableAreaAnimation = new TriggeredAnimationModel
 							{

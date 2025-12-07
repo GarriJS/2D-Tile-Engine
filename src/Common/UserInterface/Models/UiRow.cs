@@ -39,32 +39,27 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the total width.
 		/// </summary>
-		public float TotalWidth { get => this.OutsidePadding.LeftPadding + this.InsideWidth + this.OutsidePadding.RightPadding; }
+		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
 
 		/// <summary>
 		/// Gets the total height.
 		/// </summary>
-		public float TotalHeight { get => this.OutsidePadding.TopPadding + this.InsideHeight + this.OutsidePadding.BottomPadding; }
+		public float TotalHeight { get => this.Margin.TopMargin + this.InsideHeight + this.Margin.BottomMargin; }
 
 		/// <summary>
 		/// Get the inside width.
 		/// </summary>
-		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.Area.Width + this.InsidePadding.RightPadding; }
+		public float InsideWidth { get => this.Area.Width; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => this.InsidePadding.TopPadding + this.Area.Height + this.InsidePadding.BottomPadding; }
+		public float InsideHeight { get => this.Area.Height; }
 
 		/// <summary>
-		/// Gets or sets the outside user interface padding.
+		/// Gets or sets the user interface margin
 		/// </summary>
-		public UiPadding OutsidePadding { get; set; }
-
-		/// <summary>
-		/// Gets or sets the inside user interface padding. 
-		/// </summary>
-		public UiPadding InsidePadding { get; set; }
+		public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface row horizontal justification type. 
@@ -126,14 +121,14 @@ namespace Common.UserInterface.Models
 		{
 			var graphicOffset = offset + (this.CachedRowOffset ?? default) + new Vector2
 			{ 
-				X = this.OutsidePadding.LeftPadding,
-				Y = this.OutsidePadding.TopPadding,
+				X = this.Margin.LeftMargin,
+				Y = this.Margin.TopMargin,
 			};
 			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
 			var contentOffset = graphicOffset + new Vector2
 			{
-				X = this.InsidePadding.LeftPadding,
-				Y = this.InsidePadding.TopPadding
+				X = this.Margin.LeftMargin,
+				Y = this.Margin.TopMargin
 			};
 
 			foreach (var element in this.SubElements ?? [])

@@ -32,18 +32,18 @@ namespace Common.UserInterface.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the user interface insidePadding from the model.
+		/// Gets the user interface margin from the model.
 		/// </summary>
-		/// <param name="model">The model.</param>
-		/// <returns>The user interface insidePadding model.</returns>
-		public UiPadding GetUiPaddingFromModel(UiPaddingModel model)
+		/// <param name="model">The user interface margin model.</param>
+		/// <returns>The user interface margin model.</returns>
+		public UiMargin GetUiMarginFromModel(UiMarginModel model)
 		{
-			var result = new UiPadding
+			var result = new UiMargin
 			{
-				TopPadding = model.TopPadding,
-				BottomPadding = model.BottomPadding,
-				LeftPadding = model.LeftPadding,
-				RightPadding = model.RightPadding,
+				TopMargin = model.TopMargin,
+				BottomMargin = model.BottomMargin,
+				LeftMargin = model.LeftMargin,
+				RightMargin = model.RightMargin,
 			};
 
 			return result;
@@ -76,8 +76,7 @@ namespace Common.UserInterface.Services
 				return null;
 			}
 
-			uiElement.OutsidePadding = this.GetUiPaddingFromModel(uiElementModel.OutsidePadding);
-			uiElement.InsidePadding = this.GetUiPaddingFromModel(uiElementModel.InsidePadding);
+			uiElement.Margin = this.GetUiMarginFromModel(uiElementModel.Margin);
 			uiElement.Area = area;
 
 			if (null != uiElementModel.Graphic)
@@ -293,8 +292,8 @@ namespace Common.UserInterface.Services
 				{
 					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
 					var textDimensions = font.MeasureString(elementTextModel.Text.Text);
-					result.Width = (int)Math.Max(textDimensions.X + elementTextModel.InsidePadding.LeftPadding + elementTextModel.InsidePadding.RightPadding, width);
-					result.Height = (int)Math.Max(textDimensions.Y + elementTextModel.InsidePadding.TopPadding + elementTextModel.InsidePadding.BottomPadding, height);
+					result.Width = (int)Math.Max(textDimensions.X + elementTextModel.Margin.LeftMargin + elementTextModel.Margin.RightMargin, width);
+					result.Height = (int)Math.Max(textDimensions.Y + elementTextModel.Margin.TopMargin + elementTextModel.Margin.BottomMargin, height);
 				}
 			}
 

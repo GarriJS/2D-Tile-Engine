@@ -11,11 +11,11 @@ namespace Common.UserInterface.Services.Contracts
 	public interface IUserInterfaceElementService
 	{
 		/// <summary>
-		/// Gets the user interface padding from the model.
+		/// Gets the user interface margin from the model.
 		/// </summary>
-		/// <param name="model">The model.</param>
-		/// <returns>The user interface padding model.</returns>
-		public UiPadding GetUiPaddingFromModel(UiPaddingModel model);
+		/// <param name="model">The user interface margin model.</param>
+		/// <returns>The user interface margin model.</returns>
+		public UiMargin GetUiMarginFromModel(UiMarginModel model);
 
 		/// <summary>
 		/// Gets the user interface element.

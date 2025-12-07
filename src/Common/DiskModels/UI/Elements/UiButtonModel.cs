@@ -21,11 +21,8 @@ namespace Common.DiskModels.UI.Elements
 		[JsonPropertyName("verticalSizeType")]
 		public UiElementSizeType VerticalSizeType { get; set; }
 
-		[JsonPropertyName("outsidePadding")]
-		public UiPaddingModel OutsidePadding { get; set; }
-
 		[JsonPropertyName("insidePadding")]
-		public UiPaddingModel InsidePadding { get; set; }
+		public UiMarginModel Margin { get; set; }
 
 		[JsonPropertyName("fixedSized")]
 		public Vector2? FixedSized { get; set; }

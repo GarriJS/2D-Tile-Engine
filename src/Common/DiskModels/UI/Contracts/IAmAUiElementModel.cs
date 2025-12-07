@@ -19,11 +19,8 @@ namespace Common.DiskModels.UI.Contracts
 		[JsonPropertyName("verticalSizeType")]
 		public UiElementSizeType VerticalSizeType { get; set; }
 
-		[JsonPropertyName("outsidePadding")]
-		public UiPaddingModel OutsidePadding { get; set; }
-
-		[JsonPropertyName("insidePadding")]
-		public UiPaddingModel InsidePadding { get; set; }
+		[JsonPropertyName("margin")]
+		public UiMarginModel Margin { get; set; }
 
 		[JsonPropertyName("fixedSized")]
 		public Vector2? FixedSized { get; set; }

@@ -54,14 +54,9 @@ namespace Common.UserInterface.Models.Contracts
 		public Vector2? CachedElementOffset { get; set; }
 
 		/// <summary>
-		/// Gets or sets the outside user interface padding.
+		/// Gets or sets the user interface margin.
 		/// </summary>
-		public UiPadding OutsidePadding { get; set; }
-
-		/// <summary>
-		/// Gets or sets the inside user interface padding. 
-		/// </summary>
-		public UiPadding InsidePadding { get; set; }
+		public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets the Graphic.

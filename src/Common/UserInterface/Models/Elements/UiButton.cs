@@ -25,22 +25,22 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets the total width.
 		/// </summary>
-		public float TotalWidth { get => this.OutsidePadding.LeftPadding + this.InsideWidth + this.OutsidePadding.RightPadding; }
+		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
 
 		/// <summary>
 		/// Gets the total height.
 		/// </summary>
-		public float TotalHeight { get => this.OutsidePadding.TopPadding + this.InsideHeight + this.OutsidePadding.BottomPadding; }
+		public float TotalHeight { get => this.Margin.TopMargin + this.InsideHeight + this.Margin.BottomMargin; }
 
 		/// <summary>
 		/// Gets the inside width.
 		/// </summary>
-		public float InsideWidth { get => this.InsidePadding.LeftPadding + this.Area.Width + this.InsidePadding.RightPadding; }
+		public float InsideWidth { get => this.Area.Width; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => this.InsidePadding.TopPadding + this.Area.Height + this.InsidePadding.BottomPadding; }
+		public float InsideHeight { get => this.Area.Height; }
 
 		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
@@ -68,14 +68,9 @@ namespace Common.UserInterface.Models.Elements
 		public SubArea Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the outside user interface padding.
+		/// Gets or sets the user interface margin.
 		/// </summary>
-		public UiPadding OutsidePadding { get; set; }
-
-		/// <summary>
-		/// Gets or sets the inside user interface padding. 
-		/// </summary>
-		public UiPadding InsidePadding { get; set; }
+		public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Graphic text.
@@ -148,29 +143,18 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var graphicOffset = offset + new Vector2
-			{
-				X = this.OutsidePadding.LeftPadding,
-				Y = this.OutsidePadding.TopPadding
-			};
-			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
-			this.ClickAnimation?.Draw(gameTime, gameServices, position, graphicOffset);
+			this.Graphic?.Draw(gameTime, gameServices, position, offset);
+			this.ClickAnimation?.Draw(gameTime, gameServices, position, offset);
 
 			if (null != this.GraphicText)
 			{
-				var graphicTextOffset = graphicOffset + new Vector2
-				{
-					X = this.InsidePadding.LeftPadding,
-					Y = this.InsidePadding.TopPadding
-				};
-
 				var textDimensions = this.GraphicText.GetTextDimensions();
-				var centeredOffset = new Vector2(
-					(this.Area.Width - textDimensions.X) / 2f,
-					(this.Area.Height - textDimensions.Y) / 2f
-				);
-
-				this.GraphicText.Draw(gameTime, gameServices, position, graphicTextOffset + centeredOffset);
+				var centeredOffset = new Vector2
+				{ 
+					X = (this.Area.Width - textDimensions.X) / 2f,
+					Y = (this.Area.Height - textDimensions.Y) / 2f
+				};
+				this.GraphicText.Draw(gameTime, gameServices, position, offset + centeredOffset);
 			}
 		}
 

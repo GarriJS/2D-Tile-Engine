@@ -145,10 +145,10 @@ namespace LevelEditor.Spritesheets.Services
 					new UiRowModel
 					{
 						UiRowName = "Spritesheet Buttons Row",
-						InsidePadding = new UiPaddingModel
+						Margin = new UiMarginModel
 						{ 
-							TopPadding = 15,
-							BottomPadding = 30,
+							TopMargin = 15,
+							BottomMargin = 30,
 						},
 						ResizeTexture = true,
 						BackgroundTexture = new SimpleImageModel
@@ -226,10 +226,10 @@ namespace LevelEditor.Spritesheets.Services
 					buttons[i][j] = new UiButtonModel
 					{
 						UiElementName = textureName,
-						InsidePadding = new UiPaddingModel
+						Margin = new UiMarginModel
 						{ 
-							LeftPadding = 2,
-							RightPadding = 2,
+							LeftMargin = 2,
+							RightMargin = 2,
 						},
 						FixedSized = new Vector2
 						{
