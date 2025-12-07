@@ -119,16 +119,12 @@ namespace Common.UserInterface.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var graphicOffset = offset + (this.CachedRowOffset ?? default) + new Vector2
-			{ 
-				X = this.Margin.LeftMargin,
-				Y = this.Margin.TopMargin,
-			};
+			var graphicOffset = offset + (this.CachedRowOffset ?? default);
 			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
 			var contentOffset = graphicOffset + new Vector2
 			{
 				X = this.Margin.LeftMargin,
-				Y = this.Margin.TopMargin
+				Y = this.Margin.TopMargin,
 			};
 
 			foreach (var element in this.SubElements ?? [])

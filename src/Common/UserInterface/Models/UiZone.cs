@@ -102,7 +102,7 @@ namespace Common.UserInterface.Models
 				this.UpdateZoneOffsets();
 			}
 
-			foreach (var elementRow in this.ElementRows ?? Enumerable.Empty<UiRow>())
+			foreach (var elementRow in this.ElementRows ?? [])
 			{
 				elementRow.Draw(gameTime, gameServices, this.Position);
 			}
