@@ -23,7 +23,12 @@
 		/// <summary>
 		/// Gets the toggle tile grid click event name.
 		/// </summary>
-		static public string ToggleTileGrid { get; } = "TOGGLE_TILE_GRID";
+		static public string ToggleTileGridClick { get; } = "TOGGLE_TILE_GRID_CLICK";
+
+        /// <summary>
+        /// Gets the load scene click event name.
+        /// </summary>
+        static public string LoadSceneClick { get; } = "LOAD_SCENE_CLICK";
 
 	}
 }

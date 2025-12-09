@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class AnimationModel : IAmAGraphicModel
+	public class AnimationModel : BaseDiskModel, IAmAGraphicModel
 	{
 		[JsonPropertyName("currentFrameIndex")]
 		public int CurrentFrameIndex { get; set; }

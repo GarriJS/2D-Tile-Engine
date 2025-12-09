@@ -2,7 +2,7 @@
 
 namespace Engine.DiskModels.Physics
 {
-	public class PositionModel
+	public class PositionModel : BaseDiskModel
 	{
 		[JsonPropertyName("x")]
 		public float X { get; set; }

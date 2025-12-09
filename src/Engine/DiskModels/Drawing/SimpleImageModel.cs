@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class SimpleImageModel : IAmAImageModel
+	public class SimpleImageModel : BaseDiskModel, IAmAImageModel
 	{
 		[JsonPropertyName("textureName")]
 		public string TextureName { get; set; }

@@ -17,7 +17,6 @@ using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Common.UserInterface.Services
@@ -40,6 +39,11 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface margin.</returns>
 		public UiMargin GetUiMarginFromModel(UiMarginModel model)
 		{
+			if (model is null)
+			{ 
+				return new UiMargin();
+			}
+
 			var result = new UiMargin
 			{
 				TopMargin = model.TopMargin,
@@ -324,14 +328,24 @@ namespace Common.UserInterface.Services
 				{
 					var font = fontService.GetSpriteFont(elementTextModel.Text.FontName);
 					var textDimensions = font.MeasureString(elementTextModel.Text.Text);
-					result.Width = (int)Math.Max(textDimensions.X + elementTextModel.Margin.LeftMargin + elementTextModel.Margin.RightMargin, width);
-					result.Height = (int)Math.Max(textDimensions.Y + elementTextModel.Margin.TopMargin + elementTextModel.Margin.BottomMargin, height);
+					result.Width = (int)Math.Max(
+						textDimensions.X
+						+ (elementTextModel.Margin?.LeftMargin ?? 0)
+						+ (elementTextModel.Margin?.RightMargin ?? 0),
+						width);
+					result.Height = (int)Math.Max(
+						textDimensions.Y
+						+ (elementTextModel.Margin?.TopMargin ?? 0)
+						+ (elementTextModel.Margin?.BottomMargin ?? 0),
+						height);
 				}
 
 				if (elementTextModel.Text is GraphicalTextWithMarginModel graphicalTextWithMarginModel)
 				{
-					result.Width += (graphicalTextWithMarginModel.Margin.LeftMargin + graphicalTextWithMarginModel.Margin.RightMargin);
-					result.Height += (graphicalTextWithMarginModel.Margin.TopMargin + graphicalTextWithMarginModel.Margin.BottomMargin);
+					result.Width += (graphicalTextWithMarginModel.Margin?.LeftMargin ?? 0)
+									+ (graphicalTextWithMarginModel.Margin?.RightMargin ?? 0);
+					result.Height += (graphicalTextWithMarginModel.Margin?.TopMargin ?? 0)
+									 + (graphicalTextWithMarginModel.Margin?.BottomMargin ?? 0);
 				}
 			}
 

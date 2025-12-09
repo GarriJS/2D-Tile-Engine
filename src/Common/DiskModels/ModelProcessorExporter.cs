@@ -3,7 +3,6 @@ using Common.DiskModels.Controls;
 using Common.DiskModels.Tiling;
 using Common.DiskModels.UserInterface;
 using Common.Tiling.Services.Contracts;
-using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;

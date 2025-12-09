@@ -2,7 +2,7 @@
 
 namespace Engine.DiskModels.Controls
 {
-	public class ActionControlModel
+	public class ActionControlModel : BaseDiskModel
 	{
 		[JsonPropertyName("actionName")]
 		public string ActionName { get; set; }

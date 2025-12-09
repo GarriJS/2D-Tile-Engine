@@ -1,11 +1,12 @@
 ﻿using Common.DiskModels.UserInterface.Contracts;
 using Common.UserInterface.Enums;
+using Engine.DiskModels;
 using Engine.DiskModels.Drawing;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface
 {
-	public class UiRowModel
+	public class UiRowModel : BaseDiskModel
 	{
 		[JsonPropertyName("uiRowName")]
 		public string UiRowName { get; set; }

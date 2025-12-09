@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class TextureRegionModel
+	public class TextureRegionModel : BaseDiskModel
 	{
 		[JsonPropertyName("textureRegionType")]
 		public TextureRegionType TextureRegionType { get; set; }

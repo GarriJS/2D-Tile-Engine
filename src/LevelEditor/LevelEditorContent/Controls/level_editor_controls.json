@@ -1,5 +1,6 @@
 [
   {
+    "type": "ActionControlModel",
     "actionName": "esc",
     "controlKeys": null,
     "controlMouseButtons": [ 0 ]

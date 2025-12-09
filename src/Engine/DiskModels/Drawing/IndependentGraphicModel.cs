@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class IndependentGraphicModel
+	public class IndependentGraphicModel : BaseDiskModel
 	{
 		[JsonPropertyName("position")]
 		public PositionModel Position { get; set; }

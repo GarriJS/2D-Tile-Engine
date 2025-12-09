@@ -1,4 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
+using Common.DiskModels.Tiling;
 using Common.DiskModels.UserInterface;
 using Common.Scenes.Models;
 using Common.UserInterface.Models;
@@ -28,6 +29,12 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction);
+
+		/// <summary>
+		/// The load scene button click event processor.
+		/// </summary>
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction);
 
 		/// <summary>
 		/// The toggle tile grid click event processor.
@@ -60,5 +67,12 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void SaveScene(CursorInteraction<IAmAUiElement> cursorInteraction);
+
+		/// <summary>
+		/// Loads the tile map model.
+		/// </summary>
+		/// <param name="tileMapName">The tile map name.</param>
+		/// <returns>The tile map model.</returns>
+		public TileMapModel LoadTileMapModel(string tileMapName);
 	}
 }

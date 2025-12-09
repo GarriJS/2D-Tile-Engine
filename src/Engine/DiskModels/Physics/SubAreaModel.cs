@@ -2,7 +2,7 @@
 
 namespace Engine.DiskModels.Physics
 {
-	public class SubAreaModel
+	public class SubAreaModel : BaseDiskModel
 	{
 		[JsonPropertyName("width")]
 		public float Width { get; set; }

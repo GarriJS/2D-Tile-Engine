@@ -1,7 +1,8 @@
-﻿
+﻿using Engine.DiskModels;
 using LevelEditor;
 using LevelEditor.Controls.Contexts;
 using LevelEditor.Core.Initialization;
+using System.Reflection;
 
 // Create the game object
 using var game = new Engine.Engine();
@@ -9,6 +10,10 @@ using var game = new Engine.Engine();
 // Debug
 game.LaunchInDebugMode = true;
 game.DebugSpriteFontName = "Monolight";
+
+// Registers the assemblies
+DiskModelDeserializer.RegisterAssembly(Assembly.GetAssembly(typeof(BaseDiskModel)));
+DiskModelDeserializer.RegisterAssembly(Assembly.GetAssembly(typeof(Common.DiskModels.ModelProcessorExporter)));
 
 // Set the loading instructions
 var loadingInstructions = GameContainer.GetLoadingInstructions(game._graphics);

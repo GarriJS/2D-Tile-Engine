@@ -1,35 +1,42 @@
 [
   {
+    "type": "ActionControlModel",
     "actionName": "leftClick",
     "controlKeys": null,
     "controlMouseButtons": [ 0 ]
   },
   {
+    "type": "ActionControlModel",
     "actionName": "rightClick",
     "controlKeys": null,
     "controlMouseButtons": [ 1 ]
   },
   {
+    "type": "ActionControlModel",
     "actionName": "middleClick",
     "controlKeys": null,
     "controlMouseButtons": [ 3 ]
   },
   {
+    "type": "ActionControlModel",
     "actionName": "up",
     "controlKeys": [ 87 ],
     "controlMouseButtons": null
   },
   {
+    "type": "ActionControlModel",
     "actionName": "down",
     "controlKeys": [ 83 ],
     "controlMouseButtons": null
   },
   {
+    "type": "ActionControlModel",
     "actionName": "left",
     "controlKeys": [ 65 ],
     "controlMouseButtons": null
   },
   {
+    "type": "ActionControlModel",
     "actionName": "right",
     "controlKeys": [ 68 ],
     "controlMouseButtons": null

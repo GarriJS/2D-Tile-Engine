@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Engine.DiskModels;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface
 {
-	public class UiGroupModel
+	public class UiGroupModel : BaseDiskModel
 	{
 		[JsonPropertyName("uiGroupName")]
 		public string UiGroupName { get; set; }

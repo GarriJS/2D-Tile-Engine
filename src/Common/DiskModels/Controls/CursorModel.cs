@@ -1,10 +1,11 @@
-﻿using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels;
+using Engine.DiskModels.Drawing.Contracts;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Controls
 {
-	public class CursorModel
+	public class CursorModel : BaseDiskModel
 	{
 		[JsonPropertyName("cursorName")]
 		public string CursorName { get; set; }

@@ -36,7 +36,7 @@ namespace Engine.Controls.Services
 
 			var actionControls = new List<ActionControl>();
 			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
-			var serializer = new ModelSerializer<List<ActionControlModel>>();
+			var serializer = new ModelSerializer<ActionControlModel>();
 
 			foreach (var contentManagerName in contentManagerNames)
 			{
@@ -50,7 +50,7 @@ namespace Engine.Controls.Services
 				foreach (var controlName in controlNames)
 				{
 					using var stream = jsonService.GetJsonFileStream(contentManagerName, this.ControlsFileName, controlName);
-					var actionControlModels = serializer.Deserialize(stream);
+					var actionControlModels = serializer.DeserializeList(stream);
 
 					foreach (var actionControlModel in actionControlModels)
 					{

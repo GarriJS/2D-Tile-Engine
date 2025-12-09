@@ -1,9 +1,10 @@
-﻿using Engine.DiskModels.Drawing;
+﻿using Engine.DiskModels;
+using Engine.DiskModels.Drawing;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface
 {
-	public class UiZoneModel
+	public class UiZoneModel : BaseDiskModel
 	{
 		[JsonPropertyName("uiZoneName")]
 		public string UiZoneName { get; set; }

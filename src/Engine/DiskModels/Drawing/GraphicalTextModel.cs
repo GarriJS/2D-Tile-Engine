@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class GraphicalTextModel
+	public class GraphicalTextModel : BaseDiskModel
 	{
 		[JsonPropertyName("text")]
 		public string Text { get; set; }

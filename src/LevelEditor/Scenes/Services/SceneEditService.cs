@@ -109,6 +109,15 @@ namespace LevelEditor.Scenes.Services
 		}
 
 		/// <summary>
+		/// The load scene button click event processor.
+		/// </summary>
+		/// <param name="cursorInteraction">The cursor interaction.</param>
+		public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
+		{
+			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Element.UiElementName);
+		}
+
+		/// <summary>
 		/// The toggle tile grid click event processor.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
@@ -197,7 +206,7 @@ namespace LevelEditor.Scenes.Services
 									X = 1,
 									Y = 1
 								},
-								ClickEventName = UiEventName.ToggleTileGrid
+								ClickEventName = UiEventName.ToggleTileGridClick
 							},
 						]
 					}
@@ -282,7 +291,7 @@ namespace LevelEditor.Scenes.Services
 								X = 1,
 								Y = 1
 							},
-							//ClickEventName = 
+							ClickEventName = UiEventName.LoadSceneClick
 						}
 					]
 				};
@@ -348,10 +357,27 @@ namespace LevelEditor.Scenes.Services
 
 			var jsonService = this._gameServices.GetService<IJsonService>();
 
-			var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", "TestMap", createDirectoryIfDoesNotExist: true);
+			var tileMapName = "TestMap";
+			var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", tileMapName, createDirectoryIfDoesNotExist: true);
 			var serializer = new ModelSerializer<TileMapModel>();
 			var tileMapModel = this.CurrentScene.TileMap.ToModel();
 			serializer.Serialize(filePath, tileMapModel, TilingOptions.TileMapOptions);
+		}
+
+		/// <summary>
+		/// Loads the tile map model.
+		/// </summary>
+		/// <param name="tileMapName">The tile map name.</param>
+		/// <returns>The tile map model.</returns>
+		public TileMapModel LoadTileMapModel(string tileMapName)
+		{
+			var jsonService = this._gameServices.GetService<IJsonService>();
+
+			var serializer = new ModelSerializer<TileMapModel>();
+			using var tileMapStream = jsonService.GetJsonFileStream(ContentManagerParams.ContentManagerName, "TileMaps", tileMapName);
+			var tileMapModel = serializer.Deserialize(tileMapStream, TilingOptions.TileMapOptions);
+
+			return tileMapModel;
 		}
 
 		/// <summary>
@@ -364,7 +390,7 @@ namespace LevelEditor.Scenes.Services
 
 			var result = jsonService.GetJsonFileNames(ContentManagerParams.ContentManagerName, "TileMaps");
 
-			return ["fake map"];
+			return result;
 		}
 	}
 }

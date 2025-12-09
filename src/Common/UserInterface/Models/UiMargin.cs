@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents a user interface margin.
 	/// </summary>
-	public class UiMargin
+	public struct UiMargin
 	{
 		/// <summary>
 		/// Gets or sets the top margin.

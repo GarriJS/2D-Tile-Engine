@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using Engine.DiskModels;
+using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface
 {
-	public struct UiMarginModel
+	public class UiMarginModel : BaseDiskModel
 	{
 		[JsonPropertyName("topMargin")]
 		public float TopMargin { get; set; }

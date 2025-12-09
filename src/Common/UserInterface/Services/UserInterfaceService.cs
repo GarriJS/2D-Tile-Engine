@@ -535,7 +535,9 @@ namespace Common.UserInterface.Services
 					var dimensions = new SubArea
 					{
 						Width = zoneArea.Width,
-						Height = rowArea.Height + uiRowModel.Margin.TopMargin + uiRowModel.Margin.BottomMargin
+						Height = rowArea.Height
+							   + (uiRowModel.Margin?.TopMargin ?? 0)
+							   + (uiRowModel.Margin?.BottomMargin ?? 0)
 					};
 					background.SetDrawDimensions(dimensions);
 				}

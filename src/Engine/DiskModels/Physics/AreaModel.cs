@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Physics
 {
-	public class AreaModel : IAmAAreaModel
+	public class AreaModel : BaseDiskModel, IAmAAreaModel
 	{
 		[JsonPropertyName("width")]
 		public float Width { get; set; }

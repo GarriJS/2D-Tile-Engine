@@ -1,10 +1,11 @@
-﻿using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels;
+using Engine.DiskModels.Drawing.Contracts;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Tiling
 {
-    public class TileModel
-    {
+    public class TileModel : BaseDiskModel
+	{
         [JsonPropertyName("row")]
         public int Row { get; set; }
 
