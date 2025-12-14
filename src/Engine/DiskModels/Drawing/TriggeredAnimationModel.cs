@@ -1,5 +1,4 @@
-﻿using Engine.Physics.Models.SubAreas;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
@@ -7,9 +6,10 @@ namespace Engine.DiskModels.Drawing
 	{
 		[JsonPropertyName("restingFrameIndex")]
 		public int RestingFrameIndex { get; set; }
-		public override SubArea GetDimensions()
+
+		override public bool Equals(object obj)
 		{
-			return new SubArea();
+			return base.Equals(obj);
 		}
 	}
 }

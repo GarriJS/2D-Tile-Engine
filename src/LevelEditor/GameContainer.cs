@@ -9,22 +9,22 @@ namespace LevelEditor
 	/// <summary>
 	/// The game container.
 	/// </summary>
-	internal static class GameContainer
+	static internal class GameContainer
 	{
 		/// <summary>
 		/// Gets or sets the game.
 		/// </summary>
-		internal static Engine.Engine Game { get; set; }
+		static internal Engine.Engine Game { get; set; }
 
 		/// <summary>
 		/// Gets the game services.
 		/// </summary>
-		internal static GameServiceContainer GameService { get => Game.Services; }
+		static internal GameServiceContainer GameService { get; }
 
 		/// <summary>
 		/// Gets or sets the content exporters
 		/// </summary>
-		static private readonly List<IAmAContentExporter> ContentExporters = [
+		readonly static private List<IAmAContentExporter> ContentExporters = [
 			new ContentExporter(LevelEditor.LevelEditorContent.ContentManagerParams.ContentManagerName),
 			new ContentExporter(BaseContent.BaseContent.ContentManagerParams.ContentManagerName)
 		];
@@ -34,7 +34,7 @@ namespace LevelEditor
 		/// </summary>
 		/// <param name="graphicsDeviceManager">The graphics device manager.</param>
 		/// <returns>The loading instructions.</returns>
-		internal static LoadingInstructions GetLoadingInstructions(GraphicsDeviceManager graphicsDeviceManager)
+		static internal LoadingInstructions GetLoadingInstructions(GraphicsDeviceManager graphicsDeviceManager)
 		{
 			var contentManagers = new Dictionary<string, ContentManager>();
 			var controlLinkages = new List<ContentManagerLinkage>();
@@ -88,7 +88,7 @@ namespace LevelEditor
 				}
 			}
 
-			return new LoadingInstructions
+			var result = new LoadingInstructions
 			{
 				ContentManagers = contentManagers,
 				FontLinkages = fontLinkages,
@@ -96,6 +96,8 @@ namespace LevelEditor
 				TilesetLinkages = tilesetLinkages,
 				ControlLinkages = controlLinkages
 			};
+
+			return result;
 		}
 	}
 }

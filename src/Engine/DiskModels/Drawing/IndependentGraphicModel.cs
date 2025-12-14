@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels.Drawing.Abstract;
 using Engine.DiskModels.Physics;
 using System.Text.Json.Serialization;
 
@@ -10,6 +10,6 @@ namespace Engine.DiskModels.Drawing
 		public PositionModel Position { get; set; }
 
 		[JsonPropertyName("graphic")]
-		public IAmAGraphicModel Graphic { get; set; }
+		public GraphicBaseModel Graphic { get; set; }
 	}
 }

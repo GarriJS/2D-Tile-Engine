@@ -8,7 +8,7 @@ using Common.UserInterface.Models;
 using Engine.Controls.Models;
 using Engine.Core.Constants;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Services.Contracts;
@@ -67,23 +67,6 @@ namespace LevelEditor.Scenes.Models
 		/// <param name="hoverState">The hover state.</param>
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
-			//if ((true == this.BackgroundGraphicActive) &&
-			//	(this.BackgroundGraphic.TileGraphic is TiledImage fillImage))
-			//{
-			//	var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-
-			//	var FillBox = new Vector2
-			//	{
-			//		X = graphicDeviceService.GraphicsDevice.Viewport.InsideWidth,
-			//		Y = graphicDeviceService.GraphicsDevice.Viewport.InsideHeight
-			//	};
-
-			//	if (fillImage.FillBox != FillBox)
-			//	{ 
-			//		fillImage.FillBox = FillBox;
-			//	}
-			//}
-
 			if (false == controlState.ActionNameIsActive(BaseControlNames.LeftClick))
 			{
 				return;
@@ -91,7 +74,7 @@ namespace LevelEditor.Scenes.Models
 
 			var sceneEditService = this._gameServices.GetService<ISceneEditService>();
 
-			if ((null == sceneEditService.CurrentScene )||
+			if ((null == sceneEditService.CurrentScene) ||
 				(null == this.AddTileParameters) ||
 				((null != hoverState) &&
 				 ((hoverState.HoverObjectLocation.Element is not UiZone uiZone) ||
@@ -119,7 +102,7 @@ namespace LevelEditor.Scenes.Models
 		/// Sets the background TileGraphic.
 		/// </summary>
 		/// <param name="textureRegionImageModel">The texture region image model.</param>
-		public void SetBackgroundGraphic(IAmAGraphicModel textureRegionImageModel)
+		public void SetBackgroundGraphic(GraphicBaseModel textureRegionImageModel)
 		{
 			var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();

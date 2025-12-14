@@ -1,5 +1,5 @@
 ﻿using Engine.Core.Files.Models.Contract;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
 using System;
@@ -9,7 +9,7 @@ namespace Engine.Graphics.Models.Contracts
 	/// <summary>
 	/// Represent something that is a graphic.
 	/// </summary>
-	public interface IAmAGraphic : IAmSubDrawable, ICanBeSerialized<IAmAGraphicModel>, IDisposable
+	public interface IAmAGraphic : IAmSubDrawable, ICanBeSerialized<GraphicBaseModel>, IDisposable
 	{
 		/// <summary>
 		/// Gets the dimensions.

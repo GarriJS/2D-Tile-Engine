@@ -1,11 +1,12 @@
-﻿using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels.Drawing.Abstract;
 using Engine.DiskModels.Physics;
 using Engine.Physics.Models.SubAreas;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class AnimationModel : BaseDiskModel, IAmAGraphicModel
+	public class AnimationModel :  GraphicBaseModel
 	{
 		[JsonPropertyName("currentFrameIndex")]
 		public int CurrentFrameIndex { get; set; }
@@ -20,14 +21,14 @@ namespace Engine.DiskModels.Drawing
 		public int? FrameMaxDuration { get; set; }
 
 		[JsonPropertyName("frames")]
-		public IAmAImageModel[] Frames { get; set; }
+		public ImageBaseModel[] Frames { get; set; }
 
-		public virtual SubArea GetDimensions()
+		override public SubArea GetDimensions()
 		{
-			return new SubArea();
+			return this.Frames.FirstOrDefault()?.GetDimensions();
 		}
 
-		public void SetDrawDimensions(SubAreaModel dimensions)
+		override public void SetDrawDimensions(SubAreaModel dimensions)
 		{
 			foreach (var frame in this.Frames ?? [])
 			{
@@ -39,6 +40,11 @@ namespace Engine.DiskModels.Drawing
 
 				frame.SetDrawDimensions(frameDimensions);	
 			}
+		}
+
+		override public bool Equals(object obj)
+		{ 
+			return base.Equals(obj);
 		}
 	}
 }

@@ -8,6 +8,7 @@ using Common.DiskModels.UserInterface;
 using Common.DiskModels.UserInterface.Elements;
 using Common.Scenes.Models;
 using Common.Tiling.Models;
+using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
@@ -67,45 +68,7 @@ namespace LevelEditor.Scenes.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
-			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-			var controlService = this._gameServices.GetService<IControlService>();
-			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-
-			var scene = this.CreateNewScene(setCurrent: true);
-			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneTypes.Row3Col4);
-			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
-			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
-			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
-			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
-			runTimeDrawService.AddDrawable(scene.TileMap);
-			var textureRegionImageModel = new SimpleImageModel
-			{
-				TextureName = "tile_grid_light",
-				TextureRegion = new TextureRegionModel
-				{
-					TextureRegionType = TextureRegionType.Tile,
-					TextureBox = new Rectangle
-					{
-						X = 0,
-						Y = 0,
-						Width = 320,
-						Height = 320
-					},
-					DisplayArea = new SubAreaModel
-					{
-						Width = graphicDeviceService.GraphicsDevice.Viewport.Width,
-						Height = graphicDeviceService.GraphicsDevice.Viewport.Height
-					}
-				}
-			};
-			this.AddTileComponent.SetBackgroundGraphic(textureRegionImageModel);
-
-			if (false == this.AddTileComponent.BackgroundGraphicActive)
-			{
-				this.AddTileComponent.ToggleBackgroundGraphic();
-			}
+			_ = this.CreateNewScene(setCurrent: true, cursorInteraction.Element.UiElementName);
 		}
 
 		/// <summary>
@@ -115,6 +78,16 @@ namespace LevelEditor.Scenes.Services
 		public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
 			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Element.UiElementName);
+
+			if (tileMapModel is null)
+			{
+				return;
+			}
+
+			var tileService = this._gameServices.GetService<ITileService>();
+			var tileMap = tileService.GetTileMapFromModel(tileMapModel);
+
+			this.CreateNewScene(true, tileMap, cursorInteraction.Element.UiElementName);
 		}
 
 		/// <summary>
@@ -330,6 +303,21 @@ namespace LevelEditor.Scenes.Services
 				Area = area,
 				DrawLayer = 1,
 			};
+
+			var result = this.CreateNewScene(setCurrent, tileMap, sceneName);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a new scene.
+		/// </summary>
+		/// <param name="setCurrent">A value indicating whether to set the new scene as the current scene.</param>
+		/// <param name="tileMap">The tile map of the scene.</param>
+		/// <param name="sceneName">The scene name.</param>
+		/// <returns>The new scene.</returns>
+		public Scene CreateNewScene(bool setCurrent, TileMap tileMap, string sceneName = null)
+		{
 			var scene = new Scene
 			{
 				TileMap = tileMap,
@@ -338,10 +326,58 @@ namespace LevelEditor.Scenes.Services
 
 			if (true == setCurrent)
 			{
-				this.CurrentScene = scene;
+				this.SetCurrentScene(scene);
 			}
 
 			return scene;
+		}
+
+		/// <summary>
+		/// Sets the current scene.
+		/// </summary>
+		/// <param name="scene"></param>
+		public void SetCurrentScene(Scene scene)
+		{
+			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
+			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
+			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var controlService = this._gameServices.GetService<IControlService>();
+			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
+
+			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneTypes.Row3Col4);
+			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
+			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
+			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
+			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
+			runTimeDrawService.AddDrawable(scene.TileMap);
+			var simpleImageModel = new SimpleImageModel
+			{
+				TextureName = "tile_grid_light",
+				TextureRegion = new TextureRegionModel
+				{
+					TextureRegionType = TextureRegionType.Tile,
+					TextureBox = new Rectangle
+					{
+						X = 0,
+						Y = 0,
+						Width = 320,
+						Height = 320
+					},
+					DisplayArea = new SubAreaModel
+					{
+						Width = graphicDeviceService.GraphicsDevice.Viewport.Width,
+						Height = graphicDeviceService.GraphicsDevice.Viewport.Height
+					}
+				}
+			};
+			this.AddTileComponent.SetBackgroundGraphic(simpleImageModel);
+
+			if (false == this.AddTileComponent.BackgroundGraphicActive)
+			{
+				this.AddTileComponent.ToggleBackgroundGraphic();
+			}
+
+			this.CurrentScene = scene;
 		}
 
 		/// <summary>

@@ -12,8 +12,8 @@ game.LaunchInDebugMode = true;
 game.DebugSpriteFontName = "Monolight";
 
 // Registers the assemblies
-DiskModelDeserializer.RegisterAssembly(Assembly.GetAssembly(typeof(BaseDiskModel)));
-DiskModelDeserializer.RegisterAssembly(Assembly.GetAssembly(typeof(Common.DiskModels.ModelProcessorExporter)));
+DiskModelTypeResolver.RegisterAssembly(Assembly.GetAssembly(typeof(BaseDiskModel)));
+DiskModelTypeResolver.RegisterAssembly(Assembly.GetAssembly(typeof(Common.DiskModels.ModelProcessorExporter)));
 
 // Set the loading instructions
 var loadingInstructions = GameContainer.GetLoadingInstructions(game._graphics);

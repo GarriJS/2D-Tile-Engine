@@ -1,7 +1,7 @@
 ﻿using Common.DiskModels.UserInterface.Contracts;
 using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
@@ -37,7 +37,7 @@ namespace Common.DiskModels.UserInterface.Elements
 		public string PressEventName { get; set; }
 
 		[JsonPropertyName("graphic")]
-		public IAmAGraphicModel Graphic { get; set; }
+		public GraphicBaseModel Graphic { get; set; }
 
 		[JsonPropertyName("text")]
 		public GraphicalTextModel Text { get; set; }

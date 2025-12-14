@@ -1,5 +1,5 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -99,7 +99,7 @@ namespace Engine.Graphics.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		override public IAmAGraphicModel ToModel()
+		override public GraphicBaseModel ToModel()
 		{
 			var frameModels = new SimpleImageModel[this.Frames.Length];
 

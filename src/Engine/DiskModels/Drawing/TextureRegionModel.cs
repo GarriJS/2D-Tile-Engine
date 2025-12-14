@@ -27,5 +27,36 @@ namespace Engine.DiskModels.Drawing
 
 			return result;
 		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is not TextureRegionModel textureRegionModel)
+			{
+				return false;
+			}
+
+			if ((this.TextureRegionType != textureRegionModel.TextureRegionType) ||
+				(this.TextureBox != textureRegionModel.TextureBox))
+			{ 
+				return false;
+			}
+
+			if (((this.DisplayArea is not null) &&
+				 (textureRegionModel.DisplayArea is null)) ||
+				((this.DisplayArea is null) &&
+				 (textureRegionModel.DisplayArea is not null)))
+			{
+				return false;
+			}
+
+			if ((this.DisplayArea is not null) &&
+				(textureRegionModel.DisplayArea is not null) &&
+				(false == this.DisplayArea.Equals(textureRegionModel.DisplayArea)))
+			{
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

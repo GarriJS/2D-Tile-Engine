@@ -1,6 +1,6 @@
 ﻿using Engine.Core.Initialization.Services;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
@@ -23,11 +23,16 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <returns>The graphic.</returns>
-		public IAmAGraphic GetGraphicFromModel(IAmAGraphicModel model)
+		public IAmAGraphic GetGraphicFromModel(GraphicBaseModel model)
 		{
+			if (model is null)
+			{
+				return null;
+			}
+
 			var modelType = model.GetType();
 
-			if (modelType == typeof(IAmAGraphicModel))
+			if (modelType == typeof(GraphicBaseModel))
 			{
 				// LOGGING
 

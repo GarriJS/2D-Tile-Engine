@@ -3,7 +3,7 @@ using Engine.Controls.Services.Contracts;
 using Engine.Core.Initialization.Services;
 using Engine.DiskModels.Controls;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
@@ -68,7 +68,7 @@ namespace Engine.DiskModels
 				(typeof(AreaCollectionModel), areaService.GetAreaFromModel<AreaCollection>),
 				(typeof(SubAreaModel), areaService.GetSubAreaFromModel),
 				(typeof(OffsetSubAreaModel), areaService.GetOffSetSubAreaFromModel),
-				(typeof(IAmAGraphicModel), graphicService.GetGraphicFromModel),
+				(typeof(GraphicBaseModel), graphicService.GetGraphicFromModel),
 				(typeof(TextureRegionModel), graphicService.GetTextureRegionFromModel),
 				(typeof(SimpleImageModel), imageService.GetImageFromModel<SimpleImage>),
 				(typeof(CompositeImageModel), imageService.GetImageFromModel<CompositeImage>),

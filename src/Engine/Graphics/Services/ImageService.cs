@@ -1,7 +1,7 @@
 ﻿using Engine.Core.Constants;
 using Engine.Core.Textures.Services.Contracts;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Enum;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
@@ -30,7 +30,7 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
 		/// <returns>The image.</returns>
-		public IAmAImage GetImageFromModel(IAmAImageModel imageModel)
+		public IAmAImage GetImageFromModel(ImageBaseModel imageModel)
 		{
 			return this.GetImageFromModel<IAmAImage>(imageModel);
 		}
@@ -40,7 +40,7 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="imageModel">The image model.</param>
 		/// <returns>The image.</returns>
-		public T GetImageFromModel<T>(IAmAImageModel imageModel) where T : IAmAImage
+		public T GetImageFromModel<T>(ImageBaseModel imageModel) where T : IAmAImage
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
 			var graphicService = this._gameServices.GetService<IGraphicService>();

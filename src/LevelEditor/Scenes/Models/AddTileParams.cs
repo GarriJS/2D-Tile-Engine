@@ -1,4 +1,4 @@
-﻿using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels.Drawing.Abstract;
 
 namespace LevelEditor.Scenes.Models
 {
@@ -10,6 +10,6 @@ namespace LevelEditor.Scenes.Models
 		/// <summary>
 		/// Gets or sets the tile graphic.
 		/// </summary>
-		public IAmAGraphicModel TileGraphic { get; set; }
+		public GraphicBaseModel TileGraphic { get; set; }
 	}
 }

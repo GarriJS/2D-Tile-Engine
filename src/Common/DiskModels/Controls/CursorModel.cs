@@ -1,5 +1,5 @@
 ﻿using Engine.DiskModels;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
@@ -17,7 +17,7 @@ namespace Common.DiskModels.Controls
 		public Vector2 Offset { get; set; }
 
 		[JsonPropertyName("graphic")]
-		public IAmAGraphicModel Graphic {get; set; }
+		public GraphicBaseModel Graphic {get; set; }
 
 		[JsonPropertyName("cursorUpdaterName")]
 		public string CursorUpdaterName { get; set; }

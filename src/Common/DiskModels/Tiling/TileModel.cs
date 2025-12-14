@@ -1,5 +1,5 @@
 ﻿using Engine.DiskModels;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.Tiling
@@ -16,6 +16,6 @@ namespace Common.DiskModels.Tiling
 		public int GraphicId { get; set; }
 
 		[JsonIgnore]
-		public IAmAGraphicModel Graphic { get; set; }
+		public GraphicBaseModel Graphic { get; set; }
     }
 }

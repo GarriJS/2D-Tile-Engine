@@ -1,5 +1,5 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
@@ -62,7 +62,7 @@ namespace Engine.Graphics.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		public IAmAGraphicModel ToModel()
+		public GraphicBaseModel ToModel()
 		{
 			var textureRegionModel = this.TextureRegion.ToModel();
 			var result = new SimpleImageModel

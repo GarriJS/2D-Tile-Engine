@@ -2,6 +2,7 @@
 using Common.DiskModels.Tiling;
 using Common.DiskModels.UserInterface;
 using Common.Scenes.Models;
+using Common.Tiling.Models;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Core.Contracts;
@@ -61,6 +62,21 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// <param name="sceneName">The scene name.</param>
 		/// <returns>The new scene.</returns>
 		public Scene CreateNewScene(bool setCurrent, string sceneName = null);
+
+		/// <summary>
+		/// Creates a new scene.
+		/// </summary>
+		/// <param name="setCurrent">A value indicating whether to set the new scene as the current scene.</param>
+		/// <param name="tileMap">The tile map of the scene.</param>
+		/// <param name="sceneName">The scene name.</param>
+		/// <returns>The new scene.</returns>
+		public Scene CreateNewScene(bool setCurrent, TileMap tileMap, string sceneName = null);
+
+		/// <summary>
+		/// Sets the current scene.
+		/// </summary>
+		/// <param name="scene"></param>
+		public void SetCurrentScene(Scene scene);
 
 		/// <summary>
 		/// Saves the scene.

@@ -7,8 +7,10 @@ using Common.Tiling.Models;
 using Common.Tiling.Services.Contracts;
 using Engine.Core.Constants;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
 using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Linq;
 
@@ -98,15 +100,43 @@ namespace Common.Tiling.Services
 		/// <returns>The tile map.</returns>
 		public TileMap GetTileMapFromModel(TileMapModel tileMapModel)
 		{
+			var areaService = this._gameServices.GetService<IAreaService>();
+
+			var areaModel = new AreaModel
+			{
+				Position = new PositionModel
+				{
+					X = 0,
+					Y = 0,
+				},
+				Width = 0,
+				Height = 0,
+			};
+
+			var area = areaService.GetAreaFromModel(areaModel);
+
 			var tileMap = new TileMap
 			{
 				TileMapName = tileMapModel.TileMapName,
+				Area = area,
 				TileMapLayers = []
 			};
 
 			if (null == tileMapModel.TileMapLayers)
 			{
 				return tileMap;
+			}
+
+			var mapTileModels = tileMapModel.TileMapLayers.SelectMany(e => e.Tiles)
+													      .ToArray();
+
+			foreach (var mapTile in mapTileModels)
+			{
+				if ((mapTile is TileModel tileModel) &&
+					(true == tileMapModel.Graphics.TryGetValue(tileModel.GraphicId, out var tileImage)))
+				{
+					tileModel.Graphic = tileImage;
+				}
 			}
 
 			foreach (var tileMapLayerModel in tileMapModel.TileMapLayers)
@@ -119,18 +149,6 @@ namespace Common.Tiling.Services
 				}
 
 				tileMap.TileMapLayers.Add(tileMapLayer.Layer, tileMapLayer);
-			}
-
-			var mapTileModels = tileMapModel.TileMapLayers.SelectMany(e => e.Tiles)
-														  .ToArray();
-
-			foreach (var mapTile in mapTileModels)
-			{
-				if ((mapTile is TileModel tileModel) &&
-					(true == tileMapModel.Graphics.TryGetValue(tileModel.GraphicId, out var tileImage)))
-				{
-					tileModel.Graphic = tileImage;
-				}
 			}
 
 			return tileMap;

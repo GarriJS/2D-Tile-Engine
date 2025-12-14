@@ -1,5 +1,5 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 
@@ -15,7 +15,7 @@ namespace Engine.Graphics.Services.Contracts
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <returns>The graphic.</returns>
-		public IAmAGraphic GetGraphicFromModel(IAmAGraphicModel model);
+		public IAmAGraphic GetGraphicFromModel(GraphicBaseModel model);
 
 		/// <summary>
 		/// Gets the texture region from the model.

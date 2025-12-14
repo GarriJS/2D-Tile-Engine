@@ -1,7 +1,7 @@
 ﻿using Common.DiskModels.Tiling;
 using Engine.Core.Files.Models.Contract;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.DiskModels.Drawing.Comparers;
-using Engine.DiskModels.Drawing.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
@@ -12,7 +12,7 @@ using System.Linq;
 namespace Common.Tiling.Models
 {
 	/// <summary>
-	/// Represents a mapTileModel map.
+	/// Represents a tileModel map.
 	/// </summary>
 	public class TileMap : IAmDrawable, IHaveArea, ICanBeSerialized<TileMapModel>
 	{
@@ -22,7 +22,7 @@ namespace Common.Tiling.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the mapTileModel map name.
+		/// Gets or sets the tileModel map name.
 		/// </summary>
 		public string TileMapName { get; set; }
 
@@ -37,7 +37,7 @@ namespace Common.Tiling.Models
 		public IAmAArea Area { get; set; }
 
 		/// <summary>
-		/// Gets or sets the mapTileModel map layer.
+		/// Gets or sets the tileModel map layer.
 		/// </summary>
 		public Dictionary<int, TileMapLayer> TileMapLayers { get; set; } = [];
 
@@ -85,33 +85,35 @@ namespace Common.Tiling.Models
 		{
 			var tileMapLayerModels = this.TileMapLayers.Values.Select(e => e.ToModel())
 															  .ToArray();
-			var mapTileModels = tileMapLayerModels.SelectMany(e => e.Tiles)
+			var tileModels = tileMapLayerModels.SelectMany(e => e.Tiles)
 											   .ToArray(); 
-			var uniqueImages = new Dictionary<IAmAImageModel, int>(new ImageModelComparer());
-			var tileImageMappings = new Dictionary<int, IAmAGraphicModel>();
+			var uniqueImages = new Dictionary<ImageBaseModel, int>(new ImageModelComparer());
+			var tileImageMappings = new Dictionary<int, GraphicBaseModel>();
 			var nextId = 1;
 
-			foreach (var mapTileModel in mapTileModels)
+			foreach (var tileModel in tileModels)
 			{
-				if (mapTileModel.Graphic is IAmAImageModel simpleImageModel)
+				if (tileModel.Graphic is ImageBaseModel imageModel)
 				{
-					if (false == uniqueImages.TryGetValue(simpleImageModel, out var imageId))
+					if (false == uniqueImages.TryGetValue(imageModel, out var imageId))
 					{
 						imageId = nextId++;
-						uniqueImages[simpleImageModel] = imageId;
-						tileImageMappings[imageId] = simpleImageModel;
+						uniqueImages[imageModel] = imageId;
+						tileImageMappings[imageId] = imageModel;
 					}
 
-					mapTileModel.GraphicId = imageId;
+					tileModel.GraphicId = imageId;
 				}
 			}
 
-			return new TileMapModel
+			var result = new TileMapModel
 			{
 				TileMapName = this.TileMapName,
 				TileMapLayers = tileMapLayerModels,
 				Graphics = tileImageMappings,
 			};
+
+			return result;
 		}
 	}
 }

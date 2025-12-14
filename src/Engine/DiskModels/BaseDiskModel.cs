@@ -1,10 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Engine.DiskModels
+﻿namespace Engine.DiskModels
 {
-	public class BaseDiskModel
-	{
-		[JsonPropertyName("type")]
-		public string Type => GetType().Name;
-	}
+	abstract public class BaseDiskModel { }
 }

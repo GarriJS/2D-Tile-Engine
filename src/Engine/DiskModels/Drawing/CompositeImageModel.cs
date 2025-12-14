@@ -1,19 +1,16 @@
-﻿using Engine.DiskModels.Drawing.Contracts;
+﻿using Engine.DiskModels.Drawing.Abstract;
 using Engine.DiskModels.Physics;
 using Engine.Physics.Models.SubAreas;
 using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class CompositeImageModel : BaseDiskModel, IAmAImageModel
+	public class CompositeImageModel : ImageBaseModel
 	{
-		[JsonPropertyName("textureName")]
-		public string TextureName { get; set; }
-
 		[JsonPropertyName("textureRegions")]
 		public TextureRegionModel[][] TextureRegions { get; set; }
 
-		public SubArea GetDimensions()
+		override public SubArea GetDimensions()
 		{
 			if ((this.TextureRegions is null) || 
 				(0 == this.TextureRegions.Length))
@@ -75,7 +72,7 @@ namespace Engine.DiskModels.Drawing
 			return result;
 		}
 
-		public void SetDrawDimensions(SubAreaModel dimensions)
+		override public void SetDrawDimensions(SubAreaModel dimensions)
 		{
 			if ((this.TextureRegions is null) ||
 				(0 == this.TextureRegions.Length) ||
@@ -156,6 +153,11 @@ namespace Engine.DiskModels.Drawing
 					}
 				}
 			}
+		}
+
+		override public bool Equals(object obj)
+		{
+			return base.Equals(obj);
 		}
 	}
 }

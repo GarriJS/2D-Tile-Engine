@@ -9,5 +9,21 @@ namespace Engine.DiskModels.Physics
 
 		[JsonPropertyName("height")]
 		public float Height { get; set; }
+
+		override public bool Equals(object obj)
+		{
+			if (obj is not SubAreaModel subAreaModel)
+			{
+				return false;
+			}
+
+			if ((this.Width != subAreaModel.Width) ||
+				(this.Height != subAreaModel.Height))
+			{
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

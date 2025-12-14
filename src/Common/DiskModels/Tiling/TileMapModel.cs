@@ -1,5 +1,5 @@
 ﻿using Engine.DiskModels;
-using Engine.DiskModels.Drawing.Contracts;
+using Engine.DiskModels.Drawing.Abstract;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -13,8 +13,7 @@ namespace Common.DiskModels.Tiling
         [JsonPropertyName("tileMapLayers")]
         public TileMapLayerModel[] TileMapLayers { get; set; }
 
-		[JsonIgnore]
 		[JsonPropertyName("graphics")]
-		public Dictionary<int, IAmAGraphicModel> Graphics { get; set; }
+		public Dictionary<int, GraphicBaseModel> Graphics { get; set; }
 	}
 }
