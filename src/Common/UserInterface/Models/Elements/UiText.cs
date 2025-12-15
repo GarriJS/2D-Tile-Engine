@@ -133,23 +133,6 @@ namespace Common.UserInterface.Models.Elements
 		}
 
 		/// <summary>
-		/// Clears the cached element offset.
-		/// </summary>
-		public void ClearCachedElementOffset()
-		{
-			this.CachedElementOffset = null;
-		}
-
-		/// <summary>
-		/// Sets the cached element offset.
-		/// </summary>
-		/// <param name="offset">The offset.</param>
-		public void SetCachedElementOffset(Vector2 offset)
-		{
-			this.CachedElementOffset = offset;
-		}
-
-		/// <summary>
 		/// Disposes of the user interface button.
 		/// </summary>
 		public void Dispose()

@@ -139,7 +139,7 @@ namespace LevelEditor.Spritesheets.Services
 			{
 				UiZoneName = "Spritesheet Buttons Zone",
 				UiZoneType = (int)uiScreenZoneType,
-				JustificationType = (int)UiZoneJustificationTypes.Bottom,
+				VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Bottom,
 				ElementRows =
 				[
 					new UiRowModel

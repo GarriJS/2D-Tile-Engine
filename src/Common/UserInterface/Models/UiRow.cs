@@ -4,6 +4,7 @@ using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Models.LayoutInfo;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
@@ -22,7 +23,7 @@ namespace Common.UserInterface.Models
 	public class UiRow : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
-		/// Gets or sets the cached element graphicOffset.
+		/// Gets or sets the cached row offset.
 		/// </summary>
 		public Vector2? CachedRowOffset { get; set; }
 
@@ -97,9 +98,9 @@ namespace Common.UserInterface.Models
 		public CursorConfiguration<UiRow> CursorConfiguration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sub elements.
+		/// Gets or sets the elements.
 		/// </summary>
-		public List<IAmAUiElement> SubElements { get; set; }
+		public List<IAmAUiElement> Elements { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -121,15 +122,10 @@ namespace Common.UserInterface.Models
 		{
 			var graphicOffset = offset + (this.CachedRowOffset ?? default);
 			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
-			var contentOffset = graphicOffset + new Vector2
-			{
-				X = this.Margin.LeftMargin,
-				Y = this.Margin.TopMargin,
-			};
 
-			foreach (var element in this.SubElements ?? [])
+			foreach (var element in this.Elements ?? [])
 			{
-				element.Draw(gameTime, gameServices, position, contentOffset + (element.CachedElementOffset ?? default));
+				element.Draw(gameTime, gameServices, position, graphicOffset + (element.CachedElementOffset ?? default));
 			}
 		}
 
@@ -138,42 +134,59 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void UpdateRowOffsets()
 		{
-			var contentWidth = this.SubElements.Sum(e => e.TotalWidth);
-			var rowHorizontalJustificationOffset = this.HorizontalJustificationType switch
+			foreach (var layout in this.EnumerateElementLayout() ?? [])
 			{
-				UiRowHorizontalJustificationType.Center => (this.Area.Width - contentWidth) / 2,
-				UiRowHorizontalJustificationType.Right => this.Area.Width - contentWidth,
+				layout.Element.CachedElementOffset = layout.Offset;
+			}
+		}
+
+		/// <summary>
+		/// Enumerates the row layout.
+		/// </summary>
+		/// <returns>The enumerated row layout.</returns>
+		public IEnumerable<ElementLayoutInfo> EnumerateElementLayout()
+		{
+			var contentWidth = this.Elements.Sum(e => e.TotalWidth);
+			var horizontalOffset = this.HorizontalJustificationType switch
+			{
+				UiRowHorizontalJustificationType.Center => (this.TotalWidth - contentWidth) / 2,
+				UiRowHorizontalJustificationType.Right => this.TotalWidth - contentWidth,
 				_ => 0
 			};
 
-			if (0 > rowHorizontalJustificationOffset)
-			{
-				rowHorizontalJustificationOffset = default;
-			}
+			if (horizontalOffset < 0)
+				horizontalOffset = 0;
 
-			var elementOffset = new Vector2
+			foreach (var element in this.Elements ?? [])
 			{
-				X = rowHorizontalJustificationOffset,
-				Y = 0
-			};
+				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
+				var elementRight = elementLeft + element.InsideWidth;
 
-			foreach (var element in this.SubElements ?? [])
-			{
-				var rowVerticalJustificationOffset = this.VerticalJustificationType switch
+				var verticalOffset = this.VerticalJustificationType switch
 				{
-					UiRowVerticalJustificationType.Center => (this.Area.Height - element.TotalHeight) / 2,
-					UiRowVerticalJustificationType.Bottom => this.Area.Height - element.TotalHeight,
+					UiRowVerticalJustificationType.Center => (element.TotalHeight - this.InsideHeight) / 2,
+					UiRowVerticalJustificationType.Bottom => element.TotalHeight - this.InsideHeight,
 					_ => 0
 				};
 
-				if (0 > rowVerticalJustificationOffset)
-				{
-					rowVerticalJustificationOffset = 0;
-				}
+				if (verticalOffset < 0)
+					verticalOffset = 0;
 
-				elementOffset.Y = rowVerticalJustificationOffset;
-				element.CachedElementOffset = elementOffset;
-				elementOffset.X += element.TotalWidth;
+				var elementTop = verticalOffset + element.Margin.TopMargin;
+				var elementBottom = elementTop + element.InsideHeight;
+				var result = new ElementLayoutInfo
+				{
+					Element = element,
+					Offset = new Vector2
+					{
+						X = elementLeft,
+						Y = elementTop
+					}
+				};
+
+				yield return result;
+
+				horizontalOffset += element.TotalWidth;
 			}
 		}
 
@@ -182,7 +195,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			foreach (var subElement in this.SubElements ?? Enumerable.Empty<IAmAUiElement>())
+			foreach (var subElement in this.Elements ?? Enumerable.Empty<IAmAUiElement>())
 			{
 				subElement?.Dispose();
 			}

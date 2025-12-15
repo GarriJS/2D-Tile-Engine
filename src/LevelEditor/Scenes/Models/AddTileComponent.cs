@@ -77,7 +77,7 @@ namespace LevelEditor.Scenes.Models
 			if ((null == sceneEditService.CurrentScene) ||
 				(null == this.AddTileParameters) ||
 				((null != hoverState) &&
-				 ((hoverState.HoverObjectLocation.Element is not UiZone uiZone) ||
+				 ((hoverState.HoverObjectLocation.Subject is not UiZone uiZone) ||
 				  (null != uiZone.Graphic))))
 			{
 				return;

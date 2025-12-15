@@ -112,7 +112,7 @@ namespace LevelEditor.Scenes.Services
 				UiZoneName = "Tile Grid User Interface Zone",
 				UiZoneType = (int)UiScreenZoneTypes.Row3Col3,
 				BackgroundTexture = null,
-				JustificationType = (int)UiZoneJustificationTypes.Bottom,
+				VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Bottom,
 				ElementRows =
 				[
 					new UiRowModel

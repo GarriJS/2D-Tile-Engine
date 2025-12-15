@@ -113,7 +113,7 @@ namespace Common.Controls.Cursors.Models
 				return;
 			}
 
-			var uiObject = hoverState.HoverObjectLocation.Element;
+			var uiObject = hoverState.HoverObjectLocation.Subject;
 			var elementLocation = hoverState.HoverObjectLocation.Location;
 
 			switch (uiObject)

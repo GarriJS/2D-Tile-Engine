@@ -6,7 +6,7 @@ namespace Engine.Physics.Models
 	/// Represents a location extender.
 	/// </summary>
 	/// <typeparam name="T">The type being extended with location.</typeparam>
-	public struct LocationExtender<T>
+	public class LocationExtender<T>
 	{
 		/// <summary>
 		/// Gets or sets the location.
@@ -14,8 +14,8 @@ namespace Engine.Physics.Models
 		public Vector2 Location { get; set; }
 
 		/// <summary>
-		/// Gets or sets the element.
+		/// Gets or sets the subject.
 		/// </summary>
-		public T Element { get; set; }
+		public T Subject { get; set; }
 	}
 }

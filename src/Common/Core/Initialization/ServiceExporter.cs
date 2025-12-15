@@ -30,6 +30,7 @@ namespace Common.Core.Initialization
 				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),
 				(typeof(IUserInterfaceElementService), new UserInterfaceElementService(game.Services)),
 				(typeof(IUserInterfaceService), new UserInterfaceService(game.Services)),
+				(typeof(IUserInterfaceLocationService), new UserInterfaceLocationService(game.Services)),
 				(typeof(ITileService), new TileService(game.Services))
 			];
 		}

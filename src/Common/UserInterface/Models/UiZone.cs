@@ -3,6 +3,7 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.LayoutInfo;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
@@ -35,9 +36,9 @@ namespace Common.UserInterface.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface row justification type. 
+		/// Gets or sets the user interface zone vertical justification type. 
 		/// </summary>
-		public UiZoneJustificationTypes JustificationType { get; set; }
+		public UiZoneVerticalJustificationTypes VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets the Graphic.
@@ -75,9 +76,9 @@ namespace Common.UserInterface.Models
 		public UiScreenZone UserInterfaceScreenZone { get; set; }
 
 		/// <summary>
-		/// Gets or sets the element rows.
+		/// Gets or sets the rows.
 		/// </summary>
-		public List<UiRow> ElementRows { get; set; }
+		public List<UiRow> Rows { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -98,11 +99,11 @@ namespace Common.UserInterface.Models
 			this.Graphic?.Draw(gameTime, gameServices, this.Position);
 
 			if (true == this.ResetCalculateCachedOffsets)
-			{ 
+			{
 				this.UpdateZoneOffsets();
 			}
 
-			foreach (var elementRow in this.ElementRows ?? [])
+			foreach (var elementRow in this.Rows ?? [])
 			{
 				elementRow.Draw(gameTime, gameServices, this.Position);
 			}
@@ -113,33 +114,50 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void UpdateZoneOffsets()
 		{
-			var contentHeight = this.ElementRows.Sum(e => e.TotalHeight);
-			var rowVerticalJustificationOffset = this.JustificationType switch
+			foreach (var layout in this.EnumerateRowLayout() ?? [])
 			{
-				UiZoneJustificationTypes.Center => (this.Area.Height - contentHeight) / 2,
-				UiZoneJustificationTypes.Bottom => this.Area.Height - contentHeight,
-				_ => 0,
-			};
-
-			if (0 > rowVerticalJustificationOffset)
-			{
-				rowVerticalJustificationOffset = 0;
-			}
-
-			var rowOffset = new Vector2
-			{
-				X = 0,
-				Y = rowVerticalJustificationOffset
-			};
-
-			foreach (var elementRow in this.ElementRows ?? [])
-			{
-				elementRow.CachedRowOffset = rowOffset;
-				rowOffset.Y += elementRow.TotalHeight;
-				elementRow.UpdateRowOffsets();
+				layout.Row.CachedRowOffset = layout.Offset;
+				layout.Row.UpdateRowOffsets();
 			}
 
 			this.ResetCalculateCachedOffsets = false;
+		}
+
+		/// <summary>
+		/// Enumerates the row layout.
+		/// </summary>
+		/// <returns>The enumerated row layout.</returns>
+		public IEnumerable<RowLayoutInfo> EnumerateRowLayout()
+		{
+			var contentHeight = this.Rows.Sum(r => r.TotalHeight);
+			var verticalOffset = this.VerticalJustificationType switch
+			{
+				UiZoneVerticalJustificationTypes.Center => (this.Area.Height - contentHeight) / 2,
+				UiZoneVerticalJustificationTypes.Bottom => this.Area.Height - contentHeight,
+				_ => 0
+			};
+
+			if (verticalOffset < 0)
+				verticalOffset = 0;
+
+			foreach (var row in this.Rows ?? [])
+			{
+				var rowTop = verticalOffset + row.Margin.TopMargin;
+				var rowBottom = rowTop + row.InsideHeight;
+				var result = new RowLayoutInfo
+				{
+					Row = row,
+					Offset = new Vector2
+					{
+						X = 0,
+						Y = rowTop
+					}
+				};
+
+				yield return result;
+
+				verticalOffset += row.TotalHeight;
+			}
 		}
 
 		/// <summary>
@@ -149,7 +167,7 @@ namespace Common.UserInterface.Models
 		{
 			this.CursorConfiguration?.Dispose();
 
-			foreach (var elementRow in this.ElementRows ?? [])
+			foreach (var elementRow in this.Rows ?? [])
 			{
 				elementRow?.Dispose();
 			}

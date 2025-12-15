@@ -1,6 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
@@ -15,7 +13,6 @@ using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
-using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -49,23 +46,9 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets the dynamic sized types.
 		/// </summary>
-		static public List<UiElementSizeType> DynamicSizedTypes { get; } =
+		readonly static public List<UiElementSizeType> DynamicSizedTypes =
 		[
 			UiElementSizeType.Flex
-		];
-
-		/// <summary>
-		/// Gets the fixed sized types.
-		/// </summary>
-		static public List<UiElementSizeType> FixedSizedTypes { get; } =
-		[
-			UiElementSizeType.FitContent,
-			UiElementSizeType.Fixed,
-			UiElementSizeType.ExtraSmall,
-			UiElementSizeType.Small,
-			UiElementSizeType.Medium,
-			UiElementSizeType.Large,
-			UiElementSizeType.ExtraLarge
 		];
 
 		/// <summary>
@@ -144,19 +127,19 @@ namespace Common.UserInterface.Services
 			{
 				runTimeOverlaidDrawService.AddDrawable(uiZone);
 
-				if (0 == uiZone.ElementRows.Count)
+				if (0 == uiZone.Rows.Count)
 				{
 					continue;
 				}
 
-				foreach (var uiRow in uiZone.ElementRows)
+				foreach (var uiRow in uiZone.Rows)
 				{
-					if (0 == uiRow.SubElements.Count)
+					if (0 == uiRow.Elements.Count)
 					{
 						continue;
 					}
 
-					foreach (var element in uiRow.SubElements)
+					foreach (var element in uiRow.Elements)
 					{
 						if ((element is UiButton button) &&
 							(null != button?.ClickAnimation))
@@ -166,195 +149,6 @@ namespace Common.UserInterface.Services
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Gets the user interface hover state at the screen location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns>The user interface hover state at the location if one is found.</returns>
-		public HoverState GetUiObjectAtScreenLocation(Vector2 location)
-		{
-			if (true != this.ActiveVisibilityGroupId.HasValue)
-			{
-				return null;
-			}
-
-			var activeUiGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
-			var uiZone = activeUiGroup.UiZones.FirstOrDefault(e => true == e.Area.Contains(location));
-
-			if (null == uiZone)
-			{
-				return null;
-			}
-
-			var result = new HoverState
-			{
-				TopCursorConfiguration = uiZone.BaseCursorConfiguration,
-				TopHoverCursor = uiZone.HoverCursor,
-				HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
-				{
-					Location = uiZone.Position.Coordinates,
-					Element = uiZone
-				}
-			};
-
-			if (0 == uiZone.ElementRows.Count)
-			{
-				return result;
-			}
-
-			var height = uiZone.ElementRows.Sum(e => e.TotalHeight);
-			var rowVerticalOffset = uiZone.JustificationType switch
-			{
-				UiZoneJustificationTypes.Center => (uiZone.Area.Height - height) / 2,
-				UiZoneJustificationTypes.Bottom => uiZone.Area.Height - height,
-				_ => 0,
-			};
-
-			foreach (var elementRow in uiZone.ElementRows)
-			{
-				var rowTop = 0f;
-				var rowBottom = 0f;
-				rowTop = uiZone.Position.Y + rowVerticalOffset;
-				rowBottom = rowTop + elementRow.TotalHeight;
-
-				if ((rowTop > location.Y) ||
-					(rowBottom < location.Y))
-				{
-					rowVerticalOffset += (rowBottom - rowTop);
-
-					continue;
-				}
-
-				rowVerticalOffset += rowBottom;
-				result.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
-				{
-					Location = uiZone.Position.Coordinates + new Vector2
-					{
-						X = 0,
-						Y = rowTop
-					},
-					Element = elementRow
-				};
-
-				if (null != elementRow.CursorConfiguration)
-				{
-					result.TopCursorConfiguration = elementRow.CursorConfiguration;
-				}
-
-				if (null != elementRow.HoverCursor)
-				{
-					result.TopHoverCursor = elementRow.HoverCursor;
-				}
-
-				var uiElementWithLocation = this.GetUiElementAtScreenLocationInRow(uiZone.Position, elementRow, rowTop + elementRow.Margin.TopMargin, location);
-
-				if (true == uiElementWithLocation.HasValue)
-				{
-					result.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
-					{
-						Location = uiElementWithLocation.Value.Location,
-						Element = uiElementWithLocation.Value.Element
-					};
-
-					if (null != uiElementWithLocation.Value.Element.CursorConfiguration)
-					{
-						result.TopCursorConfiguration = uiElementWithLocation.Value.Element.CursorConfiguration;
-					}
-
-					if (null != uiElementWithLocation.Value.Element.HoverCursor)
-					{
-						result.TopHoverCursor = uiElementWithLocation.Value.Element.HoverCursor;
-					}
-				}
-
-				return result;
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Gets the user interface element at the screen location in the row.
-		/// </summary>
-		/// <param name="position">The position.</param>
-		/// <param name="uiRow">The user interface row.</param>
-		/// <param name="heightOffset">The height offset.</param>
-		/// <param name="location">The location.</param>
-		/// <returns>The user interface element at the location if one is found.</returns>
-		private LocationExtender<IAmAUiElement>? GetUiElementAtScreenLocationInRow(Position position, UiRow uiRow, float heightOffset, Vector2 location)
-		{
-			var width = uiRow.SubElements.Sum(e => e.TotalWidth);
-			var elementHorizontalOffset = uiRow.HorizontalJustificationType switch
-			{
-				UiRowHorizontalJustificationType.Center => (uiRow.TotalWidth - width) / 2,
-				UiRowHorizontalJustificationType.Right => uiRow.TotalWidth - width,
-				_ => 0,
-			};
-
-			var largestHeight = uiRow.SubElements.Select(e => e.TotalHeight)
-												 .OrderDescending()
-												 .FirstOrDefault();
-
-			foreach (var element in uiRow.SubElements)
-			{
-				var verticallyCenterOffset = 0f;
-
-				switch (uiRow.VerticalJustificationType)
-				{
-					case UiRowVerticalJustificationType.Bottom:
-						verticallyCenterOffset = (largestHeight - element.TotalHeight);
-						break;
-					case UiRowVerticalJustificationType.Center:
-						verticallyCenterOffset = (largestHeight - element.TotalHeight) / 2;
-						break;
-					case UiRowVerticalJustificationType.Top:
-						break;
-				}
-
-				var elementRight = 0f;
-				var elementLeft = 0f;
-
-				switch (uiRow.HorizontalJustificationType)
-				{
-					case UiRowHorizontalJustificationType.Right:
-					case UiRowHorizontalJustificationType.Center:
-					case UiRowHorizontalJustificationType.Left:
-					default:
-						elementHorizontalOffset += element.Margin.LeftMargin;
-						elementLeft = elementHorizontalOffset + position.X;
-						elementHorizontalOffset += element.Area.Width;
-						elementRight = elementHorizontalOffset + position.X;
-						elementHorizontalOffset += element.Margin.RightMargin;
-						break;
-				}
-
-				if ((elementLeft <= location.X) &&
-					(elementRight >= location.X))
-				{
-					var elementTop = verticallyCenterOffset + heightOffset;
-					var elementBottom = elementTop + element.Area.Height;
-
-					if ((elementTop <= location.Y) &&
-						(elementBottom >= location.Y))
-					{
-						var result = new LocationExtender<IAmAUiElement>
-						{
-							Element = element,
-							Location = new Vector2
-							{
-								X = elementLeft,
-								Y = elementTop
-							}
-						};
-
-						return result;
-					}
-				}
-			}
-
-			return null;
 		}
 
 		/// <summary>
@@ -421,7 +215,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var contentHeight = rows.Sum(e => e.TotalHeight);
-			var dynamicRows = rows.Where(r => r.SubElements.Any(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType)));
+			var dynamicRows = rows.Where(r => r.Elements.Any(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType)));
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
 			var dynamicHeight = remainingHeight / dynamicRows.Count();
 
@@ -464,12 +258,12 @@ namespace Common.UserInterface.Services
 				ResetCalculateCachedOffsets = true,
 				UiZoneName = uiZoneModel.UiZoneName,
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
-				JustificationType = (UiZoneJustificationTypes)uiZoneModel.JustificationType,
+				VerticalJustificationType = (UiZoneVerticalJustificationTypes)uiZoneModel.VerticalJustificationType,
 				Graphic = background,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
 				UserInterfaceScreenZone = uiScreenZone,
-				ElementRows = rows
+				Rows = rows
 			};
 
 			return uiZone;
@@ -564,7 +358,7 @@ namespace Common.UserInterface.Services
 				Graphic = background,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
-				SubElements = subElements
+				Elements = subElements
 			};
 
 			return result;
@@ -584,14 +378,14 @@ namespace Common.UserInterface.Services
 			};
 			uiRow.Graphic?.SetDrawDimensions(dimensions);
 
-			if (0 == uiRow.SubElements.Count)
+			if (0 == uiRow.Elements.Count)
 			{
 				return;
 			}
 
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 
-			var dynamicHeightElements = uiRow.SubElements.Where(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType))
+			var dynamicHeightElements = uiRow.Elements.Where(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType))
 														 .ToList();
 
 			foreach (var uiElement in dynamicHeightElements ?? [])
@@ -599,7 +393,7 @@ namespace Common.UserInterface.Services
 				uiElementService.UpdateElementHeight(uiElement, dynamicHeight);
 			}
 
-			var contentHeight = uiRow.SubElements.Select(e => e.TotalHeight)
+			var contentHeight = uiRow.Elements.Select(e => e.TotalHeight)
 												 .OrderDescending()
 												 .FirstOrDefault();
 			uiRow.Area.Height = contentHeight;

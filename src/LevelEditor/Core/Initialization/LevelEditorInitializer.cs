@@ -150,7 +150,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneName = "Level Editor Label Row",
 							UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
 							BackgroundTexture = null,
-							JustificationType = (int)UiZoneJustificationTypes.Top,
+							VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Top,
 							ElementRows =
 							[
 								new UiRowModel
@@ -197,7 +197,7 @@ namespace LevelEditor.Core.Initialization
 							UiZoneName = "Disc Zone",
 							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
 							BackgroundTexture = null,
-							JustificationType = (int)UiZoneJustificationTypes.Top,
+							VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Top,
 							ZoneHoverCursorName = CommonCursorNames.BasicCursorName,
 							ElementRows =
 							[

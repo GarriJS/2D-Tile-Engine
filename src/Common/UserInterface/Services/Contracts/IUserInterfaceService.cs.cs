@@ -1,7 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.DiskModels.UserInterface;
+﻿using Common.DiskModels.UserInterface;
 using Common.UserInterface.Models;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace Common.UserInterface.Services.Contracts
@@ -11,6 +9,11 @@ namespace Common.UserInterface.Services.Contracts
 	/// </summary>
 	public interface IUserInterfaceService
 	{
+		/// <summary>
+		/// Gets the active visibility group id.
+		/// </summary>
+		public int? ActiveVisibilityGroupId { get; }
+
 		/// <summary>
 		/// Gets or sets the user interface groups.
 		/// </summary>
@@ -41,13 +44,6 @@ namespace Common.UserInterface.Services.Contracts
 		/// </summary>
 		/// <param name="uiGroup">The user interface group.</param>
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
-
-		/// <summary>
-		/// Gets the user interface hover state at the screen location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns>The user interface hover state at the location if one is found.</returns>
-		public HoverState GetUiObjectAtScreenLocation(Vector2 location);
 
 		/// <summary>
 		/// Gets the user interface zone.

@@ -8,14 +8,12 @@ namespace LevelEditor.Controls.Contexts
 	/// <summary>
 	/// Represents a level editor start control context.
 	/// </summary>
-	public class LevelEditorStartControlContext : ControlContext
+	/// <remarks>
+	/// Initializes the level editor start control context.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class LevelEditorStartControlContext(GameServiceContainer gameServices) : ControlContext(gameServices)
 	{
-		/// <summary>
-		/// Initializes the level editor start control context.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public LevelEditorStartControlContext(GameServiceContainer gameServices) : base(gameServices) { }
-
 		/// <summary>
 		/// Initializes the control context.
 		/// </summary>

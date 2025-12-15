@@ -38,11 +38,13 @@ namespace Engine.Physics.Models
 		/// <returns>The serialization model.</returns>
 		public PositionModel ToModel()
 		{
-			return new PositionModel
+			var result = new PositionModel
 			{
 				X = this.X,
 				Y = this.Y,
 			};
+
+			return result;
 		}
 	}
 }

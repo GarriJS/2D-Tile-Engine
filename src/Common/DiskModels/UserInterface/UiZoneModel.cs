@@ -12,8 +12,8 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
-		[JsonPropertyName("justificationType")]
-		public int JustificationType { get; set; }
+		[JsonPropertyName("verticalJustificationType")]
+		public int VerticalJustificationType { get; set; }
 
 		[JsonPropertyName("uiZoneType")]
 		public int UiZoneType { get; set; }

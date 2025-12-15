@@ -1,9 +1,9 @@
 ﻿namespace Common.UserInterface.Enums
 {
 	/// <summary>
-	/// Represents a user interface zone justification type.
+	/// Represents a user interface zone vertical justification type.
 	/// </summary>
-	public enum UiZoneJustificationTypes
+	public enum UiZoneVerticalJustificationTypes
 	{
 		/// <summary>
 		/// The center type.
