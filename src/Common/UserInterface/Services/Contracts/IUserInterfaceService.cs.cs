@@ -53,6 +53,13 @@ namespace Common.UserInterface.Services.Contracts
 		public UiZone GetUiZone(UiZoneModel uiZoneModel);
 
 		/// <summary>
+		/// Get the user interface block.
+		/// </summary>
+		/// <param name="uiBlockModel">The user interface block model.</param>
+		/// <returns>The user interface block.</returns>
+		public UiBlock GetUiBlock(UiBlockModel uiBlockModel);
+
+		/// <summary>
 		/// Gets the user interface row.
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>

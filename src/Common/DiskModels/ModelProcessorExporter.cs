@@ -34,6 +34,9 @@ namespace Common.DiskModels
 				(typeof(UiMarginModel), uiElementService.GetUiMarginFromModel),
 				(typeof(GraphicalTextWithMarginModel), uiElementService.GetGraphicTextWithMarginFromModel),
 				(typeof(UiGroupModel), uiService.GetUiGroup),
+				(typeof(UiZoneModel), uiService.GetUiZone),
+				(typeof(UiBlockModel), uiService.GetUiBlock),
+				(typeof(UiRowModel), uiService.GetUiRow),
 				(typeof(CursorModel), cursorService.GetCursor)
 			];
 

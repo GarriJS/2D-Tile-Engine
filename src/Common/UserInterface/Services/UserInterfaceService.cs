@@ -300,6 +300,101 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
+		/// Get the user interface block.
+		/// </summary>
+		/// <param name="uiBlockModel">The user interface block model.</param>
+		/// <returns>The user interface block.</returns>
+		public UiBlock GetUiBlock(UiBlockModel uiBlockModel)
+		{
+			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
+			var imageService = this._gameServices.GetService<IImageService>();
+			var cursorService = this._gameServices.GetService<ICursorService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
+
+			var zoneArea = uiZoneService.ScreenZoneSize;
+			var rows = new List<UiRow>();
+
+			foreach (var rowModel in uiBlockModel.Rows ?? [])
+			{
+				var row = this.GetUiRow(rowModel);
+				rows.Add(row);
+			}
+
+			var contentWidth = rows.Sum(e => e.TotalWidth);
+			var contentHeight = rows.Select(e => e.TotalHeight)
+										   .OrderDescending()
+										   .FirstOrDefault();
+			var dynamicRows = rows
+				.OfType<UiRow>()
+				.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType)))
+				.ToArray();
+			var remainingWidth = zoneArea.Width - contentWidth;
+			var dynamicWidth = remainingWidth / dynamicRows.Length;
+
+			if (zoneArea.Width * ElementSizesScalars.ExtraSmall.X > dynamicWidth)
+			{
+				// LOGGING
+
+				dynamicWidth = zoneArea.Width * ElementSizesScalars.ExtraSmall.X;
+			}
+
+			foreach (var dynamicRow in dynamicRows)
+			{
+				dynamicRow.Area.Width = dynamicWidth;
+			}
+
+			var blockArea = new SubArea
+			{
+				Width = zoneArea.Width,
+				Height = contentHeight
+			};
+			IAmAGraphic background = null;
+
+			if (null != uiBlockModel.BackgroundTexture)
+			{
+				background = imageService.GetImageFromModel(uiBlockModel.BackgroundTexture);
+
+				if ((true == uiBlockModel.ResizeTexture) ||
+					(background is CompositeImage))
+				{
+					var dimensions = new SubArea
+					{
+						Width = zoneArea.Width,
+						Height = blockArea.Height
+					};
+					background.SetDrawDimensions(dimensions);
+				}
+			}
+
+			var margin = uiElementService.GetUiMarginFromModel(uiBlockModel.Margin);
+			Cursor hoverCursor = null;
+
+			if ((false == string.IsNullOrEmpty(uiBlockModel.BlockHoverCursorName)) &&
+				(false == cursorService.Cursors.TryGetValue(uiBlockModel.BlockHoverCursorName, out hoverCursor)))
+			{
+				// LOGGING
+			}
+
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(blockArea, null);
+			var result = new UiBlock
+			{
+				UiBlockName = uiBlockModel.UiBlockName,
+				FlexRows = true,
+				Area = blockArea,
+				Margin = margin,
+				HorizontalJustificationType = uiBlockModel.HorizontalJustificationType,
+				VerticalJustificationType = uiBlockModel.VerticalJustificationType,
+				Graphic = background,
+				HoverCursor = hoverCursor,
+				CursorConfiguration = cursorConfiguration,
+				Rows = rows
+			};
+
+			return result;
+		}
+
+		/// <summary>
 		/// Gets the user interface row.
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
@@ -326,9 +421,9 @@ namespace Common.UserInterface.Services
 										   .OrderDescending()
 										   .FirstOrDefault();
 			var dynamicWidthElements = subElements.Where(e => UiElementSizeType.FlexMax == e.HorizontalSizeType)
-											   .ToList();
+											      .ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
-			var dynamicWidth = remainingWidth / dynamicWidthElements.Count;
+			var dynamicWidth = remainingWidth / dynamicWidthElements.Length;
 
 			if (zoneArea.Width * ElementSizesScalars.ExtraSmall.X > dynamicWidth)
 			{
