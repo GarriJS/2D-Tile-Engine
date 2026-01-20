@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents user screen interface zone types.
 	/// </summary>
-	public enum UiScreenZoneTypes
+	public enum UiScreenZoneType
 	{
 		/// <summary>
 		/// The none type.

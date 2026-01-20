@@ -3,6 +3,7 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.LayoutInfo;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
@@ -38,7 +39,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface zone vertical justification type. 
 		/// </summary>
-		public UiZoneVerticalJustificationTypes VerticalJustificationType { get; set; }
+		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets the Graphic.
@@ -76,9 +77,9 @@ namespace Common.UserInterface.Models
 		public UiScreenZone UserInterfaceScreenZone { get; set; }
 
 		/// <summary>
-		/// Gets or sets the rows.
+		/// Gets or sets the child components.
 		/// </summary>
-		public List<UiRow> Rows { get; set; }
+		public List<IAmAUiZoneChild> Components { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -103,7 +104,7 @@ namespace Common.UserInterface.Models
 				this.UpdateZoneOffsets();
 			}
 
-			foreach (var elementRow in this.Rows ?? [])
+			foreach (var elementRow in this.Components ?? [])
 			{
 				elementRow.Draw(gameTime, gameServices, this.Position);
 			}
@@ -114,39 +115,38 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void UpdateZoneOffsets()
 		{
-			foreach (var layout in this.EnumerateRowLayout() ?? [])
+			foreach (var layout in this.EnumerateLayout() ?? [])
 			{
-				layout.Row.CachedRowOffset = layout.Offset;
-				layout.Row.UpdateRowOffsets();
+				layout.Component.CachedOffset = layout.Offset;
+				layout.Component.UpdateOffsets();
 			}
 
 			this.ResetCalculateCachedOffsets = false;
 		}
 
 		/// <summary>
-		/// Enumerates the row layout.
+		/// Enumerates the Component layout.
 		/// </summary>
-		/// <returns>The enumerated row layout.</returns>
-		public IEnumerable<RowLayoutInfo> EnumerateRowLayout()
+		/// <returns>The enumerated Component layout.</returns>
+		public IEnumerable<ComponentLayoutInfo> EnumerateLayout()
 		{
-			var contentHeight = this.Rows.Sum(r => r.TotalHeight);
+			var contentHeight = this.Components.Sum(r => r.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
 			{
-				UiZoneVerticalJustificationTypes.Center => (this.Area.Height - contentHeight) / 2,
-				UiZoneVerticalJustificationTypes.Bottom => this.Area.Height - contentHeight,
+				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
+				UiVerticalJustificationType.Bottom => this.Area.Height - contentHeight,
 				_ => 0
 			};
 
 			if (verticalOffset < 0)
 				verticalOffset = 0;
 
-			foreach (var row in this.Rows ?? [])
+			foreach (var component in this.Components ?? [])
 			{
-				var rowTop = verticalOffset + row.Margin.TopMargin;
-				var rowBottom = rowTop + row.InsideHeight;
-				var result = new RowLayoutInfo
+				var rowTop = verticalOffset + component.Margin.TopMargin;
+				var result = new ComponentLayoutInfo
 				{
-					Row = row,
+					Component = component,
 					Offset = new Vector2
 					{
 						X = 0,
@@ -156,7 +156,7 @@ namespace Common.UserInterface.Models
 
 				yield return result;
 
-				verticalOffset += row.TotalHeight;
+				verticalOffset += component.TotalHeight;
 			}
 		}
 
@@ -167,7 +167,7 @@ namespace Common.UserInterface.Models
 		{
 			this.CursorConfiguration?.Dispose();
 
-			foreach (var elementRow in this.Rows ?? [])
+			foreach (var elementRow in this.Components ?? [])
 			{
 				elementRow?.Dispose();
 			}

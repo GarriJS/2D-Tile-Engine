@@ -48,7 +48,7 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		readonly static public List<UiElementSizeType> DynamicSizedTypes =
 		[
-			UiElementSizeType.Flex
+			UiElementSizeType.FlexMax
 		];
 
 		/// <summary>
@@ -127,24 +127,51 @@ namespace Common.UserInterface.Services
 			{
 				runTimeOverlaidDrawService.AddDrawable(uiZone);
 
-				if (0 == uiZone.Rows.Count)
+				if (0 == uiZone.Components.Count)
 				{
 					continue;
 				}
 
-				foreach (var uiRow in uiZone.Rows)
+				foreach (var uiComponent in uiZone.Components)
 				{
-					if (0 == uiRow.Elements.Count)
+					if (uiComponent is UiBlock uiBlock)
 					{
-						continue;
-					}
-
-					foreach (var element in uiRow.Elements)
-					{
-						if ((element is UiButton button) &&
-							(null != button?.ClickAnimation))
+						if (0 == uiBlock.Rows.Count)
 						{
-							button.ClickAnimation.ResetTriggeredAnimation();
+							continue;
+						}
+
+						foreach (var uiRow in uiBlock.Rows)
+						{
+							if (0 == uiRow.Elements.Count)
+							{
+								continue;
+							}
+
+							foreach (var element in uiRow.Elements)
+							{
+								if ((element is UiButton button) &&
+									(null != button?.ClickAnimation))
+								{
+									button.ClickAnimation.ResetTriggeredAnimation();
+								}
+							}
+						}
+					}
+					else if (uiComponent is UiRow uiRow)
+					{
+						if (0 == uiRow.Elements.Count)
+						{
+							continue;
+						}
+
+						foreach (var element in uiRow.Elements)
+						{
+							if ((element is UiButton button) &&
+								(null != button?.ClickAnimation))
+							{
+								button.ClickAnimation.ResetTriggeredAnimation();
+							}
 						}
 					}
 				}
@@ -201,12 +228,12 @@ namespace Common.UserInterface.Services
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneTypes)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
+			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneType)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
 			{
-				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneTypes.Unknown];
+				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneType.Unknown];
 			}
 
-			var rows = new List<UiRow>();
+			var rows = new List<IAmAUiZoneChild>();
 
 			foreach (var elementRowModel in uiZoneModel.ElementRows ?? [])
 			{
@@ -215,7 +242,10 @@ namespace Common.UserInterface.Services
 			}
 
 			var contentHeight = rows.Sum(e => e.TotalHeight);
-			var dynamicRows = rows.Where(r => r.Elements.Any(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType)));
+			var dynamicRows = rows
+				.OfType<UiRow>()
+				.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType)))
+				.ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
 			var dynamicHeight = remainingHeight / dynamicRows.Count();
 
@@ -258,12 +288,12 @@ namespace Common.UserInterface.Services
 				ResetCalculateCachedOffsets = true,
 				UiZoneName = uiZoneModel.UiZoneName,
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
-				VerticalJustificationType = (UiZoneVerticalJustificationTypes)uiZoneModel.VerticalJustificationType,
+				VerticalJustificationType = (UiVerticalJustificationType)uiZoneModel.VerticalJustificationType,
 				Graphic = background,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
 				UserInterfaceScreenZone = uiScreenZone,
-				Rows = rows
+				Components = rows
 			};
 
 			return uiZone;
@@ -295,7 +325,7 @@ namespace Common.UserInterface.Services
 			var contentHeight = subElements.Select(e => e.TotalHeight)
 										   .OrderDescending()
 										   .FirstOrDefault();
-			var dynamicWidthElements = subElements.Where(e => UiElementSizeType.Flex == e.HorizontalSizeType)
+			var dynamicWidthElements = subElements.Where(e => UiElementSizeType.FlexMax == e.HorizontalSizeType)
 											   .ToList();
 			var remainingWidth = zoneArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicWidthElements.Count;
@@ -330,8 +360,6 @@ namespace Common.UserInterface.Services
 					{
 						Width = zoneArea.Width,
 						Height = rowArea.Height
-							   + (uiRowModel.Margin?.TopMargin ?? 0)
-							   + (uiRowModel.Margin?.BottomMargin ?? 0)
 					};
 					background.SetDrawDimensions(dimensions);
 				}

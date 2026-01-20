@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Common.UserInterface.Models
 {
@@ -29,12 +28,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			if (true != this.UiZones?.Any())
-			{ 
-				return;
-			}
-
-			foreach (var uiZone in this.UiZones)
+			foreach (var uiZone in this.UiZones ?? [])
 			{
 				uiZone?.Dispose();
 			}

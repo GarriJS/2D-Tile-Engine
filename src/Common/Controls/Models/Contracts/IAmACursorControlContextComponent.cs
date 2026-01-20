@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 namespace Common.Controls.Models.Contracts
 {
 	/// <summary>
-	/// Represents a cursor control context component.
+	/// Represents a cursor control context Component.
 	/// </summary>
 	public interface IAmACursorControlContextComponent : IAmAControlContextComponent
 	{

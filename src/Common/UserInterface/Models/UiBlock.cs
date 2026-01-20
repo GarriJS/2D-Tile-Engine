@@ -17,9 +17,9 @@ using System.Linq;
 namespace Common.UserInterface.Models
 {
 	/// <summary>
-	/// Represents a user interface row.
+	/// Represents a user interface block.
 	/// </summary>
-	public class UiRow : IAmAUiZoneChild, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
+	public class UiBlock : IAmAUiZoneChild, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -27,14 +27,14 @@ namespace Common.UserInterface.Models
 		public Vector2? CachedOffset { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface row name.
+		/// Gets or sets the user interface block name.
 		/// </summary>
-		public string UiRowName { get; set; }
+		public string UiBlockName { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the user interface row should flex.
+		/// Gets or sets a value indicating whether the user interface block should flex the rows by vertically stacking them.
 		/// </summary>
-		public bool Flex { get; set; }
+		public bool FlexRows { get; set; }
 
 		/// <summary>
 		/// Gets the total width.
@@ -94,18 +94,18 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the hover configuration.
 		/// </summary>
-		public CursorConfiguration<UiRow> CursorConfiguration { get; set; }
+		public CursorConfiguration<UiBlock> CursorConfiguration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the elements.
+		/// Gets or sets the rows.
 		/// </summary>
-		public List<IAmAUiElement> Elements { get; set; }
+		public List<UiRow> Rows { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseHoverEvent(CursorInteraction<UiRow> cursorInteraction)
+		public void RaiseHoverEvent(CursorInteraction<UiBlock> cursorInteraction)
 		{
 			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
@@ -122,9 +122,9 @@ namespace Common.UserInterface.Models
 			var graphicOffset = offset + (this.CachedOffset ?? default);
 			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
 
-			foreach (var element in this.Elements ?? [])
+			foreach (var elementRow in this.Rows ?? [])
 			{
-				element.Draw(gameTime, gameServices, position, graphicOffset + (element.CachedElementOffset ?? default));
+				elementRow.Draw(gameTime, gameServices, position, graphicOffset);
 			}
 		}
 
@@ -135,7 +135,7 @@ namespace Common.UserInterface.Models
 		{
 			foreach (var layout in this.EnumerateLayout() ?? [])
 			{
-				layout.Element.CachedElementOffset = layout.Offset;
+				layout.Row.CachedOffset = layout.Offset;
 			}
 		}
 
@@ -143,60 +143,57 @@ namespace Common.UserInterface.Models
 		/// Enumerates the layout.
 		/// </summary>
 		/// <returns>The enumerated layout.</returns>
-		public IEnumerable<ElementLayoutInfo> EnumerateLayout()
+		public IEnumerable<RowLayoutInfo> EnumerateLayout()
 		{
-			var contentWidth = this.Elements.Sum(e => e.TotalWidth);
+			var contentWidth = this.Rows.Sum(e => e.TotalWidth);
+			var contentHeight = this.Rows.Sum(e => e.TotalHeight);
 			var horizontalOffset = this.HorizontalJustificationType switch
 			{
 				UiHorizontalJustificationType.Center => (this.TotalWidth - contentWidth) / 2,
 				UiHorizontalJustificationType.Right => this.TotalWidth - contentWidth,
 				_ => 0
 			};
+			var verticalOffset = this.VerticalJustificationType switch
+			{
+				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
+				UiVerticalJustificationType.Bottom => this.Area.Height - contentHeight,
+				_ => 0
+			};
 
 			if (horizontalOffset < 0)
 				horizontalOffset = 0;
 
-			foreach (var element in this.Elements ?? [])
+			if (verticalOffset < 0)
+				verticalOffset = 0;
+
+			foreach (var row in this.Rows ?? [])
 			{
-				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
-				var elementRight = elementLeft + element.InsideWidth;
-
-				var verticalOffset = this.VerticalJustificationType switch
+				var rowTop = verticalOffset + row.Margin.TopMargin;
+				var rowLeft = horizontalOffset + row.Margin.LeftMargin;
+				var result = new RowLayoutInfo
 				{
-					UiVerticalJustificationType.Center => (element.TotalHeight - this.InsideHeight) / 2,
-					UiVerticalJustificationType.Bottom => element.TotalHeight - this.InsideHeight,
-					_ => 0
-				};
-
-				if (verticalOffset < 0)
-					verticalOffset = 0;
-
-				var elementTop = verticalOffset + element.Margin.TopMargin;
-				var elementBottom = elementTop + element.InsideHeight;
-				var result = new ElementLayoutInfo
-				{
-					Element = element,
+					Row = row,
 					Offset = new Vector2
 					{
-						X = elementLeft,
-						Y = elementTop
+						X = rowLeft,
+						Y = rowTop
 					}
 				};
 
 				yield return result;
 
-				horizontalOffset += element.TotalWidth;
+				verticalOffset += row.TotalHeight;
 			}
 		}
 
 		/// <summary>
-		/// Disposes of the user interface row.
+		/// Disposes of the user interface block.
 		/// </summary>
 		public void Dispose()
 		{
-			foreach (var subElement in this.Elements ?? Enumerable.Empty<IAmAUiElement>())
+			foreach (var row in this.Rows ?? [])
 			{
-				subElement?.Dispose();
+				row?.Dispose();
 			}
 		}
 	}

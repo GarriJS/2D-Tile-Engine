@@ -1,9 +1,9 @@
 ﻿namespace Common.UserInterface.Enums
 {
 	/// <summary>
-	/// Represents a user interface zone vertical justification type.
+	/// Represents a user interface vertical justification type.
 	/// </summary>
-	public enum UiZoneVerticalJustificationTypes
+	public enum UiVerticalJustificationType
 	{
 		/// <summary>
 		/// The center type.
@@ -19,5 +19,10 @@
 		/// The bottom type.
 		/// </summary>
 		Bottom = 2,
+
+		/// <summary>
+		/// The space between type
+		/// </summary>
+		SpaceBetween = 3,
 	}
 }

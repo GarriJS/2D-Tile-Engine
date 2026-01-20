@@ -148,17 +148,17 @@ namespace LevelEditor.Core.Initialization
 						new UiZoneModel
 						{
 							UiZoneName = "Level Editor Label Row",
-							UiZoneType = (int)UiScreenZoneTypes.Row1Col4,
+							UiZoneType = (int)UiScreenZoneType.Row1Col4,
 							BackgroundTexture = null,
-							VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Top,
+							VerticalJustificationType = (int)UiVerticalJustificationType.Top,
 							ElementRows =
 							[
 								new UiRowModel
 								{
 									UiRowName = "Level Editor Label Row",
 									ResizeTexture = true,
-									HorizontalJustificationType = UiRowHorizontalJustificationType.Right,
-									VerticalJustificationType = UiRowVerticalJustificationType.Center,
+									HorizontalJustificationType = UiHorizontalJustificationType.Right,
+									VerticalJustificationType = UiVerticalJustificationType.Center,
 									SubElements =
 									[
 										new UiTextModel
@@ -170,8 +170,8 @@ namespace LevelEditor.Core.Initialization
 												LeftMargin = 10,
 												RightMargin = 10,
 											},
-											HorizontalSizeType = (int)UiElementSizeType.FitContent,
-											VerticalSizeType = (int)UiElementSizeType.FitContent,
+											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+											VerticalSizeType = (int)UiElementSizeType.FlexMin,
 											Text = new GraphicalTextModel
 											{
 												Text = "Level Editor",
@@ -195,9 +195,9 @@ namespace LevelEditor.Core.Initialization
 						new UiZoneModel
 						{
 							UiZoneName = "Disc Zone",
-							UiZoneType = (int)UiScreenZoneTypes.Row3Col1,
+							UiZoneType = (int)UiScreenZoneType.Row3Col1,
 							BackgroundTexture = null,
-							VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Top,
+							VerticalJustificationType = (int)UiVerticalJustificationType.Top,
 							ZoneHoverCursorName = CommonCursorNames.BasicCursorName,
 							ElementRows =
 							[
@@ -219,8 +219,8 @@ namespace LevelEditor.Core.Initialization
 										}
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationType.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationType.Center,
+									HorizontalJustificationType = (int)UiHorizontalJustificationType.Center,
+									VerticalJustificationType = (int)UiVerticalJustificationType.Center,
 									SubElements =
 									[
 										new UiTextModel
@@ -228,8 +228,8 @@ namespace LevelEditor.Core.Initialization
 											UiElementName = "Create Level Label",
 											Margin = new UiMarginModel
 											{
-												LeftMargin = 0,
-												RightMargin = 0,
+												LeftMargin = 10,
+												RightMargin = 5,
 											},
 											Text = new GraphicalTextModel
 											{
@@ -237,14 +237,14 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											HorizontalSizeType = (int)UiElementSizeType.FitContent,
-											VerticalSizeType = (int)UiElementSizeType.FitContent
+											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+											VerticalSizeType = (int)UiElementSizeType.FlexMin
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Create Level Button",
-											HorizontalSizeType = (int)UiElementSizeType.FitContent,
-											VerticalSizeType = (int)UiElementSizeType.FitContent,
+											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+											VerticalSizeType = (int)UiElementSizeType.FlexMin,
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -277,14 +277,14 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											HorizontalSizeType = (int)UiElementSizeType.FitContent,
-											VerticalSizeType = (int)UiElementSizeType.FitContent
+											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+											VerticalSizeType = (int)UiElementSizeType.FlexMin
 										},
 										new UiButtonModel
 										{
 											UiElementName = "Save Level Button",
-											HorizontalSizeType = (int)UiElementSizeType.FitContent,
-											VerticalSizeType = (int)UiElementSizeType.FitContent,
+											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+											VerticalSizeType = (int)UiElementSizeType.FlexMin,
 											ClickableAreaAnimation = new TriggeredAnimationModel
 											{
 												CurrentFrameIndex = 0,
@@ -307,7 +307,12 @@ namespace LevelEditor.Core.Initialization
 								},
 								new UiRowModel
 								{
-									UiRowName = "Levels Header",
+									UiRowName = "Levels Header",                
+									Margin = new UiMarginModel
+									{
+										TopMargin = 50,
+										BottomMargin = 50
+									},
 									ResizeTexture = true,
 									BackgroundTexture = new SimpleImageModel
 									{
@@ -319,8 +324,8 @@ namespace LevelEditor.Core.Initialization
 										}
 									},
 									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiRowHorizontalJustificationType.Center,
-									VerticalJustificationType = (int)UiRowVerticalJustificationType.Center,
+									HorizontalJustificationType = (int)UiHorizontalJustificationType.Center,
+									VerticalJustificationType = (int)UiVerticalJustificationType.Center,
 									SubElements =
 									[
 										new UiTextModel
@@ -332,8 +337,8 @@ namespace LevelEditor.Core.Initialization
 												TextColor = PalletColors.Hex_BF6F4A,
 												FontName = FontNames.MonoBold
 											},
-											HorizontalSizeType = (int)UiElementSizeType.FitContent,
-											VerticalSizeType = (int)UiElementSizeType.FitContent
+											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+											VerticalSizeType = (int)UiElementSizeType.FlexMin
 										}
 									]
 								},

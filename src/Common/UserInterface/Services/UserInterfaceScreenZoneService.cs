@@ -29,25 +29,25 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public Dictionary<UiScreenZoneTypes, UiScreenZone> UserInterfaceScreenZones { get; set; } = [];
+		public Dictionary<UiScreenZoneType, UiScreenZone> UserInterfaceScreenZones { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the zone type mapper.
 		/// </summary>
-		private Dictionary<(int row, int col), UiScreenZoneTypes> ZoneTypeMapper { get; } = new()
+		private Dictionary<(int row, int col), UiScreenZoneType> ZoneTypeMapper { get; } = new()
 		{
-			{ (1, 1), UiScreenZoneTypes.Row1Col1 },
-			{ (2, 1), UiScreenZoneTypes.Row2Col1 },
-			{ (3, 1), UiScreenZoneTypes.Row3Col1 },
-			{ (1, 2), UiScreenZoneTypes.Row1Col2 },
-			{ (2, 2), UiScreenZoneTypes.Row2Col2 },
-			{ (3, 2), UiScreenZoneTypes.Row3Col2 },
-			{ (1, 3), UiScreenZoneTypes.Row1Col3 },
-			{ (2, 3), UiScreenZoneTypes.Row2Col3 },
-			{ (3, 3), UiScreenZoneTypes.Row3Col3 },
-			{ (1, 4), UiScreenZoneTypes.Row1Col4 },
-			{ (2, 4), UiScreenZoneTypes.Row2Col4 },
-			{ (3, 4), UiScreenZoneTypes.Row3Col4 }
+			{ (1, 1), UiScreenZoneType.Row1Col1 },
+			{ (2, 1), UiScreenZoneType.Row2Col1 },
+			{ (3, 1), UiScreenZoneType.Row3Col1 },
+			{ (1, 2), UiScreenZoneType.Row1Col2 },
+			{ (2, 2), UiScreenZoneType.Row2Col2 },
+			{ (3, 2), UiScreenZoneType.Row3Col2 },
+			{ (1, 3), UiScreenZoneType.Row1Col3 },
+			{ (2, 3), UiScreenZoneType.Row2Col3 },
+			{ (3, 3), UiScreenZoneType.Row3Col3 },
+			{ (1, 4), UiScreenZoneType.Row1Col4 },
+			{ (2, 4), UiScreenZoneType.Row2Col4 },
+			{ (3, 4), UiScreenZoneType.Row3Col4 }
 		};
 
 		/// <summary>
@@ -121,11 +121,11 @@ namespace Common.UserInterface.Services
 			var noneArea = areaService.GetAreaFromModel(noneAreaModel);
 			var noneZone = new UiScreenZone
 			{
-				UiZoneType = UiScreenZoneTypes.Unknown,
+				UiZoneType = UiScreenZoneType.Unknown,
 				Area = noneArea
 			};
 
-			this.UserInterfaceScreenZones.TryAdd(UiScreenZoneTypes.Unknown, noneZone);
+			this.UserInterfaceScreenZones.TryAdd(UiScreenZoneType.Unknown, noneZone);
 		}
 	}
 }

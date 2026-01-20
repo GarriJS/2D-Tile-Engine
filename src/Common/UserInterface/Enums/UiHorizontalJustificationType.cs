@@ -1,9 +1,9 @@
 ﻿namespace Common.UserInterface.Enums
 {
 	/// <summary>
-	/// Represents user interface row horizontal justification types.
+	/// Represents user interface horizontal justification types.
 	/// </summary>
-	public enum UiRowHorizontalJustificationType
+	public enum UiHorizontalJustificationType
 	{
 		/// <summary>
 		/// The center type.
@@ -18,6 +18,11 @@
 		/// <summary>
 		/// The right type.
 		/// </summary>
-		Right = 2
+		Right = 2,
+
+		/// <summary>
+		/// The space between type.
+		/// </summary>
+		SpaceBetween = 3,
 	}
 }

@@ -97,7 +97,7 @@ namespace Common.UserInterface.Services
 			var area = this.GetElementArea(uiElementModel);
 			IAmAUiElement uiElement = uiElementModel switch
 			{
-				UiTextModel textModel => new UiText { },
+				UiTextModel textModel => new UiText(),
 				UiButtonModel buttonModel => this.GetUiButton(buttonModel, area),
 				_ => null,
 			};
@@ -240,8 +240,8 @@ namespace Common.UserInterface.Services
 
 			SubArea elementFitDimensions = null;
 
-			if ((UiElementSizeType.FitContent == elementModel.HorizontalSizeType) ||
-				(UiElementSizeType.FitContent == elementModel.VerticalSizeType))
+			if ((UiElementSizeType.FlexMin == elementModel.HorizontalSizeType) ||
+				(UiElementSizeType.FlexMin == elementModel.VerticalSizeType))
 			{
 				elementFitDimensions = this.GetElementFitDimensions(elementModel);
 			}
@@ -253,7 +253,7 @@ namespace Common.UserInterface.Services
 				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Medium.X,
 				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Large.X,
 				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.ExtraLarge.X,
-				UiElementSizeType.FitContent => elementFitDimensions.Width,
+				UiElementSizeType.FlexMin => elementFitDimensions.Width,
 				_ => 0
 			};
 			var uiElementVerticalSize = elementModel.VerticalSizeType switch
@@ -263,7 +263,7 @@ namespace Common.UserInterface.Services
 				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Medium.Y,
 				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Large.Y,
 				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.ExtraLarge.Y,
-				UiElementSizeType.FitContent => elementFitDimensions.Height,
+				UiElementSizeType.FlexMin => elementFitDimensions.Height,
 				_ => 0
 			};
 

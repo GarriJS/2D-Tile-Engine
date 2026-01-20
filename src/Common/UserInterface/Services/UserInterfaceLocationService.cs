@@ -104,40 +104,126 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Tries to get the user interface row at the given location.
+		/// Tries to get the user interface zone child at the given location.
 		/// </summary>
 		/// <param name="location">The location.</param>
-		/// <param name="locatedUiRow">The located user interface row.</param>
-		/// <returns>A value indicating whether a user interface row was found at the location.</returns>
-		public bool TryGetUiRowAtLocation(Vector2 location, out LocationExtender<UiRow> locatedUiRow)
+		/// <param name="uiZoneChild">The user interface child.</param>
+		/// <returns>A value indicating whether the user interface zone child was found at the location.</returns>
+		public bool TryGetUiZoneChildAtLocation(Vector2 location, out LocationExtender<IAmAUiZoneChild> uiZoneChild)
 		{
-			locatedUiRow = null;
+			uiZoneChild = null;
 
 			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
-				(0 == uiZone.Rows.Count))
+				(0 == uiZone.Components.Count))
 			{
 				return false;
 			}
 
-			foreach (var rowLayout in uiZone.EnumerateRowLayout() ?? [])
+			foreach (var componentLayout in uiZone.EnumerateLayout() ?? [])
 			{
-				var rowTop = uiZone.Position.Y + rowLayout.Offset.Y;
-				var rowBottom = rowTop + rowLayout.Row.InsideHeight;
+				var rowTop = uiZone.Position.Y + componentLayout.Offset.Y;
+				var rowBottom = rowTop + componentLayout.Component.InsideHeight;
 
 				if ((location.Y < rowTop) ||
 					(location.Y > rowBottom))
 					continue;
 
-				locatedUiRow = new LocationExtender<UiRow>
+				uiZoneChild = new LocationExtender<IAmAUiZoneChild>
 				{
-					Location = uiZone.Position.Coordinates + rowLayout.Offset,
-					Subject = rowLayout.Row
+					Location = uiZone.Position.Coordinates + componentLayout.Offset,
+					Subject = componentLayout.Component
 				};
 
 				break;
 			}
 
-			return locatedUiRow is not null;
+			return uiZoneChild is not null;
+		}
+
+		/// <summary>
+		/// Tries to get the user interface block at the given location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="uiBlock">The located user interface block.</param>
+		/// <returns>A value indicating whether a user interface block was found at the location.</returns>
+		public bool TryGetUiBlockAtLocation(Vector2 location, out LocationExtender<UiBlock> uiBlock)
+		{
+			uiBlock = null;
+
+			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
+				(0 == uiZone.Components.Count))
+			{
+				return false;
+			}
+
+			foreach (var componentLayout in uiZone.EnumerateLayout() ?? [])
+			{
+				var rowTop = uiZone.Position.Y + componentLayout.Offset.Y;
+				var rowBottom = rowTop + componentLayout.Component.InsideHeight;
+
+				if ((location.Y < rowTop) ||
+					(location.Y > rowBottom))
+					continue;
+
+				if (componentLayout.Component is not UiBlock uiBlockComponent)
+				{
+					return false;
+				}
+
+				uiBlock = new LocationExtender<UiBlock>
+				{
+					Location = uiZone.Position.Coordinates + componentLayout.Offset,
+					Subject = uiBlockComponent
+				};
+
+				break;
+			}
+
+			return uiBlock is not null;
+		}
+
+		/// <summary>
+		/// Tries to get the user interface row at the given location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="uiRow">The located user interface row.</param>
+		/// <returns>A value indicating whether a user interface row was found at the location.</returns>
+		public bool TryGetUiRowAtLocation(Vector2 location, out LocationExtender<UiRow> uiRow)
+		{
+			uiRow = null;
+
+			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
+				(0 == uiZone.Components.Count))
+			{
+				return false;
+			}
+
+			foreach (var componentLayout in uiZone.EnumerateLayout() ?? [])
+			{
+				var rowTop = uiZone.Position.Y + componentLayout.Offset.Y;
+				var rowBottom = rowTop + componentLayout.Component.InsideHeight;
+
+				if ((location.Y < rowTop) ||
+					(location.Y > rowBottom))
+					continue;
+
+				if (componentLayout.Component is UiBlock uiBlockComponent)
+				{
+
+				}
+				else if (componentLayout.Component is UiRow uiRowComponent)
+				{
+					uiRow = new LocationExtender<UiRow>
+					{
+						Location = uiZone.Position.Coordinates + componentLayout.Offset,
+						Subject = uiRowComponent
+					};
+
+					break;
+				}
+			}
+
+			return uiRow is not null;
 		}
 
 		/// <summary>
@@ -156,7 +242,7 @@ namespace Common.UserInterface.Services
 				return false;
 			}
 
-			foreach (var elementLayout in locatedUiRow.Subject.EnumerateElementLayout() ?? [])
+			foreach (var elementLayout in locatedUiRow.Subject.EnumerateLayout() ?? [])
 			{
 				var elementLeft = locatedUiRow.Location.X + elementLayout.Offset.X;
 				var elementRight = elementLeft + elementLayout.Element.InsideWidth;

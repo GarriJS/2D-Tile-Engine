@@ -6,14 +6,14 @@
 	public enum UiElementSizeType
 	{
 		/// <summary>
-		/// The fit content type.
+		/// The flex minimum type.
 		/// </summary>
-		FitContent = 0,
+		FlexMin = 0,
 
 		/// <summary>
-		/// The flex type.
+		/// The flex maximum type.
 		/// </summary>
-		Flex = 1,
+		FlexMax = 1,
 
 		/// <summary>
 		/// The fixed type.

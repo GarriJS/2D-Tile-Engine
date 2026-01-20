@@ -128,7 +128,7 @@ namespace LevelEditor.Spritesheets.Services
 		/// <param name="backgroundTexture">The background texture.</param>
 		/// <param name="uiScreenZoneType">The user interface zone type.</param>
 		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiScreenZoneTypes uiScreenZoneType)
+		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiScreenZoneType uiScreenZoneType)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			
@@ -139,7 +139,7 @@ namespace LevelEditor.Spritesheets.Services
 			{
 				UiZoneName = "Spritesheet Buttons Zone",
 				UiZoneType = (int)uiScreenZoneType,
-				VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Bottom,
+				VerticalJustificationType = (int)UiVerticalJustificationType.Bottom,
 				ElementRows =
 				[
 					new UiRowModel
@@ -161,8 +161,8 @@ namespace LevelEditor.Spritesheets.Services
 							}
 						},
 						RowHoverCursorName = CommonCursorNames.BasicCursorName,
-						HorizontalJustificationType =  UiRowHorizontalJustificationType.Center,
-						VerticalJustificationType = UiRowVerticalJustificationType.Bottom,
+						HorizontalJustificationType =  UiHorizontalJustificationType.Center,
+						VerticalJustificationType = UiVerticalJustificationType.Bottom,
 						SubElements = flattenedButtons
 					}
 				]

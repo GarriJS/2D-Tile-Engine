@@ -12,7 +12,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface zone type.
 		/// </summary>
-		public UiScreenZoneTypes UiZoneType { get; set; }
+		public UiScreenZoneType UiZoneType { get; set; }
 
 		/// <summary>
 		/// Gets the position.

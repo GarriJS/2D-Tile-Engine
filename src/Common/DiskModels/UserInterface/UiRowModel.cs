@@ -18,10 +18,10 @@ namespace Common.DiskModels.UserInterface
 		public UiMarginModel Margin { get; set; }
 
 		[JsonPropertyName("horizontalJustificationType")]
-		public UiRowHorizontalJustificationType HorizontalJustificationType { get; set; }
+		public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
 
 		[JsonPropertyName("verticalJustificationType")]
-		public UiRowVerticalJustificationType VerticalJustificationType { get; set; }
+		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		[JsonPropertyName("rowHoverCursorName")]
 		public string RowHoverCursorName { get; set; }

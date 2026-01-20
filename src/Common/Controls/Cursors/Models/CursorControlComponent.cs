@@ -13,10 +13,10 @@ using System.Collections.Generic;
 namespace Common.Controls.Cursors.Models
 {
 	/// <summary>
-	/// Represents a cursor control component.
+	/// Represents a cursor control Component.
 	/// </summary>
 	/// <remarks>
-	/// Initializes a cursor control component.
+	/// Initializes a cursor control Component.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class CursorControlComponent(GameServiceContainer gameServices) : IAmACursorControlContextComponent

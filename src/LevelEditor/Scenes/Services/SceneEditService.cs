@@ -50,7 +50,7 @@ namespace LevelEditor.Scenes.Services
 		public Scene CurrentScene { get; private set; }
 
 		/// <summary>
-		/// Gets the add tile component.
+		/// Gets the add tile Component.
 		/// </summary>
 		public AddTileComponent AddTileComponent { get; private set; }
 
@@ -110,9 +110,9 @@ namespace LevelEditor.Scenes.Services
 			var uiZoneModel = new UiZoneModel
 			{
 				UiZoneName = "Tile Grid User Interface Zone",
-				UiZoneType = (int)UiScreenZoneTypes.Row3Col3,
+				UiZoneType = (int)UiScreenZoneType.Row3Col3,
 				BackgroundTexture = null,
-				VerticalJustificationType = (int)UiZoneVerticalJustificationTypes.Bottom,
+				VerticalJustificationType = (int)UiVerticalJustificationType.Bottom,
 				ElementRows =
 				[
 					new UiRowModel
@@ -134,8 +134,8 @@ namespace LevelEditor.Scenes.Services
 								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 							}
 						},
-						HorizontalJustificationType =  UiRowHorizontalJustificationType.Right,
-						VerticalJustificationType = UiRowVerticalJustificationType.Center,
+						HorizontalJustificationType =  UiHorizontalJustificationType.Right,
+						VerticalJustificationType = UiVerticalJustificationType.Center,
 						SubElements =
 						[
 							new UiTextModel
@@ -151,8 +151,8 @@ namespace LevelEditor.Scenes.Services
 									TextColor = PalletColors.Hex_BF6F4A,
 									FontName = FontNames.MonoBold
 								},
-								HorizontalSizeType = UiElementSizeType.FitContent,
-								VerticalSizeType = UiElementSizeType.FitContent,
+								HorizontalSizeType = UiElementSizeType.FlexMin,
+								VerticalSizeType = UiElementSizeType.FlexMin,
 							},
 							new UiButtonModel
 							{
@@ -161,8 +161,8 @@ namespace LevelEditor.Scenes.Services
 								{
 									RightMargin = 10
 								},
-								HorizontalSizeType = UiElementSizeType.FitContent,
-								VerticalSizeType = UiElementSizeType.FitContent,
+								HorizontalSizeType = UiElementSizeType.FlexMin,
+								VerticalSizeType = UiElementSizeType.FlexMin,
 								ClickableAreaAnimation = new TriggeredAnimationModel
 								{
 									CurrentFrameIndex = 0,
@@ -211,8 +211,8 @@ namespace LevelEditor.Scenes.Services
 						TopMargin = 10,
 						BottomMargin = 10,
 					},
-					HorizontalJustificationType = UiRowHorizontalJustificationType.Center,
-					VerticalJustificationType = UiRowVerticalJustificationType.Center,
+					HorizontalJustificationType = UiHorizontalJustificationType.Center,
+					VerticalJustificationType = UiVerticalJustificationType.Center,
 					BackgroundTexture = new SimpleImageModel
 					{
 						TextureName = "pallet",
@@ -228,8 +228,8 @@ namespace LevelEditor.Scenes.Services
 						{
 							UiElementName = savedTileMapNames[i],
 							ResizeTexture = true,
-							HorizontalSizeType = UiElementSizeType.FitContent,
-							VerticalSizeType = UiElementSizeType.FitContent,
+							HorizontalSizeType = UiElementSizeType.FlexMin,
+							VerticalSizeType = UiElementSizeType.FlexMin,
 							Margin = new UiMarginModel
 							{
 								TopMargin = 5,
@@ -344,7 +344,7 @@ namespace LevelEditor.Scenes.Services
 			var controlService = this._gameServices.GetService<IControlService>();
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
-			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneTypes.Row3Col4);
+			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneType.Row3Col4);
 			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);

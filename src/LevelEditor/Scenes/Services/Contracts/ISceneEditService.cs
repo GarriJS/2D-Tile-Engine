@@ -21,7 +21,7 @@ namespace LevelEditor.Scenes.Services.Contracts
 		public Scene CurrentScene { get; }
 
 		/// <summary>
-		/// Gets the add tile component.
+		/// Gets the add tile Component.
 		/// </summary>
 		public AddTileComponent AddTileComponent { get; }
 
