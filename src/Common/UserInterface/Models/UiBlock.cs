@@ -3,7 +3,6 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
-using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.LayoutInfo;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
@@ -19,7 +18,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface block.
 	/// </summary>
-	public class UiBlock : IAmAUiZoneChild, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
+	public class UiBlock : IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -29,7 +28,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface block name.
 		/// </summary>
-		public string UiBlockName { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user interface block should flex the rows by vertically stacking them.
@@ -133,16 +132,17 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void UpdateOffsets()
 		{
-			foreach (var layout in this.EnumerateLayout() ?? [])
+			foreach (var rowLayout in this.EnumerateLayout() ?? [])
 			{
-				layout.Row.CachedOffset = layout.Offset;
+				rowLayout.Row.CachedOffset = rowLayout.Offset;
+				rowLayout.Row.UpdateOffsets();
 			}
 		}
 
 		/// <summary>
-		/// Enumerates the layout.
+		/// Enumerates the rowLayout.
 		/// </summary>
-		/// <returns>The enumerated layout.</returns>
+		/// <returns>The enumerated rowLayout.</returns>
 		public IEnumerable<RowLayoutInfo> EnumerateLayout()
 		{
 			var contentWidth = this.Rows.Sum(e => e.TotalWidth);

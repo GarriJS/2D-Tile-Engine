@@ -19,10 +19,10 @@ using Microsoft.Xna.Framework;
 namespace LevelEditor.Scenes.Models
 {
 	/// <summary>
-	/// Represents a add tile Component.
+	/// Represents a add tile Block.
 	/// </summary>
 	/// <remarks>
-	/// Initializes a add tile control Component.
+	/// Initializes a add tile control Block.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class AddTileComponent(GameServiceContainer gameServices) : IAmACursorControlContextComponent

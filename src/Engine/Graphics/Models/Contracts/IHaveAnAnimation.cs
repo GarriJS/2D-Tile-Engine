@@ -13,6 +13,6 @@
 		/// <summary>
 		/// Gets the animation.
 		/// </summary>
-		public Animation Animation { get; }
+		public Animation Animation { get; set; }
 	}
 }

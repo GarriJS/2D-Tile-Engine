@@ -6,8 +6,8 @@ namespace Common.DiskModels.UserInterface
 {
 	public class UiGroupModel : BaseDiskModel
 	{
-		[JsonPropertyName("uiGroupName")]
-		public string UiGroupName { get; set; }
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
 
 		[JsonPropertyName("visibilityGroupId")]
 		public int VisibilityGroupId { get; set; }
@@ -15,7 +15,7 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("isVisible")]
 		public bool IsVisible { get; set; }
 
-		[JsonPropertyName("uiZoneElements")]
-		public IList<UiZoneModel> UiZoneElements { get; set; }
+		[JsonPropertyName("zones")]
+		public IList<UiZoneModel> Zones { get; set; }
 	}
 }

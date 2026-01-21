@@ -11,7 +11,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface group name.
 		/// </summary>
-		public string UiGroupName { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the visibility group id.
@@ -21,14 +21,14 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public IList<UiZone> UiZones { get; set; }
+		public IList<UiZone> Zones { get; set; }
 
 		/// <summary>
 		/// Disposes of the user interface group.
 		/// </summary>
 		public void Dispose()
 		{
-			foreach (var uiZone in this.UiZones ?? [])
+			foreach (var uiZone in this.Zones ?? [])
 			{
 				uiZone?.Dispose();
 			}

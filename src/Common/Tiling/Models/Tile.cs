@@ -33,7 +33,7 @@ namespace Common.Tiling.Models
 		public SubArea Area { get; set; }
 
 		/// <summary>
-		/// Gets the Graphic.
+		/// Gets the SimpleText.
 		/// </summary>
 		public IAmAGraphic Graphic { get; set; }
 

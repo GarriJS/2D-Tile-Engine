@@ -126,9 +126,9 @@ namespace LevelEditor.Spritesheets.Services
 		/// </summary>
 		/// <param name="spritesheetName">The spritesheet name.</param>
 		/// <param name="backgroundTexture">The background texture.</param>
-		/// <param name="uiScreenZoneType">The user interface zone type.</param>
+		/// <param name="uiZonePositionType">The user interface zone position type.</param>
 		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiScreenZoneType uiScreenZoneType)
+		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiZonePositionType uiZonePositionType)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			
@@ -137,33 +137,39 @@ namespace LevelEditor.Spritesheets.Services
 
 			var uiZoneModel = new UiZoneModel
 			{
-				UiZoneName = "Spritesheet Buttons Zone",
-				UiZoneType = (int)uiScreenZoneType,
-				VerticalJustificationType = (int)UiVerticalJustificationType.Bottom,
-				ElementRows =
+				Name = "Spritesheet Buttons Zone",
+				UiZonePositionType = uiZonePositionType,
+				VerticalJustificationType = UiVerticalJustificationType.Bottom,
+				Blocks =
 				[
-					new UiRowModel
+					new UiBlockModel
 					{
-						UiRowName = "Spritesheet Buttons Row",
-						Margin = new UiMarginModel
-						{ 
-							TopMargin = 15,
-							BottomMargin = 30,
-						},
-						ResizeTexture = true,
-						BackgroundTexture = new SimpleImageModel
-						{
-							TextureName = "pallet",
-							TextureRegion = new TextureRegionModel
-							{ 
-								TextureRegionType = TextureRegionType.Fill,
-								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
+						Rows =
+						[
+							new UiRowModel
+							{
+								Name = "Spritesheet Buttons Row",
+								Margin = new UiMarginModel
+								{
+									TopMargin = 15,
+									BottomMargin = 30,
+								},
+								ResizeTexture = true,
+								BackgroundTexture = new SimpleImageModel
+								{
+									TextureName = "pallet",
+									TextureRegion = new TextureRegionModel
+									{
+										TextureRegionType = TextureRegionType.Fill,
+										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
+									}
+								},
+								RowHoverCursorName = CommonCursorNames.BasicCursorName,
+								HorizontalJustificationType =  UiHorizontalJustificationType.Center,
+								VerticalJustificationType = UiVerticalJustificationType.Bottom,
+								Elements = flattenedButtons
 							}
-						},
-						RowHoverCursorName = CommonCursorNames.BasicCursorName,
-						HorizontalJustificationType =  UiHorizontalJustificationType.Center,
-						VerticalJustificationType = UiVerticalJustificationType.Bottom,
-						SubElements = flattenedButtons
+						]
 					}
 				]
 			};
@@ -225,7 +231,7 @@ namespace LevelEditor.Spritesheets.Services
 
 					buttons[i][j] = new UiButtonModel
 					{
-						UiElementName = textureName,
+						Name = textureName,
 						Margin = new UiMarginModel
 						{ 
 							LeftMargin = 2,

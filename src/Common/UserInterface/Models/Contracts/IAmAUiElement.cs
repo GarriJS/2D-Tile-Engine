@@ -14,9 +14,14 @@ namespace Common.UserInterface.Models.Contracts
     public interface IAmAUiElement : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
 	{
 		/// <summary>
-        /// Gets or sets the user interface element name.
-        /// </summary>
-        public string UiElementName { get; set; }
+		/// Gets or sets the cached offset.
+		/// </summary>
+		public Vector2? CachedOffset { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user interface element name.
+		/// </summary>
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets the total width.
@@ -49,17 +54,12 @@ namespace Common.UserInterface.Models.Contracts
 		public UiElementSizeType  VerticalSizeType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the cached element offset.
-		/// </summary>
-		public Vector2? CachedElementOffset { get; set; }
-
-		/// <summary>
 		/// Gets or sets the user interface margin.
 		/// </summary>
 		public UiMargin Margin { get; set; }
 
 		/// <summary>
-		/// Gets the Graphic.
+		/// Gets the SimpleText.
 		/// </summary>
 		public IAmAGraphic Graphic { get; set; }
 	}

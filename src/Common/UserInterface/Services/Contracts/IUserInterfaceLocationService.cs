@@ -25,6 +25,14 @@ namespace Common.UserInterface.Services.Contracts
 		public bool TryGetUiZoneAtLocation(Vector2 location, out UiZone uiZone);
 
 		/// <summary>
+		/// Tries to get the user interface block at the given location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="uiBlock">The located user interface block.</param>
+		/// <returns>A value indicating whether a user interface block was found at the location.</returns>
+		public bool TryGetUiBlockAtLocation(Vector2 location, out LocationExtender<UiBlock> uiBlock);
+
+		/// <summary>
 		/// Tries to get the user interface row at the given location.
 		/// </summary>
 		/// <param name="location">The location.</param>

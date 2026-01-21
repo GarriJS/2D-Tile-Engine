@@ -3,7 +3,6 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
-using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.LayoutInfo;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
@@ -24,7 +23,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface zone name.
 		/// </summary>
-		public string UiZoneName { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
@@ -42,7 +41,7 @@ namespace Common.UserInterface.Models
 		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		/// <summary>
-		/// Gets the Graphic.
+		/// Gets the SimpleText.
 		/// </summary>
 		public IAmAGraphic Graphic { get; set; }
 
@@ -77,9 +76,9 @@ namespace Common.UserInterface.Models
 		public UiScreenZone UserInterfaceScreenZone { get; set; }
 
 		/// <summary>
-		/// Gets or sets the child components.
+		/// Gets or sets the user interface blocks.
 		/// </summary>
-		public List<IAmAUiZoneChild> Components { get; set; }
+		public List<UiBlock> Blocks { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -104,9 +103,9 @@ namespace Common.UserInterface.Models
 				this.UpdateZoneOffsets();
 			}
 
-			foreach (var elementRow in this.Components ?? [])
+			foreach (var block in this.Blocks ?? [])
 			{
-				elementRow.Draw(gameTime, gameServices, this.Position);
+				block.Draw(gameTime, gameServices, this.Position);
 			}
 		}
 
@@ -115,22 +114,22 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void UpdateZoneOffsets()
 		{
-			foreach (var layout in this.EnumerateLayout() ?? [])
+			foreach (var blockLayout in this.EnumerateLayout() ?? [])
 			{
-				layout.Component.CachedOffset = layout.Offset;
-				layout.Component.UpdateOffsets();
+				blockLayout.Block.CachedOffset = blockLayout.Offset;
+				blockLayout.Block.UpdateOffsets();
 			}
 
 			this.ResetCalculateCachedOffsets = false;
 		}
 
 		/// <summary>
-		/// Enumerates the Component layout.
+		/// Enumerates the Block blockLayout.
 		/// </summary>
-		/// <returns>The enumerated Component layout.</returns>
-		public IEnumerable<ComponentLayoutInfo> EnumerateLayout()
+		/// <returns>The enumerated Block blockLayout.</returns>
+		public IEnumerable<BlockLayoutInfo> EnumerateLayout()
 		{
-			var contentHeight = this.Components.Sum(r => r.TotalHeight);
+			var contentHeight = this.Blocks.Sum(r => r.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
 			{
 				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
@@ -141,22 +140,22 @@ namespace Common.UserInterface.Models
 			if (verticalOffset < 0)
 				verticalOffset = 0;
 
-			foreach (var component in this.Components ?? [])
+			foreach (var block in this.Blocks ?? [])
 			{
-				var rowTop = verticalOffset + component.Margin.TopMargin;
-				var result = new ComponentLayoutInfo
+				var blockTop = verticalOffset + block.Margin.TopMargin;
+				var result = new BlockLayoutInfo
 				{
-					Component = component,
+					Block = block,
 					Offset = new Vector2
 					{
 						X = 0,
-						Y = rowTop
+						Y = blockTop
 					}
 				};
 
 				yield return result;
 
-				verticalOffset += component.TotalHeight;
+				verticalOffset += block.TotalHeight;
 			}
 		}
 
@@ -167,7 +166,7 @@ namespace Common.UserInterface.Models
 		{
 			this.CursorConfiguration?.Dispose();
 
-			foreach (var elementRow in this.Components ?? [])
+			foreach (var elementRow in this.Blocks ?? [])
 			{
 				elementRow?.Dispose();
 			}

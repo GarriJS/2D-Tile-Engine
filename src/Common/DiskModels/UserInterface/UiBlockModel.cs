@@ -7,8 +7,8 @@ namespace Common.DiskModels.UserInterface
 {
 	public class UiBlockModel : BaseDiskModel
 	{
-		[JsonPropertyName("uiBlockName")]
-		public string UiBlockName { get; set; }
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
 
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
@@ -22,8 +22,8 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("verticalJustificationType")]
 		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
-		[JsonPropertyName("rowHoverCursorName")]
-		public string BlockHoverCursorName { get; set; }
+		[JsonPropertyName("hoverCursorName")]
+		public string HoverCursorName { get; set; }
 
 		[JsonPropertyName("backgroundTexture")]
 		public SimpleImageModel BackgroundTexture { get; set; }

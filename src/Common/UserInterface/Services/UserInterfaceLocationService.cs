@@ -41,17 +41,28 @@ namespace Common.UserInterface.Services
 				};
 			}
 
+			if (true == this.TryGetUiBlockAtLocation(location, out var locatedBlock))
+			{
+				if (locatedBlock.Subject.CursorConfiguration is not null)
+					hoverState.TopCursorConfiguration = locatedBlock.Subject.CursorConfiguration;
+
+				if (locatedBlock.Subject.HoverCursor is not null)
+					hoverState.TopHoverCursor = locatedBlock.Subject.HoverCursor;
+
+				hoverState.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
+				{
+					Location = locatedBlock.Location,
+					Subject = locatedBlock.Subject
+				};
+			}
+
 			if (true == this.TryGetUiRowAtLocation(location, out var locatedRow))
 			{
 				if (locatedRow.Subject.CursorConfiguration is not null)
-				{
 					hoverState.TopCursorConfiguration = locatedRow.Subject.CursorConfiguration;
-				}
 
 				if (locatedRow.Subject.HoverCursor is not null)
-				{
 					hoverState.TopHoverCursor = locatedRow.Subject.HoverCursor;
-				}
 
 				hoverState.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
 				{
@@ -63,14 +74,10 @@ namespace Common.UserInterface.Services
 			if (true == this.TryGetUiElementAtLocation(location, out var locatedElement))
 			{
 				if (locatedElement.Subject.CursorConfiguration is not null)
-				{
 					hoverState.TopCursorConfiguration = locatedElement.Subject.CursorConfiguration;
-				}
 
 				if (locatedElement.Subject.HoverCursor is not null)
-				{
 					hoverState.TopHoverCursor = locatedElement.Subject.HoverCursor;
-				}
 
 				hoverState.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
 				{
@@ -80,9 +87,7 @@ namespace Common.UserInterface.Services
 			}
 
 			if (hoverState.HoverObjectLocation is null)
-			{
 				return null;
-			}
 
 			return hoverState;
 		}
@@ -98,46 +103,9 @@ namespace Common.UserInterface.Services
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 
 			var activeUiGroup = uiService.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == uiService.ActiveVisibilityGroupId);
-			uiZone = activeUiGroup.UiZones.FirstOrDefault(e => true == e.Area.Contains(location));
+			uiZone = activeUiGroup.Zones.FirstOrDefault(e => true == e.Area.Contains(location));
 
 			return uiZone is not null;
-		}
-
-		/// <summary>
-		/// Tries to get the user interface zone child at the given location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="uiZoneChild">The user interface child.</param>
-		/// <returns>A value indicating whether the user interface zone child was found at the location.</returns>
-		public bool TryGetUiZoneChildAtLocation(Vector2 location, out LocationExtender<IAmAUiZoneChild> uiZoneChild)
-		{
-			uiZoneChild = null;
-
-			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
-				(0 == uiZone.Components.Count))
-			{
-				return false;
-			}
-
-			foreach (var componentLayout in uiZone.EnumerateLayout() ?? [])
-			{
-				var rowTop = uiZone.Position.Y + componentLayout.Offset.Y;
-				var rowBottom = rowTop + componentLayout.Component.InsideHeight;
-
-				if ((location.Y < rowTop) ||
-					(location.Y > rowBottom))
-					continue;
-
-				uiZoneChild = new LocationExtender<IAmAUiZoneChild>
-				{
-					Location = uiZone.Position.Coordinates + componentLayout.Offset,
-					Subject = componentLayout.Component
-				};
-
-				break;
-			}
-
-			return uiZoneChild is not null;
 		}
 
 		/// <summary>
@@ -151,28 +119,24 @@ namespace Common.UserInterface.Services
 			uiBlock = null;
 
 			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
-				(0 == uiZone.Components.Count))
-			{
+				(0 == uiZone.Blocks.Count))
 				return false;
-			}
 
-			foreach (var componentLayout in uiZone.EnumerateLayout() ?? [])
+			foreach (var blockLayout in uiZone.EnumerateLayout() ?? [])
 			{
-				var rowTop = uiZone.Position.Y + componentLayout.Offset.Y;
-				var rowBottom = rowTop + componentLayout.Component.InsideHeight;
+				var blockTop = uiZone.Position.Y + blockLayout.Offset.Y;
+				var blockBottom = blockTop + blockLayout.Block.InsideHeight;
 
-				if ((location.Y < rowTop) ||
-					(location.Y > rowBottom))
+				if ((location.Y < blockTop) ||
+					(location.Y > blockBottom))
 					continue;
 
-				if (componentLayout.Component is not UiBlock uiBlockComponent)
-				{
+				if (blockLayout.Block is not UiBlock uiBlockComponent)
 					return false;
-				}
 
 				uiBlock = new LocationExtender<UiBlock>
 				{
-					Location = uiZone.Position.Coordinates + componentLayout.Offset,
+					Location = uiZone.Position.Coordinates + blockLayout.Offset,
 					Subject = uiBlockComponent
 				};
 
@@ -192,35 +156,26 @@ namespace Common.UserInterface.Services
 		{
 			uiRow = null;
 
-			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
-				(0 == uiZone.Components.Count))
-			{
+			if ((false == this.TryGetUiBlockAtLocation(location, out var locatedUiBlock)) ||
+				(0 == locatedUiBlock.Subject.Rows.Count))
 				return false;
-			}
 
-			foreach (var componentLayout in uiZone.EnumerateLayout() ?? [])
+			foreach (var rowLayout in locatedUiBlock.Subject.EnumerateLayout() ?? [])
 			{
-				var rowTop = uiZone.Position.Y + componentLayout.Offset.Y;
-				var rowBottom = rowTop + componentLayout.Component.InsideHeight;
+				var rowTop = locatedUiBlock.Location.Y + rowLayout.Offset.Y;
+				var rowBottom = rowTop + rowLayout.Row.InsideHeight;
 
 				if ((location.Y < rowTop) ||
 					(location.Y > rowBottom))
 					continue;
 
-				if (componentLayout.Component is UiBlock uiBlockComponent)
+				uiRow = new LocationExtender<UiRow>
 				{
+					Location = locatedUiBlock.Location + rowLayout.Offset,
+					Subject = rowLayout.Row
+				};
 
-				}
-				else if (componentLayout.Component is UiRow uiRowComponent)
-				{
-					uiRow = new LocationExtender<UiRow>
-					{
-						Location = uiZone.Position.Coordinates + componentLayout.Offset,
-						Subject = uiRowComponent
-					};
-
-					break;
-				}
+				break;
 			}
 
 			return uiRow is not null;
@@ -238,9 +193,7 @@ namespace Common.UserInterface.Services
 
 			if ((false == this.TryGetUiRowAtLocation(location, out var locatedUiRow)) ||
 				(0 == locatedUiRow.Subject.Elements.Count))
-			{
 				return false;
-			}
 
 			foreach (var elementLayout in locatedUiRow.Subject.EnumerateLayout() ?? [])
 			{
@@ -250,7 +203,6 @@ namespace Common.UserInterface.Services
 				if ((elementLeft > location.X) ||
 					(elementRight < location.X))
 					continue;
-
 
 				var elementTop = locatedUiRow.Location.Y + elementLayout.Offset.Y;
 				var elementBottom = elementTop + elementLayout.Element.InsideHeight;

@@ -1,9 +1,9 @@
 ﻿namespace Common.UserInterface.Enums
 {
 	/// <summary>
-	/// Represents user screen interface zone types.
+	/// Represents user interface zone position types.
 	/// </summary>
-	public enum UiScreenZoneType
+	public enum UiZonePositionType
 	{
 		/// <summary>
 		/// The none type.

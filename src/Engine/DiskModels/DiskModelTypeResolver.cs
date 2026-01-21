@@ -30,7 +30,8 @@ namespace Engine.DiskModels
 		{
 			var types = assembly.GetTypes()
 								.Where(e => (false == e.IsAbstract) &&
-											(true == typeof(BaseDiskModel).IsAssignableFrom(e)));
+											(true == typeof(BaseDiskModel).IsAssignableFrom(e)))
+								.ToArray();
 
 			foreach (var type in types)
 			{

@@ -140,53 +140,59 @@ namespace LevelEditor.Core.Initialization
 			[
 				new UiGroupModel
 				{
-					UiGroupName = "Level Editor Main UI",
+					Name = "Level Editor Main UI",
 					VisibilityGroupId = 1,
 					IsVisible = true,
-					UiZoneElements =
+					Zones =
 					[
 						new UiZoneModel
 						{
-							UiZoneName = "Level Editor Label Row",
-							UiZoneType = (int)UiScreenZoneType.Row1Col4,
+							Name = "Level Editor Label Row",
+							UiZonePositionType = UiZonePositionType.Row1Col4,
 							BackgroundTexture = null,
-							VerticalJustificationType = (int)UiVerticalJustificationType.Top,
-							ElementRows =
+							VerticalJustificationType = UiVerticalJustificationType.Top,
+							Blocks =
 							[
-								new UiRowModel
+								new UiBlockModel
 								{
-									UiRowName = "Level Editor Label Row",
-									ResizeTexture = true,
-									HorizontalJustificationType = UiHorizontalJustificationType.Right,
-									VerticalJustificationType = UiVerticalJustificationType.Center,
-									SubElements =
+									Rows =
 									[
-										new UiTextModel
+										new UiRowModel
 										{
-											UiElementName = "Level Editor Label Element",
-											HoverCursorName = CommonCursorNames.BasicCursorName,
-											Margin = new UiMarginModel
-											{
-												LeftMargin = 10,
-												RightMargin = 10,
-											},
-											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
-											VerticalSizeType = (int)UiElementSizeType.FlexMin,
-											Text = new GraphicalTextModel
-											{
-												Text = "Level Editor",
-												TextColor = PalletColors.Hex_BF6F4A,
-												FontName = FontNames.MonoBold
-											},
-											Graphic = new SimpleImageModel
-											{
-												TextureName = "pallet",
-												TextureRegion = new TextureRegionModel
+											Name = "Level Editor Label Row",
+											ResizeTexture = true,
+											HorizontalJustificationType = UiHorizontalJustificationType.Right,
+											VerticalJustificationType = UiVerticalJustificationType.Center,
+											Elements =
+											[
+												new UiTextModel
 												{
-													TextureRegionType = TextureRegionType.Fill,
-													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+													Name = "Level Editor Label Element",
+													HoverCursorName = CommonCursorNames.BasicCursorName,
+													Margin = new UiMarginModel
+													{
+														LeftMargin = 10,
+														RightMargin = 10,
+													},
+													HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+													VerticalSizeType = (int)UiElementSizeType.FlexMin,
+													Text = new GraphicalTextModel
+													{
+														Text = "Level Editor",
+														TextColor = PalletColors.Hex_BF6F4A,
+														FontName = FontNames.MonoBold
+													},
+													Graphic = new SimpleImageModel
+													{
+														TextureName = "pallet",
+														TextureRegion = new TextureRegionModel
+														{
+															TextureRegionType = TextureRegionType.Fill,
+															TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+														}
+													}
 												}
-											}
+											]
 										}
 									]
 								}
@@ -194,155 +200,161 @@ namespace LevelEditor.Core.Initialization
 						},
 						new UiZoneModel
 						{
-							UiZoneName = "Disc Zone",
-							UiZoneType = (int)UiScreenZoneType.Row3Col1,
+							Name = "Disc Zone",
+							UiZonePositionType = UiZonePositionType.Row3Col1,
 							BackgroundTexture = null,
-							VerticalJustificationType = (int)UiVerticalJustificationType.Top,
-							ZoneHoverCursorName = CommonCursorNames.BasicCursorName,
-							ElementRows =
+							VerticalJustificationType = UiVerticalJustificationType.Top,
+							HoverCursorName = CommonCursorNames.BasicCursorName,
+							Blocks =
 							[
-								new UiRowModel
+								new UiBlockModel
 								{
-									UiRowName = "Create Level",
-									Margin = new UiMarginModel
-									{
-										TopMargin = 10,
-									},
-									ResizeTexture = true,
-									BackgroundTexture = new SimpleImageModel
-									{
-										TextureName = "pallet",
-										TextureRegion = new TextureRegionModel
-										{
-											TextureRegionType = TextureRegionType.Fill,
-											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
-										}
-									},
-									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiHorizontalJustificationType.Center,
-									VerticalJustificationType = (int)UiVerticalJustificationType.Center,
-									SubElements =
+									Rows =
 									[
-										new UiTextModel
+										new UiRowModel
 										{
-											UiElementName = "Create Level Label",
+											Name = "Create Level",
 											Margin = new UiMarginModel
 											{
-												LeftMargin = 10,
-												RightMargin = 5,
+												TopMargin = 10,
 											},
-											Text = new GraphicalTextModel
+											ResizeTexture = true,
+											BackgroundTexture = new SimpleImageModel
 											{
-												Text = "Create Level",
-												TextColor = PalletColors.Hex_BF6F4A,
-												FontName = FontNames.MonoBold
+												TextureName = "pallet",
+												TextureRegion = new TextureRegionModel
+												{
+													TextureRegionType = TextureRegionType.Fill,
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+												}
 											},
-											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
-											VerticalSizeType = (int)UiElementSizeType.FlexMin
+											RowHoverCursorName = CommonCursorNames.BasicCursorName,
+											HorizontalJustificationType = (int)UiHorizontalJustificationType.Center,
+											VerticalJustificationType = (int)UiVerticalJustificationType.Center,
+											Elements =
+											[
+												new UiTextModel
+												{
+													Name = "Create Level Label",
+													Margin = new UiMarginModel
+													{
+														LeftMargin = 10,
+														RightMargin = 5,
+													},
+													Text = new GraphicalTextModel
+													{
+														Text = "Create Level",
+														TextColor = PalletColors.Hex_BF6F4A,
+														FontName = FontNames.MonoBold
+													},
+													HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+													VerticalSizeType = (int)UiElementSizeType.FlexMin
+												},
+												new UiButtonModel
+												{
+													Name = "Create Level Button",
+													HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+													VerticalSizeType = (int)UiElementSizeType.FlexMin,
+													ClickableAreaAnimation = new TriggeredAnimationModel
+													{
+														CurrentFrameIndex = 0,
+														FrameDuration = 500,
+														Frames =
+														[
+															DarkBlueButtonsManifest.UnpressedPlusButton,
+															DarkBlueButtonsManifest.PressedPlusButton
+														],
+														RestingFrameIndex = 0,
+													},
+													ClickableAreaScaler = new Vector2
+													{
+														X = 1,
+														Y = 1
+													},
+													ClickEventName = UiEventName.CreateSceneClick
+												},
+												new UiTextModel
+												{
+													Name = "Save Element Label",
+													Margin = new UiMarginModel
+													{
+														LeftMargin = 10,
+														RightMargin = 5,
+													},
+													Text = new GraphicalTextModel
+													{
+														Text = "Save Level",
+														TextColor = PalletColors.Hex_BF6F4A,
+														FontName = FontNames.MonoBold
+													},
+													HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+													VerticalSizeType = (int)UiElementSizeType.FlexMin
+												},
+												new UiButtonModel
+												{
+													Name = "Save Level Button",
+													HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+													VerticalSizeType = (int)UiElementSizeType.FlexMin,
+													ClickableAreaAnimation = new TriggeredAnimationModel
+													{
+														CurrentFrameIndex = 0,
+														FrameDuration = 500,
+														Frames =
+														[
+															DarkBlueButtonsManifest.UnpressedEnterButton,
+															DarkBlueButtonsManifest.PressedEnterButton
+														],
+														RestingFrameIndex = 0,
+													},
+													ClickableAreaScaler = new Vector2
+													{
+														X = 1,
+														Y = 1
+													},
+													ClickEventName = UiEventName.SaveSceneClick
+												}
+											]
 										},
-										new UiButtonModel
+										new UiRowModel
 										{
-											UiElementName = "Create Level Button",
-											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
-											VerticalSizeType = (int)UiElementSizeType.FlexMin,
-											ClickableAreaAnimation = new TriggeredAnimationModel
-											{
-												CurrentFrameIndex = 0,
-												FrameDuration = 500,
-												Frames =
-												[
-													DarkBlueButtonsManifest.UnpressedPlusButton,
-													DarkBlueButtonsManifest.PressedPlusButton
-												],
-												RestingFrameIndex = 0,
-											},
-											ClickableAreaScaler = new Vector2
-											{
-												X = 1,
-												Y = 1
-											},
-											ClickEventName = UiEventName.CreateSceneClick
-										},
-										new UiTextModel
-										{
-											UiElementName = "Save Element Label",
+											Name = "Levels Header",
 											Margin = new UiMarginModel
 											{
-												LeftMargin = 10,
-												RightMargin = 5,
+												TopMargin = 10,
+												BottomMargin = 10
 											},
-											Text = new GraphicalTextModel
+											ResizeTexture = true,
+											BackgroundTexture = new SimpleImageModel
 											{
-												Text = "Save Level",
-												TextColor = PalletColors.Hex_BF6F4A,
-												FontName = FontNames.MonoBold
+												TextureName = "pallet",
+												TextureRegion = new TextureRegionModel
+												{
+													TextureRegionType = TextureRegionType.Fill,
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+												}
 											},
-											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
-											VerticalSizeType = (int)UiElementSizeType.FlexMin
+											RowHoverCursorName = CommonCursorNames.BasicCursorName,
+											HorizontalJustificationType = (int)UiHorizontalJustificationType.Center,
+											VerticalJustificationType = (int)UiVerticalJustificationType.Center,
+											Elements =
+											[
+												new UiTextModel
+												{
+													Name = "Saved Levels Element",
+													Text = new GraphicalTextModel
+													{
+														Text = "Saved Levels",
+														TextColor = PalletColors.Hex_BF6F4A,
+														FontName = FontNames.MonoBold
+													},
+													HorizontalSizeType = (int)UiElementSizeType.FlexMin,
+													VerticalSizeType = (int)UiElementSizeType.FlexMin
+												}
+											]
 										},
-										new UiButtonModel
-										{
-											UiElementName = "Save Level Button",
-											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
-											VerticalSizeType = (int)UiElementSizeType.FlexMin,
-											ClickableAreaAnimation = new TriggeredAnimationModel
-											{
-												CurrentFrameIndex = 0,
-												FrameDuration = 500,
-												Frames =
-												[
-													DarkBlueButtonsManifest.UnpressedEnterButton,
-													DarkBlueButtonsManifest.PressedEnterButton
-												],
-												RestingFrameIndex = 0,
-											},
-											ClickableAreaScaler = new Vector2
-											{
-												X = 1,
-												Y = 1
-											},
-											ClickEventName = UiEventName.SaveSceneClick
-										}
+										..savedTileMapsRowModel
 									]
-								},
-								new UiRowModel
-								{
-									UiRowName = "Levels Header",                
-									Margin = new UiMarginModel
-									{
-										TopMargin = 50,
-										BottomMargin = 50
-									},
-									ResizeTexture = true,
-									BackgroundTexture = new SimpleImageModel
-									{
-										TextureName = "pallet",
-										TextureRegion = new TextureRegionModel
-										{
-											TextureRegionType = TextureRegionType.Fill,
-											TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
-										}
-									},
-									RowHoverCursorName = CommonCursorNames.BasicCursorName,
-									HorizontalJustificationType = (int)UiHorizontalJustificationType.Center,
-									VerticalJustificationType = (int)UiVerticalJustificationType.Center,
-									SubElements =
-									[
-										new UiTextModel
-										{
-											UiElementName = "Saved Levels Element",
-											Text = new GraphicalTextModel
-											{
-												Text = "Saved Levels",
-												TextColor = PalletColors.Hex_BF6F4A,
-												FontName = FontNames.MonoBold
-											},
-											HorizontalSizeType = (int)UiElementSizeType.FlexMin,
-											VerticalSizeType = (int)UiElementSizeType.FlexMin
-										}
-									]
-								},
-								..savedTileMapsRowModel
+								}
 							]
 						}
 					]

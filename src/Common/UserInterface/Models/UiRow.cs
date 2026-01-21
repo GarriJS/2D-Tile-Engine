@@ -19,7 +19,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface row.
 	/// </summary>
-	public class UiRow : IAmAUiZoneChild, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
+	public class UiRow : IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -29,7 +29,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface row name.
 		/// </summary>
-		public string UiRowName { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user interface row should flex.
@@ -97,7 +97,7 @@ namespace Common.UserInterface.Models
 		public CursorConfiguration<UiRow> CursorConfiguration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the elements.
+		/// Gets or sets the user interface elements.
 		/// </summary>
 		public List<IAmAUiElement> Elements { get; set; }
 
@@ -124,7 +124,7 @@ namespace Common.UserInterface.Models
 
 			foreach (var element in this.Elements ?? [])
 			{
-				element.Draw(gameTime, gameServices, position, graphicOffset + (element.CachedElementOffset ?? default));
+				element.Draw(gameTime, gameServices, position, graphicOffset + (element.CachedOffset ?? default));
 			}
 		}
 
@@ -135,7 +135,7 @@ namespace Common.UserInterface.Models
 		{
 			foreach (var layout in this.EnumerateLayout() ?? [])
 			{
-				layout.Element.CachedElementOffset = layout.Offset;
+				layout.Element.CachedOffset = layout.Offset;
 			}
 		}
 

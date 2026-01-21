@@ -30,7 +30,7 @@ namespace Common.Controls.Cursors.Services
 		private readonly GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets or sets the cursor control Component.
+		/// Gets or sets the cursor control Block.
 		/// </summary>
 		public CursorControlComponent CursorControlComponent { get; set; }
 

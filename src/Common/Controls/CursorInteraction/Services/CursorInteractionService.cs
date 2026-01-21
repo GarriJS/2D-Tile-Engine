@@ -1,6 +1,5 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Controls.Cursors.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
@@ -28,8 +27,6 @@ namespace Common.Controls.CursorInteraction.Services
 		/// <returns>The hover configuration.</returns>
 		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, SubArea clickArea, Vector2 offset = default, Vector2 clickOffset = default)
 		{
-			var cursorService = this._gameServices.GetService<ICursorService>();
-
 			var cursorConfiguration = new CursorConfiguration<T>
 			{
 				Area = area,

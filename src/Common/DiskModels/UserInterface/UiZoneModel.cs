@@ -1,4 +1,5 @@
-﻿using Engine.DiskModels;
+﻿using Common.UserInterface.Enums;
+using Engine.DiskModels;
 using Engine.DiskModels.Drawing;
 using System.Text.Json.Serialization;
 
@@ -6,28 +7,28 @@ namespace Common.DiskModels.UserInterface
 {
 	public class UiZoneModel : BaseDiskModel
 	{
-		[JsonPropertyName("uiZoneName")]
-		public string UiZoneName { get; set; }
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
 
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
 		[JsonPropertyName("verticalJustificationType")]
-		public int VerticalJustificationType { get; set; }
+		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		[JsonPropertyName("uiZoneType")]
-		public int UiZoneType { get; set; }
+		public UiZonePositionType UiZonePositionType { get; set; }
 
-		[JsonPropertyName("zoneHoverCursorName")]
-		public string ZoneHoverCursorName { get; set; }
+		[JsonPropertyName("hoverCursorName")]
+		public string HoverCursorName { get; set; }
 
-		[JsonPropertyName("zoneHoverEventName")]
-		public string ZoneHoverEventName { get; set; }
+		[JsonPropertyName("hoverEventName")]
+		public string HoverEventName { get; set; }
 
 		[JsonPropertyName("backgroundTexture")]
 		public SimpleImageModel BackgroundTexture { get; set; }
 
-		[JsonPropertyName("elementRows")]
-		public UiRowModel[] ElementRows { get; set; }
+		[JsonPropertyName("blocks")]
+		public UiBlockModel[] Blocks { get; set; }
 	}
 }

@@ -29,25 +29,25 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public Dictionary<UiScreenZoneType, UiScreenZone> UserInterfaceScreenZones { get; set; } = [];
+		public Dictionary<UiZonePositionType, UiScreenZone> UserInterfaceScreenZones { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the zone type mapper.
 		/// </summary>
-		private Dictionary<(int row, int col), UiScreenZoneType> ZoneTypeMapper { get; } = new()
+		private Dictionary<(int row, int col), UiZonePositionType> ZoneTypeMapper { get; } = new()
 		{
-			{ (1, 1), UiScreenZoneType.Row1Col1 },
-			{ (2, 1), UiScreenZoneType.Row2Col1 },
-			{ (3, 1), UiScreenZoneType.Row3Col1 },
-			{ (1, 2), UiScreenZoneType.Row1Col2 },
-			{ (2, 2), UiScreenZoneType.Row2Col2 },
-			{ (3, 2), UiScreenZoneType.Row3Col2 },
-			{ (1, 3), UiScreenZoneType.Row1Col3 },
-			{ (2, 3), UiScreenZoneType.Row2Col3 },
-			{ (3, 3), UiScreenZoneType.Row3Col3 },
-			{ (1, 4), UiScreenZoneType.Row1Col4 },
-			{ (2, 4), UiScreenZoneType.Row2Col4 },
-			{ (3, 4), UiScreenZoneType.Row3Col4 }
+			{ (1, 1), UiZonePositionType.Row1Col1 },
+			{ (2, 1), UiZonePositionType.Row2Col1 },
+			{ (3, 1), UiZonePositionType.Row3Col1 },
+			{ (1, 2), UiZonePositionType.Row1Col2 },
+			{ (2, 2), UiZonePositionType.Row2Col2 },
+			{ (3, 2), UiZonePositionType.Row3Col2 },
+			{ (1, 3), UiZonePositionType.Row1Col3 },
+			{ (2, 3), UiZonePositionType.Row2Col3 },
+			{ (3, 3), UiZonePositionType.Row3Col3 },
+			{ (1, 4), UiZonePositionType.Row1Col4 },
+			{ (2, 4), UiZonePositionType.Row2Col4 },
+			{ (3, 4), UiZonePositionType.Row3Col4 }
 		};
 
 		/// <summary>
@@ -121,11 +121,11 @@ namespace Common.UserInterface.Services
 			var noneArea = areaService.GetAreaFromModel(noneAreaModel);
 			var noneZone = new UiScreenZone
 			{
-				UiZoneType = UiScreenZoneType.Unknown,
+				UiZoneType = UiZonePositionType.Unknown,
 				Area = noneArea
 			};
 
-			this.UserInterfaceScreenZones.TryAdd(UiScreenZoneType.Unknown, noneZone);
+			this.UserInterfaceScreenZones.TryAdd(UiZonePositionType.Unknown, noneZone);
 		}
 	}
 }

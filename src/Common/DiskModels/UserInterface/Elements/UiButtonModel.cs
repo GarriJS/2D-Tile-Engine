@@ -9,8 +9,8 @@ namespace Common.DiskModels.UserInterface.Elements
 {
 	public class UiButtonModel : IAmAUiElementWithTextModel
 	{
-		[JsonPropertyName("uiElementName")]
-		public string UiElementName { get; set; }
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
 
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }

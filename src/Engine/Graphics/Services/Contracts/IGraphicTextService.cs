@@ -31,6 +31,6 @@ namespace Engine.Graphics.Services.Contracts
 		/// </summary>
 		/// <param name="graphicalTextModel">The graphic text model.</param>
 		/// <returns>The graphical text.</returns>
-		public GraphicalText GetGraphicTextFromModel(GraphicalTextModel graphicalTextModel);
+		public SimpleText GetGraphicTextFromModel(GraphicalTextModel graphicalTextModel);
 	}
 }

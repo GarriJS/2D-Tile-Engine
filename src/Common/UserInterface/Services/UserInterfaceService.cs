@@ -68,16 +68,16 @@ namespace Common.UserInterface.Services
 
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
-			var existingZone = uiGroup.UiZones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType);
+			var existingZone = uiGroup.Zones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType);
 
-			if (null != uiGroup.UiZones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType))
+			if (null != uiGroup.Zones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType))
 			{
 				runTimeOverlaidDrawService.RemoveDrawable(existingZone);
-				uiGroup.UiZones.Remove(existingZone);
+				uiGroup.Zones.Remove(existingZone);
 				existingZone.Dispose();
 			}
 
-			uiGroup.UiZones.Add(uiZone);
+			uiGroup.Zones.Add(uiZone);
 			runTimeOverlaidDrawService.AddDrawable(uiZone);
 		}
 
@@ -108,7 +108,7 @@ namespace Common.UserInterface.Services
 			{
 				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
 
-				foreach (var uiZoneContainer in activeGroup.UiZones)
+				foreach (var uiZoneContainer in activeGroup.Zones)
 				{
 					runTimeOverlaidDrawService.RemoveDrawable(uiZoneContainer);
 				}
@@ -116,49 +116,30 @@ namespace Common.UserInterface.Services
 
 			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
 
-			if (0 == uiGroup.UiZones.Count)
+			if (0 == uiGroup.Zones.Count)
 			{
 				return;
 			}
 
 			var animationService = this._gameServices.GetService<IAnimationService>();
 
-			foreach (var uiZone in uiGroup.UiZones)
+			foreach (var uiZone in uiGroup.Zones)
 			{
 				runTimeOverlaidDrawService.AddDrawable(uiZone);
 
-				if (0 == uiZone.Components.Count)
+				if (0 == uiZone.Blocks.Count)
 				{
 					continue;
 				}
 
-				foreach (var uiComponent in uiZone.Components)
+				foreach (var uiBlock in uiZone.Blocks)
 				{
-					if (uiComponent is UiBlock uiBlock)
+					if (0 == uiBlock.Rows.Count)
 					{
-						if (0 == uiBlock.Rows.Count)
-						{
-							continue;
-						}
-
-						foreach (var uiRow in uiBlock.Rows)
-						{
-							if (0 == uiRow.Elements.Count)
-							{
-								continue;
-							}
-
-							foreach (var element in uiRow.Elements)
-							{
-								if ((element is UiButton button) &&
-									(null != button?.ClickAnimation))
-								{
-									button.ClickAnimation.ResetTriggeredAnimation();
-								}
-							}
-						}
+						continue;
 					}
-					else if (uiComponent is UiRow uiRow)
+
+					foreach (var uiRow in uiBlock.Rows)
 					{
 						if (0 == uiRow.Elements.Count)
 						{
@@ -187,7 +168,7 @@ namespace Common.UserInterface.Services
 		{
 			var uiZones = new List<UiZone>();
 
-			foreach (var uiZoneElementModel in uiGroupModel.UiZoneElements)
+			foreach (var uiZoneElementModel in uiGroupModel.Zones)
 			{
 				var uiZoneElement = this.GetUiZone(uiZoneElementModel);
 
@@ -199,9 +180,9 @@ namespace Common.UserInterface.Services
 
 			var uiGroup = new UiGroup
 			{
-				UiGroupName = uiGroupModel.UiGroupName,
+				Name = uiGroupModel.Name,
 				VisibilityGroupId = uiGroupModel.VisibilityGroupId,
-				UiZones = uiZones
+				Zones = uiZones
 			};
 
 			this.UserInterfaceGroups.Add(uiGroup);
@@ -228,24 +209,23 @@ namespace Common.UserInterface.Services
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiScreenZoneType)uiZoneModel.UiZoneType, out UiScreenZone uiScreenZone))
+			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiZonePositionType)uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
 			{
-				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiScreenZoneType.Unknown];
+				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiZonePositionType.Unknown];
 			}
 
-			var rows = new List<IAmAUiZoneChild>();
+			var blocks = new List<UiBlock>();
 
-			foreach (var elementRowModel in uiZoneModel.ElementRows ?? [])
+			foreach (var uiBlockModel in uiZoneModel.Blocks ?? [])
 			{
-				var row = this.GetUiRow(elementRowModel);
-				rows.Add(row);
+				var row = this.GetUiBlock(uiBlockModel);
+				blocks.Add(row);
 			}
 
-			var contentHeight = rows.Sum(e => e.TotalHeight);
-			var dynamicRows = rows
-				.OfType<UiRow>()
-				.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType)))
-				.ToArray();
+			var contentHeight = blocks.Sum(e => e.TotalHeight);
+			var rows = blocks.Where(e => e.Rows.Count != 0).SelectMany(e => e.Rows).ToArray();
+			var dynamicRows = rows.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType)))
+								  .ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
 			var dynamicHeight = remainingHeight / dynamicRows.Count();
 
@@ -276,8 +256,8 @@ namespace Common.UserInterface.Services
 
 			Cursor hoverCursor = null;
 
-			if ((false == string.IsNullOrEmpty(uiZoneModel.ZoneHoverCursorName)) &&
-				(false == cursorService.Cursors.TryGetValue(uiZoneModel.ZoneHoverCursorName, out hoverCursor)))
+			if ((false == string.IsNullOrEmpty(uiZoneModel.HoverCursorName)) &&
+				(false == cursorService.Cursors.TryGetValue(uiZoneModel.HoverCursorName, out hoverCursor)))
 			{
 				// LOGGING
 			}
@@ -286,24 +266,24 @@ namespace Common.UserInterface.Services
 			var uiZone = new UiZone
 			{
 				ResetCalculateCachedOffsets = true,
-				UiZoneName = uiZoneModel.UiZoneName,
+				Name = uiZoneModel.Name,
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
 				VerticalJustificationType = (UiVerticalJustificationType)uiZoneModel.VerticalJustificationType,
 				Graphic = background,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
 				UserInterfaceScreenZone = uiScreenZone,
-				Components = rows
+				Blocks = blocks
 			};
 
 			return uiZone;
 		}
 
 		/// <summary>
-		/// Get the user interface block.
+		/// Get the user interface uiBlock.
 		/// </summary>
-		/// <param name="uiBlockModel">The user interface block model.</param>
-		/// <returns>The user interface block.</returns>
+		/// <param name="uiBlockModel">The user interface uiBlock model.</param>
+		/// <returns>The user interface uiBlock.</returns>
 		public UiBlock GetUiBlock(UiBlockModel uiBlockModel)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
@@ -322,13 +302,8 @@ namespace Common.UserInterface.Services
 			}
 
 			var contentWidth = rows.Sum(e => e.TotalWidth);
-			var contentHeight = rows.Select(e => e.TotalHeight)
-										   .OrderDescending()
-										   .FirstOrDefault();
-			var dynamicRows = rows
-				.OfType<UiRow>()
-				.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType)))
-				.ToArray();
+			var contentHeight = rows.Sum(e => e.TotalHeight);
+			var dynamicRows = rows.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicRows.Length;
 
@@ -370,8 +345,8 @@ namespace Common.UserInterface.Services
 			var margin = uiElementService.GetUiMarginFromModel(uiBlockModel.Margin);
 			Cursor hoverCursor = null;
 
-			if ((false == string.IsNullOrEmpty(uiBlockModel.BlockHoverCursorName)) &&
-				(false == cursorService.Cursors.TryGetValue(uiBlockModel.BlockHoverCursorName, out hoverCursor)))
+			if ((false == string.IsNullOrEmpty(uiBlockModel.HoverCursorName)) &&
+				(false == cursorService.Cursors.TryGetValue(uiBlockModel.HoverCursorName, out hoverCursor)))
 			{
 				// LOGGING
 			}
@@ -379,7 +354,7 @@ namespace Common.UserInterface.Services
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(blockArea, null);
 			var result = new UiBlock
 			{
-				UiBlockName = uiBlockModel.UiBlockName,
+				Name = uiBlockModel.Name,
 				FlexRows = true,
 				Area = blockArea,
 				Margin = margin,
@@ -410,7 +385,7 @@ namespace Common.UserInterface.Services
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var subElements = new List<IAmAUiElement>();
 
-			foreach (var subElementModel in uiRowModel.SubElements ?? [])
+			foreach (var subElementModel in uiRowModel.Elements ?? [])
 			{
 				var subElement = uiElementService.GetUiElement(subElementModel);
 				subElements.Add(subElement);
@@ -421,7 +396,7 @@ namespace Common.UserInterface.Services
 										   .OrderDescending()
 										   .FirstOrDefault();
 			var dynamicWidthElements = subElements.Where(e => UiElementSizeType.FlexMax == e.HorizontalSizeType)
-											      .ToArray();
+												  .ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicWidthElements.Length;
 
@@ -472,7 +447,7 @@ namespace Common.UserInterface.Services
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiRow>(rowArea, null);
 			var result = new UiRow
 			{
-				UiRowName = uiRowModel.UiRowName,
+				Name = uiRowModel.Name,
 				Flex = true,
 				Area = rowArea,
 				Margin = margin,

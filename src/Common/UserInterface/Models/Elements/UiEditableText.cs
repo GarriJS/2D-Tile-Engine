@@ -9,35 +9,25 @@ using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Models.Elements
 {
-    /// <summary>
-    /// Represents a user interface button.
-    /// </summary>
-    public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
+	/// <summary>
+	/// Represents user interface editable text.
+	/// </summary>
+	public class UiEditableText : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
 	{
-		/// <summary>
-		/// Gets or sets the pressed text offset. 
-		/// </summary>
-		public Vector2 PressedTextOffset { get; set; } = new Vector2(0, 5); 
-
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
 		/// </summary>
 		public Vector2 ClickableAreaScaler { get; set; }
 
 		/// <summary>
-		/// Gets or sets the graphic text.
+		/// Gets the graphic text.
 		/// </summary>
-		public IAmGraphicText GraphicText { get => this.SimpleText; }
+		public IAmGraphicText GraphicText { get => this.WritableText; }
 
 		/// <summary>
-		/// Gets or sets the simple text.
+		/// Gets or sets the writable text.
 		/// </summary>
-		public SimpleText SimpleText { get; set; }
-
-		/// <summary>
-		/// Gets or sets the clickable animation.
-		/// </summary>
-		public TriggeredAnimation ClickAnimation { get; set; }
+		public WritableText WritableText { get; set; }
 
 		/// <summary>
 		/// Raises the click event.
@@ -58,25 +48,16 @@ namespace Common.UserInterface.Models.Elements
 		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
 			this.Graphic?.Draw(gameTime, gameServices, position, offset);
-			this.ClickAnimation?.Draw(gameTime, gameServices, position, offset);
 
 			if (null != this.GraphicText)
 			{
 				var textDimensions = this.GraphicText.GetTextDimensions();
 				var centeredOffset = new Vector2
-				{ 
+				{
 					X = (this.Area.Width - textDimensions.X) / 2f,
 					Y = (this.Area.Height - textDimensions.Y) / 2f
 				};
-
-				var animationOffset = Vector2.Zero;
-
-				if (true == this.ClickAnimation?.AnimationIsTrigged)
-				{ 
-					animationOffset = this.PressedTextOffset;
-				}
-
-				this.GraphicText.Draw(gameTime, gameServices, position, offset + centeredOffset + animationOffset);
+				this.GraphicText.Draw(gameTime, gameServices, position, offset + centeredOffset);
 			}
 		}
 

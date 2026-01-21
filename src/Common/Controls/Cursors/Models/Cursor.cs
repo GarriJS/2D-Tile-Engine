@@ -37,7 +37,7 @@ namespace Common.Controls.Cursors.Models
 		public Position Position { get; set; }
 
 		/// <summary>
-		/// Gets the Graphic.
+		/// Gets the SimpleText.
 		/// </summary>
 		public IAmAGraphic Graphic { get; set; }
 

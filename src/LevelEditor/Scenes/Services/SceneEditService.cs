@@ -50,7 +50,7 @@ namespace LevelEditor.Scenes.Services
 		public Scene CurrentScene { get; private set; }
 
 		/// <summary>
-		/// Gets the add tile Component.
+		/// Gets the add tile Block.
 		/// </summary>
 		public AddTileComponent AddTileComponent { get; private set; }
 
@@ -68,7 +68,7 @@ namespace LevelEditor.Scenes.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			_ = this.CreateNewScene(setCurrent: true, cursorInteraction.Element.UiElementName);
+			_ = this.CreateNewScene(setCurrent: true, cursorInteraction.Element.Name);
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace LevelEditor.Scenes.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Element.UiElementName);
+			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Element.Name);
 
 			if (tileMapModel is null)
 			{
@@ -87,7 +87,7 @@ namespace LevelEditor.Scenes.Services
 			var tileService = this._gameServices.GetService<ITileService>();
 			var tileMap = tileService.GetTileMapFromModel(tileMapModel);
 
-			this.CreateNewScene(true, tileMap, cursorInteraction.Element.UiElementName);
+			this.CreateNewScene(true, tileMap, cursorInteraction.Element.Name);
 		}
 
 		/// <summary>
@@ -109,78 +109,84 @@ namespace LevelEditor.Scenes.Services
 
 			var uiZoneModel = new UiZoneModel
 			{
-				UiZoneName = "Tile Grid User Interface Zone",
-				UiZoneType = (int)UiScreenZoneType.Row3Col3,
+				Name = "Tile Grid User Interface Zone",
+				UiZonePositionType = UiZonePositionType.Row3Col3,
 				BackgroundTexture = null,
-				VerticalJustificationType = (int)UiVerticalJustificationType.Bottom,
-				ElementRows =
+				VerticalJustificationType = UiVerticalJustificationType.Bottom,
+				Blocks =
 				[
-					new UiRowModel
+					new UiBlockModel
 					{
-						UiRowName = "Toggle Tile Grid Row",
-						Margin = new UiMarginModel
-						{
-							TopMargin = 10,
-							BottomMargin = 5,
-						},
-						RowHoverCursorName = CommonCursorNames.BasicCursorName,
-						ResizeTexture = true,
-						BackgroundTexture = new SimpleImageModel
-						{
-							TextureName = "pallet",
-							TextureRegion = new TextureRegionModel
-							{
-								TextureRegionType = TextureRegionType.Fill,
-								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
-							}
-						},
-						HorizontalJustificationType =  UiHorizontalJustificationType.Right,
-						VerticalJustificationType = UiVerticalJustificationType.Center,
-						SubElements =
+						Rows =
 						[
-							new UiTextModel
+							new UiRowModel
 							{
-								UiElementName = "Create Element Label",
+								Name = "Toggle Tile Grid Row",
 								Margin = new UiMarginModel
 								{
-									RightMargin = 5
+									TopMargin = 10,
+									BottomMargin = 5,
 								},
-								Text = new GraphicalTextModel
+								RowHoverCursorName = CommonCursorNames.BasicCursorName,
+								ResizeTexture = true,
+								BackgroundTexture = new SimpleImageModel
 								{
-									Text = "Toggle Tile Grid",
-									TextColor = PalletColors.Hex_BF6F4A,
-									FontName = FontNames.MonoBold
+									TextureName = "pallet",
+									TextureRegion = new TextureRegionModel
+									{
+										TextureRegionType = TextureRegionType.Fill,
+										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+									}
 								},
-								HorizontalSizeType = UiElementSizeType.FlexMin,
-								VerticalSizeType = UiElementSizeType.FlexMin,
-							},
-							new UiButtonModel
-							{
-								UiElementName = "Toggle Tile Grid Button",
-								Margin = new UiMarginModel
-								{
-									RightMargin = 10
-								},
-								HorizontalSizeType = UiElementSizeType.FlexMin,
-								VerticalSizeType = UiElementSizeType.FlexMin,
-								ClickableAreaAnimation = new TriggeredAnimationModel
-								{
-									CurrentFrameIndex = 0,
-									FrameDuration = 500,
-									Frames =
-									[
-										DarkBlueButtonsManifest.UnpressedTabButton,
-										DarkBlueButtonsManifest.PressedTabButton
-									],
-									RestingFrameIndex = 0,
-								},
-								ClickableAreaScaler = new Vector2
-								{
-									X = 1,
-									Y = 1
-								},
-								ClickEventName = UiEventName.ToggleTileGridClick
-							},
+								HorizontalJustificationType =  UiHorizontalJustificationType.Right,
+								VerticalJustificationType = UiVerticalJustificationType.Center,
+								Elements =
+								[
+									new UiTextModel
+									{
+										Name = "Create Element Label",
+										Margin = new UiMarginModel
+										{
+											RightMargin = 5
+										},
+										Text = new GraphicalTextModel
+										{
+											Text = "Toggle Tile Grid",
+											TextColor = PalletColors.Hex_BF6F4A,
+											FontName = FontNames.MonoBold
+										},
+										HorizontalSizeType = UiElementSizeType.FlexMin,
+										VerticalSizeType = UiElementSizeType.FlexMin,
+									},
+									new UiButtonModel
+									{
+										Name = "Toggle Tile Grid Button",
+										Margin = new UiMarginModel
+										{
+											RightMargin = 10
+										},
+										HorizontalSizeType = UiElementSizeType.FlexMin,
+										VerticalSizeType = UiElementSizeType.FlexMin,
+										ClickableAreaAnimation = new TriggeredAnimationModel
+										{
+											CurrentFrameIndex = 0,
+											FrameDuration = 500,
+											Frames =
+											[
+												DarkBlueButtonsManifest.UnpressedTabButton,
+												DarkBlueButtonsManifest.PressedTabButton
+											],
+											RestingFrameIndex = 0,
+										},
+										ClickableAreaScaler = new Vector2
+										{
+											X = 1,
+											Y = 1
+										},
+										ClickEventName = UiEventName.ToggleTileGridClick
+									},
+								]
+							}
 						]
 					}
 				]
@@ -204,12 +210,12 @@ namespace LevelEditor.Scenes.Services
 			{
 				var rowModel = new UiRowModel
 				{
-					UiRowName = $"{savedTileMapNames[i]} row",
+					Name = $"{savedTileMapNames[i]} row",
 					ResizeTexture = true,
 					Margin = new UiMarginModel
 					{
-						TopMargin = 10,
-						BottomMargin = 10,
+						TopMargin = 0,
+						BottomMargin = 0,
 					},
 					HorizontalJustificationType = UiHorizontalJustificationType.Center,
 					VerticalJustificationType = UiVerticalJustificationType.Center,
@@ -222,11 +228,11 @@ namespace LevelEditor.Scenes.Services
 							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 						}
 					},
-					SubElements =
+					Elements =
 					[
 						new UiButtonModel
 						{
-							UiElementName = savedTileMapNames[i],
+							Name = savedTileMapNames[i],
 							ResizeTexture = true,
 							HorizontalSizeType = UiElementSizeType.FlexMin,
 							VerticalSizeType = UiElementSizeType.FlexMin,
@@ -344,7 +350,7 @@ namespace LevelEditor.Scenes.Services
 			var controlService = this._gameServices.GetService<IControlService>();
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
-			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiScreenZoneType.Row3Col4);
+			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiZonePositionType.Row3Col4);
 			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);

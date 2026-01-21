@@ -9,7 +9,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents graphical text with margin.
 	/// </summary>
-	public class GraphicalTextWithMargin : GraphicalText
+	public class GraphicalTextWithMargin : SimpleText
 	{
 		/// <summary>
 		/// Gets or sets the user interface margin.

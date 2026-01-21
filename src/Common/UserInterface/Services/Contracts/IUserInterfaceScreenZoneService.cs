@@ -19,7 +19,7 @@ namespace Common.UserInterface.Services.Contracts
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public Dictionary<UiScreenZoneType, UiScreenZone> UserInterfaceScreenZones { get; set; }
+		public Dictionary<UiZonePositionType, UiScreenZone> UserInterfaceScreenZones { get; set; }
 
 		/// <summary>
 		/// Initialize the user interface zones.

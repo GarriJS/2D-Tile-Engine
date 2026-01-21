@@ -8,8 +8,8 @@ namespace Common.DiskModels.UserInterface
 {
 	public class UiRowModel : BaseDiskModel
 	{
-		[JsonPropertyName("uiRowName")]
-		public string UiRowName { get; set; }
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
 
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
@@ -29,7 +29,7 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("backgroundTexture")]
 		public SimpleImageModel BackgroundTexture { get; set; }
 
-		[JsonPropertyName("subElements")]
-		public IAmAUiElementModel[] SubElements { get; set; }
+		[JsonPropertyName("elements")]
+		public IAmAUiElementModel[] Elements { get; set; }
 	}
 }

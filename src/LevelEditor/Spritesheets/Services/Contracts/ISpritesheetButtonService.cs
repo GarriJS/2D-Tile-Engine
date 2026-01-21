@@ -31,9 +31,9 @@ namespace LevelEditor.Spritesheets.Services.Contracts
 		/// </summary>
 		/// <param name="spritesheetName">The spritesheet name.</param>
 		/// <param name="backgroundTexture">The background texture.</param>
-		/// <param name="uiScreenZoneType">The user interface zone type.</param>
+		/// <param name="uiZonePositionType">The user interface zone position type.</param>
 		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiScreenZoneType uiScreenZoneType);
+		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiZonePositionType uiZonePositionType);
 
 		/// <summary>
 		/// Gets the user interface buttons for the spritesheet.

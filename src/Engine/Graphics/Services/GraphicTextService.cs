@@ -51,7 +51,7 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="model">The graphic text model.</param>
 		/// <returns>The graphical text.</returns>
-		public GraphicalText GetGraphicTextFromModel(GraphicalTextModel model)
+		public SimpleText GetGraphicTextFromModel(GraphicalTextModel model)
 		{
 			if (null == model)
 			{
@@ -63,7 +63,7 @@ namespace Engine.Graphics.Services
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
 
-			var result = new GraphicalText
+			var result = new SimpleText
 			{
 				FontName = model.FontName,
 				Text = model.Text,
