@@ -72,8 +72,8 @@ namespace Engine
 			this.ExternalServiceProviders.Clear();
 
 			// Do initializations
-			this._graphics.PreferredBackBufferWidth = 1920;
-			this._graphics.PreferredBackBufferHeight = 1080;
+			this._graphics.PreferredBackBufferWidth = 1080;
+			this._graphics.PreferredBackBufferHeight = 720;
 			this._graphics.ApplyChanges();
 
 			foreach (var initialization in this.Initializations)

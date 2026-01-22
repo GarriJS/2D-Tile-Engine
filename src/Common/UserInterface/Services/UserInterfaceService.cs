@@ -298,6 +298,12 @@ namespace Common.UserInterface.Services
 			foreach (var rowModel in uiBlockModel.Rows ?? [])
 			{
 				var row = this.GetUiRow(rowModel);
+
+				if (row.TotalWidth > zoneArea.Width)
+				{
+
+				}
+
 				rows.Add(row);
 			}
 
@@ -401,16 +407,10 @@ namespace Common.UserInterface.Services
 			var dynamicWidth = remainingWidth / dynamicWidthElements.Length;
 
 			if (zoneArea.Width * ElementSizesScalars.ExtraSmall.X > dynamicWidth)
-			{
-				// LOGGING
-
 				dynamicWidth = zoneArea.Width * ElementSizesScalars.ExtraSmall.X;
-			}
 
 			foreach (var dynamicWidthElement in dynamicWidthElements)
-			{
 				dynamicWidthElement.Area.Width = dynamicWidth;
-			}
 
 			var rowArea = new SubArea
 			{
@@ -458,6 +458,47 @@ namespace Common.UserInterface.Services
 				CursorConfiguration = cursorConfiguration,
 				Elements = subElements
 			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Splits the row to accommodate  
+		/// </summary>
+		/// <param name="uiRow">The user interface row.</param>
+		/// <param name="maxWidth">The max width.</param>
+		/// <returns>The user interface rows.</returns>
+		private UiRow[] SplitRow(UiRow uiRow, float maxWidth)
+		{
+			if (uiRow.Elements.Count <= 1)
+				return [uiRow];
+
+			var splitEven = uiRow.HorizontalJustificationType == UiHorizontalJustificationType.Center;
+			var newRows = new List<UiRow>();
+			var currentElements = new List<IAmAUiElement>();
+
+			foreach (var element in uiRow.Elements)
+			{
+				var currentWidth = currentElements.Sum(e => e.TotalWidth);
+
+				if ((currentElements.Count == 0) ||
+					(maxWidth > currentWidth + element.TotalWidth))
+				{
+					currentElements.Add(element);
+
+					continue;
+				}
+
+				var newRow = new UiRow
+				{
+					// do rest
+					Elements = currentElements,
+				};
+				newRows.Add(newRow);
+				currentElements = [];
+			}
+
+			var result = newRows.ToArray();
 
 			return result;
 		}
