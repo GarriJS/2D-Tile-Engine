@@ -16,7 +16,7 @@ namespace Engine.RunTime.Managers
 	public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
 	{
 		/// <summary>
-		/// Gets the run time collections.
+		/// Gets the run time collection.
 		/// </summary>
 		public RunTimeCollection<IAmUpdateable> RunTimeCollection { get; private set; } 
 
@@ -30,7 +30,6 @@ namespace Engine.RunTime.Managers
 			{
 				KeyFunction = this.GetKey
 			};
-
 			base.Initialize();
 		}
 
@@ -41,7 +40,9 @@ namespace Engine.RunTime.Managers
 		/// <returns>The key.</returns>
 		private int GetKey(IAmUpdateable updateable)
 		{
-			return updateable.UpdateOrder;
+			var key = updateable.UpdateOrder;
+
+			return key;
 		}
 
 		/// <summary>

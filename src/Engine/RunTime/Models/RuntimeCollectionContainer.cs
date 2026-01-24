@@ -51,29 +51,21 @@ namespace Engine.RunTime.Models
 		public void AddModel(T model)
 		{
 			if (true == this.PendingAdds.Contains(model))
-			{
 				return;
-			}
 
 			var key = this.KeyFunction(model);
 
 			if (false == this.ActiveModels.TryGetValue(key, out var modelList))
 			{
 				if (false == this.CurrentKey.HasValue)
-				{
 					this.ActiveModels[key] = [model];
-				}
 				else if (true == this.PendingListAdds.TryGetValue(key, out var pendingModelList))
 				{
 					if (false == pendingModelList.Contains(model))
-					{
 						pendingModelList.Add(model);
-					}
 				}
 				else
-				{
 					this.PendingListAdds[key] = [model];
-				}
 
 				return;
 			}
@@ -81,22 +73,16 @@ namespace Engine.RunTime.Models
 			if (key == this.CurrentKey)
 			{
 				if (true == this.PendingRemovals.Contains(model))
-				{
 					this.PendingRemovals.Remove(model);
-				}
 				else
-				{
 					this.PendingAdds.Add(model);
-				}
 			}
 			else if (false == modelList.Contains(model))
 			{
 				modelList.Add(model);
 
 				if (true == this.PendingListRemovals.Contains(key))
-				{
 					this.PendingListRemovals.Remove(key);
-				}
 			}
 		}
 
@@ -107,45 +93,31 @@ namespace Engine.RunTime.Models
 		public void RemoveModel(T model)
 		{
 			if (true == this.PendingRemovals.Contains(model))
-			{
 				return;
-			}
 
 			var key = this.KeyFunction(model);
 
 			if (false == this.ActiveModels.TryGetValue(key, out var modelList))
-			{
 				return;
-			}
 
 			if (key == this.CurrentKey)
 			{
 				if (true == this.PendingAdds.Contains(model))
-				{
 					this.PendingAdds.Remove(model);
-				}
 				else
-				{
 					this.PendingRemovals.Add(model);
-				}
 			}
 			else if (true == modelList.Contains(model))
 			{
 				modelList.Remove(model);
 
 				if (0 < modelList.Count)
-				{
 					return;
-				}
 
 				if (true == this.CurrentKey.HasValue)
-				{
 					this.PendingListRemovals.Add(key);
-				}
 				else
-				{
 					this.ActiveModels.Remove(key);
-				}
 			}
 		}
 
@@ -166,9 +138,7 @@ namespace Engine.RunTime.Models
 			modelList.RemoveAll(this.PendingRemovals.Contains);
 
 			if (modelList.Count == 0)
-			{
 				this.PendingListRemovals.Add(this.CurrentKey.Value);
-			}
 
 			this.ClearPendingModels();
 		}
@@ -179,19 +149,13 @@ namespace Engine.RunTime.Models
 		public void ResolvePendingLists()
 		{
 			if (true == this.CurrentKey.HasValue)
-			{
 				this.ClearPendingLists();
-			}
 
 			foreach (var kvp in this.PendingListAdds)
-			{
 				this.ActiveModels[kvp.Key] = kvp.Value;
-			}
 
 			foreach (var key in this.PendingListRemovals)
-			{
 				this.ActiveModels.Remove(key);
-			}
 
 			this.ClearPendingLists();
 		}

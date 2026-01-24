@@ -16,7 +16,7 @@ namespace Engine.RunTime.Managers
 	public class RuntimeOverlaidDrawManager(Game game) : DrawableGameComponent(game), IRuntimeOverlaidDrawService
 	{
 		/// <summary>
-		/// Gets the run time collections.
+		/// Gets the run time collection.
 		/// </summary>
 		public RunTimeCollection<IAmDrawable> RunTimeCollection { get; private set; }
 
@@ -31,7 +31,6 @@ namespace Engine.RunTime.Managers
 			{
 				KeyFunction = this.GetKey
 			};
-
 			base.Initialize();
 		}
 
@@ -42,7 +41,9 @@ namespace Engine.RunTime.Managers
 		/// <returns>The key.</returns>
 		private int GetKey(IAmDrawable drawable)
 		{
-			return drawable.DrawLayer;
+			var key = drawable.DrawLayer;
+
+			return key;
 		}
 
 		/// <summary>
@@ -82,7 +83,6 @@ namespace Engine.RunTime.Managers
 		public override void Draw(GameTime gameTime)
 		{
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
-			
 			drawingService.BeginDraw();
 
 			foreach (var kvp in this.RunTimeCollection.ActiveModels)
