@@ -10,6 +10,7 @@ using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
+using Engine.DiskModels.Drawing;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
@@ -98,9 +99,7 @@ namespace Common.UserInterface.Services
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup)
 		{
 			if (null == uiGroup)
-			{
 				return;
-			}
 
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
@@ -109,17 +108,13 @@ namespace Common.UserInterface.Services
 				var activeGroup = this.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == this.ActiveVisibilityGroupId);
 
 				foreach (var uiZoneContainer in activeGroup.Zones)
-				{
 					runTimeOverlaidDrawService.RemoveDrawable(uiZoneContainer);
-				}
 			}
 
 			this.ActiveVisibilityGroupId = uiGroup.VisibilityGroupId;
 
 			if (0 == uiGroup.Zones.Count)
-			{
 				return;
-			}
 
 			var animationService = this._gameServices.GetService<IAnimationService>();
 
@@ -128,32 +123,22 @@ namespace Common.UserInterface.Services
 				runTimeOverlaidDrawService.AddDrawable(uiZone);
 
 				if (0 == uiZone.Blocks.Count)
-				{
 					continue;
-				}
 
 				foreach (var uiBlock in uiZone.Blocks)
 				{
 					if (0 == uiBlock.Rows.Count)
-					{
 						continue;
-					}
 
 					foreach (var uiRow in uiBlock.Rows)
 					{
 						if (0 == uiRow.Elements.Count)
-						{
 							continue;
-						}
 
 						foreach (var element in uiRow.Elements)
-						{
 							if ((element is UiButton button) &&
 								(null != button?.ClickAnimation))
-							{
 								button.ClickAnimation.ResetTriggeredAnimation();
-							}
-						}
 					}
 				}
 			}
@@ -173,9 +158,7 @@ namespace Common.UserInterface.Services
 				var uiZoneElement = this.GetUiZone(uiZoneElementModel);
 
 				if (null != uiZoneElement)
-				{
 					uiZones.Add(uiZoneElement);
-				}
 			}
 
 			var uiGroup = new UiGroup
@@ -188,9 +171,7 @@ namespace Common.UserInterface.Services
 			this.UserInterfaceGroups.Add(uiGroup);
 
 			if (true == uiGroupModel.IsVisible)
-			{
 				this.ToggleUserInterfaceGroupVisibility(uiGroup.VisibilityGroupId);
-			}
 
 			return uiGroup;
 		}
@@ -209,25 +190,25 @@ namespace Common.UserInterface.Services
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 
-			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue((UiZonePositionType)uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
-			{
+			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue(uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
 				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiZonePositionType.Unknown];
-			}
 
 			var blocks = new List<UiBlock>();
 
 			foreach (var uiBlockModel in uiZoneModel.Blocks ?? [])
 			{
-				var row = this.GetUiBlock(uiBlockModel);
-				blocks.Add(row);
+				var block = this.GetUiBlock(uiBlockModel);
+				blocks.Add(block);
 			}
 
 			var contentHeight = blocks.Sum(e => e.TotalHeight);
-			var rows = blocks.Where(e => e.Rows.Count != 0).SelectMany(e => e.Rows).ToArray();
+			var rows = blocks.Where(e => e.Rows.Count != 0)
+							 .SelectMany(e => e.Rows)
+							 .ToArray();
 			var dynamicRows = rows.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType)))
 								  .ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
-			var dynamicHeight = remainingHeight / dynamicRows.Count();
+			var dynamicHeight = remainingHeight / dynamicRows.Length;
 
 			if (uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y > dynamicHeight)
 			{
@@ -249,9 +230,7 @@ namespace Common.UserInterface.Services
 
 				if ((true == uiZoneModel.ResizeTexture) ||
 					(background is CompositeImage))
-				{
 					background.SetDrawDimensions(uiScreenZone.Area.ToSubArea);
-				}
 			}
 
 			Cursor hoverCursor = null;
@@ -268,7 +247,7 @@ namespace Common.UserInterface.Services
 				ResetCalculateCachedOffsets = true,
 				Name = uiZoneModel.Name,
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
-				VerticalJustificationType = (UiVerticalJustificationType)uiZoneModel.VerticalJustificationType,
+				VerticalJustificationType = uiZoneModel.VerticalJustificationType,
 				Graphic = background,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
@@ -301,10 +280,11 @@ namespace Common.UserInterface.Services
 
 				if (row.TotalWidth > zoneArea.Width)
 				{
-
+					var splitRows = this.SplitRow(row, rowModel, zoneArea.Width);
+					rows.AddRange(splitRows);
 				}
-
-				rows.Add(row);
+				else
+					rows.Add(row);
 			}
 
 			var contentWidth = rows.Sum(e => e.TotalWidth);
@@ -321,10 +301,9 @@ namespace Common.UserInterface.Services
 			}
 
 			foreach (var dynamicRow in dynamicRows)
-			{
 				dynamicRow.Area.Width = dynamicWidth;
-			}
 
+			var margin = uiElementService.GetUiMarginFromModel(uiBlockModel.Margin);
 			var blockArea = new SubArea
 			{
 				Width = zoneArea.Width,
@@ -334,21 +313,22 @@ namespace Common.UserInterface.Services
 
 			if (null != uiBlockModel.BackgroundTexture)
 			{
+				var graphicArea = blockArea;
+
+				if (true == uiBlockModel.ExtendBackgroundToMargin)
+					graphicArea = new SubArea
+					{
+						Width = blockArea.Width,
+						Height = blockArea.Height + margin.TopMargin + margin.BottomMargin
+					};
+
 				background = imageService.GetImageFromModel(uiBlockModel.BackgroundTexture);
 
 				if ((true == uiBlockModel.ResizeTexture) ||
 					(background is CompositeImage))
-				{
-					var dimensions = new SubArea
-					{
-						Width = zoneArea.Width,
-						Height = blockArea.Height
-					};
-					background.SetDrawDimensions(dimensions);
-				}
+					background.SetDrawDimensions(graphicArea);
 			}
 
-			var margin = uiElementService.GetUiMarginFromModel(uiBlockModel.Margin);
 			Cursor hoverCursor = null;
 
 			if ((false == string.IsNullOrEmpty(uiBlockModel.HoverCursorName)) &&
@@ -362,6 +342,8 @@ namespace Common.UserInterface.Services
 			{
 				Name = uiBlockModel.Name,
 				FlexRows = true,
+				ExtendBackgroundToMargin = uiBlockModel.ExtendBackgroundToMargin,
+				AvailableWidth = zoneArea.Width,
 				Area = blockArea,
 				Margin = margin,
 				HorizontalJustificationType = uiBlockModel.HorizontalJustificationType,
@@ -376,10 +358,10 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface row.
+		/// Gets the user interface block.
 		/// </summary>
-		/// <param name="uiRowModel">The user interface row model.</param>
-		/// <returns>The user interface row.</returns>
+		/// <param name="uiRowModel">The user interface block model.</param>
+		/// <returns>The user interface block.</returns>
 		public UiRow GetUiRow(UiRowModel uiRowModel)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
@@ -412,30 +394,32 @@ namespace Common.UserInterface.Services
 			foreach (var dynamicWidthElement in dynamicWidthElements)
 				dynamicWidthElement.Area.Width = dynamicWidth;
 
+			var margin = uiElementService.GetUiMarginFromModel(uiRowModel.Margin);
 			var rowArea = new SubArea
 			{
-				Width = zoneArea.Width,
+				Width = contentWidth,
 				Height = contentHeight
 			};
 			IAmAGraphic background = null;
 
 			if (null != uiRowModel.BackgroundTexture)
 			{
+				var graphicArea = rowArea;
+
+				if (true == uiRowModel.ExtendBackgroundToMargin)
+					graphicArea = new SubArea
+					{
+						Width = rowArea.Width + margin.LeftMargin + margin.RightMargin,
+						Height = rowArea.Height + margin.TopMargin + margin.BottomMargin
+					};
+
 				background = imageService.GetImageFromModel(uiRowModel.BackgroundTexture);
 
 				if ((true == uiRowModel.ResizeTexture) ||
 					(background is CompositeImage))
-				{
-					var dimensions = new SubArea
-					{
-						Width = zoneArea.Width,
-						Height = rowArea.Height
-					};
-					background.SetDrawDimensions(dimensions);
-				}
+					background.SetDrawDimensions(graphicArea);
 			}
 
-			var margin = uiElementService.GetUiMarginFromModel(uiRowModel.Margin);
 			Cursor hoverCursor = null;
 
 			if ((false == string.IsNullOrEmpty(uiRowModel.RowHoverCursorName)) &&
@@ -449,6 +433,8 @@ namespace Common.UserInterface.Services
 			{
 				Name = uiRowModel.Name,
 				Flex = true,
+				ExtendBackgroundToMargin = uiRowModel.ExtendBackgroundToMargin,
+				AvailableWidth = zoneArea.Width,
 				Area = rowArea,
 				Margin = margin,
 				HorizontalJustificationType = uiRowModel.HorizontalJustificationType,
@@ -463,39 +449,159 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Splits the row to accommodate  
+		/// Splits the block to accommodate  
 		/// </summary>
-		/// <param name="uiRow">The user interface row.</param>
+		/// <param name="uiRow">The user interface block.</param>
+		/// <param name="originalModel">The original row model.</param>
 		/// <param name="maxWidth">The max width.</param>
 		/// <returns>The user interface rows.</returns>
-		private UiRow[] SplitRow(UiRow uiRow, float maxWidth)
+		private UiRow[] SplitRow(UiRow uiRow, UiRowModel originalModel, float maxWidth)
 		{
 			if (uiRow.Elements.Count <= 1)
 				return [uiRow];
 
+			var imageService = this._gameServices.GetService<IImageService>();
+
 			var splitEven = uiRow.HorizontalJustificationType == UiHorizontalJustificationType.Center;
 			var newRows = new List<UiRow>();
+			var currentRow = 1;
 			var currentElements = new List<IAmAUiElement>();
+			var currentWidth = 0f;
+			var targetWidth = maxWidth;
+
+			if (true == splitEven)
+			{
+				var totalWidth = uiRow.Elements.Sum(e => e.TotalWidth);
+				var rowCount = (int)MathF.Ceiling(totalWidth / maxWidth);
+				targetWidth = (totalWidth / rowCount) + uiRow.Elements.OrderBy(e => e.TotalWidth)
+																	  .First().TotalWidth;
+			}
 
 			foreach (var element in uiRow.Elements)
 			{
-				var currentWidth = currentElements.Sum(e => e.TotalWidth);
+				var elementWidth = element.TotalWidth;
 
-				if ((currentElements.Count == 0) ||
-					(maxWidth > currentWidth + element.TotalWidth))
+				if (currentElements.Count == 0)
 				{
 					currentElements.Add(element);
+					currentWidth = elementWidth;
 
 					continue;
 				}
 
+				var wouldOverflowHard = currentWidth + elementWidth > maxWidth;
+				var wouldExceedTarget = splitEven && currentWidth + elementWidth > targetWidth;
+
+				if ((true == wouldOverflowHard) ||
+					(true == wouldExceedTarget))
+				{
+					var contentWidth = currentElements.Sum(e => e.TotalWidth);
+					var contentHeight = currentElements.Select(e => e.TotalHeight)
+													   .OrderDescending()
+													   .FirstOrDefault();
+					var area = new SubArea
+					{
+						Width = contentWidth,
+						Height = contentHeight,
+					};
+					var margin = uiRow.Margin.Copy();
+					IAmAGraphic background = null;
+
+					if (null != originalModel.BackgroundTexture)
+					{
+						var graphicArea = area;
+
+						if (true == uiRow.ExtendBackgroundToMargin)
+							graphicArea = new SubArea
+							{
+								Width = area.Width + margin.LeftMargin + margin.RightMargin,
+								Height = area.Height + margin.TopMargin + margin.BottomMargin
+							};
+
+						background = imageService.GetImageFromModel(originalModel.BackgroundTexture);
+
+						if ((true == originalModel.ResizeTexture) ||
+							(background is CompositeImage))
+							background.SetDrawDimensions(graphicArea);
+					}
+
+					var newRow = new UiRow
+					{
+						Name = $"{uiRow.Name}_{currentRow}",
+						Flex = uiRow.Flex,
+						ExtendBackgroundToMargin = uiRow.ExtendBackgroundToMargin,
+						AvailableWidth = uiRow.AvailableWidth,
+						Margin = uiRow.Margin.Copy(),
+						HorizontalJustificationType = uiRow.HorizontalJustificationType,
+						VerticalJustificationType = uiRow.VerticalJustificationType,
+						Area = area,
+						Graphic = background,
+						HoverCursor = uiRow.HoverCursor,
+						CursorConfiguration = uiRow.CursorConfiguration,
+						Elements = currentElements
+					};
+
+					currentRow++;
+					newRows.Add(newRow);
+					currentElements = [element];
+					currentWidth = elementWidth;
+				}
+				else
+				{
+					currentElements.Add(element);
+					currentWidth += elementWidth;
+				}
+			}
+
+			if (currentElements.Count > 0)
+			{
+				var contentWidth = currentElements.Sum(e => e.TotalWidth);
+				var contentHeight = currentElements.Select(e => e.TotalHeight)
+												   .OrderDescending()
+												   .FirstOrDefault();
+				var area = new SubArea
+				{
+					Width = contentWidth,
+					Height = contentHeight,
+				};
+				var margin = uiRow.Margin.Copy();
+				IAmAGraphic background = null;
+
+				if (null != originalModel.BackgroundTexture)
+				{
+					var graphicArea = area;
+
+					if (true == uiRow.ExtendBackgroundToMargin)
+						graphicArea = new SubArea
+						{
+							Width = area.Width + margin.LeftMargin + margin.RightMargin,
+							Height = area.Height + margin.TopMargin + margin.BottomMargin
+						};
+
+					background = imageService.GetImageFromModel(originalModel.BackgroundTexture);
+
+					if ((true == originalModel.ResizeTexture) ||
+						(background is CompositeImage))
+						background.SetDrawDimensions(graphicArea);
+				}
+
 				var newRow = new UiRow
 				{
-					// do rest
-					Elements = currentElements,
+					Name = $"{uiRow.Name}_{currentRow}",
+					Flex = uiRow.Flex,
+					ExtendBackgroundToMargin = uiRow.ExtendBackgroundToMargin,
+					AvailableWidth = uiRow.AvailableWidth,
+					Margin = margin,
+					HorizontalJustificationType = uiRow.HorizontalJustificationType,
+					VerticalJustificationType = uiRow.VerticalJustificationType,
+					Area = area,
+					Graphic = background,
+					HoverCursor = uiRow.HoverCursor,
+					CursorConfiguration = uiRow.CursorConfiguration,
+					Elements = currentElements
 				};
+
 				newRows.Add(newRow);
-				currentElements = [];
 			}
 
 			var result = newRows.ToArray();
@@ -504,9 +610,9 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Updates the row dynamic height.
+		/// Updates the block dynamic height.
 		/// </summary>
-		/// <param name="uiRow">The user interface row.</param>
+		/// <param name="uiRow">The user interface block.</param>
 		/// <param name="dynamicHeight">The dynamic height.</param>
 		private void UpdateRowDynamicHeight(UiRow uiRow, float dynamicHeight)
 		{
@@ -518,23 +624,19 @@ namespace Common.UserInterface.Services
 			uiRow.Graphic?.SetDrawDimensions(dimensions);
 
 			if (0 == uiRow.Elements.Count)
-			{
 				return;
-			}
 
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 
 			var dynamicHeightElements = uiRow.Elements.Where(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType))
-														 .ToList();
+													  .ToList();
 
 			foreach (var uiElement in dynamicHeightElements ?? [])
-			{
 				uiElementService.UpdateElementHeight(uiElement, dynamicHeight);
-			}
 
 			var contentHeight = uiRow.Elements.Select(e => e.TotalHeight)
-												 .OrderDescending()
-												 .FirstOrDefault();
+										      .OrderDescending()
+											  .FirstOrDefault();
 			uiRow.Area.Height = contentHeight;
 		}
 	}

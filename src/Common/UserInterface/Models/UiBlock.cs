@@ -36,6 +36,16 @@ namespace Common.UserInterface.Models
 		public bool FlexRows { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether to extend the background to the margins.
+		/// </summary>
+		public bool ExtendBackgroundToMargin { get; set; }
+
+		/// <summary>
+		/// Gets or sets the available width to the row.
+		/// </summary>
+		public float AvailableWidth { get; set; }
+
+		/// <summary>
 		/// Gets the total width.
 		/// </summary>
 		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
@@ -118,13 +128,19 @@ namespace Common.UserInterface.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
+			var marginGraphicOffset = this.ExtendBackgroundToMargin ?
+				new Vector2
+				{
+					X = -this.Margin.LeftMargin,
+					Y = -this.Margin.TopMargin
+				} :
+				default;
 			var graphicOffset = offset + (this.CachedOffset ?? default);
-			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
+			var backgroundOffset = graphicOffset + marginGraphicOffset;
+			this.Graphic?.Draw(gameTime, gameServices, position, backgroundOffset);
 
 			foreach (var elementRow in this.Rows ?? [])
-			{
 				elementRow.Draw(gameTime, gameServices, position, graphicOffset);
-			}
 		}
 
 		/// <summary>
@@ -145,14 +161,7 @@ namespace Common.UserInterface.Models
 		/// <returns>The enumerated rowLayout.</returns>
 		public IEnumerable<RowLayoutInfo> EnumerateLayout()
 		{
-			var contentWidth = this.Rows.Sum(e => e.TotalWidth);
 			var contentHeight = this.Rows.Sum(e => e.TotalHeight);
-			var horizontalOffset = this.HorizontalJustificationType switch
-			{
-				UiHorizontalJustificationType.Center => (this.TotalWidth - contentWidth) / 2,
-				UiHorizontalJustificationType.Right => this.TotalWidth - contentWidth,
-				_ => 0
-			};
 			var verticalOffset = this.VerticalJustificationType switch
 			{
 				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
@@ -160,14 +169,21 @@ namespace Common.UserInterface.Models
 				_ => 0
 			};
 
-			if (horizontalOffset < 0)
-				horizontalOffset = 0;
-
 			if (verticalOffset < 0)
 				verticalOffset = 0;
 
 			foreach (var row in this.Rows ?? [])
 			{
+				var horizontalOffset = this.HorizontalJustificationType switch
+				{
+					UiHorizontalJustificationType.Center => (this.AvailableWidth - row.TotalWidth) / 2,
+					UiHorizontalJustificationType.Right => this.AvailableWidth - row.TotalWidth,
+					_ => 0
+				};
+
+				if (horizontalOffset < 0)
+					horizontalOffset = 0;
+
 				var rowTop = verticalOffset + row.Margin.TopMargin;
 				var rowLeft = horizontalOffset + row.Margin.LeftMargin;
 				var result = new RowLayoutInfo
@@ -192,9 +208,7 @@ namespace Common.UserInterface.Models
 		public void Dispose()
 		{
 			foreach (var row in this.Rows ?? [])
-			{
 				row?.Dispose();
-			}
 		}
 	}
 }

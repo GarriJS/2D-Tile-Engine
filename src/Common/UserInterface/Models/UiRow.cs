@@ -37,6 +37,16 @@ namespace Common.UserInterface.Models
 		public bool Flex { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether to extend the background to the margins.
+		/// </summary>
+		public bool ExtendBackgroundToMargin { get; set; }
+
+		/// <summary>
+		/// Gets or sets the available width to the row.
+		/// </summary>
+		public float AvailableWidth { get; set; }
+
+		/// <summary>
 		/// Gets the total width.
 		/// </summary>
 		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
@@ -119,13 +129,19 @@ namespace Common.UserInterface.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
+			var marginGraphicOffset = this.ExtendBackgroundToMargin ? 
+				new Vector2
+				{ 
+					X = -this.Margin.LeftMargin,
+					Y = -this.Margin.TopMargin
+				} :
+				default;
 			var graphicOffset = offset + (this.CachedOffset ?? default);
-			this.Graphic?.Draw(gameTime, gameServices, position, graphicOffset);
+			var backgroundOffset = graphicOffset + marginGraphicOffset;
+			this.Graphic?.Draw(gameTime, gameServices, position, backgroundOffset);
 
 			foreach (var element in this.Elements ?? [])
-			{
 				element.Draw(gameTime, gameServices, position, graphicOffset + (element.CachedOffset ?? default));
-			}
 		}
 
 		/// <summary>
@@ -134,9 +150,7 @@ namespace Common.UserInterface.Models
 		public void UpdateOffsets()
 		{
 			foreach (var layout in this.EnumerateLayout() ?? [])
-			{
 				layout.Element.CachedOffset = layout.Offset;
-			}
 		}
 
 		/// <summary>
@@ -195,9 +209,7 @@ namespace Common.UserInterface.Models
 		public void Dispose()
 		{
 			foreach (var subElement in this.Elements ?? Enumerable.Empty<IAmAUiElement>())
-			{
 				subElement?.Dispose();
-			}
 		}
 	}
 }

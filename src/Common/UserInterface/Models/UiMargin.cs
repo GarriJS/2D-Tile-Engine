@@ -24,5 +24,22 @@
 		/// Gets or sets the right margin.
 		/// </summary>
 		public float RightMargin { get; set; }
+
+		/// <summary>
+		/// Gets a copy of the user interface margin.
+		/// </summary>
+		/// <returns>A copy of the user interface margin.</returns>
+		public UiMargin Copy() 
+		{
+			var result = new UiMargin
+			{ 
+				TopMargin = this.TopMargin,
+				BottomMargin = this.BottomMargin,	
+				LeftMargin = this.LeftMargin,
+				RightMargin = this.RightMargin
+			};
+
+			return result;
+		}
 	}
 }
