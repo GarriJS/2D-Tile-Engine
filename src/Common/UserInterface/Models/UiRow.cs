@@ -174,7 +174,6 @@ namespace Common.UserInterface.Models
 			{
 				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
 				var elementRight = elementLeft + element.InsideWidth;
-
 				var verticalOffset = this.VerticalJustificationType switch
 				{
 					UiVerticalJustificationType.Center => (element.TotalHeight - this.InsideHeight) / 2,

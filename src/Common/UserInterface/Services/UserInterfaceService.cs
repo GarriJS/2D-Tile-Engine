@@ -278,7 +278,8 @@ namespace Common.UserInterface.Services
 			{
 				var row = this.GetUiRow(rowModel);
 
-				if (row.TotalWidth > zoneArea.Width)
+				if ((true == uiBlockModel.FlexRows) &&
+					(row.TotalWidth > zoneArea.Width))
 				{
 					var splitRows = this.SplitRow(row, rowModel, zoneArea.Width);
 					rows.AddRange(splitRows);
@@ -422,8 +423,8 @@ namespace Common.UserInterface.Services
 
 			Cursor hoverCursor = null;
 
-			if ((false == string.IsNullOrEmpty(uiRowModel.RowHoverCursorName)) &&
-				(false == cursorService.Cursors.TryGetValue(uiRowModel.RowHoverCursorName, out hoverCursor)))
+			if ((false == string.IsNullOrEmpty(uiRowModel.HoverCursorName)) &&
+				(false == cursorService.Cursors.TryGetValue(uiRowModel.HoverCursorName, out hoverCursor)))
 			{
 				// LOGGING
 			}

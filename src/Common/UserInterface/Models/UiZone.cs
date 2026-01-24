@@ -142,13 +142,20 @@ namespace Common.UserInterface.Models
 
 			foreach (var block in this.Blocks ?? [])
 			{
+				var horizontalOffset = block.HorizontalJustificationType switch
+				{
+					UiHorizontalJustificationType.Center => (block.AvailableWidth - block.TotalWidth) / 2,
+					UiHorizontalJustificationType.Right => block.AvailableWidth - block.TotalWidth,
+					_ => 0
+				};
 				var blockTop = verticalOffset + block.Margin.TopMargin;
+				var blockLeft = horizontalOffset + block.Margin.LeftMargin;
 				var result = new BlockLayoutInfo
 				{
 					Block = block,
 					Offset = new Vector2
 					{
-						X = 0,
+						X = blockLeft,
 						Y = blockTop
 					}
 				};

@@ -13,6 +13,9 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
+		[JsonPropertyName("flexRows")]
+		public bool FlexRows { get; set; }
+
 		[JsonPropertyName("extendBackgroundToMargin")]
 		public bool ExtendBackgroundToMargin { get; set; }
 

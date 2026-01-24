@@ -209,6 +209,7 @@ namespace LevelEditor.Core.Initialization
 							[
 								new UiBlockModel
 								{
+									FlexRows = true,
 									Rows =
 									[
 										new UiRowModel
@@ -229,8 +230,8 @@ namespace LevelEditor.Core.Initialization
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 												}
 											},
-											RowHoverCursorName = CommonCursorNames.BasicCursorName,
-											HorizontalJustificationType = UiHorizontalJustificationType.Center,
+											HoverCursorName = CommonCursorNames.BasicCursorName,
+											HorizontalJustificationType = UiHorizontalJustificationType.Left,
 											VerticalJustificationType = UiVerticalJustificationType.Center,
 											Elements =
 											[
@@ -335,7 +336,7 @@ namespace LevelEditor.Core.Initialization
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
 												}
 											},
-											RowHoverCursorName = CommonCursorNames.BasicCursorName,
+											HoverCursorName = CommonCursorNames.BasicCursorName,
 											HorizontalJustificationType = UiHorizontalJustificationType.Center,
 											VerticalJustificationType = UiVerticalJustificationType.Center,
 											Elements =

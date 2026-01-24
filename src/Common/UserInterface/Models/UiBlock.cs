@@ -174,13 +174,12 @@ namespace Common.UserInterface.Models
 
 			foreach (var row in this.Rows ?? [])
 			{
-				var horizontalOffset = this.HorizontalJustificationType switch
+				var horizontalOffset = row.HorizontalJustificationType switch
 				{
-					UiHorizontalJustificationType.Center => (this.AvailableWidth - row.TotalWidth) / 2,
-					UiHorizontalJustificationType.Right => this.AvailableWidth - row.TotalWidth,
+					UiHorizontalJustificationType.Center => (row.AvailableWidth - row.TotalWidth) / 2,
+					UiHorizontalJustificationType.Right => row.AvailableWidth - row.TotalWidth,
 					_ => 0
 				};
-
 				if (horizontalOffset < 0)
 					horizontalOffset = 0;
 

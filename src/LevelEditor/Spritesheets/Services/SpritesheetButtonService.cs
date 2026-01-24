@@ -52,7 +52,6 @@ namespace LevelEditor.Spritesheets.Services
 
 			var tileService = this._gameServices.GetService<ITileService>();
 			var controlService = this._gameServices.GetService<IControlService>();
-
 			cursorService.CursorControlComponent.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
@@ -69,7 +68,6 @@ namespace LevelEditor.Spritesheets.Services
 				Graphic = elementGraphicModel,
 				CursorUpdaterName = LevelEditorCursorUpdatersNames.SpritesheetButtonCursorUpdater
 			};
-
 			var secondaryCursor = cursorService.GetCursor(secondaryCursorModel, addCursor: false, drawLayerOffset: 1);
 			cursorService.CursorControlComponent.AddSecondaryCursor(secondaryCursor, disableExisting: true);
 
@@ -90,17 +88,13 @@ namespace LevelEditor.Spritesheets.Services
 				},
 				Graphic = elementGraphicModel
 			};
-
 			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
 			cursorService.CursorControlComponent.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
-
 			var sceneEditService = this._gameServices.GetService<ISceneEditService>();
-			
 			var addTileParams = new AddTileParams
 			{
 				TileGraphic = elementGraphicModel
 			};
-
 			sceneEditService.AddTileComponent.AddTileParameters = addTileParams;
 		}
 
@@ -112,7 +106,6 @@ namespace LevelEditor.Spritesheets.Services
 		public void SpritesheetButtonCursorUpdater(Cursor cursor, GameTime gameTime)
 		{
 			var tileService = this._gameServices.GetService<ITileService>();
-
 			var localTileLocation = tileService.GetLocalTileCoordinates(cursor.Position.Coordinates);
 			cursor.Offset = new Vector2
 			{
@@ -134,7 +127,6 @@ namespace LevelEditor.Spritesheets.Services
 			
 			var spritesheetButtons = this.GetUiButtonsForSpritesheet(spritesheetName, new Point(32, 32));
 			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();
-
 			var uiZoneModel = new UiZoneModel
 			{
 				Name = "Spritesheet Buttons Zone",
@@ -144,6 +136,18 @@ namespace LevelEditor.Spritesheets.Services
 				[
 					new UiBlockModel
 					{
+						ResizeTexture = true,
+						FlexRows = true,
+						HoverCursorName = CommonCursorNames.BasicCursorName,
+						BackgroundTexture = new SimpleImageModel
+						{
+							TextureName = "pallet",
+							TextureRegion = new TextureRegionModel
+							{
+								TextureRegionType = TextureRegionType.Fill,
+								TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
+							}
+						},
 						Rows =
 						[
 							new UiRowModel
@@ -154,17 +158,6 @@ namespace LevelEditor.Spritesheets.Services
 									TopMargin = 15,
 									BottomMargin = 30,
 								},
-								ResizeTexture = true,
-								BackgroundTexture = new SimpleImageModel
-								{
-									TextureName = "pallet",
-									TextureRegion = new TextureRegionModel
-									{
-										TextureRegionType = TextureRegionType.Fill,
-										TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColorAdditions.Hex_404040_Transparent)
-									}
-								},
-								RowHoverCursorName = CommonCursorNames.BasicCursorName,
 								HorizontalJustificationType =  UiHorizontalJustificationType.Center,
 								VerticalJustificationType = UiVerticalJustificationType.Bottom,
 								Elements = flattenedButtons

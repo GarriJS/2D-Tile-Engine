@@ -80,13 +80,10 @@ namespace LevelEditor.Scenes.Services
 			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Element.Name);
 
 			if (tileMapModel is null)
-			{
 				return;
-			}
 
 			var tileService = this._gameServices.GetService<ITileService>();
 			var tileMap = tileService.GetTileMapFromModel(tileMapModel);
-
 			this.CreateNewScene(true, tileMap, cursorInteraction.Element.Name);
 		}
 
@@ -106,7 +103,6 @@ namespace LevelEditor.Scenes.Services
 		public UiZone GetTileGridUserInterfaceZone()
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-
 			var uiZoneModel = new UiZoneModel
 			{
 				Name = "Tile Grid User Interface Zone",
@@ -127,7 +123,7 @@ namespace LevelEditor.Scenes.Services
 									TopMargin = 10,
 									BottomMargin = 5,
 								},
-								RowHoverCursorName = CommonCursorNames.BasicCursorName,
+								HoverCursorName = CommonCursorNames.BasicCursorName,
 								ResizeTexture = true,
 								BackgroundTexture = new SimpleImageModel
 								{
@@ -290,7 +286,6 @@ namespace LevelEditor.Scenes.Services
 		public Scene CreateNewScene(bool setCurrent, string sceneName = null)
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
-
 			var areaModel = new AreaModel
 			{
 				Position = new PositionModel
@@ -301,7 +296,6 @@ namespace LevelEditor.Scenes.Services
 				Width = 0,
 				Height = 0,
 			};
-
 			var area = areaService.GetAreaFromModel(areaModel);
 			var tileMap = new TileMap
 			{
@@ -309,7 +303,6 @@ namespace LevelEditor.Scenes.Services
 				Area = area,
 				DrawLayer = 1,
 			};
-
 			var result = this.CreateNewScene(setCurrent, tileMap, sceneName);
 
 			return result;
@@ -331,9 +324,7 @@ namespace LevelEditor.Scenes.Services
 			};
 
 			if (true == setCurrent)
-			{
 				this.SetCurrentScene(scene);
-			}
 
 			return scene;
 		}
@@ -349,7 +340,6 @@ namespace LevelEditor.Scenes.Services
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-
 			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiZonePositionType.Row3Col4);
 			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
 			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
@@ -379,9 +369,7 @@ namespace LevelEditor.Scenes.Services
 			this.AddTileComponent.SetBackgroundGraphic(simpleImageModel);
 
 			if (false == this.AddTileComponent.BackgroundGraphicActive)
-			{
 				this.AddTileComponent.ToggleBackgroundGraphic();
-			}
 
 			this.CurrentScene = scene;
 		}
@@ -393,12 +381,9 @@ namespace LevelEditor.Scenes.Services
 		public void SaveScene(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
 			if (null == this.CurrentScene)
-			{
 				return;
-			}
 
 			var jsonService = this._gameServices.GetService<IJsonService>();
-
 			var tileMapName = "TestMap";
 			var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", tileMapName, createDirectoryIfDoesNotExist: true);
 			var serializer = new ModelSerializer<TileMapModel>();
@@ -414,7 +399,6 @@ namespace LevelEditor.Scenes.Services
 		public TileMapModel LoadTileMapModel(string tileMapName)
 		{
 			var jsonService = this._gameServices.GetService<IJsonService>();
-
 			var serializer = new ModelSerializer<TileMapModel>();
 			using var tileMapStream = jsonService.GetJsonFileStream(ContentManagerParams.ContentManagerName, "TileMaps", tileMapName);
 			var tileMapModel = serializer.Deserialize(tileMapStream, TilingOptions.TileMapOptions);
@@ -429,7 +413,6 @@ namespace LevelEditor.Scenes.Services
 		private string[] GetSavedTileMapNames()
 		{
 			var jsonService = this._gameServices.GetService<IJsonService>();
-
 			var result = jsonService.GetJsonFileNames(ContentManagerParams.ContentManagerName, "TileMaps");
 
 			return result;

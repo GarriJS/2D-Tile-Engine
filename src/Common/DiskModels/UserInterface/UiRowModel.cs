@@ -26,8 +26,8 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("verticalJustificationType")]
 		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
-		[JsonPropertyName("rowHoverCursorName")]
-		public string RowHoverCursorName { get; set; }
+		[JsonPropertyName("hoverCursorName")]
+		public string HoverCursorName { get; set; }
 
 		[JsonPropertyName("backgroundTexture")]
 		public SimpleImageModel BackgroundTexture { get; set; }
