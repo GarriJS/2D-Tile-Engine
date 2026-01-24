@@ -15,6 +15,6 @@ namespace Engine.RunTime.Models.Contracts
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default);
+		public void Write(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default);
 	}
 }

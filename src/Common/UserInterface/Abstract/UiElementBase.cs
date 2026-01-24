@@ -110,8 +110,9 @@ namespace Common.UserInterface.Abstract
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
+		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		abstract public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default);
+		abstract public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default);
 
 		/// <summary>
 		/// Disposes of the user interface button.

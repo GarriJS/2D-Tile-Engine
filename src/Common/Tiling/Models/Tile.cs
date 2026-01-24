@@ -46,12 +46,12 @@ namespace Common.Tiling.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
-			var tileOffset = new Vector2
+			var tileOffset = offset + new Vector2
 			{
 				X = this.Column * TileConstants.TILE_SIZE,
 				Y = this.Row * TileConstants.TILE_SIZE
 			};
-			this.Graphic?.Draw(gameTime, gameServices, position, tileOffset);
+			this.Graphic?.Draw(gameTime, gameServices, position, Color.White, tileOffset);
 		}
 
 		/// <summary>

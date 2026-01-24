@@ -9,6 +9,7 @@ using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
+using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface row.
 	/// </summary>
-	public class UiRow : IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
+	public class UiRow : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -126,8 +127,9 @@ namespace Common.UserInterface.Models
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
+		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
 		{
 			var marginGraphicOffset = this.ExtendBackgroundToMargin ? 
 				new Vector2
@@ -138,10 +140,12 @@ namespace Common.UserInterface.Models
 				default;
 			var graphicOffset = offset + (this.CachedOffset ?? default);
 			var backgroundOffset = graphicOffset + marginGraphicOffset;
-			this.Graphic?.Draw(gameTime, gameServices, position, backgroundOffset);
+			this.Graphic?.Draw(gameTime, gameServices, position, color, backgroundOffset);
 
 			foreach (var element in this.Elements ?? [])
-				element.Draw(gameTime, gameServices, position, graphicOffset + (element.CachedOffset ?? default));
+				element.Draw(gameTime, gameServices, position, color, graphicOffset + (element.CachedOffset ?? default));
+
+			this.Area.Draw(gameTime, gameServices, position, Color.MonoGameOrange, graphicOffset);
 		}
 
 		/// <summary>

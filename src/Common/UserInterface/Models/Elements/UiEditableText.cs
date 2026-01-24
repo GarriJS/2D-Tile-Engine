@@ -44,10 +44,11 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
+		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, position, offset);
+			this.Graphic?.Draw(gameTime, gameServices, position, color, offset);
 
 			if (null != this.GraphicText)
 			{
@@ -57,7 +58,8 @@ namespace Common.UserInterface.Models.Elements
 					X = (this.Area.Width - textDimensions.X) / 2f,
 					Y = (this.Area.Height - textDimensions.Y) / 2f
 				};
-				this.GraphicText.Draw(gameTime, gameServices, position, offset + centeredOffset);
+				var graphicTextOffset = offset + centeredOffset;
+				this.GraphicText.Write(gameTime, gameServices, position, graphicTextOffset);
 			}
 		}
 

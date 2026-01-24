@@ -10,7 +10,6 @@ using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
-using Engine.DiskModels.Drawing;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
@@ -68,7 +67,6 @@ namespace Common.UserInterface.Services
 			}
 
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
-
 			var existingZone = uiGroup.Zones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType);
 
 			if (null != uiGroup.Zones.FirstOrDefault(e => e.UserInterfaceScreenZone.UiZoneType == uiZone.UserInterfaceScreenZone.UiZoneType))
@@ -121,26 +119,18 @@ namespace Common.UserInterface.Services
 			foreach (var uiZone in uiGroup.Zones)
 			{
 				runTimeOverlaidDrawService.AddDrawable(uiZone);
+				var clickAnimations = uiZone.Blocks.SelectMany(e => e.Rows)
+												   .SelectMany(e => e.Elements)
+												   .OfType<UiButton>()
+												   .Where(e => null != e.ClickAnimation)
+												   .Select(e => e.ClickAnimation)
+												   .ToArray();
 
-				if (0 == uiZone.Blocks.Count)
+				if (0 == clickAnimations.Length)
 					continue;
 
-				foreach (var uiBlock in uiZone.Blocks)
-				{
-					if (0 == uiBlock.Rows.Count)
-						continue;
-
-					foreach (var uiRow in uiBlock.Rows)
-					{
-						if (0 == uiRow.Elements.Count)
-							continue;
-
-						foreach (var element in uiRow.Elements)
-							if ((element is UiButton button) &&
-								(null != button?.ClickAnimation))
-								button.ClickAnimation.ResetTriggeredAnimation();
-					}
-				}
+				foreach (var clickAnimation in clickAnimations)
+					clickAnimation.ResetTriggeredAnimation();
 			}
 		}
 
@@ -270,7 +260,6 @@ namespace Common.UserInterface.Services
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
-
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var rows = new List<UiRow>();
 
@@ -370,7 +359,6 @@ namespace Common.UserInterface.Services
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
-
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var subElements = new List<IAmAUiElement>();
 
@@ -462,7 +450,6 @@ namespace Common.UserInterface.Services
 				return [uiRow];
 
 			var imageService = this._gameServices.GetService<IImageService>();
-
 			var splitEven = uiRow.HorizontalJustificationType == UiHorizontalJustificationType.Center;
 			var newRows = new List<UiRow>();
 			var currentRow = 1;
@@ -482,7 +469,7 @@ namespace Common.UserInterface.Services
 			{
 				var elementWidth = element.TotalWidth;
 
-				if (currentElements.Count == 0)
+				if (0 == currentElements.Count)
 				{
 					currentElements.Add(element);
 					currentWidth = elementWidth;
@@ -554,7 +541,7 @@ namespace Common.UserInterface.Services
 				}
 			}
 
-			if (currentElements.Count > 0)
+			if (0 < currentElements.Count)
 			{
 				var contentWidth = currentElements.Sum(e => e.TotalWidth);
 				var contentHeight = currentElements.Select(e => e.TotalHeight)
@@ -628,7 +615,6 @@ namespace Common.UserInterface.Services
 				return;
 
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
-
 			var dynamicHeightElements = uiRow.Elements.Where(e => true == DynamicSizedTypes.Contains(e.VerticalSizeType))
 													  .ToList();
 

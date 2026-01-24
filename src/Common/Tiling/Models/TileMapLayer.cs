@@ -38,13 +38,12 @@ namespace Common.Tiling.Models
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
+		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
 		{
 			foreach (var tile in this.Tiles.Values)
-			{
 				tile.Draw(gameTime, gameServices, position);
-			}
 		}
 
 		/// <summary>

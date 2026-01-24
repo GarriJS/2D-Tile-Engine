@@ -73,7 +73,7 @@ namespace Common.Tiling.Models
 		{
 			foreach (var tileMapLayer in this.TileMapLayers.Values)
 			{
-				tileMapLayer.Draw(gameTime, gameServices, this.Position);
+				tileMapLayer.Draw(gameTime, gameServices, this.Position, Color.White);
 			}
 		}
 

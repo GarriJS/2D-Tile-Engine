@@ -36,12 +36,10 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		override public void Write(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
 			if (true == string.IsNullOrEmpty(this.Text))
-			{
 				return;
-			}
 
 			var writingService = gameServices.GetService<IWritingService>();
 			var contentOffset = position.Coordinates + offset + new Vector2
@@ -49,7 +47,6 @@ namespace Common.UserInterface.Models
 				X = this.Margin.LeftMargin,
 				Y = this.Margin.TopMargin
 			};
-
 			writingService.Draw(this.Font, this.Text, contentOffset, this.TextColor);
 		}
 

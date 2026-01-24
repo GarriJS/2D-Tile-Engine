@@ -96,17 +96,13 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, this.Position);
+			this.Graphic?.Draw(gameTime, gameServices, this.Position, Color.White);
 
 			if (true == this.ResetCalculateCachedOffsets)
-			{
 				this.UpdateZoneOffsets();
-			}
 
 			foreach (var block in this.Blocks ?? [])
-			{
-				block.Draw(gameTime, gameServices, this.Position);
-			}
+				block.Draw(gameTime, gameServices, this.Position, Color.White);
 		}
 
 		/// <summary>
@@ -174,9 +170,7 @@ namespace Common.UserInterface.Models
 			this.CursorConfiguration?.Dispose();
 
 			foreach (var elementRow in this.Blocks ?? [])
-			{
 				elementRow?.Dispose();
-			}
 		}
 	}
 }

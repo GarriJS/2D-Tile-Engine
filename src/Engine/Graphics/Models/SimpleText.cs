@@ -99,22 +99,20 @@ namespace Engine.Graphics.Models
 		}
 
 		/// <summary>
-		/// Draws the sub drawable.
+		/// Writes the sub writable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="offset">The offset.</param>
-		virtual public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		virtual public void Write(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
 		{
 			if (true == string.IsNullOrEmpty(this.Text))
-			{
 				return;
-			}
-
+		
 			var writingService = gameServices.GetService<IWritingService>();
-
-			writingService.Draw(this.Font, this.Text, position.Coordinates + offset, this.TextColor);
+			var textOffset = position.Coordinates + offset;
+			writingService.Draw(this.Font, this.Text, textOffset, this.TextColor);
 		}
 
 

@@ -7,7 +7,7 @@ namespace Engine.Graphics.Models.Contracts
 	/// <summary>
 	/// Represents graphic text.
 	/// </summary>
-	public interface IAmGraphicText : IAmSubDrawable
+	public interface IAmGraphicText : IAmSubWritable
 	{
 		/// <summary>
 		/// Gets the max line width.

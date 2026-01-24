@@ -9,12 +9,19 @@ namespace Engine.RunTime.Services
 	/// </summary>
 	public class DrawingService : IDrawingService
 	{
-		private readonly GameServiceContainer _gameServices;
+		readonly private GameServiceContainer _gameServices;
+		readonly public SpriteBatch _spriteBatch;
+		readonly Texture2D _pixel;
 
 		/// <summary>
 		/// Gets the sprite batch.
 		/// </summary>
-		public SpriteBatch SpriteBatch { get; }
+		public SpriteBatch SpriteBatch { get => this._spriteBatch; }
+
+		/// <summary>
+		/// Gets the pixel.
+		/// </summary>
+		public Texture2D Pixel { get => this._pixel; }
 
 		/// <summary>
 		/// Initializes a new instance of the drawing service.
@@ -23,10 +30,10 @@ namespace Engine.RunTime.Services
 		public DrawingService(GameServiceContainer gameServices)
 		{
 			this._gameServices = gameServices;
-
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-
-			this.SpriteBatch = new SpriteBatch(graphicDeviceService.GraphicsDevice);
+			this._spriteBatch = new SpriteBatch(graphicDeviceService.GraphicsDevice);
+			this._pixel = new Texture2D(graphicDeviceService.GraphicsDevice, 1, 1);
+			this._pixel.SetData([Color.White]);
 		}
 
 		/// <summary>
@@ -74,8 +81,17 @@ namespace Engine.RunTime.Services
 				Width = (int)stretchBox.X,
 				Height = (int)stretchBox.Y
 			};
-
 			this.SpriteBatch.Draw(texture, destinationRectangle, sourceRectangle, color);
+		}
+
+		/// <summary>
+		/// Draws the rectangle.
+		/// </summary>
+		/// <param name="rectangle">The rectangle.</param>
+		/// <param name="color">The color.</param>
+		public void DrawRectangle(Rectangle rectangle, Color color)
+		{
+			this.SpriteBatch.Draw(this.Pixel, rectangle, color);
 		}
 	}
 }

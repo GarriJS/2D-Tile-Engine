@@ -14,6 +14,11 @@ namespace Engine.RunTime.Services.Contracts
 		public SpriteBatch SpriteBatch { get; }
 
 		/// <summary>
+		/// Gets the pixel.
+		/// </summary>
+		public Texture2D Pixel { get; }
+
+		/// <summary>
 		/// Begins the draw.
 		/// </summary>
 		public void BeginDraw();
@@ -41,5 +46,12 @@ namespace Engine.RunTime.Services.Contracts
 		/// <param name="stretchBox">The stretch box.</param>
 		/// <param name="color">The color.</param>
 		public void Draw(Texture2D texture, Vector2 drawCoordinates, Rectangle sourceRectangle, Vector2 stretchBox, Color color);
+
+		/// <summary>
+		/// Draws the rectangle.
+		/// </summary>
+		/// <param name="rectangle">The rectangle.</param>
+		/// <param name="color">The color.</param>
+		public void DrawRectangle(Rectangle rectangle, Color color);
 	}
 }
