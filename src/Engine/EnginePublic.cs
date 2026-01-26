@@ -16,7 +16,7 @@ namespace Engine
 		/// <summary>
 		/// Gets or sets a value describing whether the engine should launch in debug mode.
 		/// </summary>
-		public bool LaunchInDebugMode { get; set; }
+		public bool InDebugMode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the debug sprite font name.

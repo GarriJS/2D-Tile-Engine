@@ -13,5 +13,10 @@ namespace Common.Debugging.Services
 	public class CommonDebugService(GameServiceContainer gameServices) : ICommonDebugService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the screen area indicators are enabled.
+		/// </summary>
+		private bool ScreenAreaIndicatorsEnabled { get; set; }
 	}
 }

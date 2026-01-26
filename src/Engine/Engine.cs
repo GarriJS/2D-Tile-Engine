@@ -108,11 +108,10 @@ namespace Engine
 			this.Loadables.Clear();
 
 			// Debug
-			if (true == this.LaunchInDebugMode)
+			if (true == this.InDebugMode)
 			{ 
 				var debugService = this.Services.GetService<IDebugService>();
 				var fontService = this.Services.GetService<IFontService>();
-
 				fontService.SetDebugSpriteFont(this.DebugSpriteFontName);
 				debugService.ToggleScreenAreaIndicators();
 				debugService.TogglePerformanceRateCounter();
