@@ -3,9 +3,9 @@
 namespace Engine.Debugging.Models.Contracts
 {
 	/// <summary>
-	/// Represents something updateable.
+	/// Represents something that is updated by another updateable.
 	/// </summary>
-	public interface IAmDebugUpdateable
+	public interface IAmDebugSubUpdateable
 	{
 		/// <summary>
 		/// Gets or sets the update order.
@@ -13,10 +13,10 @@ namespace Engine.Debugging.Models.Contracts
 		public int UpdateOrder { get; set; }
 
 		/// <summary>
-		/// Updates the updateable.
+		/// Updates the debug updateable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public void UpdateDebug(GameTime gameTime, GameServiceContainer gameServices);
+		public void DebugUpdate(GameTime gameTime, GameServiceContainer gameServices);
 	}
 }

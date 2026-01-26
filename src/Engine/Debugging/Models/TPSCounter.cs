@@ -1,5 +1,5 @@
-﻿using Engine.Physics.Models;
-using Engine.RunTime.Models.Contracts;
+﻿using Engine.Debugging.Models.Contracts;
+using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,21 +10,16 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a TPS counter.
 	/// </summary>
-	internal class TpsCounter : IAmDrawable, IAmUpdateable
+	internal class TpsCounter : IAmDebugDrawable, IAmDebugUpdateable
 	{
 		/// <summary>
 		/// The draw offset.
 		/// </summary>
-		private readonly static Vector2 Offset = new()
+		private readonly Vector2 Offset = new()
 		{
 			X = 0,
 			Y = 20
 		};
-
-		/// <summary>
-		/// A value describing whether the TPS counter is enabled.
-		/// </summary>
-		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -57,38 +52,25 @@ namespace Engine.Debugging.Models
 		public SpriteFont Font { get; set; }
 
 		/// <summary>
-		/// Draws the drawable.
+		/// Draws the debug drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
+		public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (false == this.IsActive)
-			{
-				return;
-			}
-
 			var writingService = gameServices.GetService<IWritingService>();
-
 			writingService.Draw(this.Font, this.TpsText, this.Position.Coordinates + Offset, Color.MonoGameOrange);
 		}
 
 		/// <summary>
-		/// Updates the updateable.
+		/// Updates the debug updateable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public void Update(GameTime gameTime, GameServiceContainer gameServices)
+		public void UpdateDebug(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (false == this.IsActive)
-			{
-				return;
-			}
-
 			if (false == this.LastTickTime.HasValue)
-			{
 				this.LastTickTime = gameTime.TotalGameTime.TotalMilliseconds;
-			}
 			else
 			{
 				var updateDelta = gameTime.TotalGameTime.TotalMilliseconds - this.LastTickTime.Value;

@@ -29,16 +29,18 @@ namespace Engine.Core.Initialization.Services
 	/// <summary>
 	/// Represents a service initializer.
 	/// </summary>
-	internal static class ServiceInitializer
+	static internal class ServiceInitializer
 	{
 		/// <summary>
 		/// Starts the engine services.
 		/// </summary>
 		/// <param name="game">The game.</param>
 		/// <returns>A value indicating whether if all services were started.</returns>
-		internal static bool StartEngineServices(Engine game)
+		static internal bool StartEngineServices(Engine game)
 		{
-			return StartServices(game, GetEngineServiceContractPairs);
+			var result = StartServices(game, GetEngineServiceContractPairs);
+
+			return result;
 		}
 
 		/// <summary>
@@ -47,36 +49,25 @@ namespace Engine.Core.Initialization.Services
 		/// <param name="game">The game.</param>
 		/// <param name="serviceProvider">The service provider.</param>
 		/// <returns>A value indicating whether if all services were started.</returns>
-		internal static bool StartServices(Engine game, Func<Game, (Type type, object provider)[]> serviceProvider)
+		static internal bool StartServices(Engine game, Func<Game, (Type type, object provider)[]> serviceProvider)
 		{
 			var success = true;
 			var serviceContractPairs = serviceProvider?.Invoke(game);
 
-			if (true != serviceContractPairs?.Any())
-			{ 
-				return success;
-			}
-
-			foreach (var (type, provider) in serviceContractPairs)
+			foreach (var (type, provider) in serviceContractPairs ?? [])
 			{
 				try
 				{
 					game.Services.AddService(type, provider);
 
 					if (provider is GameComponent gameComponent)
-					{
 						game.Components.Add(gameComponent);
-					}
 
 					if (provider is INeedInitialization initializations)
-					{
 						game.Initializations.Add(initializations);
-					}
 
 					if (provider is ILoadContent loadable)
-					{
 						game.Loadables.Add(loadable);
-					}
 				}
 				catch (Exception ex)
 				{
@@ -95,7 +86,7 @@ namespace Engine.Core.Initialization.Services
 		/// <returns>The service contract pairs.</returns>
 		static private (Type type, object provider)[] GetEngineServiceContractPairs(Game game)
 		{
-			return
+			(Type type, object provider)[] pairs =
 			[
 				(typeof(ContentManager), game.Content),
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(game)),
@@ -119,6 +110,8 @@ namespace Engine.Core.Initialization.Services
 				(typeof(IAreaService), new AreaService(game.Services)),
 				(typeof(IRandomService), new RandomService()),
 			];
+
+			return pairs;
 		}
 	}
 }

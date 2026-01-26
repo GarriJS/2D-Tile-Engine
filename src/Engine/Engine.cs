@@ -7,8 +7,6 @@ using Engine.Core.Initialization.Services;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
-using Engine.Graphics.Services.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -65,9 +63,7 @@ namespace Engine
 			_ = ServiceInitializer.StartEngineServices(this);
 
 			foreach (var externalServiceProvider in this.ExternalServiceProviders)
-			{
 				_ = ServiceInitializer.StartServices(this, externalServiceProvider);
-			}
 
 			this.ExternalServiceProviders.Clear();
 
@@ -77,17 +73,13 @@ namespace Engine
 			this._graphics.ApplyChanges();
 
 			foreach (var initialization in this.Initializations)
-			{
 				initialization.Initialize();
-			}
 
 			// Load model processors
 			ModelMapper.LoadEngineModelProcessingMappings(this.Services);
 
 			foreach (var externalModelProcessorMapProvider in this.ExternalModelProcessorMapProviders)
-			{
 				ModelMapper.LoadModelProcessingMappings(this.Services, externalModelProcessorMapProvider);
-			}
 
 			this.ExternalModelProcessorMapProviders.Clear();
 
@@ -99,23 +91,19 @@ namespace Engine
 				var functionKpvs = functionProvider.Invoke(this.Services);
 
 				foreach (var functionKpv in functionKpvs)
-				{
 					functionService.TryAddFunction(functionKpv.Key, functionKpv.Value);
-				}
 			}
 
-			// Other
-
+			// Initialize game managers
 			base.Initialize();
 		}
 
+		// Is called by base.Initialize in Initialize()
 		protected override void LoadContent()
 		{
 			// Do any content loading
 			foreach (var loadable in this.Loadables)
-			{
 				loadable.LoadContent();
-			}
 
 			this.Loadables.Clear();
 
@@ -134,12 +122,9 @@ namespace Engine
 
 			// Load the initial models
 			foreach (var initialModelsProvider in this.InitialModelsProviders)
-			{
 				ModelProcessor.ProcessInitialModels(initialModelsProvider, this.Services);
-			}
 
 			this.InitialModelsProviders.Clear();
-
 			var controlService = this.Services.GetService<IControlService>();
 			var controlContext = (ControlContext)Activator.CreateInstance(this.InitialControlContextType, this.Services);
 			controlService.ControlContext = controlContext;
@@ -151,9 +136,7 @@ namespace Engine
 			var controlState = controlService.ControlState;
 
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-			{
 				Exit();
-			}
 
 			if (Keyboard.GetState().IsKeyDown(Keys.G))
 			{
@@ -161,27 +144,13 @@ namespace Engine
 			}
 
 			base.Update(gameTime);
-
 			KeyboardTyping.OldPressedKeys = Keyboard.GetState().GetPressedKeys();
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
 			this.GraphicsDevice.Clear(Color.CornflowerBlue);
-			var drawService = this.Services.GetService<IDrawingService>();
-			var imageService = this.Services.GetService<IImageService>();
-			var controlService = this.Services.GetService<IControlService>();
-			var image = imageService.GetImage("tile_grid_dark", 160, 160);
-			var mouse = controlService.ControlState.MousePosition;
-
 			base.Draw(gameTime);
-
-			//drawService.BeginDraw();
-
-			//drawService.Write(image.Texture, this.GetLocalTileCoordinates(mouse, -2), new Rectangle(0, 0, 160, 160), TextColor.White);
-
-			//drawService.EndDraw();
-
 		}
 	}
 }

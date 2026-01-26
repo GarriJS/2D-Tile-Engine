@@ -101,9 +101,8 @@ namespace Common.UserInterface.Services
 		public bool TryGetUiZoneAtLocation(Vector2 location, out UiZone uiZone)
 		{
 			var uiService = this._gameServices.GetService<IUserInterfaceService>();
-
 			var activeUiGroup = uiService.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == uiService.ActiveVisibilityGroupId);
-			uiZone = activeUiGroup.Zones.FirstOrDefault(e => true == e.Area.Contains(location));
+			uiZone = activeUiGroup?.Zones.FirstOrDefault(e => true == e.Area.Contains(location));
 
 			return uiZone is not null;
 		}

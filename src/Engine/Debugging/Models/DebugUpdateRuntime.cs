@@ -1,43 +1,41 @@
-﻿using Engine.RunTime.Constants;
+﻿using Engine.Debugging.Models.Contracts;
 using Engine.RunTime.Models;
 using Engine.RunTime.Models.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Engine.RunTime.Managers
+namespace Engine.Debugging.Models
 {
 	/// <summary>
-	/// Represents a run time update manager.
+	/// Represents a debug draw runtime.
 	/// </summary>
-	/// <remarks>
-	/// Initializes a new instance of the run time update manager.
-	/// </remarks>
-	/// <param name="game">The game.</param>
-	public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
+	public class DebugUpdateRuntime : IAmUpdateable
 	{
+		/// <summary>
+		/// Gets or sets the update order.
+		/// </summary>
+		public int UpdateOrder { get; set; }
+
 		/// <summary>
 		/// Gets the run time collection.
 		/// </summary>
-		public RunTimeCollection<IAmUpdateable> RunTimeCollection { get; private set; }
+		public RunTimeCollection<IAmDebugUpdateable> RunTimeCollection { get; private set; }
 
 		/// <summary>
-		/// Initializes the runtime update manager.
+		/// Initializes a new instance of the debug update runtime.
 		/// </summary>
-		override public void Initialize()
+		public DebugUpdateRuntime()
 		{
-			this.UpdateOrder = ManagerOrderConstants.UpdateManagerUpdateOrder;
-			this.RunTimeCollection = new RunTimeCollection<IAmUpdateable>
+			this.RunTimeCollection = new RunTimeCollection<IAmDebugUpdateable>
 			{
 				KeyFunction = updateable => updateable.UpdateOrder
 			};
-			base.Initialize();
 		}
 
 		/// <summary>
 		/// Adds the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>
-		public void AddUpdateable(IAmUpdateable updateable)
+		public void AddUpdateable(IAmDebugUpdateable updateable)
 		{
 			this.RunTimeCollection.AddModel(updateable);
 		}
@@ -46,7 +44,7 @@ namespace Engine.RunTime.Managers
 		/// Removes the updateable.
 		/// </summary>
 		/// <param name="updateable">The updateable.</param>
-		public void RemoveUpdateable(IAmUpdateable updateable)
+		public void RemoveUpdateable(IAmDebugUpdateable updateable)
 		{
 			this.RunTimeCollection.RemoveModel(updateable);
 		}
@@ -56,7 +54,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		/// <param name="newUpdateOrder">The new update order.</param>
 		/// <param name="updateable">The updateable.</param>
-		public void ChangeUpdateableOrder(int newUpdateOrder, IAmUpdateable updateable)
+		public void ChangeUpdateableOrder(int newUpdateOrder, IAmDebugUpdateable updateable)
 		{
 			this.RemoveUpdateable(updateable);
 			updateable.UpdateOrder = newUpdateOrder;
@@ -67,7 +65,8 @@ namespace Engine.RunTime.Managers
 		/// Updates the active updateables.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		override public void Update(GameTime gameTime)
+		/// <param name="gameServices">The game services.</param>
+		public void Update(GameTime gameTime, GameServiceContainer gameServices)
 		{
 			foreach (var kvp in this.RunTimeCollection.ActiveModels)
 			{
@@ -78,14 +77,13 @@ namespace Engine.RunTime.Managers
 					if (true == this.RunTimeCollection.PendingRemovals.Contains(updateable))
 						continue;
 
-					updateable.Update(gameTime, this.Game.Services);
+					updateable.UpdateDebug(gameTime, gameServices);
 				}
 
 				this.RunTimeCollection.ResolvePendingModels();
 				this.RunTimeCollection.CurrentKey = null;
 			}
 
-			base.Update(gameTime);
 			this.RunTimeCollection.ResolvePendingLists();
 		}
 	}

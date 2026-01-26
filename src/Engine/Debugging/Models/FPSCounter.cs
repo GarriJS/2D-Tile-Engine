@@ -1,5 +1,5 @@
-﻿using Engine.Physics.Models;
-using Engine.RunTime.Models.Contracts;
+﻿using Engine.Debugging.Models.Contracts;
+using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,13 +10,8 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a FPS counter.
 	/// </summary>
-	internal class FpsCounter : IAmDrawable
+	internal class FpsCounter : IAmDebugDrawable
 	{
-		/// <summary>
-		/// A value describing whether the FPS counter is enabled.
-		/// </summary>
-		public bool IsActive { get; set; }
-
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
@@ -43,23 +38,16 @@ namespace Engine.Debugging.Models
 		public SpriteFont Font { get; set; }
 
 		/// <summary>
-		/// Draws the drawable.
+		/// Draws the debug drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
+		public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (false == this.IsActive)
-			{
-				return;
-			}
-
 			var writingService = gameServices.GetService<IWritingService>();
 
 			if (false == this.LastFrameTime.HasValue)
-			{
 				this.LastFrameTime = gameTime.TotalGameTime.TotalMilliseconds;
-			}
 			else
 			{
 				var frameDelta = gameTime.TotalGameTime.TotalMilliseconds - this.LastFrameTime.Value;

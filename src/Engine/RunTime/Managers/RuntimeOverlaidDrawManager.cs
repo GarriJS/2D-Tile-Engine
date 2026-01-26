@@ -23,27 +23,15 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// Initializes the runtime draw manager.
 		/// </summary>
-		public override void Initialize()
+		override public void Initialize()
 		{
 			this.UpdateOrder = ManagerOrderConstants.UnusedOrder;
 			this.DrawOrder = ManagerOrderConstants.OverlaidDrawMangerDrawOrder;
 			this.RunTimeCollection = new RunTimeCollection<IAmDrawable>
 			{
-				KeyFunction = this.GetKey
+				KeyFunction = drawable => drawable.DrawLayer
 			};
 			base.Initialize();
-		}
-
-		/// <summary>
-		/// Gets the key.
-		/// </summary>
-		/// <param name="drawable">The drawable.</param>
-		/// <returns>The key.</returns>
-		private int GetKey(IAmDrawable drawable)
-		{
-			var key = drawable.DrawLayer;
-
-			return key;
 		}
 
 		/// <summary>
@@ -80,7 +68,7 @@ namespace Engine.RunTime.Managers
 		/// Updates the active drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		public override void Draw(GameTime gameTime)
+		override public void Draw(GameTime gameTime)
 		{
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
 			drawingService.BeginDraw();
