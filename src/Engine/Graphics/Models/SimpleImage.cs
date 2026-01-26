@@ -54,7 +54,6 @@ namespace Engine.Graphics.Models
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
-
 			var drawCoordinates = position.Coordinates + offset;
 			this.TextureRegion.Draw(drawingService, this.Texture, drawCoordinates);
 		}

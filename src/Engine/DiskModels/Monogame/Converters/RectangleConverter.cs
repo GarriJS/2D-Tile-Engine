@@ -11,7 +11,7 @@ namespace Engine.DiskModels.Monogame.Converters
 		{
 			int x = 0, y = 0, width = 0, height = 0;
 
-			while (reader.Read())
+			while (true == reader.Read())
 			{
 				if (reader.TokenType == JsonTokenType.EndObject)
 					break;
@@ -31,7 +31,9 @@ namespace Engine.DiskModels.Monogame.Converters
 				}
 			}
 
-			return new Rectangle(x, y, width, height);
+			var result = new Rectangle(x, y, width, height);
+
+			return result;
 		}
 
 		public override void Write(Utf8JsonWriter writer, Rectangle value, JsonSerializerOptions options)

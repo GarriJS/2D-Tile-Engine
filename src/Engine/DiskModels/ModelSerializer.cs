@@ -47,9 +47,7 @@ namespace Engine.DiskModels
 			var folder = Path.GetDirectoryName(filePath);
 
 			if (false == Directory.Exists(folder))
-			{
 				Directory.CreateDirectory(folder);
-			}
 
 			using var stream = File.Create(filePath);
 			JsonSerializer.Serialize(stream, data, options);

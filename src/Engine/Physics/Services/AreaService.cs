@@ -27,7 +27,9 @@ namespace Engine.Physics.Services
 		/// <returns>The area.</returns>
 		public IAmAArea GetAreaFromModel(IAmAAreaModel areaModel)
 		{
-			return this.GetAreaFromModel<IAmAArea>(areaModel);
+			var result = this.GetAreaFromModel<IAmAArea>(areaModel);
+
+			return result;
 		}
 
 		/// <summary>
@@ -39,7 +41,6 @@ namespace Engine.Physics.Services
 		public T GetAreaFromModel<T>(IAmAAreaModel areaModel, Position position = null) where T : IAmAArea
 		{
 			var positionService = this._gameServices.GetService<IPositionService>();
-
 			position ??= positionService.GetPositionFromModel(areaModel.Position);
 
 			switch (areaModel)
@@ -51,9 +52,7 @@ namespace Engine.Physics.Services
 					var areas = new OffsetSubArea[areaCollectionModel.SubAreas?.Length ?? 0];
 
 					for (int i = 0; i < areas.Length; i++)
-					{
 						areas[i] = this.GetOffSetSubAreaFromModel(areaCollectionModel.SubAreas[i]);
-					}
 
 					var areaCollection = new AreaCollection(width, height)
 					{
@@ -62,9 +61,7 @@ namespace Engine.Physics.Services
 					};
 
 					if (areaCollection is T resultCollection)
-					{
 						return resultCollection;
-					}
 
 					break;
 
@@ -80,9 +77,7 @@ namespace Engine.Physics.Services
 					};
 
 					if (offsetArea is T resultOffsetArea)
-					{
 						return resultOffsetArea;
-					}
 
 					break;
 
@@ -96,9 +91,7 @@ namespace Engine.Physics.Services
 					};
 
 					if (simpleArea is T resultSimpleArea)
-					{
 						return resultSimpleArea;
-					}
 
 					break;
 			}

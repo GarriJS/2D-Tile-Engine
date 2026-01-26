@@ -31,21 +31,15 @@ namespace Engine.Graphics.Models
 		{
 			if ((false == allowReset) &&
 				(this.RestingFrameIndex != this.CurrentFrameIndex))
-			{
 				return;
-			}
 
 			this.FrameStartTime = null;
 			this.CurrentFrameIndex = this.RestingFrameIndex;
 
 			if (this.CurrentFrameIndex < this.Frames.Length - 1)
-			{
 				this.CurrentFrameIndex++;
-			}
 			else
-			{
 				this.CurrentFrameIndex = 0;
-			}
 		}
 
 		/// <summary>
@@ -78,18 +72,13 @@ namespace Engine.Graphics.Models
 					(true == this.FrameMaxDuration.HasValue))
 				{
 					var randomService = gameServices.GetService<IRandomService>();
-
 					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
 				}
 
 				if (this.CurrentFrameIndex < this.Frames.Length - 1)
-				{
 					this.CurrentFrameIndex++;
-				}
 				else
-				{
 					this.CurrentFrameIndex = 0;
-				}
 
 				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
 			}
@@ -104,11 +93,9 @@ namespace Engine.Graphics.Models
 			var frameModels = new SimpleImageModel[this.Frames.Length];
 
 			for (int i = 0; i < this.Frames.Length; i++)
-			{
 				frameModels[i] = (SimpleImageModel)this.Frames[i].ToModel();
-			}
 
-			return new TriggeredAnimationModel
+			var result = new TriggeredAnimationModel
 			{
 				CurrentFrameIndex = this.CurrentFrameIndex,
 				FrameDuration = this.FrameDuration,
@@ -117,6 +104,8 @@ namespace Engine.Graphics.Models
 				Frames = frameModels,
 				RestingFrameIndex = this.RestingFrameIndex,
 			};
+
+			return result;
 		}
 	}
 }

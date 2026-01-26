@@ -29,7 +29,9 @@ namespace Engine.Core.Initialization.Services
 		/// <returns>A value indicating whether the function was added.</returns>
 		public bool TryAddFunction(string functionName, Delegate function)
 		{
-			return this.Functions.TryAdd(functionName, function);
+			var result = this.Functions.TryAdd(functionName, function);
+
+			return result;
 		}
 
 		/// <summary>
@@ -40,7 +42,9 @@ namespace Engine.Core.Initialization.Services
 		/// <returns>A value indicating whether the function was found.</returns>
 		public bool TryGetFunction(string functionName, out Delegate function)
 		{ 
-			return this.Functions.TryGetValue(functionName, out function);
+			var result = this.Functions.TryGetValue(functionName, out function);
+			
+			return result;
 		}
 
 		/// <summary>

@@ -41,7 +41,9 @@ namespace Engine.Controls.Models
 		/// <returns>A value indicating whether the action name is fresh.</returns>
 		public bool ActionNameIsFresh(string actionName)
 		{ 
-			return true == this.FreshActionNames?.Contains(actionName);
+			var result = true == this.FreshActionNames?.Contains(actionName);
+
+			return result;
 		}
 
 		/// <summary>
@@ -51,7 +53,9 @@ namespace Engine.Controls.Models
 		/// <returns>A value indicating whether the action name is active.</returns>
 		public bool ActionNameIsActive(string actionName)
 		{
-			return true == this.ActiveActionNames?.Contains(actionName);
+			var result = true == this.ActiveActionNames?.Contains(actionName);
+
+			return result;
 		}
 	}
 }

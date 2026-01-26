@@ -61,9 +61,7 @@ namespace Engine.Graphics.Models
 		public void SetDrawDimensions(SubArea dimensions)
 		{
 			foreach (var frame in this.Frames ?? [])
-			{ 
 				frame.SetDrawDimensions(dimensions);
-			}
 		}
 
 		/// <summary>
@@ -100,18 +98,13 @@ namespace Engine.Graphics.Models
 					(true == this.FrameMaxDuration.HasValue))
 				{
 					var randomService = gameServices.GetService<IRandomService>();
-
 					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
 				}
 
 				if (this.CurrentFrameIndex < this.Frames.Length - 1)
-				{
 					this.CurrentFrameIndex++;
-				}
 				else
-				{
 					this.CurrentFrameIndex = 0;
-				}
 
 				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
 			}
@@ -132,7 +125,7 @@ namespace Engine.Graphics.Models
 				FrameDuration = this.FrameDuration,
 				FrameMinDuration = this.FrameMinDuration,
 				FrameMaxDuration = this.FrameMaxDuration,
-				//Frames = frameModels
+				//Frames = frameModels TODO
 			};
 
 			return result;
@@ -144,9 +137,7 @@ namespace Engine.Graphics.Models
 		public void Dispose()
 		{
 			foreach (var frame in this.Frames ?? [])
-			{ 
 				frame?.Dispose();
-			}
 		}
 	}
 }

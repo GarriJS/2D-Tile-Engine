@@ -51,9 +51,7 @@ namespace Engine.Physics.Models
 					truePosition.X + area.Width >= coordinate.X &&
 					truePosition.Y <= coordinate.Y &&
 					truePosition.Y + area.Height >= coordinate.Y)
-				{
 					return true;
-				}
 			}
 			
 			return false;
@@ -68,14 +66,15 @@ namespace Engine.Physics.Models
 			var positionModel = this.Position.ToModel();
 			var offsetSubAreaModels = this.SubAreas.Select(e => e.ToModel())
 												   .ToArray();
-
-			return new AreaCollectionModel
+			var result = new AreaCollectionModel
 			{
 				Width = this.Width,
 				Height = this.Height,
 				Position = positionModel,
 				SubAreas = offsetSubAreaModels
 			};
+
+			return result;
 		}
 	}
 }

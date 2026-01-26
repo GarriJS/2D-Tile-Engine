@@ -26,9 +26,7 @@ namespace Engine.Graphics.Services
 		public IAmAGraphic GetGraphicFromModel(GraphicBaseModel model)
 		{
 			if (model is null)
-			{
 				return null;
-			}
 
 			var modelType = model.GetType();
 
@@ -57,17 +55,12 @@ namespace Engine.Graphics.Services
 		public TextureRegion GetTextureRegionFromModel(TextureRegionModel textureRegionModel)
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
-
-			SubArea displayArea = null;
+			SubArea displayArea;
 
 			if (null != textureRegionModel.DisplayArea)
-			{
 				displayArea = areaService.GetSubAreaFromModel(textureRegionModel.DisplayArea);
-			}
 			else
-			{
 				displayArea = new SubArea { Width = textureRegionModel.TextureBox.Width, Height = textureRegionModel.TextureBox.Height };
-			}
 
 			var result = new TextureRegion
 			{

@@ -32,7 +32,9 @@ namespace Engine.Graphics.Services
 		/// <returns>The image.</returns>
 		public IAmAImage GetImageFromModel(ImageBaseModel imageModel)
 		{
-			return this.GetImageFromModel<IAmAImage>(imageModel);
+			var result = this.GetImageFromModel<IAmAImage>(imageModel);
+
+			return result;
 		}
 
 		/// <summary>
@@ -46,9 +48,7 @@ namespace Engine.Graphics.Services
 			var graphicService = this._gameServices.GetService<IGraphicService>();
 
 			if (false == textureService.TryGetTexture(imageModel.TextureName, out var texture))
-			{
 				texture = textureService.DebugTexture;
-			}
 
 			IAmAImage image = imageModel switch
 			{
@@ -80,17 +80,13 @@ namespace Engine.Graphics.Services
 					textureRegions[i] = new TextureRegion[compositeImageModel.TextureRegions[i].Length];
 
 					for (int j = 0; j < compositeImageModel.TextureRegions.Length; j++)
-					{
 						textureRegions[i][j] = graphicService.GetTextureRegionFromModel(compositeImageModel.TextureRegions[i][j]);
-					}
 				}
 
 				if ((textureRegions is null) ||
-					(textureRegions.Any(e => e is null || e.Length != textureRegions[0].Length)) ||
+					(true == textureRegions.Any(e => e is null || e.Length != textureRegions[0].Length)) ||
 					(textureRegions.Length != textureRegions[0].Length))
-				{
 					throw new ArgumentException("Composite image does not have valid texture regions. Texture regions must have equal length columns and rows.");
-				}
 
 				var firstRowTotalWidth = textureRegions[0].Sum(e => e.DisplayArea.Width);
 
@@ -99,9 +95,7 @@ namespace Engine.Graphics.Services
 					var rowWidth = textureRegionRow.Sum(e => e.DisplayArea.Width);
 
 					if (firstRowTotalWidth != rowWidth)
-					{
 						throw new ArgumentException("Composite image does not have valid texture regions. Row widths are not equal.");
-					}
 				}
 
 				var firstColumnTotalHeight = textureRegions.Sum(e => e[0].DisplayArea.Height);
@@ -111,9 +105,7 @@ namespace Engine.Graphics.Services
 					var columnHeight = textureRegions.Sum(row => row[col].DisplayArea.Height);
 
 					if (firstColumnTotalHeight != columnHeight)
-					{
 						throw new ArgumentException("Composite image does not have valid texture regions. Column heights are not equal.");
-					}
 				}
 
 				compositeImage.TextureRegions = textureRegions;
@@ -132,16 +124,12 @@ namespace Engine.Graphics.Services
 		public SimpleImage GetImage(string textureName, int width, int height)
 		{
 			if (true == string.IsNullOrEmpty(textureName))
-			{
 				return null;
-			}
 
 			var textureService = this._gameServices.GetService<ITextureService>();
 
 			if (false == textureService.TryGetTexture(textureName, out var texture))
-			{
 				texture = textureService.DebugTexture;
-			}
 
 			var result = new SimpleImage
 			{
@@ -179,34 +167,26 @@ namespace Engine.Graphics.Services
 				(0 == images.Length) ||
 				(true == images.Any(e => e is null || 0 == e.Length)) ||
 				(false == images.All(e => e.Length == images[0].Length)))
-			{
 				return null;
-			}
 
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var textureService = this._gameServices.GetService<ITextureService>();
-
 			var graphicsDevice = graphicDeviceService.GraphicsDevice;
-			int totalWidth = 0;
-			int totalHeight = 0;
+			var totalWidth = 0;
+			var totalHeight = 0;
 
 			for (int c = 0; c < images[0].Length; c++)
-			{
 				totalWidth += images[0][c].TextureRegion.TextureBox.Width;
-			}
 
 			for (int r = 0; r < images.Length; r++)
-			{
 				totalHeight += images[r][0].TextureRegion.TextureBox.Height;
-			}
 
 			var renderTarget = new RenderTarget2D(graphicsDevice, totalWidth, totalHeight);
 			var spriteBatch = new SpriteBatch(graphicsDevice);
-
 			graphicsDevice.SetRenderTarget(renderTarget);
 			graphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-			int verticalOffset = 0;
+			var verticalOffset = 0;
 
 			for (int r = 0; r < images.Length; r++)
 			{
@@ -244,8 +224,7 @@ namespace Engine.Graphics.Services
 
 			spriteBatch.End();
 			graphicsDevice.SetRenderTarget(null);
-
-			Color[] data = new Color[renderTarget.Width * renderTarget.Height];
+			var data = new Color[renderTarget.Width * renderTarget.Height];
 			renderTarget.GetData(data);
 			renderTarget.Dispose();
 			var finalTexture = textureService.ExtendTexture(data, totalWidth, totalHeight, TextureConstants.TEXTURE_EXTENSION_AMOUNT);

@@ -32,11 +32,11 @@ namespace Engine.Core.Files.Services
 			var filePath = this.GetJsonFilePath(contentManagerName, folderName, fileName);
 
 			if (false == File.Exists(filePath))
-			{ 
 				return null;
-			}
 
-			return File.OpenRead(filePath);
+			var result = File.OpenRead(filePath);
+
+			return result;
 		}
 
 		/// <summary>
@@ -53,11 +53,11 @@ namespace Engine.Core.Files.Services
 
 			if ((true == createDirectoryIfDoesNotExist) &&
 				(false == Directory.Exists(folderPath)))
-			{
 				Directory.CreateDirectory(folderPath);
-			}
 
-			return Path.Combine(folderPath, $"{fileName}.json");
+			var result = Path.Combine(folderPath, $"{fileName}.json");
+
+			return result;
 		}
 
 		/// <summary>
@@ -71,17 +71,13 @@ namespace Engine.Core.Files.Services
 			var folderPath = Path.Combine(this.CurrentDirectory, contentManagerName, folderName);
 
 			if (false == Directory.Exists(folderPath))
-			{
 				return [];
-			}
 
 			var files = Directory.GetFiles(folderPath, "*.json");
 			var fileNames = new string[files.Length];
 
 			for (int i = 0; i < files.Length; i++)
-			{
 				fileNames[i] = Path.GetFileNameWithoutExtension(files[i]);
-			}
 
 			return fileNames;
 		}

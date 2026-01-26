@@ -33,7 +33,6 @@ namespace Engine.Controls.Services
 		public List<ActionControl> GetActionControls()
 		{
 			var jsonService = this._gameServices.GetService<IJsonService>();
-
 			var actionControls = new List<ActionControl>();
 			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
 			var serializer = new ModelSerializer<ActionControlModel[]>();
@@ -41,9 +40,7 @@ namespace Engine.Controls.Services
 			foreach (var contentManagerName in contentManagerNames)
 			{
 				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
-				{
 					continue;
-				}
 
 				var controlNames = LoadingInstructionsContainer.GetControlNamesForContentManager(contentManagerName);
 
@@ -79,9 +76,7 @@ namespace Engine.Controls.Services
 				controlKeys = new Keys[actionControlModel.ControlKeys.Length];
 
 				for (int i = 0; i < actionControlModel.ControlKeys.Length; i++)
-				{
 					controlKeys[i] = (Keys)actionControlModel.ControlKeys[i];
-				}
 			}
 
 			if ((null != actionControlModel.ControlMouseButtons) &&
@@ -90,17 +85,17 @@ namespace Engine.Controls.Services
 				controlMouseButtons = new MouseButtonTypes[actionControlModel.ControlMouseButtons.Length];
 
 				for (int i = 0; i < actionControlModel.ControlMouseButtons.Length; i++)
-				{
 					controlMouseButtons[i] = (MouseButtonTypes)actionControlModel.ControlMouseButtons[i];
-				}
 			}
 
-			return new ActionControl
+			var result = new ActionControl
 			{ 
 				ActionName = actionControlModel.ActionName,
 				ControlKeys = controlKeys,
 				ControlMouseButtons = controlMouseButtons
 			};
+
+			return result;
 		}
 
 		/// <summary>
@@ -119,9 +114,7 @@ namespace Engine.Controls.Services
 				controlKeys = new int[actionControl.ControlKeys.Length];
 
 				for (int i = 0; i < actionControl.ControlKeys.Length; i++)
-				{
 					controlKeys[i] = (int)actionControl.ControlKeys[i];
-				}
 			}
 
 			if ((null != actionControl.ControlMouseButtons) &&
@@ -130,17 +123,17 @@ namespace Engine.Controls.Services
 				controlMouseButtons = new int[actionControl.ControlMouseButtons.Length];
 
 				for (int i = 0; i < actionControl.ControlMouseButtons.Length; i++)
-				{
 					controlMouseButtons[i] = (int)actionControl.ControlMouseButtons[i];
-				}
 			}
 
-			return new ActionControlModel
+			var result = new ActionControlModel
 			{ 
 				ActionName = actionControl.ActionName,
 				ControlKeys = controlKeys,
 				ControlMouseButtons = controlMouseButtons
 			};
+
+			return result;
 		}
 	}
 }

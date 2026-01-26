@@ -24,22 +24,13 @@ namespace Engine.Core.Initialization.Services
 		{
 			var initialModels = initialModelsProvider?.Invoke(gameService);
 
-			if (true != initialModels?.Any())
-			{
-				return;
-			}
-
-			foreach (var model in initialModels)
+			foreach (var model in initialModels ?? [])
 			{
 				if (null == model)
-				{ 
 					continue;
-				}
 
 				if (false == ModelProcessingMappings.TryGetValue(model.GetType(), out var func))
-				{
 					continue;
-				}
 
 				_ = func.DynamicInvoke(model);
 			}

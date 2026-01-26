@@ -23,12 +23,16 @@ namespace Engine.Physics.Services
 		/// <returns>The position.</returns>
 		public Position GetPositionFromModel(PositionModel positionModel)
 		{
-			var vector = new Vector2(positionModel.X, positionModel.Y);
-
-			return new Position
+			var result = new Position
 			{
-				Coordinates = vector
+				Coordinates = new Vector2
+				{ 
+					X = positionModel.X,
+					Y = positionModel.Y
+				}
 			};
+
+			return result;
 		}
 	}
 }

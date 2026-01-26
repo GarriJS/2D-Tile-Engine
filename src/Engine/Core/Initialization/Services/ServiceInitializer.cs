@@ -22,7 +22,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Engine.Core.Initialization.Services
 {

@@ -27,30 +27,28 @@ namespace Engine.Graphics.Services
 		public IndependentGraphic GetIndependentGraphicFromModel(IndependentGraphicModel independentGraphicModel, int drawLayer = 0)
 		{
 			var positionService = this._gameServices.GetService<IPositionService>();
-
 			IAmAGraphic graphic = null;
 
 			if (independentGraphicModel.Graphic is AnimationModel animationModel)
 			{
 				var animationService = this._gameServices.GetService<IAnimationService>();
-
 				graphic = animationService.GetAnimationFromModel(animationModel);
 			}
 			else if (independentGraphicModel.Graphic is SimpleImageModel imageModel)
 			{ 
 				var imageService = this._gameServices.GetService<IImageService>();
-
 				graphic = imageService.GetImageFromModel(imageModel);	
 			}
 
 			var position = positionService.GetPositionFromModel(independentGraphicModel.Position);
-
-			return new IndependentGraphic
+			var result = new IndependentGraphic
 			{
 				DrawLayer = drawLayer,
 				Position = position,
 				Graphic = graphic
 			};
+
+			return result;
 		}
 	}
 }

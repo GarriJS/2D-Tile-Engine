@@ -37,9 +37,7 @@ namespace Engine.Core.Fonts.Services
 			foreach (var contentManagerName in contentManagerNames)
 			{
 				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
-				{
 					continue;
-				}
 
 				var managerFontNames = LoadingInstructionsContainer.GetFontNamesForContentManager(contentManagerName);
 
@@ -59,9 +57,7 @@ namespace Engine.Core.Fonts.Services
 		public SpriteFont GetSpriteFont(string spriteFontName)
 		{
 			if (true == this.SpriteFonts.TryGetValue(spriteFontName, out var font))
-			{
 				return font;
-			}
 
 			//LOGGING
 			return null;

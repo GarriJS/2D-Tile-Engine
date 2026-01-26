@@ -27,13 +27,10 @@ namespace Engine.Graphics.Services
 		public Animation GetAnimationFromModel(AnimationModel animationModel)
 		{
 			var imageService = this._gameServices.GetService<IImageService>();
-
 			var frames = new IAmAImage[animationModel.Frames.Length];
 
 			for (int i = 0; i < frames.Length; i++)
-			{
 				frames[i] = imageService.GetImageFromModel(animationModel.Frames[i]);
-			}
 
 			var animation = animationModel switch
 			{
@@ -55,9 +52,7 @@ namespace Engine.Graphics.Services
 			};
 
 			if (true == animationModel.FrameDuration.HasValue)
-			{
 				animation.FrameDuration = animationModel.FrameDuration.Value;
-			}
 			else
 			{
 				var randomService = this._gameServices.GetService<RandomService>();

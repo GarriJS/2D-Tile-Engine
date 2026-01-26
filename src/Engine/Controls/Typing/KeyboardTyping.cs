@@ -47,7 +47,6 @@ namespace Engine.Controls.Typing
 			if (key == Keys.X) return isShiftPressed ? 'X' : 'x';
 			if (key == Keys.Y) return isShiftPressed ? 'Y' : 'y';
 			if (key == Keys.Z) return isShiftPressed ? 'Z' : 'z';
-
 			if (((key == Keys.D0) && !isShiftPressed) || (key == Keys.NumPad0)) return '0';
 			if (((key == Keys.D1) && !isShiftPressed) || (key == Keys.NumPad1)) return '1';
 			if (((key == Keys.D2) && !isShiftPressed) || (key == Keys.NumPad2)) return '2';
@@ -58,7 +57,6 @@ namespace Engine.Controls.Typing
 			if (((key == Keys.D7) && !isShiftPressed) || (key == Keys.NumPad7)) return '7';
 			if (((key == Keys.D8) && !isShiftPressed) || (key == Keys.NumPad8)) return '8';
 			if (((key == Keys.D9) && !isShiftPressed) || (key == Keys.NumPad9)) return '9';
-
 			if ((key == Keys.D0) && isShiftPressed) return ')';
 			if ((key == Keys.D1) && isShiftPressed) return '!';
 			if ((key == Keys.D2) && isShiftPressed) return '@';
@@ -69,12 +67,10 @@ namespace Engine.Controls.Typing
 			if ((key == Keys.D7) && isShiftPressed) return '&';
 			if ((key == Keys.D8) && isShiftPressed) return '*';
 			if ((key == Keys.D9) && isShiftPressed) return '(';
-
 			if (key == Keys.Space) return ' ';
 			if (key == Keys.Tab) return '\t';
 			if (key == Keys.Enter) return (char)13;
 			if (key == Keys.Back) return (char)8;
-
 			if (key == Keys.Add) return '+';
 			if (key == Keys.Decimal) return '.';
 			if (key == Keys.Divide) return '/';
@@ -114,7 +110,9 @@ namespace Engine.Controls.Typing
 		/// <returns>The formatted text.</returns>
 		static public string FormatForDrawString(string text)
 		{ 
-			return text.Replace("\t", "    ");
+			var result = text.Replace("\t", "    ");
+
+			return result;
 		}
 	}
 }

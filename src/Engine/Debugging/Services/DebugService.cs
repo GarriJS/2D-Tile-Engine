@@ -94,9 +94,7 @@ namespace Engine.Debugging.Services
 			if (true == this.ScreenAreaIndicatorsEnabled)
 			{
 				foreach (var screenAreaIndicatorImage in this.ScreenAreaIndicatorImages)
-				{
 					runtimeOverlaidDrawService.RemoveDrawable(screenAreaIndicatorImage);
-				}
 
 				this.ScreenAreaIndicatorImages = [];
 			}
@@ -104,7 +102,6 @@ namespace Engine.Debugging.Services
 			{
 				var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 				var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
-
 				var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
 				var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
@@ -138,7 +135,6 @@ namespace Engine.Debugging.Services
 							}
 						}
 					};
-
 					var widthImage = independentGraphicService.GetIndependentGraphicFromModel(widthImageModel);
 					var nextWidthImageModel = new IndependentGraphicModel
 					{
@@ -168,7 +164,6 @@ namespace Engine.Debugging.Services
 							}
 						}
 					};
-
 					var nextWidthImage = independentGraphicService.GetIndependentGraphicFromModel(nextWidthImageModel);
 					runtimeOverlaidDrawService.AddDrawable(widthImage);
 					runtimeOverlaidDrawService.AddDrawable(nextWidthImage);
@@ -206,7 +201,6 @@ namespace Engine.Debugging.Services
 							}
 						}
 					};
-
 					var heightImage = independentGraphicService.GetIndependentGraphicFromModel(heightImageModel);
 					var nextHeightImageModel = new IndependentGraphicModel
 					{
@@ -236,7 +230,6 @@ namespace Engine.Debugging.Services
 							}
 						}
 					};
-
 					var nextHeightImage = independentGraphicService.GetIndependentGraphicFromModel(nextHeightImageModel);
 					runtimeOverlaidDrawService.AddDrawable(heightImage);
 					runtimeOverlaidDrawService.AddDrawable(nextHeightImage);

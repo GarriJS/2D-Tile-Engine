@@ -47,13 +47,14 @@ namespace Engine.Physics.Models
 		virtual public AreaModel ToModel()
 		{ 
 			var positionModel = this.Position.ToModel();
-
-			return new AreaModel
+			var result = new AreaModel
 			{
 				Width = this.Width,
 				Height = this.Height,
 				Position = positionModel
 			};
+
+			return result;
 		}
 	}
 }

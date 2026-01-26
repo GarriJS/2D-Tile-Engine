@@ -53,12 +53,13 @@ namespace Engine.Graphics.Models
 		{ 
 			var positionModel = this.Position.ToModel();
 			var graphicModel = this.Graphic.ToModel();
-
-			return new IndependentGraphicModel
+			var result = new IndependentGraphicModel
 			{
 				Position = positionModel,
 				Graphic = graphicModel
 			};
+
+			return result;
 		}
 	}
 }

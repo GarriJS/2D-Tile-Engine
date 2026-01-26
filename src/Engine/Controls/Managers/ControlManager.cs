@@ -45,7 +45,6 @@ namespace Engine.Controls.Managers
         public override void Initialize()
         {
             var actionControlServices = this.Game.Services.GetService<IActionControlServices>();
-
 			this.UpdateOrder = ManagerOrderConstants.ControlManagerUpdateOrder;
 			this.ActionControls = actionControlServices.GetActionControls();
 			this.ControlState = new ControlState
@@ -55,7 +54,6 @@ namespace Engine.Controls.Managers
                 FreshActionNames = [],
                 ActiveActionNames = []
             };
-
             base.Initialize();
         }
 
@@ -80,27 +78,26 @@ namespace Engine.Controls.Managers
         {
             var pressedKeys = Keyboard.GetState().GetPressedKeys();
             var mouseState = Mouse.GetState();
-            var pressedMouseButtons = this.GetPressedMouseButtons(Mouse.GetState());
+            var pressedMouseButtons = GetPressedMouseButtons(mouseState);
             var actionControlNames = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
                                                                     (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
-                                                     .Select(e => e.ActionName)
-                                                     .ToList();
-
+                                                        .Select(e => e.ActionName)
+                                                        .ToList();
             //var direction = this.GetMovementDirection(actionControlNames);
             var freshActionTypes = actionControlNames;
 
             if (null != this.PriorControlState?.ActiveActionNames)
-            {
                 freshActionTypes = [.. actionControlNames.Where(e => false == this.PriorControlState.ActiveActionNames.Contains(e))];
-            }
 
-            return new ControlState
+            var result = new ControlState
             {
                 //Direction = direction,
                 MouseState = mouseState,
 				FreshActionNames = freshActionTypes,
 				ActiveActionNames = actionControlNames
             };
+
+            return result;
         }
 
         /// <summary>
@@ -108,34 +105,24 @@ namespace Engine.Controls.Managers
         /// </summary>
         /// <param name="mouseState">The mouse state.</param>
         /// <returns>The mouse buttons.</returns>
-        private MouseButtonTypes[] GetPressedMouseButtons(MouseState mouseState)
+        static private MouseButtonTypes[] GetPressedMouseButtons(MouseState mouseState)
         {
             var activeMouseButtons = new List<MouseButtonTypes>(5);
 
             if (ButtonState.Pressed == mouseState.LeftButton)
-            {
                 activeMouseButtons.Add(MouseButtonTypes.LeftButton);
-            }
 
             if (ButtonState.Pressed == mouseState.RightButton)
-            {
                 activeMouseButtons.Add(MouseButtonTypes.RightButton);
-            }
 
             if (ButtonState.Pressed == mouseState.MiddleButton)
-            {
                 activeMouseButtons.Add(MouseButtonTypes.MiddleButton);
-            }
 
             if (ButtonState.Pressed == mouseState.XButton1)
-            {
                 activeMouseButtons.Add(MouseButtonTypes.XButton1);
-            }
 
             if (ButtonState.Pressed == mouseState.XButton2)
-            {
                 activeMouseButtons.Add(MouseButtonTypes.XButton2);
-            }
 
             return [.. activeMouseButtons];
         }

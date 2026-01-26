@@ -8,12 +8,12 @@ namespace Engine.Core.Initialization.Services
 	/// <summary>
 	/// Represents a loading instructions container.
 	/// </summary>
-	internal static class LoadingInstructionsContainer
+	static internal class LoadingInstructionsContainer
 	{
 		/// <summary>
 		/// Gets or sets the loading instructions settings.
 		/// </summary>
-		internal static LoadingInstructions LoadingInstructions { get; set; }
+		static internal LoadingInstructions LoadingInstructions { get; set; }
 
 		/// <summary>
 		/// Tries to get the content manager.
@@ -21,16 +21,18 @@ namespace Engine.Core.Initialization.Services
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <param name="contentManager">The content manager.</param>
 		/// <returns>A value indicating whether the content manager was returned.</returns>
-		internal static bool TryGetContentManager(string contentManagerName, out ContentManager contentManager)
+		static internal bool TryGetContentManager(string contentManagerName, out ContentManager contentManager)
 		{ 
-			return LoadingInstructions.ContentManagers.TryGetValue(contentManagerName, out contentManager);
+			var result = LoadingInstructions.ContentManagers.TryGetValue(contentManagerName, out contentManager);
+
+			return result;
 		}
 
 		/// <summary>
 		/// Gets the content manager names.
 		/// </summary>
 		/// <returns>A list of content manager names.</returns>
-		internal static IList<string> GetContentManagerNames()
+		static internal IList<string> GetContentManagerNames()
 		{
 			var controlNames = LoadingInstructions?.ContentManagers?.Keys?.ToList();
 
@@ -42,7 +44,7 @@ namespace Engine.Core.Initialization.Services
 		/// </summary>
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <returns>A list of control names for the content manager name.</returns>
-		internal static IList<string> GetControlNamesForContentManager(string contentManagerName)
+		static internal IList<string> GetControlNamesForContentManager(string contentManagerName)
 		{
 			var controlList = LoadingInstructions?.ControlLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
 																   .Select(e => e.ContentName)?
@@ -56,7 +58,7 @@ namespace Engine.Core.Initialization.Services
 		/// </summary>
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <returns>A list of font names for the content manager name.</returns>
-		internal static IList<string> GetFontNamesForContentManager(string contentManagerName)
+		static internal IList<string> GetFontNamesForContentManager(string contentManagerName)
 		{
 			var fontList = LoadingInstructions?.FontLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
 															 .Select(e => e.ContentName)?
@@ -70,7 +72,7 @@ namespace Engine.Core.Initialization.Services
 		/// </summary>
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <returns>A list of tile set names for the content manager name.</returns>
-		internal static IList<string> GetTileSetNamesForContentManager(string contentManagerName)
+		static internal IList<string> GetTileSetNamesForContentManager(string contentManagerName)
 		{
 			var contentList = LoadingInstructions?.TilesetLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
 																   .Select(e => e.ContentName)?
@@ -84,7 +86,7 @@ namespace Engine.Core.Initialization.Services
 		/// </summary>
 		/// <param name="contentManagerName">The content manager name.</param>
 		/// <returns>A list of image names for the content manager name.</returns>
-		internal static IList<string> GetImageNamesForContentManager(string contentManagerName)
+		static internal IList<string> GetImageNamesForContentManager(string contentManagerName)
 		{
 			var contentList = LoadingInstructions?.ImageLinkages?.Where(e => e.ContentManagerName == contentManagerName)?
 																 .Select(e => e.ContentName)?

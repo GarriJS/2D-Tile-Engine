@@ -15,12 +15,12 @@ namespace Engine.DiskModels
 		/// <summary>
 		/// The type discriminator name.
 		/// </summary>
-		readonly static private string TypeDiscriminatorName = "Type";
+		static readonly private string TypeDiscriminatorName = "Type";
 
 		/// <summary>
 		/// The type map.
 		/// </summary>
-		readonly static public Dictionary<string, Type> TypeMap = [];
+		static readonly public Dictionary<string, Type> TypeMap = [];
 
 		/// <summary>
 		/// Registers the assembly base disk models.
@@ -34,9 +34,7 @@ namespace Engine.DiskModels
 								.ToArray();
 
 			foreach (var type in types)
-			{
 				TypeMap[type.Name] = type;
-			}
 		}
 
 		/// <summary>
@@ -67,13 +65,9 @@ namespace Engine.DiskModels
 				};
 
 				foreach (var (name, derivedType) in TypeMap)
-				{
-					if (type.IsAssignableFrom(derivedType))
-					{
+					if (true == type.IsAssignableFrom(derivedType))
 						info.PolymorphismOptions.DerivedTypes.Add(
 							new JsonDerivedType(derivedType, name));
-					}
-				}
 			}
 
 			return info;

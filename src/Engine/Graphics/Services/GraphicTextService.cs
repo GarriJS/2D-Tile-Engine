@@ -27,10 +27,10 @@ namespace Engine.Graphics.Services
 		public Vector2 MeasureString(string fontName, string text)
 		{
 			var fontService = _gameServices.GetService<IFontService>();
-
 			var font = fontService.GetSpriteFont(fontName);
+			var result = font.MeasureString(text);
 
-			return font.MeasureString(text);
+			return result;
 		}
 
 		/// <summary>
@@ -54,15 +54,11 @@ namespace Engine.Graphics.Services
 		public SimpleText GetGraphicTextFromModel(GraphicalTextModel model)
 		{
 			if (null == model)
-			{
 				return null;
-			}
 
 			var fontService = this._gameServices.GetService<IFontService>();
-
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
-
 			var result = new SimpleText
 			{
 				FontName = model.FontName,

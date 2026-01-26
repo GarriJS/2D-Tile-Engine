@@ -36,9 +36,7 @@ namespace Engine.DiskModels
 			var modelProcessingMappings = modelProcessorMapProvider.Invoke(gameServices);
 
 			foreach (var (typeIn, processor) in modelProcessingMappings)
-			{ 
 				ModelProcessor.ModelProcessingMappings.Add(typeIn, processor);
-			}
 		}
 
 		/// <summary>
@@ -56,8 +54,7 @@ namespace Engine.DiskModels
 			var graphicTextService = gameServices.GetService<IGraphicTextService>();
 			var animationService = gameServices.GetService<IAnimationService>();
 			var actionControlService = gameServices.GetService<IActionControlServices>();
-
-			(Type type, Delegate factory)[] result =
+			(Type type, Delegate factory)[] pairs =
 			[
 				(typeof(PositionModel), positionService.GetPositionFromModel),
 				(typeof(AreaModel), areaService.GetAreaFromModel<SimpleArea>),
@@ -76,7 +73,7 @@ namespace Engine.DiskModels
 				(typeof(ActionControlModel), actionControlService.GetActionControlFromModel),
 			];
 
-			return result;
+			return pairs;
 		}
 	}
 }

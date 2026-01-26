@@ -46,8 +46,8 @@ namespace Engine.Graphics.Models
 		/// <param name="dimensions">The dimensions.</param>
 		public void SetDrawDimensions(SubArea dimensions)
 		{
-			var topCornersWidth = this.TextureRegions[0][0].DisplayArea.Width + this.TextureRegions[0][this.TextureRegions[0].Length - 1].DisplayArea.Width;
-			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[this.TextureRegions.Length - 1][0].DisplayArea.Height;
+			var topCornersWidth = this.TextureRegions[0][0].DisplayArea.Width + this.TextureRegions[0][^1].DisplayArea.Width;
+			var leftCornersHeight = this.TextureRegions[0][0].DisplayArea.Height + this.TextureRegions[^1][0].DisplayArea.Height;
 			var middleSetWidth = dimensions.Width - topCornersWidth;
 			var middleSetHeight = dimensions.Height - leftCornersHeight;
 
@@ -64,20 +64,12 @@ namespace Engine.Graphics.Models
 			}
 
 			for (int i = 0; i < this.TextureRegions.Length - 1; i++)
-			{
 				for (int j = 1; j < this.TextureRegions[0].Length; j++)
-				{
 					this.TextureRegions[i][j].DisplayArea.Width = middleSetWidth;
-				}
-			}
 
 			for (int i = 1; i < this.TextureRegions[0].Length - 1; i++)
-			{
 				for (int j = 0; j < this.TextureRegions.Length; j++)
-				{
 					this.TextureRegions[i][j].DisplayArea.Height = middleSetHeight;
-				}
-			}
 		}
 
 		/// <summary>
@@ -91,7 +83,6 @@ namespace Engine.Graphics.Models
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
-
 			var drawCoordinates = position.Coordinates + offset;
 			var verticalRowOffset = 0f;
 
@@ -101,7 +92,11 @@ namespace Engine.Graphics.Models
 
 				foreach (var textureRegion in textureRegionRow)
 				{
-					var textureRegionOffset = new Vector2 { X = horizontalRowOffset, Y = verticalRowOffset };
+					var textureRegionOffset = new Vector2 
+					{ 
+						X = horizontalRowOffset,
+						Y = verticalRowOffset 
+					};
 					textureRegion.Draw(drawingService, this.Texture, textureRegionOffset + drawCoordinates);
 					horizontalRowOffset += textureRegion.DisplayArea.Width;
 				}
@@ -117,10 +112,12 @@ namespace Engine.Graphics.Models
 		/// <returns>The serialization model.</returns>
 		virtual public GraphicBaseModel ToModel()
 		{
-			var result = new SimpleImageModel
+			//var textureRegions = this.TextureRegions.Select(e => e.ToModel());
+
+			var result = new CompositeImageModel
 			{
 				TextureName = this.TextureName,
-				//TextureBox = this.TextureBox
+				//TextureRegions = textureRegions TODO
 			};
 
 			return result;

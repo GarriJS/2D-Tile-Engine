@@ -38,11 +38,10 @@ namespace Engine.Physics.Models
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
 		override public bool Contains(Vector2 coordinate)
 		{
-			var offsetPosition = this.OffsetPosition;
-			var result = offsetPosition.X <= coordinate.X &&
-						 offsetPosition.X + Width >= coordinate.X &&
-						 offsetPosition.Y <= coordinate.Y &&
-						 offsetPosition.Y + Height >= coordinate.Y;
+			var result = this.Position.X + HorizontalOffset <= coordinate.X &&
+						 this.Position.X + HorizontalOffset + Width >= coordinate.X &&
+						 this.Position.Y + VerticalOffset <= coordinate.Y &&
+						 this.Position.Y + VerticalOffset + Height >= coordinate.Y;
 
 			return result;
 		}
@@ -54,8 +53,7 @@ namespace Engine.Physics.Models
 		override public OffsetAreaModel ToModel()
 		{
 			var positionModel = Position.ToModel();
-
-			return new OffsetAreaModel
+			var result = new OffsetAreaModel
 			{
 				Width = Width,
 				Height = Height,
@@ -63,6 +61,8 @@ namespace Engine.Physics.Models
 				HorizontalOffset = HorizontalOffset,
 				VerticalOffset = VerticalOffset
 			};
+
+			return result;
 		}
 	}
 }

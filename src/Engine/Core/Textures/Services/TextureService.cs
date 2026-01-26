@@ -60,9 +60,7 @@ namespace Engine.Core.Textures.Services
 			if ((true == this.Images.TryGetValue(textureName, out texture)) ||
 				(true == this.Tilesets.TryGetValue(textureName, out texture)) ||
 				(true == this.Tiles.TryGetValue(textureName, out texture)))
-			{
 				return true;
-			}
 
 			return false;
 		}
@@ -75,7 +73,9 @@ namespace Engine.Core.Textures.Services
 		/// <returns>The texture name.</returns>
 		public string GetTextureName(string spritesheet, Rectangle spritesheetBox)
 		{
-			return $"{spritesheet}_{spritesheetBox.X}_{spritesheetBox.Y}_{spritesheetBox.Width}_{spritesheetBox.Height}";
+			var result = $"{spritesheet}_{spritesheetBox.X}_{spritesheetBox.Y}_{spritesheetBox.Width}_{spritesheetBox.Height}";
+
+			return result;
 		}
 
 		/// <summary>
@@ -88,6 +88,7 @@ namespace Engine.Core.Textures.Services
 		/// <returns>The extended texture.</returns>
 		public Texture2D ExtendTexture(Color[] textureData, int sourceTextureWidth, int sourceTextureHeight, int extendAmount)
 		{
+			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var extendedWidth = sourceTextureWidth + (extendAmount * 2);
 			var extendedHeight = sourceTextureHeight + (extendAmount * 2);
 			var extendedTextureData = new Color[extendedWidth * extendedHeight];
@@ -102,84 +103,48 @@ namespace Engine.Core.Textures.Services
 				if (originalY == 0)
 				{
 					if (originalX == 0)
-					{
 						// Extend top left corner
 						for (int j = 0; j < extendAmount + 1; j++)
-						{
 							for (int k = 0; k < extendAmount + 1; k++)
-							{
 								extendedTextureData[(x - k) + ((y - j) * extendedWidth)] = textureData[i];
-							}
-						}
-					}
 					else if (originalX == sourceTextureWidth - 1)
-					{
 						// Extend top right corner
 						for (int j = 0; j < extendAmount + 1; j++)
-						{
 							for (int k = 0; k < extendAmount + 1; k++)
-							{
 								extendedTextureData[(x + k) + ((y - j) * extendedWidth)] = textureData[i];
-							}
-						}
-					}
 					else
-					{
 						// Extend top edge
 						for (int j = 0; j < extendAmount + 1; j++)
-						{
 							extendedTextureData[x + ((y - j) * extendedWidth)] = textureData[i];
-						}
-					}
 				}
 				else if (originalY == sourceTextureHeight - 1)
 				{
 					if (originalX == 0)
-					{
 						// Extend bottom left corner
 						for (int j = 0; j < extendAmount + 1; j++)
-						{
 							for (int k = 0; k < extendAmount + 1; k++)
-							{
 								extendedTextureData[(x - k) + ((y + j) * extendedWidth)] = textureData[i];
-							}
-						}
-					}
 					else if (originalX == sourceTextureWidth - 1)
-					{
 						// Extend bottom right corner
 						for (int j = 0; j < extendAmount + 1; j++)
-						{
 							for (int k = 0; k < extendAmount + 1; k++)
-							{
 								extendedTextureData[(x + k) + ((y + j) * extendedWidth)] = textureData[i];
-							}
-						}
-					}
 					else
-					{
 						// Extend bottom edge
 						for (int j = 0; j < extendAmount + 1; j++)
-						{
 							extendedTextureData[x + ((y + j) * extendedWidth)] = textureData[i];
-						}
-					}
 				}
 				else if (originalX == 0)
 				{
 					// Extend left edge
 					for (int k = 0; k < extendAmount + 1; k++)
-					{
 						extendedTextureData[(x - k) + (y * extendedWidth)] = textureData[i];
-					}
 				}
 				else if (originalX == sourceTextureWidth - 1)
 				{
 					// Extend right edge
 					for (int k = 0; k < extendAmount + 1; k++)
-					{
 						extendedTextureData[(x + k) + (y * extendedWidth)] = textureData[i];
-					}
 				}
 				else
 				{
@@ -187,8 +152,6 @@ namespace Engine.Core.Textures.Services
 					extendedTextureData[x + (y * extendedWidth)] = textureData[i];
 				}
 			}
-
-			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
 			var extendedTexture = new Texture2D(graphicsDeviceService.GraphicsDevice, extendedWidth, extendedHeight);
 			extendedTexture.SetData(extendedTextureData);
@@ -206,9 +169,7 @@ namespace Engine.Core.Textures.Services
 			foreach (var contentManagerName in contentManagerNames)
 			{
 				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
-				{
 					continue;
-				}
 
 				var managerImageNames = LoadingInstructionsContainer.GetImageNamesForContentManager(contentManagerName);
 
@@ -230,9 +191,7 @@ namespace Engine.Core.Textures.Services
 			foreach (var contentManagerName in contentManagerNames)
 			{
 				if (false == LoadingInstructionsContainer.TryGetContentManager(contentManagerName, out var contentManager))
-				{
 					continue;
-				}
 
 				var managerTilesetNames = LoadingInstructionsContainer.GetTileSetNamesForContentManager(contentManagerName);
 
@@ -253,9 +212,7 @@ namespace Engine.Core.Textures.Services
 		private void LoadTiles(string tilesetName, Texture2D tilesetTexture = null)
 		{
 			if (null == tilesetTexture)
-			{
 				tilesetTexture = this.Tilesets[tilesetName];
-			}
 
 			for (int x = 0; x < tilesetTexture.Width; x += TileConstants.TILE_SIZE)
 			{
@@ -284,7 +241,6 @@ namespace Engine.Core.Textures.Services
 		private Texture2D GetDebugTexture()
 		{
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-
 			var texture = new Texture2D(graphicsDeviceService.GraphicsDevice, 1, 1);
 			Color[] colorData = [ Color.MonoGameOrange ];
 			texture.SetData(colorData);
