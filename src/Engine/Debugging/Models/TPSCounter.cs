@@ -15,7 +15,7 @@ namespace Engine.Debugging.Models
 		/// <summary>
 		/// The draw offset.
 		/// </summary>
-		private readonly Vector2 Offset = new()
+		readonly private Vector2 Offset = new()
 		{
 			X = 0,
 			Y = 20
@@ -69,6 +69,8 @@ namespace Engine.Debugging.Models
 		/// <param name="gameServices">The game services.</param>
 		public void UpdateDebug(GameTime gameTime, GameServiceContainer gameServices)
 		{
+			var randomService = gameServices.GetService<IRandomService>();
+
 			if (false == this.LastTickTime.HasValue)
 				this.LastTickTime = gameTime.TotalGameTime.TotalMilliseconds;
 			else

@@ -6,7 +6,7 @@ namespace Engine.Debugging.Services.Contracts
 	/// <summary>
 	/// Represents a debug service.
 	/// </summary>
-	public interface IDebugService : ILoadContent
+	public interface IDebugService : IDoConfiguration, IPostLoadInitialize
 	{
 		//TODO move to another file
 		/// <summary>
@@ -42,7 +42,8 @@ namespace Engine.Debugging.Services.Contracts
 		/// <summary>
 		/// Toggles the performance rate counter.
 		/// </summary>
-		public void TogglePerformanceRateCounter();
+		/// <param name="enable">A value indicating whether to enable the performance counters.</param>
+		public void TogglePerformanceRateCounter(bool enable);
 
 	}
 }

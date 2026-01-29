@@ -1,5 +1,5 @@
 ﻿using Engine.Core.Constants;
-using Engine.Core.Initialization.Services;
+using Engine.Core.Initialization;
 using Engine.Core.Textures.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

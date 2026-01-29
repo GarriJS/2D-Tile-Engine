@@ -26,7 +26,7 @@ namespace Common.UserInterface.Services
 	/// Represents a user interface service.
 	/// </summary>
 	/// <remarks>
-	/// Initialize the user interface service.
+	/// ConfigureService the user interface service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class UserInterfaceService(GameServiceContainer gameServices) : IUserInterfaceService

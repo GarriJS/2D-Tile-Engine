@@ -16,20 +16,12 @@ namespace Engine.Debugging.Models
 		public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets the run time collection.
+		/// The run time collection.
 		/// </summary>
-		public RunTimeCollection<IAmDebugDrawable> RunTimeCollection { get; private set; }
-
-		/// <summary>
-		/// Initializes a new instance of the debug draw runtime.
-		/// </summary>
-		public DebugDrawRuntime()
+		readonly public RunTimeCollection<IAmDebugDrawable> RunTimeCollection = new()
 		{
-			this.RunTimeCollection = new RunTimeCollection<IAmDebugDrawable>
-			{
-				KeyFunction = drawable => drawable.DrawLayer
-			};
-		}
+			KeyFunction = drawable => drawable.DrawLayer
+		};
 
 		/// <summary>
 		/// Adds the drawable.
@@ -68,7 +60,7 @@ namespace Engine.Debugging.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			foreach (var kvp in RunTimeCollection.ActiveModels)
+			foreach (var kvp in this.RunTimeCollection.ActiveModels)
 			{
 				this.RunTimeCollection.CurrentKey = kvp.Key;
 

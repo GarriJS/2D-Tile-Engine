@@ -18,18 +18,10 @@ namespace Engine.Debugging.Models
 		/// <summary>
 		/// Gets the run time collection.
 		/// </summary>
-		public RunTimeCollection<IAmDebugUpdateable> RunTimeCollection { get; private set; }
-
-		/// <summary>
-		/// Initializes a new instance of the debug update runtime.
-		/// </summary>
-		public DebugUpdateRuntime()
+		readonly public RunTimeCollection<IAmDebugUpdateable> RunTimeCollection = new()
 		{
-			this.RunTimeCollection = new RunTimeCollection<IAmDebugUpdateable>
-			{
-				KeyFunction = updateable => updateable.UpdateOrder
-			};
-		}
+			KeyFunction = updateable => updateable.UpdateOrder
+		};
 
 		/// <summary>
 		/// Adds the updateable.

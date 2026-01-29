@@ -13,7 +13,7 @@ namespace Common.UserInterface.Services
 	/// Represents a user interface location service.
 	/// </summary>
 	/// <remarks>
-	/// Initialize the user interface location service.
+	/// ConfigureService the user interface location service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class UserInterfaceLocationService(GameServiceContainer gameServices) : IUserInterfaceLocationService

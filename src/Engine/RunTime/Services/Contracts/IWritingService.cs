@@ -7,7 +7,7 @@ namespace Engine.RunTime.Services.Contracts
 	/// <summary>
 	/// Represents a writing service.
 	/// </summary>
-	public interface IWritingService : INeedInitialization
+	public interface IWritingService : IDoConfiguration
 	{
 		/// <summary>
 		/// Draws the text.

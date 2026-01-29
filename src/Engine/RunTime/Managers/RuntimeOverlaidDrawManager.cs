@@ -16,9 +16,12 @@ namespace Engine.RunTime.Managers
 	public class RuntimeOverlaidDrawManager(Game game) : DrawableGameComponent(game), IRuntimeOverlaidDrawService
 	{
 		/// <summary>
-		/// Gets the run time collection.
+		/// The run time collection.
 		/// </summary>
-		public RunTimeCollection<IAmDrawable> RunTimeCollection { get; private set; }
+		readonly public RunTimeCollection<IAmDrawable> RunTimeCollection = new()
+		{
+			KeyFunction = drawable => drawable.DrawLayer
+		};
 
 		/// <summary>
 		/// Initializes the runtime draw manager.
@@ -27,10 +30,6 @@ namespace Engine.RunTime.Managers
 		{
 			this.UpdateOrder = ManagerOrderConstants.UnusedOrder;
 			this.DrawOrder = ManagerOrderConstants.OverlaidDrawMangerDrawOrder;
-			this.RunTimeCollection = new RunTimeCollection<IAmDrawable>
-			{
-				KeyFunction = drawable => drawable.DrawLayer
-			};
 			base.Initialize();
 		}
 

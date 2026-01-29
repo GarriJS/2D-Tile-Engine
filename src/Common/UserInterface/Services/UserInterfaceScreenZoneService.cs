@@ -53,13 +53,13 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Performs initialization.
 		/// </summary>
-		public void Initialize()
+		public void ConfigureService()
 		{
 			this.InitializeUiScreenZones();
 		}
 
 		/// <summary>
-		/// Initialize the user interface zones.
+		/// ConfigureService the user interface zones.
 		/// </summary>
 		public void InitializeUiScreenZones()
 		{

@@ -1,5 +1,5 @@
 ﻿using Engine.Core.Fonts.Services.Contracts;
-using Engine.Core.Initialization.Services;
+using Engine.Core.Initialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -23,9 +23,23 @@ namespace Engine.Core.Fonts.Services
 		private Dictionary<string, SpriteFont> SpriteFonts { get; set; } = [];
 
 		/// <summary>
+		/// Gets or sets the debug sprite font name.
+		/// </summary>
+		private string DebugSpriteFontName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the debug sprite font.
 		/// </summary>
 		public SpriteFont DebugSpriteFont { get; set; }
+		
+		/// <summary>
+		/// Configures the service.
+		/// </summary>
+		public void ConfigureService()
+		{
+			//TODO make configurable
+			this.DebugSpriteFontName = "Monolight";
+		}
 
 		/// <summary>
 		/// Loads the font content.
@@ -47,6 +61,8 @@ namespace Engine.Core.Fonts.Services
 					this.SpriteFonts.Add(managerFontName, font);
 				}
 			}
+
+			this.SetDebugSpriteFont(this.DebugSpriteFontName);
 		}
 
 		/// <summary>

@@ -3,7 +3,7 @@ using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Contracts;
 using Engine.Core.Fonts.Services.Contracts;
-using Engine.Core.Initialization.Services;
+using Engine.Core.Initialization;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels;
@@ -48,21 +48,26 @@ namespace Engine
 		private List<Func<GameServiceContainer, Dictionary<string, Delegate>>> FunctionProviders { get; } = [];
 
 		/// <summary>
+		/// Gets the initializations. 
+		/// </summary>
+		internal List<IDoConfiguration> Configurables { get; } = [];
+
+		/// <summary>
 		/// Gets the loadables.
 		/// </summary>
 		internal List<ILoadContent> Loadables { get; } = [];
 
 		/// <summary>
-		/// Gets the initializations. 
+		/// Gets the post load initializers.
 		/// </summary>
-		internal List<INeedInitialization> Initializations { get; } = [];
+		internal List<IPostLoadInitialize> PostLoadInitializers { get; } = [];
 
 		protected override void Initialize()
 		{
 			// Start services
 			_ = ServiceInitializer.StartEngineServices(this);
 
-			foreach (var externalServiceProvider in this.ExternalServiceProviders)
+			foreach (var externalServiceProvider in this.ExternalServiceProviders ?? [])
 				_ = ServiceInitializer.StartServices(this, externalServiceProvider);
 
 			this.ExternalServiceProviders.Clear();
@@ -72,13 +77,13 @@ namespace Engine
 			this._graphics.PreferredBackBufferHeight = 720;
 			this._graphics.ApplyChanges();
 
-			foreach (var initialization in this.Initializations)
-				initialization.Initialize();
+			foreach (var configurable in this.Configurables ?? [])
+				configurable.ConfigureService();
 
 			// Load model processors
 			ModelMapper.LoadEngineModelProcessingMappings(this.Services);
 
-			foreach (var externalModelProcessorMapProvider in this.ExternalModelProcessorMapProviders)
+			foreach (var externalModelProcessorMapProvider in this.ExternalModelProcessorMapProviders ?? [])
 				ModelMapper.LoadModelProcessingMappings(this.Services, externalModelProcessorMapProvider);
 
 			this.ExternalModelProcessorMapProviders.Clear();
@@ -86,19 +91,36 @@ namespace Engine
 			// Loads the game functions
 			var functionService = this.Services.GetService<IFunctionService>();
 
-			foreach (var functionProvider in this.FunctionProviders)
+			foreach (var functionProvider in this.FunctionProviders ?? [])
 			{
 				var functionKpvs = functionProvider.Invoke(this.Services);
 
-				foreach (var functionKpv in functionKpvs)
+				foreach (var functionKpv in functionKpvs ?? [])
 					functionService.TryAddFunction(functionKpv.Key, functionKpv.Value);
 			}
 
-			// Initialize game managers
+			this.FunctionProviders.Clear();
+
+			// ConfigureService game managers
 			base.Initialize();
+
+			// Do post initializer
+
+			foreach (var initializer in this.PostLoadInitializers ?? [])
+				initializer.PostLoadInitialize();
+
+			// Debug
+			if (true == this.InDebugMode)
+			{
+				var debugService = this.Services.GetService<IDebugService>();
+				var fontService = this.Services.GetService<IFontService>();
+				fontService.SetDebugSpriteFont(this.DebugSpriteFontName);
+				debugService.ToggleScreenAreaIndicators();
+				debugService.TogglePerformanceRateCounter(true);
+			}
 		}
 
-		// Is called by base.Initialize in Initialize()
+		// Is called by base.ConfigureService in ConfigureService()
 		protected override void LoadContent()
 		{
 			// Do any content loading
@@ -106,18 +128,6 @@ namespace Engine
 				loadable.LoadContent();
 
 			this.Loadables.Clear();
-
-			// Debug
-			if (true == this.InDebugMode)
-			{ 
-				var debugService = this.Services.GetService<IDebugService>();
-				var fontService = this.Services.GetService<IFontService>();
-				fontService.SetDebugSpriteFont(this.DebugSpriteFontName);
-				debugService.ToggleScreenAreaIndicators();
-				debugService.TogglePerformanceRateCounter();
-			}
-
-			this.FunctionProviders.Clear();
 
 			// Load the initial models
 			foreach (var initialModelsProvider in this.InitialModelsProviders)

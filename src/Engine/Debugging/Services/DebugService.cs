@@ -1,4 +1,5 @@
 ﻿using Engine.Core.Fonts.Services.Contracts;
+using Engine.Core.State.Contracts;
 using Engine.Debugging.Models;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels.Drawing;
@@ -24,6 +25,11 @@ namespace Engine.Debugging.Services
 	public class DebugService(GameServiceContainer gameServices) : IDebugService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
+
+		/// <summary>
+		/// The debug flag name. TODO find a proper place.
+		/// </summary>
+		static readonly public string DebugFlagName = "DebugModeActive";
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the screen area indicators are enabled.
@@ -66,9 +72,9 @@ namespace Engine.Debugging.Services
 		private List<IndependentGraphic> ScreenAreaIndicatorImages { get; set; } = [];
 
 		/// <summary>
-		/// Loads the content.
+		/// Configures the service.
 		/// </summary>
-		public void LoadContent()
+		public void ConfigureService()
 		{
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
@@ -82,6 +88,57 @@ namespace Engine.Debugging.Services
 			runTimeDrawService.AddDrawable(this.DebugDrawRuntime);
 			runTimeOverlaidDrawService.AddDrawable(this.DebugOverlaidDrawRuntime);
 			runtimeUpdateSerive.AddUpdateable(this.DebugUpdateRuntime);
+			var gameStateService = this._gameServices.GetService<IGameStateService>();
+			gameStateService.SubscribeToFlag(DebugFlagName, this.DebugFlagSubscription);
+		}
+
+		/// <summary>
+		/// Does the post load initialization.
+		/// </summary>
+		public void PostLoadInitialize()
+		{
+			var fontService = this._gameServices.GetService<IFontService>();
+			var positionService = this._gameServices.GetService<IPositionService>();
+			var spriteFont = fontService.DebugSpriteFont;
+
+			if (null == spriteFont)
+				return;
+
+			var fpsPositionModel = new PositionModel
+			{
+				X = 5,
+				Y = 0,
+			};
+			var fpsPosition = positionService.GetPositionFromModel(fpsPositionModel);
+			this.FpsCounter = new FpsCounter
+			{
+				DrawLayer = IDebugService.DebugDrawLayer,
+				LastFrameTime = null,
+				Font = spriteFont,
+				Position = fpsPosition
+			};
+			var tpsPositionModel = new PositionModel
+			{
+				X = 5,
+				Y = 0,
+			};
+			var tpsPosition = positionService.GetPositionFromModel(tpsPositionModel);
+			this.TpsCounter = new TpsCounter
+			{
+				DrawLayer = IDebugService.DebugDrawLayer,
+				UpdateOrder = IDebugService.DebugUpdateOrder,
+				Font = spriteFont,
+				Position = tpsPosition
+			};
+		}
+
+		/// <summary>
+		/// The debug flag subscription.
+		/// </summary>
+		/// <param name="flagValue">The flag value.</param>
+		private void DebugFlagSubscription(bool flagValue)
+		{
+			this.TogglePerformanceRateCounter(flagValue);
 		}
 
 		/// <summary>
@@ -242,46 +299,11 @@ namespace Engine.Debugging.Services
 		/// <summary>
 		/// Toggles the performance rate counter.
 		/// </summary>
-		public void TogglePerformanceRateCounter()
+		/// <param name="enable">A value indicating whether to enable the performance counters.</param>
+		public void TogglePerformanceRateCounter(bool enable)
 		{
-			var fontService = this._gameServices.GetService<IFontService>();
-			var positionService = this._gameServices.GetService<IPositionService>();
-
-			if ((null == this.FpsCounter) ||
-				(null == this.TpsCounter))
-			{
-				var spriteFont = fontService.DebugSpriteFont;
-
-				if (null == spriteFont)
-					return;
-
-				var fpsPositionModel = new PositionModel
-				{
-					X = 5,
-					Y = 0,
-				};
-				var fpsPosition = positionService.GetPositionFromModel(fpsPositionModel);
-				this.FpsCounter = new FpsCounter
-				{
-					DrawLayer = IDebugService.DebugDrawLayer,
-					LastFrameTime = null,
-					Font = spriteFont,
-					Position = fpsPosition
-				};
-				var tpsPositionModel = new PositionModel
-				{
-					X = 5,
-					Y = 0,
-				};
-				var tpsPosition = positionService.GetPositionFromModel(tpsPositionModel);
-				this.TpsCounter = new TpsCounter
-				{
-					DrawLayer = IDebugService.DebugDrawLayer,
-					UpdateOrder = IDebugService.DebugUpdateOrder,
-					Font = spriteFont,
-					Position = tpsPosition
-				};
-			}
+			if (enable == this.PerformanceCountersActive)
+				return;
 
 			if (false == this.PerformanceCountersActive)
 			{

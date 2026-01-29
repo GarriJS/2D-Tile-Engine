@@ -6,7 +6,7 @@ namespace Engine.Core.Fonts.Services.Contracts
 	/// <summary>
 	/// Represents a font service.
 	/// </summary>
-	public interface IFontService : ILoadContent
+	public interface IFontService : IDoConfiguration, ILoadContent
 	{
 		/// <summary>
 		/// Gets or sets the debug sprite font.

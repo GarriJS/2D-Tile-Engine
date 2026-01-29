@@ -16,9 +16,12 @@ namespace Engine.RunTime.Managers
 	public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
 	{
 		/// <summary>
-		/// Gets the run time collection.
+		/// The run time collection.
 		/// </summary>
-		public RunTimeCollection<IAmUpdateable> RunTimeCollection { get; private set; }
+		readonly public RunTimeCollection<IAmUpdateable> RunTimeCollection = new()
+		{
+			KeyFunction = updateable => updateable.UpdateOrder
+		};
 
 		/// <summary>
 		/// Initializes the runtime update manager.
@@ -26,10 +29,6 @@ namespace Engine.RunTime.Managers
 		override public void Initialize()
 		{
 			this.UpdateOrder = ManagerOrderConstants.UpdateManagerUpdateOrder;
-			this.RunTimeCollection = new RunTimeCollection<IAmUpdateable>
-			{
-				KeyFunction = updateable => updateable.UpdateOrder
-			};
 			base.Initialize();
 		}
 

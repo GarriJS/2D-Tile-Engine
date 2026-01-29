@@ -9,7 +9,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface screen zone service.
 	/// </summary>
-	public interface IUserInterfaceScreenZoneService : INeedInitialization
+	public interface IUserInterfaceScreenZoneService : IDoConfiguration
 	{
 		/// <summary>
 		/// Gets or sets the screen zone size.
@@ -22,7 +22,7 @@ namespace Common.UserInterface.Services.Contracts
 		public Dictionary<UiZonePositionType, UiScreenZone> UserInterfaceScreenZones { get; set; }
 
 		/// <summary>
-		/// Initialize the user interface zones.
+		/// ConfigureService the user interface zones.
 		/// </summary>
 		public void InitializeUiScreenZones();
 	}

@@ -22,9 +22,9 @@ namespace Engine.RunTime.Services
 		private SpriteBatch SpriteBatch { get; set; }
 	
 		/// <summary>
-		/// Performs initializes.
+		/// Configures the service.
 		/// </summary>
-		public void Initialize()
+		public void ConfigureService()
 		{
 			var drawingService = _gameServices.GetService<IDrawingService>();
 
