@@ -50,12 +50,12 @@ namespace EngineTests.RunTime
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
 
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
 
             manager.AddDrawable(drawable);
 
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.Contains(drawable, manager.RunTimeCollection.ActiveModels[1]);
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.Contains(drawable, manager._runTimeCollection.ActiveModels[1]);
         }
 
         [Fact]
@@ -64,16 +64,16 @@ namespace EngineTests.RunTime
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 1 };
             manager.AddDrawable(drawable);
-            manager.RunTimeCollection.CurrentKey = 1;
+            manager._runTimeCollection.CurrentKey = 1;
             var newDrawable = new FakeDrawable { DrawLayer = 1 };
             manager.AddDrawable(newDrawable);
 
-            Assert.DoesNotContain(newDrawable, manager.RunTimeCollection.ActiveModels[1]);
-            Assert.Contains(newDrawable, manager.RunTimeCollection.PendingAdds);
+            Assert.DoesNotContain(newDrawable, manager._runTimeCollection.ActiveModels[1]);
+            Assert.Contains(newDrawable, manager._runTimeCollection.PendingAdds);
 
-            manager.RunTimeCollection.ResolvePendingModels();
+            manager._runTimeCollection.ResolvePendingModels();
 
-            Assert.Contains(newDrawable, manager.RunTimeCollection.ActiveModels[1]);
+            Assert.Contains(newDrawable, manager._runTimeCollection.ActiveModels[1]);
         }
 
         [Fact]
@@ -82,18 +82,18 @@ namespace EngineTests.RunTime
             var manager = CreateManager();
             var drawable = new FakeDrawable { DrawLayer = 2 };
 
-            manager.RunTimeCollection.CurrentKey = 1;
+            manager._runTimeCollection.CurrentKey = 1;
             manager.AddDrawable(drawable);
 
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(2));
-            Assert.True(manager.RunTimeCollection.PendingListAdds.ContainsKey(2));
-            Assert.Contains(drawable, manager.RunTimeCollection.PendingListAdds[2]);
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.True(manager._runTimeCollection.PendingListAdds.ContainsKey(2));
+            Assert.Contains(drawable, manager._runTimeCollection.PendingListAdds[2]);
 
-            manager.RunTimeCollection.CurrentKey = null;
-            manager.RunTimeCollection.ResolvePendingLists();
+            manager._runTimeCollection.CurrentKey = null;
+            manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(2));
-            Assert.Contains(drawable, manager.RunTimeCollection.ActiveModels[2]);
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.Contains(drawable, manager._runTimeCollection.ActiveModels[2]);
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace EngineTests.RunTime
 
             manager.RemoveDrawable(drawable1);
 
-            Assert.False(true == manager.RunTimeCollection.ActiveModels[1].Contains(drawable1));
+            Assert.False(true == manager._runTimeCollection.ActiveModels[1].Contains(drawable1));
         }
 
         [Fact]
@@ -117,11 +117,11 @@ namespace EngineTests.RunTime
             var drawable = new FakeDrawable { DrawLayer = 1 };
             manager.AddDrawable(drawable);
 
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
 
             manager.RemoveDrawable(drawable);
 
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
         }
 
         [Fact]
@@ -131,15 +131,15 @@ namespace EngineTests.RunTime
             var drawable = new FakeDrawable { DrawLayer = 1 };
 
             manager.AddDrawable(drawable);
-            manager.RunTimeCollection.CurrentKey = 1;
+            manager._runTimeCollection.CurrentKey = 1;
             manager.RemoveDrawable(drawable);
 
-            Assert.Contains(drawable, manager.RunTimeCollection.ActiveModels[1]);
-            Assert.Contains(drawable, manager.RunTimeCollection.PendingRemovals);
+            Assert.Contains(drawable, manager._runTimeCollection.ActiveModels[1]);
+            Assert.Contains(drawable, manager._runTimeCollection.PendingRemovals);
 
-            manager.RunTimeCollection.ResolvePendingModels();
+            manager._runTimeCollection.ResolvePendingModels();
 
-            Assert.DoesNotContain(drawable, manager.RunTimeCollection.ActiveModels[1]);
+            Assert.DoesNotContain(drawable, manager._runTimeCollection.ActiveModels[1]);
         }
 
         [Fact]
@@ -149,17 +149,17 @@ namespace EngineTests.RunTime
             var drawable = new FakeDrawable { DrawLayer = 1 };
 
             manager.AddDrawable(drawable);
-            manager.RunTimeCollection.CurrentKey = 2;
+            manager._runTimeCollection.CurrentKey = 2;
             manager.RemoveDrawable(drawable);
 
-            Assert.Contains(1, manager.RunTimeCollection.PendingListRemovals);
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.Empty(manager.RunTimeCollection.ActiveModels[1]);
+            Assert.Contains(1, manager._runTimeCollection.PendingListRemovals);
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.Empty(manager._runTimeCollection.ActiveModels[1]);
 
-            manager.RunTimeCollection.CurrentKey = null;
-            manager.RunTimeCollection.ResolvePendingLists();
+            manager._runTimeCollection.CurrentKey = null;
+            manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
         }
 
         [Fact]
@@ -169,13 +169,13 @@ namespace EngineTests.RunTime
             var drawable = new FakeDrawable { DrawLayer = 1 };
             manager.AddDrawable(drawable);
 
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(2));
 
             manager.ChangeDrawableLayer(2, drawable);
 
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(2));
             Assert.Equal(2, drawable.DrawLayer);
         }
 
@@ -186,21 +186,21 @@ namespace EngineTests.RunTime
             var drawable = new FakeDrawable { DrawLayer = 1 };
 
             manager.AddDrawable(drawable);
-            manager.RunTimeCollection.CurrentKey = 1;
+            manager._runTimeCollection.CurrentKey = 1;
             manager.ChangeDrawableLayer(2, drawable);
 
-            Assert.True(manager.RunTimeCollection.PendingListAdds.ContainsKey(2));
-            Assert.Contains(drawable, manager.RunTimeCollection.PendingRemovals);
+            Assert.True(manager._runTimeCollection.PendingListAdds.ContainsKey(2));
+            Assert.Contains(drawable, manager._runTimeCollection.PendingRemovals);
 
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(2));
 
-            manager.RunTimeCollection.ResolvePendingModels();
-            manager.RunTimeCollection.CurrentKey = null;
-            manager.RunTimeCollection.ResolvePendingLists();
+            manager._runTimeCollection.ResolvePendingModels();
+            manager._runTimeCollection.CurrentKey = null;
+            manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.False(manager.RunTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.True(manager.RunTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(2));
             Assert.Equal(2, drawable.DrawLayer);
         }
 
@@ -326,12 +326,12 @@ namespace EngineTests.RunTime
         {
             var manager = CreateManager();
 
-            manager.RunTimeCollection.PendingListRemovals.Add(123);
-            manager.RunTimeCollection.CurrentKey = 1;
+            manager._runTimeCollection.PendingListRemovals.Add(123);
+            manager._runTimeCollection.CurrentKey = 1;
 
-            manager.RunTimeCollection.ResolvePendingLists();
+            manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.Empty(manager.RunTimeCollection.PendingListRemovals);
+            Assert.Empty(manager._runTimeCollection.PendingListRemovals);
         }
     }
 }

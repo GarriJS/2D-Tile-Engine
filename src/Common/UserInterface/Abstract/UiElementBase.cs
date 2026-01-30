@@ -5,7 +5,6 @@ using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
@@ -109,10 +108,10 @@ namespace Common.UserInterface.Abstract
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		abstract public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default);
+		abstract public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default);
 
 		/// <summary>
 		/// Disposes of the user interface button.

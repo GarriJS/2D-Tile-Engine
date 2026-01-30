@@ -1,7 +1,6 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Drawing;
 using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -103,15 +102,15 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="offset">The offset.</param>
-		virtual public void Write(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		virtual public void Write(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
 			if (true == string.IsNullOrEmpty(this.Text))
 				return;
 		
 			var writingService = gameServices.GetService<IWritingService>();
-			var textOffset = position.Coordinates + offset;
+			var textOffset = coordinates + offset;
 			writingService.Draw(this.Font, this.Text, textOffset, this.TextColor);
 		}
 

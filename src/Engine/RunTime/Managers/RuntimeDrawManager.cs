@@ -18,7 +18,7 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// The run time collection.
 		/// </summary>
-		readonly public RunTimeCollection<IAmDrawable> RunTimeCollection = new()
+		readonly public RunTimeCollection<IAmDrawable> _runTimeCollection = new()
 		{
 			KeyFunction = drawable => drawable.DrawLayer
 		};
@@ -39,7 +39,13 @@ namespace Engine.RunTime.Managers
 		/// <param name="drawable">The drawable.</param>
 		public void AddDrawable(IAmDrawable drawable)
 		{
-			this.RunTimeCollection.AddModel(drawable);
+			this._runTimeCollection.AddModel(drawable);
+
+			if (drawable is IRequirePreRender subRender)
+			{
+				var preRenderService = this.Game.Services.GetService<IPreRenderService>();
+				preRenderService.AddPrerender(subRender);
+			}
 		}
 
 		/// <summary>
@@ -48,7 +54,13 @@ namespace Engine.RunTime.Managers
 		/// <param name="drawable">The drawable.</param>
 		public void RemoveDrawable(IAmDrawable drawable)
 		{
-			this.RunTimeCollection.RemoveModel(drawable);
+			this._runTimeCollection.RemoveModel(drawable);
+
+			if (drawable is IRequirePreRender subRender)
+			{
+				var preRenderService = this.Game.Services.GetService<IPreRenderService>();
+				preRenderService.RemovePrerender(subRender);
+			}
 		}
 
 		/// <summary>
@@ -64,7 +76,7 @@ namespace Engine.RunTime.Managers
 		}
 
 		/// <summary>
-		/// Updates the active drawable.
+		/// Draws the active drawables.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		override public void Draw(GameTime gameTime)
@@ -72,25 +84,25 @@ namespace Engine.RunTime.Managers
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
 			drawingService.BeginDraw();
 
-			foreach (var kvp in this.RunTimeCollection.ActiveModels)
+			foreach (var kvp in this._runTimeCollection.ActiveModels)
 			{
-				this.RunTimeCollection.CurrentKey = kvp.Key;
+				this._runTimeCollection.CurrentKey = kvp.Key;
 
 				foreach (var drawable in kvp.Value)
 				{
-					if (true == this.RunTimeCollection.PendingRemovals.Contains(drawable))
+					if (true == this._runTimeCollection.PendingRemovals.Contains(drawable))
 						continue;
 
 					drawable.Draw(gameTime, this.Game.Services);
 				}
 
-				this.RunTimeCollection.ResolvePendingModels();
-				this.RunTimeCollection.CurrentKey = null;
+				this._runTimeCollection.ResolvePendingModels();
+				this._runTimeCollection.CurrentKey = null;
 			}
 
 			base.Draw(gameTime);
 			drawingService.EndDraw(); 
-			this.RunTimeCollection.ResolvePendingLists();
+			this._runTimeCollection.ResolvePendingLists();
 		}
 	}
 }

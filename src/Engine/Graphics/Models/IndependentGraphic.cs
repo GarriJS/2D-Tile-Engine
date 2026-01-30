@@ -34,7 +34,7 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			this.Graphic.Draw(gameTime, gameServices, this.Position, Color.White);
+			this.Graphic.Draw(gameTime, gameServices, this.Position.Coordinates, Color.White);
 		}
 
 		/// <summary>

@@ -16,7 +16,10 @@ namespace Engine.Graphics.Models
 		public Vector2 UpdateText(string text, bool conformText = true)
 		{
 			this.Text = text;
-			this.ConformTextToMaxWidth();
+
+			if (true == conformText)
+				this.ConformTextToMaxWidth();
+			
 			var dimensions = this.GetTextDimensions();
 
 			return dimensions;

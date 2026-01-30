@@ -94,6 +94,7 @@ namespace Engine.Core.Initialization
 			(Type type, object provider)[] pairs =
 			[
 				(typeof(ContentManager), engine.Content),
+				(typeof(IPreRenderService), new PreRenderManager(engine)),
 				(typeof(IRuntimeUpdateService), new RuntimeUpdateManager(engine)),
 				(typeof(IRuntimeDrawService), new RuntimeDrawManager(engine)),               
 				(typeof(IRuntimeOverlaidDrawService), new RuntimeOverlaidDrawManager(engine)),

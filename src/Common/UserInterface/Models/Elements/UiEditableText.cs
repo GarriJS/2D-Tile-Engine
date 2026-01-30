@@ -4,7 +4,6 @@ using Common.UserInterface.Abstract;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
 using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Models.Elements
@@ -43,12 +42,12 @@ namespace Common.UserInterface.Models.Elements
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
+		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, position, color, offset);
+			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
 
 			if (null != this.GraphicText)
 			{
@@ -59,7 +58,7 @@ namespace Common.UserInterface.Models.Elements
 					Y = (this.Area.Height - textDimensions.Y) / 2f
 				};
 				var graphicTextOffset = offset + centeredOffset;
-				this.GraphicText.Write(gameTime, gameServices, position, graphicTextOffset);
+				this.GraphicText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
 			}
 		}
 

@@ -18,7 +18,7 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// The run time collection.
 		/// </summary>
-		readonly public RunTimeCollection<IAmUpdateable> RunTimeCollection = new()
+		readonly public RunTimeCollection<IAmUpdateable> _runTimeCollection = new()
 		{
 			KeyFunction = updateable => updateable.UpdateOrder
 		};
@@ -38,7 +38,7 @@ namespace Engine.RunTime.Managers
 		/// <param name="updateable">The updateable.</param>
 		public void AddUpdateable(IAmUpdateable updateable)
 		{
-			this.RunTimeCollection.AddModel(updateable);
+			this._runTimeCollection.AddModel(updateable);
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace Engine.RunTime.Managers
 		/// <param name="updateable">The updateable.</param>
 		public void RemoveUpdateable(IAmUpdateable updateable)
 		{
-			this.RunTimeCollection.RemoveModel(updateable);
+			this._runTimeCollection.RemoveModel(updateable);
 		}
 
 		/// <summary>
@@ -68,24 +68,24 @@ namespace Engine.RunTime.Managers
 		/// <param name="gameTime">The game time.</param>
 		override public void Update(GameTime gameTime)
 		{
-			foreach (var kvp in this.RunTimeCollection.ActiveModels)
+			foreach (var kvp in this._runTimeCollection.ActiveModels)
 			{
-				this.RunTimeCollection.CurrentKey = kvp.Key;
+				this._runTimeCollection.CurrentKey = kvp.Key;
 
 				foreach (var updateable in kvp.Value)
 				{
-					if (true == this.RunTimeCollection.PendingRemovals.Contains(updateable))
+					if (true == this._runTimeCollection.PendingRemovals.Contains(updateable))
 						continue;
 
 					updateable.Update(gameTime, this.Game.Services);
 				}
 
-				this.RunTimeCollection.ResolvePendingModels();
-				this.RunTimeCollection.CurrentKey = null;
+				this._runTimeCollection.ResolvePendingModels();
+				this._runTimeCollection.CurrentKey = null;
 			}
 
 			base.Update(gameTime);
-			this.RunTimeCollection.ResolvePendingLists();
+			this._runTimeCollection.ResolvePendingLists();
 		}
 	}
 }

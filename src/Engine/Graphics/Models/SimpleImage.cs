@@ -1,7 +1,6 @@
 ﻿using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -48,13 +47,13 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
-			var drawCoordinates = position.Coordinates + offset;
+			var drawCoordinates = coordinates + offset;
 			this.TextureRegion.Draw(drawingService, this.Texture, drawCoordinates);
 		}
 

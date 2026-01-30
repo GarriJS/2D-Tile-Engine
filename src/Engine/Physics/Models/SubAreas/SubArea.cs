@@ -1,8 +1,10 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
+using Engine.Monogame;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Engine.Physics.Models.SubAreas
 {
@@ -36,7 +38,7 @@ namespace Engine.Physics.Models.SubAreas
 		/// </summary>
 		/// <param name="vector">The vector.</param>
 		public SubArea(Vector2 vector)
-		{ 
+		{
 			this.Width = vector.X;
 			this.Height = vector.Y;
 		}
@@ -46,45 +48,24 @@ namespace Engine.Physics.Models.SubAreas
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Color color, Vector2 offset = default)
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			var topLeft = position.Coordinates + offset;
 			var drawingService = gameServices.GetService<IDrawingService>();
-			var topRect = new Rectangle
+			var thisRectangle = new Rectangle
 			{
-				X = (int)topLeft.X,
-				Y = (int)topLeft.Y,
-				Width = (int)Width,
-				Height = 1
+				X = (int)(coordinates.X + offset.X),
+				Y = (int)(coordinates.Y + offset.Y),
+				Width = (int)this.Width,
+				Height = (int)this.Height
 			};
-			var bottomRect = new Rectangle
-			{
-				X = (int)topLeft.X,
-				Y = (int)topLeft.Y + (int)Height - 1,
-				Width = (int)Width,
-				Height = 1
-			};
-			var leftRect = new Rectangle
-			{
-				X = (int)topLeft.X,
-				Y = (int)topLeft.Y,
-				Width = 1,
-				Height = (int)Height
-			};
-			var rightRect = new Rectangle
-			{
-				X = (int)topLeft.X + (int)Width - 1,
-				Y = (int)topLeft.Y,
-				Width = 1,
-				Height = (int)Height
-			};
-			drawingService.DrawRectangle(topRect, color);
-			drawingService.DrawRectangle(bottomRect, color);
-			drawingService.DrawRectangle(leftRect, color);
-			drawingService.DrawRectangle(rightRect, color);
+			var sideRectangles = thisRectangle.GetEdgeRectangles(1)
+											  .ToArray();
+
+			foreach (var sideRectangle in sideRectangles ?? [])
+				drawingService.DrawRectangle(sideRectangle, color);
 		}
 
 		/// <summary>
@@ -93,7 +74,7 @@ namespace Engine.Physics.Models.SubAreas
 		/// <returns>The serialization model.</returns>
 		virtual public SubAreaModel ToModel()
 		{
-			var result =  new SubAreaModel
+			var result = new SubAreaModel
 			{
 				Width = Width,
 				Height = Height

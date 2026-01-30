@@ -2,15 +2,11 @@
 using Engine.Core.State.Contracts;
 using Engine.Debugging.Models;
 using Engine.Debugging.Services.Contracts;
-using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Physics;
-using Engine.Graphics.Enum;
 using Engine.Graphics.Models;
-using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace Engine.Debugging.Services
@@ -30,11 +26,6 @@ namespace Engine.Debugging.Services
 		/// The debug flag name. TODO find a proper place.
 		/// </summary>
 		static readonly public string DebugFlagName = "DebugModeActive";
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the screen area indicators are enabled.
-		/// </summary>
-		private bool ScreenAreaIndicatorsEnabled { get => 0 != this.ScreenAreaIndicatorImages.Count; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the performance counters are active.
@@ -130,6 +121,10 @@ namespace Engine.Debugging.Services
 				Font = spriteFont,
 				Position = tpsPosition
 			};
+			var gameStateService = this._gameServices.GetService<IGameStateService>();
+
+			if (true == gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var debugModeActive))
+				this.SetPerformanceRateCounterEnabled(debugModeActive);
 		}
 
 		/// <summary>
@@ -138,169 +133,14 @@ namespace Engine.Debugging.Services
 		/// <param name="flagValue">The flag value.</param>
 		private void DebugFlagSubscription(bool flagValue)
 		{
-			this.TogglePerformanceRateCounter(flagValue);
+			this.SetPerformanceRateCounterEnabled(flagValue);
 		}
 
 		/// <summary>
-		/// Toggles the screen area indicators.
-		/// </summary>
-		public void ToggleScreenAreaIndicators()
-		{
-			var runtimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
-
-			if (true == this.ScreenAreaIndicatorsEnabled)
-			{
-				foreach (var screenAreaIndicatorImage in this.ScreenAreaIndicatorImages)
-					runtimeOverlaidDrawService.RemoveDrawable(screenAreaIndicatorImage);
-
-				this.ScreenAreaIndicatorImages = [];
-			}
-			else
-			{
-				var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
-				var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
-				var screenWidth = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth;
-				var screenHeight = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight;
-
-				for (int i = screenHeight / 3; i < screenHeight; i += screenHeight / 3)
-				{
-					var widthImageModel = new IndependentGraphicModel
-					{
-						Position = new PositionModel
-						{
-							X = 0,
-							Y = i
-						},
-						Graphic = new SimpleImageModel
-						{
-							TextureName = "debug",
-							TextureRegion = new TextureRegionModel
-							{
-								TextureRegionType = TextureRegionType.Simple,
-								TextureBox = new Rectangle
-								{
-									X = 0,
-									Y = 0,
-									Width = screenWidth,
-									Height = 1
-								},
-								DisplayArea = new SubAreaModel
-								{ 
-									Width = screenWidth,
-									Height = i	
-								}
-							}
-						}
-					};
-					var widthImage = independentGraphicService.GetIndependentGraphicFromModel(widthImageModel);
-					var nextWidthImageModel = new IndependentGraphicModel
-					{
-						Position = new PositionModel
-						{
-							X = 0,
-							Y = i + 1
-						},
-						Graphic = new SimpleImageModel
-						{
-							TextureName = "debug",
-							TextureRegion = new TextureRegionModel
-							{
-								TextureRegionType = TextureRegionType.Simple,
-								TextureBox = new Rectangle
-								{
-									X = 0,
-									Y = 0,
-									Width = screenWidth,
-									Height = 1
-								},
-								DisplayArea = new SubAreaModel
-								{
-									Width = screenWidth,
-									Height = i
-								}
-							}
-						}
-					};
-					var nextWidthImage = independentGraphicService.GetIndependentGraphicFromModel(nextWidthImageModel);
-					runtimeOverlaidDrawService.AddDrawable(widthImage);
-					runtimeOverlaidDrawService.AddDrawable(nextWidthImage);
-					this.ScreenAreaIndicatorImages.Add(widthImage);
-					this.ScreenAreaIndicatorImages.Add(nextWidthImage);
-				}
-
-				for (int i = screenWidth / 4; i < screenWidth; i += screenWidth / 4)
-				{
-					var heightImageModel = new IndependentGraphicModel
-					{
-						Position = new PositionModel
-						{
-							X = i,
-							Y = 0
-						},
-						Graphic = new SimpleImageModel
-						{
-							TextureName = "debug",
-							TextureRegion = new TextureRegionModel
-							{
-								TextureRegionType = TextureRegionType.Simple,
-								TextureBox = new Rectangle
-								{
-									X = 0,
-									Y = 0,
-									Width = 1,
-									Height = screenHeight
-								},
-								DisplayArea = new SubAreaModel
-								{
-									Width = 1,
-									Height = screenHeight
-								}
-							}
-						}
-					};
-					var heightImage = independentGraphicService.GetIndependentGraphicFromModel(heightImageModel);
-					var nextHeightImageModel = new IndependentGraphicModel
-					{
-						Position = new PositionModel
-						{
-							X = i + 1,
-							Y = 0
-						},
-						Graphic = new SimpleImageModel
-						{
-							TextureName = "debug",
-							TextureRegion = new TextureRegionModel
-							{
-								TextureRegionType = TextureRegionType.Simple,
-								TextureBox = new Rectangle
-								{
-									X = 0,
-									Y = 0,
-									Width = 1,
-									Height = screenHeight
-								},
-								DisplayArea = new SubAreaModel
-								{
-									Width = 1,
-									Height = screenHeight
-								}
-							}
-						}
-					};
-					var nextHeightImage = independentGraphicService.GetIndependentGraphicFromModel(nextHeightImageModel);
-					runtimeOverlaidDrawService.AddDrawable(heightImage);
-					runtimeOverlaidDrawService.AddDrawable(nextHeightImage);
-					this.ScreenAreaIndicatorImages.Add(heightImage);
-					this.ScreenAreaIndicatorImages.Add(nextHeightImage);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Toggles the performance rate counter.
+		/// Sets the performance rate counter activity.
 		/// </summary>
 		/// <param name="enable">A value indicating whether to enable the performance counters.</param>
-		public void TogglePerformanceRateCounter(bool enable)
+		public void SetPerformanceRateCounterEnabled(bool enable)
 		{
 			if (enable == this.PerformanceCountersActive)
 				return;
@@ -310,15 +150,15 @@ namespace Engine.Debugging.Services
 				this.DebugOverlaidDrawRuntime.AddDrawable(this.FpsCounter);
 				this.DebugOverlaidDrawRuntime.AddDrawable(this.TpsCounter);
 				this.DebugUpdateRuntime.AddUpdateable(this.TpsCounter);
-				this.PerformanceCountersActive = true;
 			}
 			else
 			{
 				this.DebugOverlaidDrawRuntime.RemoveDrawable(this.FpsCounter);
 				this.DebugOverlaidDrawRuntime.RemoveDrawable(this.TpsCounter);
 				this.DebugUpdateRuntime.RemoveUpdateable(this.TpsCounter);
-				this.PerformanceCountersActive = false;
 			}
+
+			this.PerformanceCountersActive = enable;
 		}
 	}
 }

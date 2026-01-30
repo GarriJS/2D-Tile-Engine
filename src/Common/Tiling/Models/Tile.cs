@@ -1,8 +1,8 @@
 ﻿using Common.DiskModels.Tiling;
 using Engine.Core.Constants;
 using Engine.Graphics.Models.Contracts;
-using Engine.Physics.Models;
 using Engine.Physics.Models.SubAreas;
+using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace Common.Tiling.Models
@@ -10,7 +10,7 @@ namespace Common.Tiling.Models
 	/// <summary>
 	/// Represents a tile.
 	/// </summary>
-	public class Tile
+	public class Tile : IAmSubDrawable
 	{
 		/// <summary>
 		/// Gets or sets the row.
@@ -42,16 +42,17 @@ namespace Common.Tiling.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var tileOffset = offset + new Vector2
 			{
 				X = this.Column * TileConstants.TILE_SIZE,
 				Y = this.Row * TileConstants.TILE_SIZE
 			};
-			this.Graphic?.Draw(gameTime, gameServices, position, Color.White, tileOffset);
+			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, tileOffset);
 		}
 
 		/// <summary>
@@ -61,13 +62,14 @@ namespace Common.Tiling.Models
 		public TileModel ToModel()
 		{
 			var graphicModel = this.Graphic.ToModel();
-
-			return new TileModel
+			var result = new TileModel
 			{
 				Row = this.Row,
 				Column = this.Column,
 				Graphic = graphicModel,
 			};
+
+			return result;
 		}
 	}
 }

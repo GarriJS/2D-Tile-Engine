@@ -8,7 +8,9 @@ using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+	public class UiZone : IAmDrawable, IRequirePreRender, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -96,13 +98,78 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, this.Position, Color.White);
+			var drawingService = gameServices.GetService<IDrawingService>();
+
+			if (this.Name == "Level Editor Label Row")
+			{
+				drawingService.SpriteBatch.Draw(this._scrollRenderTarget, this.Position.Coordinates, Color.White);
+			}
+			else
+				this.DrawContents(gameTime, gameServices, this.Position.Coordinates, Color.White);
+		}
+
+		/// <summary>
+		/// Draws the contents.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="scrollOffset">The scroll offset.</param>
+		private void DrawContents(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 scrollOffset = default)
+		{
+			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, scrollOffset);
 
 			if (true == this.ResetCalculateCachedOffsets)
 				this.UpdateZoneOffsets();
 
 			foreach (var block in this.Blocks ?? [])
-				block.Draw(gameTime, gameServices, this.Position, Color.White);
+				block.Draw(gameTime, gameServices, coordinates, color, scrollOffset);
+		}
+
+		private RenderTarget2D _scrollRenderTarget;
+		public bool IsScrollable { get; set; }
+		public int ScrollOffsetY { get; private set; } = -10;
+		public int ScrollSpeed { get; set; } = 30;
+		public int MaxVisibleHeight { get; set; } = 20;// set this to your limit
+		public bool ShouldPreRender()
+		{
+			return this.Name == "Level Editor Label Row";
+		}
+
+		public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
+		{
+			var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
+			var device = graphicDeviceService.GraphicsDevice;
+			var drawingService = gameServices.GetService<IDrawingService>();
+
+			// Create RT if needed
+			if (_scrollRenderTarget == null ||
+				_scrollRenderTarget.Width != this.Area.Width ||
+				_scrollRenderTarget.Height != MaxVisibleHeight)
+			{
+				_scrollRenderTarget?.Dispose();
+				_scrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, MaxVisibleHeight);
+			}
+
+			// Draw content into RT
+			var previousTargets = device.GetRenderTargets();
+			device.SetRenderTarget(_scrollRenderTarget);
+			device.Clear(Color.Transparent);
+
+			drawingService.BeginDraw();
+
+			var scrollOffset = new Vector2(0, -ScrollOffsetY);
+			this.DrawContents(gameTime, gameServices, default, Color.White, scrollOffset);
+
+			drawingService.EndDraw();
+
+			device.SetRenderTargets(previousTargets);
+
+			// Draw RT to screen at zone position
+			//spriteBatch.Begin();
+			//spriteBatch.Draw(_scrollRenderTarget, this.Position.Coordinates, Color.White);
+			//spriteBatch.End();
 		}
 
 		/// <summary>

@@ -24,6 +24,11 @@ namespace Engine.Physics.Models.Contracts
 		public Vector2 ToVectorDimensions { get => new() { X = this.Width, Y = this.Height }; }
 
 		/// <summary>
+		/// The area to a rectangle.
+		/// </summary>
+		public Rectangle ToRectangle { get => new() { X = (int)this.Position.X, Y = (int)this.Position.Y, Width = (int)this.Width, Height = (int)this.Height }; }
+
+		/// <summary>
 		/// The area to a sub area.
 		/// </summary>
 		public SubArea ToSubArea { get => new() { Width = this.Width, Height = this.Height }; }

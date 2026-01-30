@@ -35,15 +35,10 @@ namespace Engine.Debugging.Services.Contracts
 		public DebugUpdateRuntime DebugUpdateRuntime { get; }
 
 		/// <summary>
-		/// Toggles the screen area indicators.
-		/// </summary>
-		public void ToggleScreenAreaIndicators();
-
-		/// <summary>
-		/// Toggles the performance rate counter.
+		/// Sets the performance rate counter activity.
 		/// </summary>
 		/// <param name="enable">A value indicating whether to enable the performance counters.</param>
-		public void TogglePerformanceRateCounter(bool enable);
+		public void SetPerformanceRateCounterEnabled(bool enable);
 
 	}
 }

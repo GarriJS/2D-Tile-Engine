@@ -1,5 +1,4 @@
-﻿using Engine.Physics.Models;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Engine.RunTime.Models.Contracts
 {
@@ -13,8 +12,8 @@ namespace Engine.RunTime.Models.Contracts
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="offset">The offset.</param>
-		public void Write(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default);
+		public void Write(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default);
 	}
 }

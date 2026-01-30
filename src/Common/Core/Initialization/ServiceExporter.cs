@@ -2,6 +2,8 @@
 using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Services;
 using Common.Controls.Cursors.Services.Contracts;
+using Common.Debugging.Services;
+using Common.Debugging.Services.Contracts;
 using Common.Tiling.Services;
 using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Services;
@@ -25,6 +27,7 @@ namespace Common.Core.Initialization
 		{
 			return
 			[
+				(typeof(ICommonDebugService), new CommonDebugService(game.Services)),
 				(typeof(ICursorService), new CursorService(game.Services)),
 				(typeof(ICursorInteractionService), new CursorInteractionService(game.Services)),
 				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),

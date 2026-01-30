@@ -1,6 +1,5 @@
 ﻿using Common.DiskModels.UserInterface;
 using Engine.Graphics.Models;
-using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -34,15 +33,15 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="gameServices">The game services.</param>
-		/// <param name="position">The position.</param>
+		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="offset">The offset.</param>
-		override public void Write(GameTime gameTime, GameServiceContainer gameServices, Position position, Vector2 offset = default)
+		override public void Write(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
 			if (true == string.IsNullOrEmpty(this.Text))
 				return;
 
 			var writingService = gameServices.GetService<IWritingService>();
-			var contentOffset = position.Coordinates + offset + new Vector2
+			var contentOffset = coordinates + offset + new Vector2
 			{
 				X = this.Margin.LeftMargin,
 				Y = this.Margin.TopMargin

@@ -2,10 +2,10 @@
 using Engine.Controls.Services.Contracts;
 using Engine.Controls.Typing;
 using Engine.Core.Contracts;
-using Engine.Core.Fonts.Services.Contracts;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Services.Contracts;
-using Engine.Debugging.Services.Contracts;
+using Engine.Core.State.Contracts;
+using Engine.Debugging.Services;
 using Engine.DiskModels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -26,7 +26,7 @@ namespace Engine
 		/// Gets or sets the initial control context type.
 		/// </summary>
 		private Type InitialControlContextType { get; set; }
-		
+
 		/// <summary>
 		/// Gets the external services.
 		/// </summary>
@@ -104,20 +104,14 @@ namespace Engine
 			// ConfigureService game managers
 			base.Initialize();
 
+			// Debug to be moved
+			var gameStateService = this.Services.GetService<IGameStateService>();
+			gameStateService.CreateGameStateFlag(DebugService.DebugFlagName, this.InDebugMode);
+
 			// Do post initializer
 
 			foreach (var initializer in this.PostLoadInitializers ?? [])
 				initializer.PostLoadInitialize();
-
-			// Debug
-			if (true == this.InDebugMode)
-			{
-				var debugService = this.Services.GetService<IDebugService>();
-				var fontService = this.Services.GetService<IFontService>();
-				fontService.SetDebugSpriteFont(this.DebugSpriteFontName);
-				debugService.ToggleScreenAreaIndicators();
-				debugService.TogglePerformanceRateCounter(true);
-			}
 		}
 
 		// Is called by base.ConfigureService in ConfigureService()
@@ -158,7 +152,6 @@ namespace Engine
 
 		protected override void Draw(GameTime gameTime)
 		{
-			this.GraphicsDevice.Clear(Color.CornflowerBlue);
 			base.Draw(gameTime);
 		}
 	}
