@@ -18,7 +18,7 @@ namespace Engine.Controls.Services
 	/// Initializes the action actionControlModel service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
+	sealed public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

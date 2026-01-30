@@ -49,12 +49,12 @@ namespace EngineTests.RunTime
             var manager = CreateManager();
             var drawable = new FakeUpdateable { UpdateOrder = 1 };
 
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(1));
 
             manager.AddUpdateable(drawable);
 
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.Contains(drawable, manager._runTimeCollection.ActiveModels[1]);
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(1));
+            Assert.Contains(drawable, manager._runTimeCollection._activeModels[1]);
         }
 
         [Fact]
@@ -67,12 +67,12 @@ namespace EngineTests.RunTime
             var newUpdateable = new FakeUpdateable { UpdateOrder = 1 };
             manager.AddUpdateable(newUpdateable);
 
-            Assert.DoesNotContain(newUpdateable, manager._runTimeCollection.ActiveModels[1]);
-            Assert.Contains(newUpdateable, manager._runTimeCollection.PendingAdds);
+            Assert.DoesNotContain(newUpdateable, manager._runTimeCollection._activeModels[1]);
+            Assert.Contains(newUpdateable, manager._runTimeCollection._pendingAdds);
 
             manager._runTimeCollection.ResolvePendingModels();
 
-            Assert.Contains(newUpdateable, manager._runTimeCollection.ActiveModels[1]);
+            Assert.Contains(newUpdateable, manager._runTimeCollection._activeModels[1]);
         }
 
         [Fact]
@@ -84,15 +84,15 @@ namespace EngineTests.RunTime
             manager._runTimeCollection.CurrentKey = 1;
             manager.AddUpdateable(drawable);
 
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(2));
-            Assert.True(manager._runTimeCollection.PendingListAdds.ContainsKey(2));
-            Assert.Contains(drawable, manager._runTimeCollection.PendingListAdds[2]);
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(2));
+            Assert.True(manager._runTimeCollection._pendingListAdds.ContainsKey(2));
+            Assert.Contains(drawable, manager._runTimeCollection._pendingListAdds[2]);
 
             manager._runTimeCollection.CurrentKey = null;
             manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(2));
-            Assert.Contains(drawable, manager._runTimeCollection.ActiveModels[2]);
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(2));
+            Assert.Contains(drawable, manager._runTimeCollection._activeModels[2]);
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace EngineTests.RunTime
 
             manager.RemoveUpdateable(drawable1);
 
-            Assert.False(true == manager._runTimeCollection.ActiveModels[1].Contains(drawable1));
+            Assert.False(true == manager._runTimeCollection._activeModels[1].Contains(drawable1));
         }
 
         [Fact]
@@ -116,11 +116,11 @@ namespace EngineTests.RunTime
             var drawable = new FakeUpdateable { UpdateOrder = 1 };
             manager.AddUpdateable(drawable);
 
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(1));
 
             manager.RemoveUpdateable(drawable);
 
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(1));
         }
 
         [Fact]
@@ -133,12 +133,12 @@ namespace EngineTests.RunTime
             manager._runTimeCollection.CurrentKey = 1;
             manager.RemoveUpdateable(drawable);
 
-            Assert.Contains(drawable, manager._runTimeCollection.ActiveModels[1]);
-            Assert.Contains(drawable, manager._runTimeCollection.PendingRemovals);
+            Assert.Contains(drawable, manager._runTimeCollection._activeModels[1]);
+            Assert.Contains(drawable, manager._runTimeCollection._pendingRemovals);
 
             manager._runTimeCollection.ResolvePendingModels();
 
-            Assert.DoesNotContain(drawable, manager._runTimeCollection.ActiveModels[1]);
+            Assert.DoesNotContain(drawable, manager._runTimeCollection._activeModels[1]);
         }
 
         [Fact]
@@ -151,14 +151,14 @@ namespace EngineTests.RunTime
             manager._runTimeCollection.CurrentKey = 2;
             manager.RemoveUpdateable(drawable);
 
-            Assert.Contains(1, manager._runTimeCollection.PendingListRemovals);
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.Empty(manager._runTimeCollection.ActiveModels[1]);
+            Assert.Contains(1, manager._runTimeCollection._pendingListRemovals);
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(1));
+            Assert.Empty(manager._runTimeCollection._activeModels[1]);
 
             manager._runTimeCollection.CurrentKey = null;
             manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(1));
         }
 
         [Fact]
@@ -168,13 +168,13 @@ namespace EngineTests.RunTime
             var drawable = new FakeUpdateable { UpdateOrder = 1 };
             manager.AddUpdateable(drawable);
 
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(2));
 
             manager.ChangeUpdateableOrder(2, drawable);
 
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(1));
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(2));
             Assert.Equal(2, drawable.UpdateOrder);
         }
 
@@ -188,18 +188,18 @@ namespace EngineTests.RunTime
             manager._runTimeCollection.CurrentKey = 1;
             manager.ChangeUpdateableOrder(2, drawable);
 
-            Assert.True(manager._runTimeCollection.PendingListAdds.ContainsKey(2));
-            Assert.Contains(drawable, manager._runTimeCollection.PendingRemovals);
+            Assert.True(manager._runTimeCollection._pendingListAdds.ContainsKey(2));
+            Assert.Contains(drawable, manager._runTimeCollection._pendingRemovals);
 
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(1));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(2));
 
             manager._runTimeCollection.ResolvePendingModels();
             manager._runTimeCollection.CurrentKey = null;
             manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.False(manager._runTimeCollection.ActiveModels.ContainsKey(1));
-            Assert.True(manager._runTimeCollection.ActiveModels.ContainsKey(2));
+            Assert.False(manager._runTimeCollection._activeModels.ContainsKey(1));
+            Assert.True(manager._runTimeCollection._activeModels.ContainsKey(2));
             Assert.Equal(2, drawable.UpdateOrder);
         }
 
@@ -297,12 +297,12 @@ namespace EngineTests.RunTime
         {
             var manager = CreateManager();
 
-            manager._runTimeCollection.PendingListRemovals.Add(123);
+            manager._runTimeCollection._pendingListRemovals.Add(123);
             manager._runTimeCollection.CurrentKey = 1;
 
             manager._runTimeCollection.ResolvePendingLists();
 
-            Assert.Empty(manager._runTimeCollection.PendingListRemovals);
+            Assert.Empty(manager._runTimeCollection._pendingListRemovals);
         }
     }
 }

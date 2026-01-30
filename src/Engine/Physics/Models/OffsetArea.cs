@@ -7,10 +7,10 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a offset area.
 	/// </summary>
-	public class OffsetArea : SimpleArea, ICanBeSerialized<OffsetAreaModel>
+	sealed public class OffsetArea : SimpleArea, ICanBeSerialized<OffsetAreaModel>
 	{
 		/// <summary>
-		/// Gets or sets the offset position.
+		/// Gets the offset position.
 		/// </summary>
 		public Vector2 OffsetPosition
 		{
@@ -24,12 +24,12 @@ namespace Engine.Physics.Models
 		/// <summary>
 		/// Gets or sets the vertical offset.
 		/// </summary>
-		public float VerticalOffset { get; set; }
+		required public float VerticalOffset { get; set; }
 
 		/// <summary>
 		/// Gets or sets the horizontal offset.
 		/// </summary>
-		public float HorizontalOffset { get; set; }
+		required public float HorizontalOffset { get; set; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.

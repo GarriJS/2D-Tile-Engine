@@ -13,17 +13,17 @@ namespace Engine.Physics.Models
 		/// <summary>
 		/// Get or sets the width.
 		/// </summary>
-		public float Width { get; set; }
+		required public float Width { get; set; }
 
 		/// <summary>
 		/// Gets or sets the height.
 		/// </summary>
-		public float Height { get; set; }
+		required public float Height { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position.
 		/// </summary>
-		public Position Position { get; set; }
+		required public Position Position { get; set; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.

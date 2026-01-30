@@ -17,7 +17,7 @@ namespace Engine.Controls.Managers
     /// Initializes a new instance of the control manager.
     /// </remarks>
     /// <param name="game">The game.</param>
-    public class ControlManager(Game game) : GameComponent(game), IControlService
+    sealed public class ControlManager(Game game) : GameComponent(game), IControlService
     {
         /// <summary>
         /// Gets or sets the action controls.
@@ -91,7 +91,7 @@ namespace Engine.Controls.Managers
 
             var result = new ControlState
             {
-                //Direction = direction,
+                Direction = null,
                 MouseState = mouseState,
 				FreshActionNames = freshActionTypes,
 				ActiveActionNames = actionControlNames

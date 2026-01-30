@@ -16,27 +16,27 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the current frame index.
 		/// </summary>
-		public int CurrentFrameIndex { get; set; }
+		required public int CurrentFrameIndex { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current frame duration in milliseconds.
 		/// </summary>
-		public int FrameDuration { get; set; }
+		required public int? FrameDuration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the frame min duration in milliseconds.
 		/// </summary>
-		public int? FrameMinDuration { get; set; }
+		required public int? FrameMinDuration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the frame max duration in milliseconds.
 		/// </summary>
-		public int? FrameMaxDuration { get; set; }
+		required public int? FrameMaxDuration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current frame start time in milliseconds.
 		/// </summary>
-		public double? FrameStartTime { get; set; }
+		required public double? FrameStartTime { get; set; }
 
 		/// <summary>
 		/// Gets the dimensions.
@@ -51,7 +51,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the frames.
 		/// </summary>
-		public IAmAImage[] Frames { get; set; } = [];
+		required public IAmAImage[] Frames { get; set; } = [];
 
 		/// <summary>
 		/// Sets the draw dimensions.

@@ -63,24 +63,23 @@ namespace Common.UserInterface.Services
 		public GraphicalTextWithMargin GetGraphicTextWithMarginFromModel(GraphicalTextWithMarginModel model)
 		{
 			if (null == model)
-			{
 				return null;
-			}
-
+			
 			var fontService = this._gameServices.GetService<IFontService>();
-
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
 			var margin = this.GetUiMarginFromModel(model.Margin);
-
-			return new GraphicalTextWithMargin
+			var result = new GraphicalTextWithMargin
 			{
+				MaxLineWidth = null,
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,
 				Font = font,
 				Margin = margin
 			};
+
+			return result;
 		}
 
 		/// <summary>

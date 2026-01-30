@@ -14,7 +14,7 @@ namespace Engine.Core.Textures.Services
 	/// Initializes a new instance of the texture service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class TextureService(GameServiceContainer gameServices) : ITextureService
+	sealed public class TextureService(GameServiceContainer gameServices) : ITextureService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

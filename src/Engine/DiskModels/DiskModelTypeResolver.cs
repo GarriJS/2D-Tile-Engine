@@ -10,7 +10,7 @@ namespace Engine.DiskModels
 	/// <summary>
 	/// Represents a disk model type resolver.
 	/// </summary>
-	public class DiskModelTypeResolver : DefaultJsonTypeInfoResolver
+	sealed public class DiskModelTypeResolver : DefaultJsonTypeInfoResolver
 	{
 		/// <summary>
 		/// The type discriminator name.

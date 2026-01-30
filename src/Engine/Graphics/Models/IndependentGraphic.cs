@@ -10,22 +10,22 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents a independent graphic.
 	/// </summary>
-	public class IndependentGraphic : IHaveAGraphic, IAmDrawable, ICanBeSerialized<IndependentGraphicModel>
+	sealed public class IndependentGraphic : IHaveAGraphic, IAmDrawable, ICanBeSerialized<IndependentGraphicModel>
 	{
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position.
 		/// </summary>
-		public Position Position { get; set; }
+		required public Position Position { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
-		public IAmAGraphic Graphic { get; set; }
+		required public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Draws the drawable.

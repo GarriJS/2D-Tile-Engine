@@ -13,7 +13,7 @@ namespace Engine.Core.Fonts.Services
 	/// Initializes a new instance of the font service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class FontService(GameServiceContainer gameServices) : IFontService
+	sealed public class FontService(GameServiceContainer gameServices) : IFontService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

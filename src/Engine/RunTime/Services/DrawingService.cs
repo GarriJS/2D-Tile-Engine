@@ -7,7 +7,7 @@ namespace Engine.RunTime.Services
 	/// <summary>
 	/// Represents a drawing service.
 	/// </summary>
-	public class DrawingService : IDrawingService
+	sealed public class DrawingService : IDrawingService
 	{
 		readonly private GameServiceContainer _gameServices;
 		readonly public SpriteBatch _spriteBatch;

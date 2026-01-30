@@ -10,7 +10,7 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a TPS counter.
 	/// </summary>
-	internal class TpsCounter : IAmDebugDrawable, IAmDebugUpdateable
+	sealed internal class TpsCounter : IAmDebugDrawable, IAmDebugUpdateable
 	{
 		/// <summary>
 		/// The draw offset.
@@ -24,12 +24,12 @@ namespace Engine.Debugging.Models
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the update order.
 		/// </summary>
-		public int UpdateOrder { get; set; }
+		required public int UpdateOrder { get; set; }
 
 		/// <summary>
 		/// Gets or sets the TPS text.
@@ -39,17 +39,17 @@ namespace Engine.Debugging.Models
 		/// <summary>
 		/// Gets or sets the last tick time.
 		/// </summary>
-		public double? LastTickTime { get; set; }
+		required public double? LastTickTime { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position.
 		/// </summary>
-		public Position Position { get; set; }
+		required public Position Position { get; set; }
 
 		/// <summary>
 		/// Gets or sets the font.
 		/// </summary>
-		public SpriteFont Font { get; set; }
+		required public SpriteFont Font { get; set; }
 
 		/// <summary>
 		/// Draws the debug drawable.

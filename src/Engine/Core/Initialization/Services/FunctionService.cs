@@ -12,7 +12,7 @@ namespace Engine.Core.Initialization.Services
 	/// Initializes a new instance of the function service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class FunctionService(GameServiceContainer gameServices) : IFunctionService
+	sealed public class FunctionService(GameServiceContainer gameServices) : IFunctionService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

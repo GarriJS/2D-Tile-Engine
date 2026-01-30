@@ -14,7 +14,7 @@ namespace Engine.Graphics.Services
 	/// Initializes the independent graphic service.
 	/// </remarks>
 	/// <param name="gameService">The game services.</param>
-	public class IndependentGraphicService(GameServiceContainer gameService) : IIndependentGraphicService
+	sealed public class IndependentGraphicService(GameServiceContainer gameService) : IIndependentGraphicService
 	{
 		private readonly GameServiceContainer _gameServices = gameService;
 

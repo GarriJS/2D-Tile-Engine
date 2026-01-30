@@ -11,22 +11,22 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents a texture region.
 	/// </summary>
-	public class TextureRegion : ICanBeSerialized<TextureRegionModel>
+	sealed public class TextureRegion : ICanBeSerialized<TextureRegionModel>
 	{
 		/// <summary>
 		/// Gets or sets the texture region type.
 		/// </summary>
-		public TextureRegionType TextureRegionType { get; set; }
+		required public TextureRegionType TextureRegionType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the texture box.
 		/// </summary>
-		public Rectangle TextureBox { get; set; }
+		required public Rectangle TextureBox { get; set; }
 
 		/// <summary>
 		/// Gets or sets the display area.
 		/// </summary>
-		public SubArea DisplayArea { get; set; }
+		required public SubArea DisplayArea { get; set; }
 
 		/// <summary>
 		/// Draws the texture region.
@@ -75,13 +75,11 @@ namespace Engine.Graphics.Models
 			var remainderY = (int)(this.DisplayArea.Height % this.TextureBox.Height);
 
 			for (int x = 0; x < horizontalRepeats; x++)
-			{
 				for (int y = 0; y < verticalRepeats; y++)
 				{
 					var repeatOffset = new Vector2 { X = x * this.TextureBox.Width, Y = y * this.TextureBox.Height };
 					drawingService.Draw(texture, repeatOffset + drawCoordinates, this.TextureBox, Color.White);
 				}
-			}
 
 			if (0 < remainderX)
 			{

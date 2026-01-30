@@ -10,12 +10,12 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a FPS counter.
 	/// </summary>
-	internal class FpsCounter : IAmDebugDrawable
+	sealed internal class FpsCounter : IAmDebugDrawable
 	{
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the FPS text.
@@ -25,17 +25,17 @@ namespace Engine.Debugging.Models
 		/// <summary>
 		/// Gets or sets the last frame time.
 		/// </summary>
-		public double? LastFrameTime { get; set; }
+		required public double? LastFrameTime { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position.
 		/// </summary>
-		public Position Position { get; set; }
+		required public Position Position { get; set; }
 
 		/// <summary>
 		/// Gets or sets the font.
 		/// </summary>
-		public SpriteFont Font { get; set; }
+		required public SpriteFont Font { get; set; }
 
 		/// <summary>
 		/// Draws the debug drawable.

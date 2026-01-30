@@ -7,30 +7,35 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a position.
 	/// </summary>
-	/// <param name="coordinates">The coordinates.</param>
-	public class Position(Vector2 coordinates = default) : ICanBeSerialized<PositionModel>
+	sealed public class Position : ICanBeSerialized<PositionModel>
 	{
-		private Vector2 _coordinates = coordinates;
-
 		/// <summary>
 		/// Gets or sets the coordinates.
 		/// </summary>
-		public Vector2 Coordinates { get => this._coordinates; set => this._coordinates = value; }
+		required public Vector2 Coordinates { get; set; }
 
 		/// <summary>
 		/// Get the position as a point.
 		/// </summary>
-		public Point ToPoint { get => this._coordinates.ToPoint(); }
+		public Point ToPoint { get => this.Coordinates.ToPoint(); }
 
 		/// <summary>
 		/// Gets or sets the X coordinate.
 		/// </summary>
-		public float X { get => this._coordinates.X; set => this._coordinates.X = value; }
+		public float X
+		{
+			get => this.Coordinates.X;
+			set => this.Coordinates = new Vector2(value, this.Coordinates.Y);
+		}
 
 		/// <summary>
 		/// Gets or sets the Y coordinate.
 		/// </summary>
-		public float Y { get => this._coordinates.Y; set => this._coordinates.Y = value; }
+		public float Y
+		{
+			get => this.Coordinates.Y;
+			set => this.Coordinates = new Vector2(this.Coordinates.X, value);
+		}
 
 		/// <summary>
 		/// Converts the object to a serialization model.

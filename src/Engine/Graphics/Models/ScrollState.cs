@@ -27,4 +27,4 @@ namespace Engine.Graphics.Models
 		/// </summary>
 		public RenderTarget2D ScrollRenderTarget { get; set; }
 	}
-}`
+}

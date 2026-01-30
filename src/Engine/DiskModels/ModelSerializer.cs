@@ -7,7 +7,7 @@ namespace Engine.DiskModels
 	/// Represents a model serializer.
 	/// </summary>
 	/// <typeparam name="T">The type being serialized to.</typeparam>
-	public class ModelSerializer<T>
+	sealed public class ModelSerializer<T>
 	{
 		/// <summary>
 		/// Deserializes the file stream.

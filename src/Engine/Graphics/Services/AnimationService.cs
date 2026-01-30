@@ -15,7 +15,7 @@ namespace Engine.Graphics.Services
 	/// Initializes a new instance of the animation service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class AnimationService(GameServiceContainer gameServices) : IAnimationService
+	sealed public class AnimationService(GameServiceContainer gameServices) : IAnimationService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -37,16 +37,20 @@ namespace Engine.Graphics.Services
 				TriggeredAnimationModel triggeredAnimationModel => new TriggeredAnimation
 				{
 					CurrentFrameIndex = triggeredAnimationModel.CurrentFrameIndex,
+					FrameDuration = triggeredAnimationModel.FrameDuration,
 					FrameMinDuration = triggeredAnimationModel.FrameMinDuration,
 					FrameMaxDuration = triggeredAnimationModel.FrameMaxDuration,
+					FrameStartTime = null,
 					Frames = frames,
 					RestingFrameIndex = triggeredAnimationModel.RestingFrameIndex,
 				},
 				_ => new Animation
 				{
 					CurrentFrameIndex = animationModel.CurrentFrameIndex,
+					FrameDuration = animationModel.FrameDuration,
 					FrameMinDuration = animationModel.FrameMinDuration,
 					FrameMaxDuration = animationModel.FrameMaxDuration,
+					FrameStartTime = null,
 					Frames = frames
 				}
 			};

@@ -12,7 +12,7 @@ namespace Engine.Core.State
 	/// Initializes a new instance of the game state service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class GameStateService(GameServiceContainer gameServices) : IGameStateService
+	sealed public class GameStateService(GameServiceContainer gameServices) : IGameStateService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

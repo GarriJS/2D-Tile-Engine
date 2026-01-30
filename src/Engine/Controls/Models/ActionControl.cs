@@ -11,16 +11,16 @@ namespace Engine.Controls.Models
 		/// <summary>
 		/// Gets or sets the action name.
 		/// </summary>
-		public string ActionName { get; set; }
+		required public string ActionName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the control keys.
 		/// </summary>
-		public Keys[] ControlKeys { get; set; }
+		required public Keys[] ControlKeys { get; set; }
 
 		/// <summary>
 		/// Gets or sets the control mouse buttons.
 		/// </summary>
-		public MouseButtonTypes[] ControlMouseButtons { get; set; }
+		required public MouseButtonTypes[] ControlMouseButtons { get; set; }
 	}
 }

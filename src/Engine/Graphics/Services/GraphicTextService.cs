@@ -14,7 +14,7 @@ namespace Engine.Graphics.Services
 	/// Initializes the graphic text service.
 	/// </remarks>
 	/// <param name="gameService">The game services.</param>
-	public class GraphicTextService(GameServiceContainer gameService) : IGraphicTextService
+	sealed public class GraphicTextService(GameServiceContainer gameService) : IGraphicTextService
 	{
 		private readonly GameServiceContainer _gameServices = gameService;
 
@@ -61,6 +61,7 @@ namespace Engine.Graphics.Services
 			font ??= fontService.DebugSpriteFont;
 			var result = new SimpleText
 			{
+				MaxLineWidth = null,
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,

@@ -9,7 +9,7 @@ namespace Engine.RunTime.Managers
 	/// Represents a prerender manager.
 	/// </summary>
 	/// <param name="game">The game.</param>
-	public class PreRenderManager(Game game) : DrawableGameComponent(game), IPreRenderService
+	sealed public class PreRenderManager(Game game) : DrawableGameComponent(game), IPreRenderService
 	{
 		/// <summary>
 		/// The prerenders.

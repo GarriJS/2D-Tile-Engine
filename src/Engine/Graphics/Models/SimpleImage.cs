@@ -11,12 +11,12 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents a simple image.
 	/// </summary>
-	public class SimpleImage : IAmAImage
+	sealed public class SimpleImage : IAmAImage
 	{
 		/// <summary>
 		/// Gets or sets the texture name.
 		/// </summary>
-		public string TextureName { get; set; }
+		required public string TextureName { get; set; }
 
 		/// <summary>
 		/// Gets the dimensions.
@@ -26,12 +26,12 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the texture.
 		/// </summary>
-		public Texture2D Texture { get; set; }
+		required public Texture2D Texture { get; set; }
 
 		/// <summary>
 		/// Gets or sets the texture region.
 		/// </summary>
-		public TextureRegion TextureRegion { get; set; }
+		required public TextureRegion TextureRegion { get; set; }
 
 		/// <summary>
 		/// Sets the draw dimensions.

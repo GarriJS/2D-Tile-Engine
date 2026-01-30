@@ -9,14 +9,12 @@ namespace LevelEditor.Controls.Contexts
 	/// <summary>
 	/// Represents a scene edit control context.
 	/// </summary>
-	public class SceneEditControlContext : ControlContext
+	/// <remarks>
+	/// Initializes the scene edit control context.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	public class SceneEditControlContext(GameServiceContainer gameServices) : ControlContext(gameServices)
 	{
-		/// <summary>
-		/// Initializes the scene edit control context.
-		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public SceneEditControlContext(GameServiceContainer gameServices) : base(gameServices) { }
-
 		/// <summary>
 		/// Initializes the control context.
 		/// </summary>

@@ -7,12 +7,12 @@ namespace Engine.Controls.Models
 	/// <summary>
 	/// Represents a control state.
 	/// </summary>
-	public class ControlState
+	sealed public class ControlState
 	{
 		/// <summary>
 		/// Gets or sets the direction.
 		/// </summary>
-		public float? Direction { get; set; }
+		required public float? Direction { get; set; }
 
 		/// <summary>
 		/// Gets the mouse position.
@@ -22,17 +22,17 @@ namespace Engine.Controls.Models
 		/// <summary>
 		/// Gets or sets the mouse state.
 		/// </summary>
-		public MouseState MouseState { get; set; }
+		required public MouseState MouseState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the fresh action names. 
 		/// </summary>
-		public List<string> FreshActionNames { get; set; }
+		required public List<string> FreshActionNames { get; set; }
 
 		/// <summary>
 		/// Gets or sets the active action names.
 		/// </summary>
-		public List<string> ActiveActionNames { get; set; }
+		required public List<string> ActiveActionNames { get; set; }
 
 		/// <summary>
 		/// Determines if the action name is fresh.

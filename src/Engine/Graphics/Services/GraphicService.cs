@@ -14,7 +14,7 @@ namespace Engine.Graphics.Services
 	/// Represents a graphic service.
 	/// </summary>
 	/// <param name="gameService"></param>
-	public class GraphicService(GameServiceContainer gameService) : IGraphicService
+	sealed public class GraphicService(GameServiceContainer gameService) : IGraphicService
 	{
 		private readonly GameServiceContainer _gameServices = gameService;
 

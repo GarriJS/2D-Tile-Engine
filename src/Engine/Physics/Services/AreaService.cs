@@ -16,7 +16,7 @@ namespace Engine.Physics.Services
 	/// Initializes a new instance of the animation service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class AreaService(GameServiceContainer gameServices) : IAreaService
+	sealed public class AreaService(GameServiceContainer gameServices) : IAreaService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -54,8 +54,10 @@ namespace Engine.Physics.Services
 					for (int i = 0; i < areas.Length; i++)
 						areas[i] = this.GetOffSetSubAreaFromModel(areaCollectionModel.SubAreas[i]);
 
-					var areaCollection = new AreaCollection(width, height)
+					var areaCollection = new AreaCollection
 					{
+						Width = width,
+						Height = height,
 						Position = position,
 						SubAreas = areas
 					};

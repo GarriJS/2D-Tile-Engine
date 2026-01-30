@@ -10,27 +10,27 @@ namespace Engine.Physics.Models
 	/// <summary>
 	/// Represents a area collection
 	/// </summary>
-	public class AreaCollection(float width, float height) : IAmAArea, ICanBeSerialized<AreaCollectionModel>
+	sealed public class AreaCollection : IAmAArea, ICanBeSerialized<AreaCollectionModel>
 	{
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
-		public float Width { get; } = width;
+		required public float Width { get; set; }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
-		public float Height { get; } = height;
+		required public float Height { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position.
 		/// </summary>
-		public Position Position { get; set; }
+		required public Position Position { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sub areas.
 		/// </summary>
-		public OffsetSubArea[] SubAreas { get; set; }
+		required public OffsetSubArea[] SubAreas { get; set; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.

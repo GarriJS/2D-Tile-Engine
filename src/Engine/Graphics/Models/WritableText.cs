@@ -5,7 +5,7 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents writable text.
 	/// </summary>
-	public class WritableText : SimpleText
+	sealed public class WritableText : SimpleText
 	{
 		/// <summary>
 		/// Updates the text.

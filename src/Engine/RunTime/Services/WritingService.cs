@@ -12,7 +12,7 @@ namespace Engine.RunTime.Services
 	/// Initializes the writing service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	public class WritingService(GameServiceContainer gameServices) : IWritingService
+	sealed public class WritingService(GameServiceContainer gameServices) : IWritingService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

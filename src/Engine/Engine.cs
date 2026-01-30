@@ -18,7 +18,7 @@ namespace Engine
 	/// <summary>
 	/// Represents a engine.
 	/// </summary>
-	public partial class Engine : Game
+	sealed public partial class Engine : Game
 	{
 		public GraphicsDeviceManager _graphics;
 

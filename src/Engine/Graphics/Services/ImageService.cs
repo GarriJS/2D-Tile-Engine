@@ -21,7 +21,7 @@ namespace Engine.Graphics.Services
 	/// Initializes the image service.
 	/// </remarks>
 	/// <param name="gameService">The game services.</param>
-	public class ImageService(GameServiceContainer gameService) : IImageService
+	sealed public class ImageService(GameServiceContainer gameService) : IImageService
 	{
 		private readonly GameServiceContainer _gameServices = gameService;
 
@@ -50,17 +50,20 @@ namespace Engine.Graphics.Services
 			if (false == textureService.TryGetTexture(imageModel.TextureName, out var texture))
 				texture = textureService.DebugTexture;
 
+			//TODO switch around so we can set the actual texture region value here
 			IAmAImage image = imageModel switch
 			{
 				CompositeImageModel => new CompositeImage
 				{
 					TextureName = imageModel.TextureName,
-					Texture = texture
+					Texture = texture,
+					TextureRegions = []
 				},
 				_ => new SimpleImage
 				{
 					TextureName = imageModel.TextureName,
-					Texture = texture
+					Texture = texture,
+					TextureRegion = null
 				}
 			};
 
@@ -73,24 +76,24 @@ namespace Engine.Graphics.Services
 			if (image is CompositeImage compositeImage)
 			{
 				var compositeImageModel = imageModel as CompositeImageModel;
-				var textureRegions = new TextureRegion[compositeImageModel.TextureRegions.Length][];
+				compositeImage.TextureRegions = new TextureRegion[compositeImageModel.TextureRegions.Length][];
 
 				for (int i = 0; i < compositeImageModel.TextureRegions.Length; i++)
 				{
-					textureRegions[i] = new TextureRegion[compositeImageModel.TextureRegions[i].Length];
+					compositeImage.TextureRegions[i] = new TextureRegion[compositeImageModel.TextureRegions[i].Length];
 
 					for (int j = 0; j < compositeImageModel.TextureRegions.Length; j++)
-						textureRegions[i][j] = graphicService.GetTextureRegionFromModel(compositeImageModel.TextureRegions[i][j]);
+						compositeImage.TextureRegions[i][j] = graphicService.GetTextureRegionFromModel(compositeImageModel.TextureRegions[i][j]);
 				}
 
-				if ((textureRegions is null) ||
-					(true == textureRegions.Any(e => e is null || e.Length != textureRegions[0].Length)) ||
-					(textureRegions.Length != textureRegions[0].Length))
+				if ((compositeImage.TextureRegions is null) ||
+					(true == compositeImage.TextureRegions.Any(e => e is null || e.Length != compositeImage.TextureRegions[0].Length)) ||
+					(compositeImage.TextureRegions.Length != compositeImage.TextureRegions[0].Length))
 					throw new ArgumentException("Composite image does not have valid texture regions. Texture regions must have equal length columns and rows.");
 
-				var firstRowTotalWidth = textureRegions[0].Sum(e => e.DisplayArea.Width);
+				var firstRowTotalWidth = compositeImage.TextureRegions[0].Sum(e => e.DisplayArea.Width);
 
-				foreach (var textureRegionRow in textureRegions)
+				foreach (var textureRegionRow in compositeImage.TextureRegions)
 				{
 					var rowWidth = textureRegionRow.Sum(e => e.DisplayArea.Width);
 
@@ -98,17 +101,15 @@ namespace Engine.Graphics.Services
 						throw new ArgumentException("Composite image does not have valid texture regions. Row widths are not equal.");
 				}
 
-				var firstColumnTotalHeight = textureRegions.Sum(e => e[0].DisplayArea.Height);
+				var firstColumnTotalHeight = compositeImage.TextureRegions.Sum(e => e[0].DisplayArea.Height);
 
-				for (int col = 0; col < textureRegions.Length; col++)
+				for (int col = 0; col < compositeImage.TextureRegions.Length; col++)
 				{
-					var columnHeight = textureRegions.Sum(row => row[col].DisplayArea.Height);
+					var columnHeight = compositeImage.TextureRegions.Sum(row => row[col].DisplayArea.Height);
 
 					if (firstColumnTotalHeight != columnHeight)
 						throw new ArgumentException("Composite image does not have valid texture regions. Column heights are not equal.");
 				}
-
-				compositeImage.TextureRegions = textureRegions;
 			}
 
 			return (T)image;

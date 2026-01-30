@@ -18,7 +18,7 @@ namespace Engine.Debugging.Services
 	/// Initializes a new instance of the debug service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class DebugService(GameServiceContainer gameServices) : IDebugService
+	sealed public class DebugService(GameServiceContainer gameServices) : IDebugService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 
@@ -70,12 +70,18 @@ namespace Engine.Debugging.Services
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var runtimeUpdateSerive = this._gameServices.GetService<IRuntimeUpdateService>();
-			this.DebugDrawRuntime = new();
-			this.DebugOverlaidDrawRuntime = new();
-			this.DebugUpdateRuntime = new();
-			this.DebugDrawRuntime.DrawLayer = IDebugService.DebugDrawLayer;
-			this.DebugOverlaidDrawRuntime.DrawLayer = IDebugService.DebugDrawLayer;
-			this.DebugUpdateRuntime.UpdateOrder = IDebugService.DebugUpdateOrder;
+			this.DebugDrawRuntime = new DebugDrawRuntime 
+			{
+				DrawLayer = IDebugService.DebugDrawLayer
+			};
+			this.DebugOverlaidDrawRuntime = new DebugOverlaidDrawRuntime
+			{
+				DrawLayer = IDebugService.DebugDrawLayer
+			};
+			this.DebugUpdateRuntime = new DebugUpdateRuntime
+			{
+				UpdateOrder = IDebugService.DebugUpdateOrder
+			};
 			runTimeDrawService.AddDrawable(this.DebugDrawRuntime);
 			runTimeOverlaidDrawService.AddDrawable(this.DebugOverlaidDrawRuntime);
 			runtimeUpdateSerive.AddUpdateable(this.DebugUpdateRuntime);
@@ -119,6 +125,7 @@ namespace Engine.Debugging.Services
 				DrawLayer = IDebugService.DebugDrawLayer,
 				UpdateOrder = IDebugService.DebugUpdateOrder,
 				Font = spriteFont,
+				LastTickTime = null,
 				Position = tpsPosition
 			};
 			var gameStateService = this._gameServices.GetService<IGameStateService>();

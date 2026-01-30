@@ -14,7 +14,7 @@ namespace Engine.RunTime.Managers
 	/// Creates a new instance of the runtime overlaid draw manager.
 	/// </remarks>
 	/// <param name="game">The game.</param>
-	public class RuntimeOverlaidDrawManager(Game game) : DrawableGameComponent(game), IRuntimeOverlaidDrawService
+	sealed public class RuntimeOverlaidDrawManager(Game game) : DrawableGameComponent(game), IRuntimeOverlaidDrawService
 	{
 		/// <summary>
 		/// The sub renders.
@@ -26,6 +26,7 @@ namespace Engine.RunTime.Managers
 		/// </summary>
 		readonly public RunTimeCollection<IAmDrawable> _runTimeCollection = new()
 		{
+			CurrentKey = null,
 			KeyFunction = drawable => drawable.DrawLayer
 		};
 
@@ -90,13 +91,13 @@ namespace Engine.RunTime.Managers
 			var drawingService = this.Game.Services.GetService<IDrawingService>();
 			drawingService.BeginDraw();
 
-			foreach (var kvp in this._runTimeCollection.ActiveModels)
+			foreach (var kvp in this._runTimeCollection._activeModels)
 			{
 				this._runTimeCollection.CurrentKey = kvp.Key;
 
 				foreach (var drawable in kvp.Value)
 				{
-					if (true == this._runTimeCollection.PendingRemovals.Contains(drawable))
+					if (true == this._runTimeCollection._pendingRemovals.Contains(drawable))
 						continue;
 
 					drawable.Draw(gameTime, this.Game.Services);

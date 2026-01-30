@@ -8,12 +8,12 @@ namespace Engine.RunTime.Models
 	/// <summary>
 	/// Represents a drawable rectangle.
 	/// </summary>
-	public class DrawableRectangle : IAmDrawable, IAmDebugDrawable
+	sealed public class DrawableRectangle : IAmDrawable, IAmDebugDrawable
 	{
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the color.

@@ -18,27 +18,27 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the max line width.
 		/// </summary>
-		public float? MaxLineWidth { get; set; }
+		required public float? MaxLineWidth { get; set; }
 
 		/// <summary>
 		/// Gets or sets the font name.
 		/// </summary>
-		public string FontName { get; set; }
+		required public string FontName { get; set; }
 
 		/// <summary>
 		/// Gets the text.
 		/// </summary>
-		public string Text { get; set; }
+		required public string Text { get; set; }
 
 		/// <summary>
 		/// Gets or sets the text color
 		/// </summary>
-		public Color TextColor { get; set; }
+		required public Color TextColor { get; set; }
 
 		/// <summary>
 		/// Gets or sets the font.
 		/// </summary>
-		public SpriteFont Font { get; set; }
+		required public SpriteFont Font { get; set; }
 
 		/// <summary>
 		/// Gets the text dimensions.

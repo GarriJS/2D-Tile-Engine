@@ -8,18 +8,19 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a debug draw runtime.
 	/// </summary>
-	public class DebugUpdateRuntime : IAmUpdateable
+	sealed public class DebugUpdateRuntime : IAmUpdateable
 	{
 		/// <summary>
 		/// Gets or sets the update order.
 		/// </summary>
-		public int UpdateOrder { get; set; }
+		required public int UpdateOrder { get; set; }
 
 		/// <summary>
 		/// Gets the run time collection.
 		/// </summary>
 		readonly public RunTimeCollection<IAmDebugUpdateable> RunTimeCollection = new()
 		{
+			CurrentKey = null,
 			KeyFunction = updateable => updateable.UpdateOrder
 		};
 
@@ -60,13 +61,13 @@ namespace Engine.Debugging.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Update(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			foreach (var kvp in this.RunTimeCollection.ActiveModels)
+			foreach (var kvp in this.RunTimeCollection._activeModels)
 			{
 				this.RunTimeCollection.CurrentKey = kvp.Key;
 
 				foreach (var updateable in kvp.Value)
 				{
-					if (true == this.RunTimeCollection.PendingRemovals.Contains(updateable))
+					if (true == this.RunTimeCollection._pendingRemovals.Contains(updateable))
 						continue;
 
 					updateable.UpdateDebug(gameTime, gameServices);

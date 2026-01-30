@@ -11,7 +11,7 @@ namespace Engine.Core.Files.Services
 	/// Initializes a new instance of the JSON service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class JsonService(GameServiceContainer gameServices) : IJsonService
+	sealed public class JsonService(GameServiceContainer gameServices) : IJsonService
 	{
 		private readonly GameServiceContainer _gameServices = gameServices;
 

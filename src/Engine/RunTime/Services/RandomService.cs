@@ -6,7 +6,7 @@ namespace Engine.RunTime.Services
 	/// <summary>
 	/// Represents a random service.
 	/// </summary>
-	public class RandomService : IRandomService
+	sealed public class RandomService : IRandomService
 	{
 		/// <summary>
 		/// Gets or sets the random generator.
@@ -29,7 +29,9 @@ namespace Engine.RunTime.Services
 		/// <returns>A random int.</returns>
 		public int GetRandomInt(int lowerBound, int upperBound)
 		{
-			return this.Random.Next(lowerBound, upperBound + 1);
+			var result = this.Random.Next(lowerBound, upperBound + 1);
+
+			return result;
 		}
 	}
 }

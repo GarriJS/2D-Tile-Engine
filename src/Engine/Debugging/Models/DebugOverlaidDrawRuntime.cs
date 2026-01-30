@@ -8,18 +8,19 @@ namespace Engine.Debugging.Models
 	/// <summary>
 	/// Represents a debug overlaid draw runtime.
 	/// </summary>
-	public class DebugOverlaidDrawRuntime : IAmDrawable
+	sealed public class DebugOverlaidDrawRuntime : IAmDrawable
 	{
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// The run time collection.
 		/// </summary>
 		readonly public RunTimeCollection<IAmDebugDrawable> RunTimeCollection = new()
 		{
+			CurrentKey = null,
 			KeyFunction = drawable => drawable.DrawLayer
 		};
 
@@ -60,13 +61,13 @@ namespace Engine.Debugging.Models
 		/// <param name="gameServices">The game services.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			foreach (var kvp in this.RunTimeCollection.ActiveModels)
+			foreach (var kvp in this.RunTimeCollection._activeModels)
 			{
 				this.RunTimeCollection.CurrentKey = kvp.Key;
 
 				foreach (var drawable in kvp.Value)
 				{
-					if (true == this.RunTimeCollection.PendingRemovals.Contains(drawable))
+					if (true == this.RunTimeCollection._pendingRemovals.Contains(drawable))
 						continue;
 
 					drawable.DrawDebug(gameTime, gameServices);

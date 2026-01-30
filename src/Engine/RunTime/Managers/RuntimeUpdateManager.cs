@@ -13,13 +13,14 @@ namespace Engine.RunTime.Managers
 	/// Initializes a new instance of the run time update manager.
 	/// </remarks>
 	/// <param name="game">The game.</param>
-	public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
+	sealed public class RuntimeUpdateManager(Game game) : GameComponent(game), IRuntimeUpdateService
 	{
 		/// <summary>
 		/// The run time collection.
 		/// </summary>
 		readonly public RunTimeCollection<IAmUpdateable> _runTimeCollection = new()
 		{
+			CurrentKey = null,
 			KeyFunction = updateable => updateable.UpdateOrder
 		};
 
@@ -68,13 +69,13 @@ namespace Engine.RunTime.Managers
 		/// <param name="gameTime">The game time.</param>
 		override public void Update(GameTime gameTime)
 		{
-			foreach (var kvp in this._runTimeCollection.ActiveModels)
+			foreach (var kvp in this._runTimeCollection._activeModels)
 			{
 				this._runTimeCollection.CurrentKey = kvp.Key;
 
 				foreach (var updateable in kvp.Value)
 				{
-					if (true == this._runTimeCollection.PendingRemovals.Contains(updateable))
+					if (true == this._runTimeCollection._pendingRemovals.Contains(updateable))
 						continue;
 
 					updateable.Update(gameTime, this.Game.Services);
