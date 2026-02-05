@@ -58,6 +58,19 @@ namespace Engine.Physics.Models
 		}
 
 		/// <summary>
+		/// Draws the sub drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Color color, Vector2 offset = default)
+		{
+			foreach (var subArea in this.SubAreas)
+				subArea.Draw(gameTime, gameServices, this.Position.Coordinates, color, offset);
+		}
+
+		/// <summary>
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>

@@ -28,17 +28,22 @@ namespace Common.UserInterface.Services
 		/// <remarks>TODO could be optimized further.</remarks>
 		public HoverState GetUiObjectAtScreenLocation(Vector2 location)
 		{
-			var hoverState = new HoverState();
+			var hoverState = new HoverState
+			{ 
+				HoveredObjects = []
+			};
 
 			if (true == this.TryGetUiZoneAtLocation(location, out var uiZone))
 			{
 				hoverState.TopCursorConfiguration = uiZone.CursorConfiguration;
 				hoverState.TopHoverCursor = uiZone.HoverCursor;
+				hoverState.BottomScrollable = uiZone;
 				hoverState.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
 				{
 					Location = uiZone.Position.Coordinates,
 					Subject = uiZone
 				};
+				hoverState.HoveredObjects[typeof(UiZone)] = uiZone;
 			}
 
 			if (true == this.TryGetUiBlockAtLocation(location, out var locatedBlock))
@@ -121,22 +126,21 @@ namespace Common.UserInterface.Services
 				(0 == uiZone.Blocks.Count))
 				return false;
 
-			foreach (var blockLayout in uiZone.EnumerateLayout() ?? [])
+			var uiZoneLocation = uiZone.Position.Coordinates;
+
+			foreach (var blockLayout in uiZone.EnumerateLayout(includeScrollOffset: true) ?? [])
 			{
-				var blockTop = uiZone.Position.Y + blockLayout.Offset.Y;
+				var blockTop = uiZoneLocation.Y + blockLayout.Offset.Y;
 				var blockBottom = blockTop + blockLayout.Block.InsideHeight;
 
 				if ((location.Y < blockTop) ||
 					(location.Y > blockBottom))
 					continue;
 
-				if (blockLayout.Block is not UiBlock uiBlockComponent)
-					return false;
-
 				uiBlock = new LocationExtender<UiBlock>
 				{
-					Location = uiZone.Position.Coordinates + blockLayout.Offset,
-					Subject = uiBlockComponent
+					Location = uiZoneLocation + blockLayout.Offset,
+					Subject = blockLayout.Block
 				};
 
 				break;

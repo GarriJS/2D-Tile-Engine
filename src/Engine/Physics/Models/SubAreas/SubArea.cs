@@ -1,7 +1,6 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
 using Engine.Monogame;
-using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace Engine.Physics.Models.SubAreas
 	/// <summary>
 	/// Represents a sub area.
 	/// </summary>
-	public class SubArea : IAmSubDrawable, ICanBeSerialized<SubAreaModel>
+	public class SubArea : ICanBeSerialized<SubAreaModel>
 	{
 		/// <summary>
 		/// Gets or sets the width.
@@ -51,7 +50,7 @@ namespace Engine.Physics.Models.SubAreas
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
+		virtual public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var thisRectangle = new Rectangle

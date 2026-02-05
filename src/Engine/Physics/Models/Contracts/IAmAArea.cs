@@ -39,5 +39,14 @@ namespace Engine.Physics.Models.Contracts
 		/// <param name="coordinate">The coordinate.</param>
 		/// <returns>A value indicating whether the area contains the coordinate.</returns>
 		public bool Contains(Vector2 coordinate);
+
+		/// <summary>
+		/// Draws the sub drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="offset">The offset.</param>
+		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Color color, Vector2 offset = default);
 	}
 }

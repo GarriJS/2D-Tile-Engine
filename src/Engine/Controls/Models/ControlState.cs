@@ -25,6 +25,11 @@ namespace Engine.Controls.Models
 		required public MouseState MouseState { get; set; }
 
 		/// <summary>
+		/// Gets or sets the mouse vertical scroll delta.
+		/// </summary>
+		required public float MouseVerticalScrollDelta { get; set; }
+
+		/// <summary>
 		/// Gets or sets the fresh action names. 
 		/// </summary>
 		required public List<string> FreshActionNames { get; set; }

@@ -5,6 +5,7 @@ using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.LayoutInfo;
+using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
@@ -19,7 +20,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface row.
 	/// </summary>
-	public class UiRow : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
+	public class UiRow : IAmSubDrawable, IAmDebugSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -143,11 +144,8 @@ namespace Common.UserInterface.Models
 
 			foreach (var element in this.Elements ?? [])
 			{
-				var elementOffset = graphicOffset + (element.CachedOffset ?? default);
-				element.Draw(gameTime, gameServices, coordinates, color, elementOffset);
+				element.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			}
-
-			this.Area.Draw(gameTime, gameServices, coordinates, Color.MonoGameOrange, graphicOffset);
 		}
 
 		/// <summary>
@@ -206,6 +204,24 @@ namespace Common.UserInterface.Models
 
 				horizontalOffset += element.TotalWidth;
 			}
+		}
+
+		/// <summary>
+		/// Draws the debug drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="offset">The offset.</param>
+		public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
+		{
+			var graphicOffset = offset + (this.CachedOffset ?? default);
+
+			foreach (var element in this.Elements)
+				element.DrawDebug(gameTime, gameServices, coordinates, color, graphicOffset);
+
+			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
 		/// <summary>

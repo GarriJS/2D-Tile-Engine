@@ -1,7 +1,10 @@
 ﻿using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
+using Common.UserInterface.Models.Contracts;
 using Engine.Physics.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Common.Controls.CursorInteraction.Models
 {
@@ -21,8 +24,18 @@ namespace Common.Controls.CursorInteraction.Models
 		public Cursor TopHoverCursor { get; set; }
 
 		/// <summary>
+		/// Gets or sets the bottom scrollable.
+		/// </summary>
+		public IAmScrollable BottomScrollable { get; set; }
+
+		/// <summary>
 		/// Gets or sets the hover object location.
 		/// </summary>
 		public LocationExtender<IHaveACursorConfiguration> HoverObjectLocation { get; set; }
+
+		/// <summary>
+		/// Get or sets the hovered object.
+		/// </summary>
+		public Dictionary<Type, object> HoveredObjects { get; set; }
 	}
 }

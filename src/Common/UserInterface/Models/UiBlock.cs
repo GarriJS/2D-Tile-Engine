@@ -4,7 +4,9 @@ using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.LayoutInfo;
+using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
+using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
@@ -18,7 +20,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface block.
 	/// </summary>
-	public class UiBlock : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
+	public class UiBlock : IAmSubDrawable, IAmDebugSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -143,7 +145,7 @@ namespace Common.UserInterface.Models
 			foreach (var elementRow in this.Rows ?? [])
 				elementRow.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 
-			this.Area.Draw(gameTime, gameServices, coordinates, Color.MonoGameOrange, graphicOffset);
+			//this.Area.Draw(gameTime, gameServices, coordinates, Color.MonoGameOrange, graphicOffset);
 		}
 
 		/// <summary>
@@ -202,6 +204,24 @@ namespace Common.UserInterface.Models
 
 				verticalOffset += row.TotalHeight;
 			}
+		}
+
+		/// <summary>
+		/// Draws the debug drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="offset">The offset.</param>
+		public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
+		{
+			var graphicOffset = offset + (this.CachedOffset ?? default);
+
+			foreach (var uiRow in this.Rows)
+				uiRow.DrawDebug(gameTime, gameServices, coordinates, color, graphicOffset);
+
+			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
 		/// <summary>

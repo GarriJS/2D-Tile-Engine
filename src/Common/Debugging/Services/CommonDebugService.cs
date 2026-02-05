@@ -1,4 +1,5 @@
 ﻿using Common.Debugging.Services.Contracts;
+using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Core.State.Contracts;
 using Engine.Debugging.Services;
@@ -6,6 +7,7 @@ using Engine.Debugging.Services.Contracts;
 using Engine.Monogame;
 using Engine.RunTime.Models;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Common.Debugging.Services
@@ -32,6 +34,11 @@ namespace Common.Debugging.Services
 		private DrawableRectangle[] ScreenAreaDrawableRectangles { get; set; } = [];
 
 		/// <summary>
+		/// Gets or sets a list of the active debug user interface zones.
+		/// </summary>
+		private List<UiZone> ActiveDebugUserInterfaceZones { get; set; } = [];
+
+		/// <summary>
 		/// Does the post load initialization.
 		/// </summary>
 		public void PostLoadInitialize()
@@ -46,6 +53,7 @@ namespace Common.Debugging.Services
 			}).ToArray();
 			this.ScreenAreaDrawableRectangles = drawableRectangles;
 			var gameStateService = this._gameServices.GetService<IGameStateService>();
+			gameStateService.SubscribeToFlag(DebugService.DebugFlagName, this.DebugFlagSubscription);
 
 			if (true == gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var debugModeActive))
 				this.DebugFlagSubscription(debugModeActive);
@@ -79,6 +87,47 @@ namespace Common.Debugging.Services
 					debugService.DebugOverlaidDrawRuntime.RemoveDrawable(drawableRectangle);
 
 			this.ScreenAreaIndicatorsEnabled = enable;
+		}
+
+		/// <summary>
+		/// Adds the user interface zone from debugging.
+		/// </summary>
+		/// <param name="uiZone">The user interface zone.</param>
+		public void AddDebugUserInterfaceZone(UiZone uiZone)
+		{
+			if (true == this.ActiveDebugUserInterfaceZones.Contains(uiZone))
+				return;
+
+			var debugService = this._gameServices.GetService<IDebugService>();
+			debugService.DebugOverlaidDrawRuntime.AddDrawable(uiZone);
+			this.ActiveDebugUserInterfaceZones.Add(uiZone);		
+		}
+
+		/// <summary>
+		/// Removes the user interface zone from debugging.
+		/// </summary>
+		/// <param name="uiZone">The user interface zone.</param>
+		public void RemoveDebugUserInterfaceZone(UiZone uiZone)
+		{
+			if (false == this.ActiveDebugUserInterfaceZones.Contains(uiZone))
+				return;
+
+			var debugService = this._gameServices.GetService<IDebugService>();
+			debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiZone);
+			this.ActiveDebugUserInterfaceZones.Remove(uiZone);
+		}
+
+		/// <summary>
+		/// Adds the user interface zone rectangles.
+		/// </summary>
+		public void ClearDebugUserInterfaceZones()
+		{
+			var debugService = this._gameServices.GetService<IDebugService>();
+
+			foreach (var uiZone in this.ActiveDebugUserInterfaceZones ?? [])
+				debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiZone);
+
+			this.ActiveDebugUserInterfaceZones.Clear();
 		}
 	}
 }

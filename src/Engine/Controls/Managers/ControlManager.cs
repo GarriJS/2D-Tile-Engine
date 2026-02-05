@@ -51,6 +51,7 @@ namespace Engine.Controls.Managers
             {
                 Direction = null,
                 MouseState = default,
+                MouseVerticalScrollDelta = default,
                 FreshActionNames = [],
                 ActiveActionNames = []
             };
@@ -79,6 +80,7 @@ namespace Engine.Controls.Managers
             var pressedKeys = Keyboard.GetState().GetPressedKeys();
             var mouseState = Mouse.GetState();
             var pressedMouseButtons = GetPressedMouseButtons(mouseState);
+            var mouseVerticalScrollDelta = GetMouseVerticalScrollDelta(mouseState, this.PriorControlState.MouseState);
             var actionControlNames = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
                                                                     (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
                                                         .Select(e => e.ActionName)
@@ -93,6 +95,7 @@ namespace Engine.Controls.Managers
             {
                 Direction = null,
                 MouseState = mouseState,
+                MouseVerticalScrollDelta = mouseVerticalScrollDelta,
 				FreshActionNames = freshActionTypes,
 				ActiveActionNames = actionControlNames
             };
@@ -127,74 +130,88 @@ namespace Engine.Controls.Managers
             return [.. activeMouseButtons];
         }
 
-        /// <summary>
-        /// Gets the movement direction.
-        /// </summary>
-        /// <param name="actionTypes">The action types.</param>
-        /// <returns>The movement direction.</returns>
-   //     private float? GetMovementDirection(List<int> actionTypes)
-   //     {
-   //         var upMovement = actionTypes.Contains(ActionTypes.Up);
-			//var downMovement = actionTypes.Contains(ActionTypes.Down);
-			//var leftMovement = actionTypes.Contains(ActionTypes.Left);
-			//var rightMovement = actionTypes.Contains(ActionTypes.Right);
+		/// <summary>
+		/// Gets the mouse vertical scroll delta.
+		/// </summary>
+        /// <param name="newState">The new state.</param>
+		/// <param name="oldState">The old state.</param>
+		/// <returns>The vertical scroll delta.</returns>
+		static private float GetMouseVerticalScrollDelta(MouseState newState, MouseState oldState)
+		{
+			var delta = newState.ScrollWheelValue - oldState.ScrollWheelValue;
+			var result = delta / 120f; //normalize for 120 monogame scroll wheel notches.
 
-   //         if ((true == upMovement) &&
-   //             (true == downMovement))
-   //         {
-   //             upMovement = false;
-   //             downMovement = false;
-   //         }
+			return result;
+		}
 
-   //         if ((true == leftMovement) &&
-   //             (true == rightMovement))
-   //         {
-   //             leftMovement = false;
-   //             rightMovement = false;
-   //         }
+		/// <summary>
+		/// Gets the movement direction.
+		/// </summary>
+		/// <param name="actionTypes">The action types.</param>
+		/// <returns>The movement direction.</returns>
+		//     private float? GetMovementDirection(List<int> actionTypes)
+		//     {
+		//         var upMovement = actionTypes.Contains(ActionTypes.Up);
+		//var downMovement = actionTypes.Contains(ActionTypes.Down);
+		//var leftMovement = actionTypes.Contains(ActionTypes.Left);
+		//var rightMovement = actionTypes.Contains(ActionTypes.Right);
 
-   //         if (true == upMovement)
-   //         {
-   //             if (true == leftMovement)
-   //             {
-   //                 return (float)(3 * Math.PI) / 4f;
-   //             }
-   //             else if (true == rightMovement)
-   //             {
-   //                 return (float)Math.PI / 4f;
-   //             }
-   //             else
-   //             {
-   //                 return (float)Math.PI / 2f;
-   //             }
-   //         }
-   //         else if (true == downMovement)
-   //         {
-   //             if (true == leftMovement)
-   //             {
-   //                 return (float)(5 * Math.PI) / 4f;
-   //             }
-   //             else if (true == rightMovement)
-   //             {
-   //                 return (float)(7 * Math.PI) / 4f;
-   //             }
-   //             else
-   //             {
-   //                 return (float)(3 * Math.PI) / 2f;
-   //             }
-   //         }
-   //         else if (true == leftMovement)
-   //         {
-   //             return (float)Math.PI;
-   //         }
-   //         else if (true == rightMovement)
-   //         {
-   //             return 0f;
-   //         }
-   //         else
-   //         {
-   //             return null;
-   //         }
-   //     }
-    }
+		//         if ((true == upMovement) &&
+		//             (true == downMovement))
+		//         {
+		//             upMovement = false;
+		//             downMovement = false;
+		//         }
+
+		//         if ((true == leftMovement) &&
+		//             (true == rightMovement))
+		//         {
+		//             leftMovement = false;
+		//             rightMovement = false;
+		//         }
+
+		//         if (true == upMovement)
+		//         {
+		//             if (true == leftMovement)
+		//             {
+		//                 return (float)(3 * Math.PI) / 4f;
+		//             }
+		//             else if (true == rightMovement)
+		//             {
+		//                 return (float)Math.PI / 4f;
+		//             }
+		//             else
+		//             {
+		//                 return (float)Math.PI / 2f;
+		//             }
+		//         }
+		//         else if (true == downMovement)
+		//         {
+		//             if (true == leftMovement)
+		//             {
+		//                 return (float)(5 * Math.PI) / 4f;
+		//             }
+		//             else if (true == rightMovement)
+		//             {
+		//                 return (float)(7 * Math.PI) / 4f;
+		//             }
+		//             else
+		//             {
+		//                 return (float)(3 * Math.PI) / 2f;
+		//             }
+		//         }
+		//         else if (true == leftMovement)
+		//         {
+		//             return (float)Math.PI;
+		//         }
+		//         else if (true == rightMovement)
+		//         {
+		//             return 0f;
+		//         }
+		//         else
+		//         {
+		//             return null;
+		//         }
+		//     }
+	}
 }

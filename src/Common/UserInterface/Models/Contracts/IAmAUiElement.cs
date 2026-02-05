@@ -1,5 +1,6 @@
 ﻿using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.UserInterface.Enums;
+using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.Contracts;
 using Engine.RunTime.Models.Contracts;
@@ -11,7 +12,7 @@ namespace Common.UserInterface.Models.Contracts
     /// <summary>
     /// Represents a user interface element.
     /// </summary>
-    public interface IAmAUiElement : IAmSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
+    public interface IAmAUiElement : IAmSubDrawable, IAmDebugSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<IAmAUiElement>, ICanBePressed<IAmAUiElement>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.

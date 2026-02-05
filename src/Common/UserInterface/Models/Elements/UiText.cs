@@ -1,4 +1,4 @@
-﻿using Common.UserInterface.Abstract;
+﻿using Common.UserInterface.Models.Elements.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -30,7 +30,8 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="offset">The offset.</param>
 		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
+			var graphicOffset = offset + this.CachedOffset ?? default;
+			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			
 			if (null != this.GraphicText)
 			{
@@ -40,7 +41,7 @@ namespace Common.UserInterface.Models.Elements
 					X = (this.Area.Width - textDimensions.X) / 2f,
 					Y = (this.Area.Height - textDimensions.Y) / 2f
 				};
-				var graphicTextOffset = offset + centeredOffset;
+				var graphicTextOffset = graphicOffset + centeredOffset;
 				this.GraphicText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
 			}
 		}

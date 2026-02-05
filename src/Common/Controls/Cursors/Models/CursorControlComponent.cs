@@ -2,9 +2,12 @@
 using Common.Controls.CursorInteraction.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
+using Common.Debugging.Services.Contracts;
 using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Controls.Models;
+using Engine.Core.State.Contracts;
+using Engine.Debugging.Services;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -77,11 +80,12 @@ namespace Common.Controls.Cursors.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
+			var commonDebugService = this._gameServices.GetService<ICommonDebugService>();
+			var gameStateService = this._gameServices.GetService<IGameStateService>();
+			commonDebugService.ClearDebugUserInterfaceZones();
 
 			if (null == controlState)
-			{
 				return;
-			}
 
 			this.CursorPosition.Coordinates = controlState.MousePosition;
 
@@ -91,9 +95,7 @@ namespace Common.Controls.Cursors.Models
 				this.SetPrimaryHoverCursor(hoverState.TopHoverCursor, clearSecondaryCursors: false);
 
 				foreach (var secondaryCursor in this.SecondaryHoverCursors)
-				{
 					this.AddSecondaryHoverCursor(secondaryCursor, false);
-				}
 			}
 			else
 			{
@@ -101,17 +103,13 @@ namespace Common.Controls.Cursors.Models
 				this.SetPrimaryCursor(this.PrimaryCursor, clearSecondaryCursors: false);
 
 				foreach (var secondaryCursor in this.SecondaryCursors)
-				{
 					this.AddSecondaryCursor(secondaryCursor, false);
-				}
 			}
 
 			this.UpdateActiveCursors(gameTime);
 
 			if (null == hoverState?.HoverObjectLocation)
-			{
 				return;
-			}
 
 			var uiObject = hoverState.HoverObjectLocation.Subject;
 			var elementLocation = hoverState.HoverObjectLocation.Location;
@@ -162,6 +160,19 @@ namespace Common.Controls.Cursors.Models
 
 					break;
 			}
+
+			gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var isDebugMode);
+
+			if ((true == isDebugMode) &&
+				(true == hoverState.HoveredObjects.TryGetValue(typeof(UiZone), out var value)) &&
+				(value is UiZone hoveredUiZone))
+			{
+				commonDebugService.AddDebugUserInterfaceZone(hoveredUiZone);
+			}
+
+			if ((null != hoverState.BottomScrollable.ScrollState?.ScrollRenderTarget) &&
+				(0 != controlState.MouseVerticalScrollDelta))
+				hoverState.BottomScrollable.ScrollState.Scroll(controlState.MouseVerticalScrollDelta);
 		}
 
 		/// <summary>
@@ -175,18 +186,14 @@ namespace Common.Controls.Cursors.Models
 				this.PrimaryCursor.Update(gameTime, this._gameServices);
 
 				foreach (var cursor in this.SecondaryCursors)
-				{
 					cursor.Update(gameTime, this._gameServices);
-				}
 			}
 			else
 			{
 				this.PrimaryHoverCursor.Update(gameTime, this._gameServices);
 
 				foreach (var hoverCursor in this.SecondaryHoverCursors)
-				{
 					hoverCursor.Update(gameTime, this._gameServices);
-				}
 			}
 		}
 
@@ -203,9 +210,7 @@ namespace Common.Controls.Cursors.Models
 			if (true == clearSecondaryCursors)
 			{
 				foreach (var secondaryCursor in this.SecondaryCursors)
-				{
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-				}
 
 				this.SecondaryCursors.Clear();
 			}
@@ -221,9 +226,7 @@ namespace Common.Controls.Cursors.Models
 			this.HoverCursorActive = false;
 
 			if (null != this.PrimaryCursor)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryCursor);
-			}
 
 			this.PrimaryCursor = cursor;
 			runTimeOverlaidDrawService.AddDrawable(this.PrimaryCursor);
@@ -239,15 +242,12 @@ namespace Common.Controls.Cursors.Models
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (this.PrimaryCursor == cursor)
-			{
 				return;
-			}
-			else if (true == this.SecondaryCursors.Contains(cursor))
+
+			if (true == this.SecondaryCursors.Contains(cursor))
 			{
 				if (false == this.HoverCursorActive)
-				{
 					runTimeOverlaidDrawService.AddDrawable(cursor);
-				}
 
 				return;
 			}
@@ -255,9 +255,7 @@ namespace Common.Controls.Cursors.Models
 			if (true == disableExisting)
 			{
 				foreach (var secondaryCursor in this.SecondaryCursors)
-				{
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-				}
 
 				this.SecondaryCursors.Clear();
 			}
@@ -265,9 +263,7 @@ namespace Common.Controls.Cursors.Models
 			this.SecondaryCursors.Add(cursor);
 
 			if (false == this.HoverCursorActive)
-			{
 				runTimeOverlaidDrawService.AddDrawable(cursor);
-			}
 		}
 
 		/// <summary>
@@ -283,9 +279,7 @@ namespace Common.Controls.Cursors.Models
 			if (true == clearSecondaryCursors)
 			{
 				foreach (var secondaryCursor in this.SecondaryHoverCursors)
-				{
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-				}
 
 				this.SecondaryCursors.Clear();
 			}
@@ -301,9 +295,7 @@ namespace Common.Controls.Cursors.Models
 			this.HoverCursorActive = true;
 
 			if (null != this.PrimaryHoverCursor)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryHoverCursor);
-			}
 
 			this.PrimaryHoverCursor = cursor;
 			runTimeOverlaidDrawService.AddDrawable(this.PrimaryHoverCursor);
@@ -319,15 +311,12 @@ namespace Common.Controls.Cursors.Models
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (this.PrimaryHoverCursor == cursor)
-			{
 				return;
-			}
-			else if (true == this.SecondaryHoverCursors.Contains(cursor))
+
+			if (true == this.SecondaryHoverCursors.Contains(cursor))
 			{
 				if (true == this.HoverCursorActive)
-				{
 					runTimeOverlaidDrawService.AddDrawable(cursor);
-				}
 
 				return;
 			}
@@ -335,9 +324,7 @@ namespace Common.Controls.Cursors.Models
 			if (true == disableExisting)
 			{
 				foreach (var secondaryCursor in this.SecondaryHoverCursors)
-				{
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-				}
 
 				this.SecondaryHoverCursors.Clear();
 			}
@@ -345,9 +332,7 @@ namespace Common.Controls.Cursors.Models
 			this.SecondaryHoverCursors.Add(cursor);
 
 			if (true == this.HoverCursorActive)
-			{
 				runTimeOverlaidDrawService.AddDrawable(cursor);
-			}
 		}
 
 		/// <summary>
@@ -356,22 +341,16 @@ namespace Common.Controls.Cursors.Models
 		private void ClearHoverState()
 		{
 			if (false == this.HoverCursorActive)
-			{
 				return;
-			}
 
 			this.HoverCursorActive = false;
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (null != this.PrimaryHoverCursor)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryHoverCursor);
-			}
 
 			foreach (var secondaryCursor in this.SecondaryHoverCursors)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-			}
 		}
 
 		/// <summary>
@@ -380,22 +359,16 @@ namespace Common.Controls.Cursors.Models
 		private void SetHoverState()
 		{
 			if (true == this.HoverCursorActive)
-			{
 				return;
-			}
 
 			this.HoverCursorActive = true;
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (null != this.PrimaryCursor)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryCursor);
-			}
 
 			foreach (var secondaryCursor in this.SecondaryCursors)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
-			}
 		}
 	}
 }

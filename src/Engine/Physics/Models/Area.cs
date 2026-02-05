@@ -1,7 +1,10 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
+using Engine.Monogame;
 using Engine.Physics.Models.Contracts;
+using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Engine.Physics.Models
 {
@@ -38,6 +41,30 @@ namespace Engine.Physics.Models
 						 this.Position.Y + this.Height >= coordinate.Y;
 
 			return result;
+		}
+
+		/// <summary>
+		/// Draws the sub drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="offset">The offset.</param>
+		virtual public void Draw(GameTime gameTime, GameServiceContainer gameServices, Color color, Vector2 offset = default)
+		{
+			var drawingService = gameServices.GetService<IDrawingService>();
+			var thisRectangle = new Rectangle
+			{
+				X = (int)(this.Position.X + offset.X),
+				Y = (int)(this.Position.Y + offset.Y),
+				Width = (int)this.Width,
+				Height = (int)this.Height
+			};
+			var sideRectangles = thisRectangle.GetEdgeRectangles(1)
+											  .ToArray();
+
+			foreach (var sideRectangle in sideRectangles ?? [])
+				drawingService.DrawRectangle(sideRectangle, color);
 		}
 
 		/// <summary>

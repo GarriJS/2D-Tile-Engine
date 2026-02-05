@@ -2,13 +2,12 @@
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
-using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
-namespace Common.UserInterface.Abstract
+namespace Common.UserInterface.Models.Elements.Abstract
 {
 	/// <summary>
 	/// Represents a user interface element base class.
@@ -28,22 +27,22 @@ namespace Common.UserInterface.Abstract
 		/// <summary>
 		/// Gets the total width.
 		/// </summary>
-		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
+		public float TotalWidth { get => Margin.LeftMargin + InsideWidth + Margin.RightMargin; }
 
 		/// <summary>
 		/// Gets the total height.
 		/// </summary>
-		public float TotalHeight { get => this.Margin.TopMargin + this.InsideHeight + this.Margin.BottomMargin; }
+		public float TotalHeight { get => Margin.TopMargin + InsideHeight + Margin.BottomMargin; }
 
 		/// <summary>
 		/// Gets the inside width.
 		/// </summary>
-		public float InsideWidth { get => this.Area.Width; }
+		public float InsideWidth { get => Area.Width; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => this.Area.Height; }
+		public float InsideHeight { get => Area.Height; }
 
 		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
@@ -78,7 +77,7 @@ namespace Common.UserInterface.Abstract
 		/// <summary>
 		/// Gets the base cursor configuration.
 		/// </summary>
-		public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
+		public BaseCursorConfiguration BaseCursorConfiguration { get => CursorConfiguration; }
 
 		/// <summary>
 		/// Gets or sets the cursor configuration
@@ -91,7 +90,7 @@ namespace Common.UserInterface.Abstract
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void RaiseHoverEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
+			CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
 
 		/// <summary>
@@ -100,7 +99,7 @@ namespace Common.UserInterface.Abstract
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void RaisePressEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			this.CursorConfiguration?.RaisePressEvent(cursorInteraction);
+			CursorConfiguration?.RaisePressEvent(cursorInteraction);
 		}
 
 		/// <summary>
@@ -112,6 +111,20 @@ namespace Common.UserInterface.Abstract
 		/// <param name="color">The color.</param>
 		/// <param name="offset">The offset.</param>
 		abstract public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default);
+
+		/// <summary>
+		/// Draws the debug drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="color">The color.</param>
+		/// <param name="offset">The offset.</param>
+		virtual public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
+		{
+			var graphicOffset = offset + CachedOffset ?? default;
+			Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+		}
 
 		/// <summary>
 		/// Disposes of the user interface button.

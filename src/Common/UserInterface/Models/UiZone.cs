@@ -3,7 +3,9 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
+using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.LayoutInfo;
+using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
@@ -20,7 +22,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IRequirePreRender, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+	public class UiZone : IAmDrawable, IAmDebugDrawable, IAmScrollable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -31,6 +33,11 @@ namespace Common.UserInterface.Models
 		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
 		/// </summary>
 		public bool ResetCalculateCachedOffsets { get; set; }
+
+		/// <summary>
+		/// Gets or sets the a value indicating whether to disable scrolling.
+		/// </summary>
+		public bool DisableScrolling { get; set; }
 
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -56,6 +63,11 @@ namespace Common.UserInterface.Models
 		/// Gets or sets the area.
 		/// </summary>
 		public IAmAArea Area { get => this.UserInterfaceScreenZone?.Area; }
+
+		/// <summary>
+		/// Gets the scroll state.
+		/// </summary>
+		public ScrollState ScrollState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the hover cursor.
@@ -100,9 +112,10 @@ namespace Common.UserInterface.Models
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
-			if (this.Name == "Level Editor Label Row")
+			if (null != this.ScrollState?.ScrollRenderTarget)
 			{
-				drawingService.SpriteBatch.Draw(this._scrollRenderTarget, this.Position.Coordinates, Color.White);
+				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
+				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White);
 			}
 			else
 				this.DrawContents(gameTime, gameServices, this.Position.Coordinates, Color.White);
@@ -115,61 +128,75 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game services.</param>
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="color">The color.</param>
-		/// <param name="scrollOffset">The scroll offset.</param>
-		private void DrawContents(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 scrollOffset = default)
+		/// <param name="offset">The offset.</param>
+		private void DrawContents(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, scrollOffset);
+			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
 
 			if (true == this.ResetCalculateCachedOffsets)
 				this.UpdateZoneOffsets();
 
 			foreach (var block in this.Blocks ?? [])
-				block.Draw(gameTime, gameServices, coordinates, color, scrollOffset);
+				block.Draw(gameTime, gameServices, coordinates, color, offset);
 		}
 
-		private RenderTarget2D _scrollRenderTarget;
-		public bool IsScrollable { get; set; }
-		public int ScrollOffsetY { get; private set; } = -10;
-		public int ScrollSpeed { get; set; } = 30;
-		public int MaxVisibleHeight { get; set; } = 20;// set this to your limit
+		/// <summary>
+		/// Assess if prerendering is needed.
+		/// </summary>
+		/// <returns>A value indicating whether prerendering is needed.</returns>
 		public bool ShouldPreRender()
 		{
-			return this.Name == "Level Editor Label Row";
+			//if (null == this.ScrollState)
+			//	return false;
+
+			var contentHeight = this.Blocks.Sum(e => e.TotalHeight);
+			var result = contentHeight > this.Area.Height; //this.ScrollState.MaxVisibleHeight;
+
+			if (null == this.ScrollState)
+				this.ScrollState = new ScrollState
+				{
+					VerticalScrollOffset = 0,
+					ScrollSpeed = 15,
+					MaxVisibleHeight = this.Area.Height
+				};
+
+			return result;
 		}
 
+		/// <summary>
+		/// Does the prerender.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game service.</param>
 		public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
 		{
+			if (null == this.ScrollState)
+				return;
+
 			var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
 			var device = graphicDeviceService.GraphicsDevice;
 			var drawingService = gameServices.GetService<IDrawingService>();
+			var contentHeight = this.Blocks.Sum(e => e.TotalHeight);
 
-			// Create RT if needed
-			if (_scrollRenderTarget == null ||
-				_scrollRenderTarget.Width != this.Area.Width ||
-				_scrollRenderTarget.Height != MaxVisibleHeight)
+			if ((null == this.ScrollState.ScrollRenderTarget) ||
+				(this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
+				(this.ScrollState.ScrollRenderTarget.Height != this.ScrollState.MaxVisibleHeight))
 			{
-				_scrollRenderTarget?.Dispose();
-				_scrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, MaxVisibleHeight);
+				this.ScrollState.ScrollRenderTarget?.Dispose();
+				this.ScrollState.ScrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, (int)contentHeight);
 			}
 
-			// Draw content into RT
 			var previousTargets = device.GetRenderTargets();
-			device.SetRenderTarget(_scrollRenderTarget);
+			device.SetRenderTarget(this.ScrollState.ScrollRenderTarget);
 			device.Clear(Color.Transparent);
 
 			drawingService.BeginDraw();
 
-			var scrollOffset = new Vector2(0, -ScrollOffsetY);
-			this.DrawContents(gameTime, gameServices, default, Color.White, scrollOffset);
+			this.DrawContents(gameTime, gameServices, default, Color.White);
 
 			drawingService.EndDraw();
 
 			device.SetRenderTargets(previousTargets);
-
-			// Draw RT to screen at zone position
-			//spriteBatch.Begin();
-			//spriteBatch.Draw(_scrollRenderTarget, this.Position.Coordinates, Color.White);
-			//spriteBatch.End();
 		}
 
 		/// <summary>
@@ -177,7 +204,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void UpdateZoneOffsets()
 		{
-			foreach (var blockLayout in this.EnumerateLayout() ?? [])
+			foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
 			{
 				blockLayout.Block.CachedOffset = blockLayout.Offset;
 				blockLayout.Block.UpdateOffsets();
@@ -189,8 +216,9 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Enumerates the Block blockLayout.
 		/// </summary>
+		/// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
 		/// <returns>The enumerated Block blockLayout.</returns>
-		public IEnumerable<BlockLayoutInfo> EnumerateLayout()
+		public IEnumerable<BlockLayoutInfo> EnumerateLayout(bool includeScrollOffset)
 		{
 			var contentHeight = this.Blocks.Sum(r => r.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
@@ -202,6 +230,10 @@ namespace Common.UserInterface.Models
 
 			if (verticalOffset < 0)
 				verticalOffset = 0;
+
+			if ((true == includeScrollOffset) &&
+				(null != this.ScrollState))
+				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
 			foreach (var block in this.Blocks ?? [])
 			{
@@ -227,6 +259,25 @@ namespace Common.UserInterface.Models
 
 				verticalOffset += block.TotalHeight;
 			}
+		}
+
+		/// <summary>
+		/// Draws the debug drawable.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <param name="gameServices">The game services.</param>
+		public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices)
+		{
+			var offset = new Vector2
+			{
+				X = 0,
+				Y = -this.ScrollState?.VerticalScrollOffset ?? default
+			};
+
+			foreach (var block in this.Blocks ?? [])
+				block.DrawDebug(gameTime, gameServices, this.Position.Coordinates, Color.MonoGameOrange, offset);
+
+			this.Area.Draw(gameTime, gameServices, Color.MonoGameOrange);
 		}
 
 		/// <summary>

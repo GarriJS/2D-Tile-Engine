@@ -1,7 +1,7 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.UserInterface.Abstract;
 using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Models.Elements.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -57,8 +57,9 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="offset">The offset.</param>
 		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
-			this.ClickAnimation?.Draw(gameTime, gameServices, coordinates, color, offset);
+			var graphicOffset = offset + this.CachedOffset ?? default;
+			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+			this.ClickAnimation?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 
 			if (null != this.GraphicText)
 			{
@@ -73,7 +74,7 @@ namespace Common.UserInterface.Models.Elements
 				if (true == this.ClickAnimation?.AnimationIsTrigged)
 					animationOffset = this.PressedTextOffset;
 
-				var graphicTextOffset = offset + centeredOffset + animationOffset;
+				var graphicTextOffset = graphicOffset + centeredOffset + animationOffset;
 				this.GraphicText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
 			}
 		}

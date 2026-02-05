@@ -8,7 +8,7 @@ using System.Reflection;
 using var game = new Engine.Engine();
 
 // Debug
-game.InDebugMode = true;
+game.InDebugMode = false;
 game.DebugSpriteFontName = "Monolight";
 
 // Registers the assemblies

@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 // LOGGING
 namespace Engine
@@ -141,9 +142,14 @@ namespace Engine
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			if (Keyboard.GetState().IsKeyDown(Keys.G))
+			if (false == KeyboardTyping.OldPressedKeys.Any(e => e == Keys.G) &&
+				Keyboard.GetState().IsKeyDown(Keys.G))
 			{
+				var gameStateService = this.Services.GetService<IGameStateService>();
 
+				gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var currentValue);
+
+				gameStateService.ChangeGameStateFlagState(DebugService.DebugFlagName, !currentValue);
 			}
 
 			base.Update(gameTime);
