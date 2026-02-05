@@ -42,7 +42,7 @@ namespace Engine.RunTime.Managers
 		{
 			this._runTimeCollection.AddModel(drawable);
 
-			if (drawable is IRequirePreRender subRender)
+			if (drawable is IAmPreRenderable subRender)
 			{
 				var preRenderService = this.Game.Services.GetService<IPreRenderService>();
 				preRenderService.AddPrerender(subRender);
@@ -57,7 +57,7 @@ namespace Engine.RunTime.Managers
 		{
 			this._runTimeCollection.RemoveModel(drawable);
 
-			if (drawable is IRequirePreRender subRender)
+			if (drawable is IAmPreRenderable subRender)
 			{
 				var preRenderService = this.Game.Services.GetService<IPreRenderService>();
 				preRenderService.RemovePrerender(subRender);

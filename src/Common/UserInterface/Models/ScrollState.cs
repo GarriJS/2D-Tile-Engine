@@ -8,7 +8,12 @@ namespace Common.UserInterface.Models
 	/// Represents a scroll state.
 	/// </summary>
 	public class ScrollState
-	{	
+	{
+		/// <summary>
+		/// Gets or sets the a value indicating whether to disable scrolling.
+		/// </summary>
+		required public bool DisableScrolling { get; set; }
+
 		/// <summary>
 		/// Gets or sets the vertical scroll offset.
 		/// </summary>
@@ -35,7 +40,8 @@ namespace Common.UserInterface.Models
 		/// <param name="scrollDelta">The scroll delta.</param>
 		public void Scroll(float scrollDelta)
 		{
-			if (null == ScrollRenderTarget)
+			if ((null == this.ScrollRenderTarget) ||
+				(true == this.DisableScrolling))
 				return;
 
 			this.VerticalScrollOffset -= scrollDelta * ScrollSpeed;

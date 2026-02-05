@@ -143,9 +143,7 @@ namespace Common.UserInterface.Models
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, backgroundOffset);
 
 			foreach (var element in this.Elements ?? [])
-			{
 				element.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
-			}
 		}
 
 		/// <summary>

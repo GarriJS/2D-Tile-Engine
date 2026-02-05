@@ -11,24 +11,24 @@ namespace Engine.RunTime.Services.Contracts
 		/// Adds the prerender.
 		/// </summary>
 		/// <param name="prerender">The prerender.</param>
-		public void AddPrerender(IRequirePreRender prerender);
+		public void AddPrerender(IAmPreRenderable prerender);
 
 		/// <summary>
 		/// Removes the prerender.
 		/// </summary>
 		/// <param name="prerender">The prerender.</param>
-		public void RemovePrerender(IRequirePreRender prerender);
+		public void RemovePrerender(IAmPreRenderable prerender);
 
 		/// <summary>
 		/// Adds the overlaid prerender.
 		/// </summary>
 		/// <param name="prerender">The prerender.</param>
-		public void AddOverlaidPrerender(IRequirePreRender prerender);
+		public void AddOverlaidPrerender(IAmPreRenderable prerender);
 
 		/// <summary>
 		/// Removes the overlaid prerender.
 		/// </summary>
 		/// <param name="prerender">The prerender.</param>
-		public void RemoveOverlaidPrerender(IRequirePreRender prerender);
+		public void RemoveOverlaidPrerender(IAmPreRenderable prerender);
 	}
 }

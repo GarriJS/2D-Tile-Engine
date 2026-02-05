@@ -19,7 +19,7 @@ namespace Engine.RunTime.Managers
 		/// <summary>
 		/// The sub renders.
 		/// </summary>
-		readonly public List<IRequirePreRender> _subRenders = [];
+		readonly public List<IAmPreRenderable> _subRenders = [];
 
 		/// <summary>
 		/// The run time collection.
@@ -48,7 +48,7 @@ namespace Engine.RunTime.Managers
 		{
 			this._runTimeCollection.AddModel(drawable);
 
-			if (drawable is IRequirePreRender subRender)
+			if (drawable is IAmPreRenderable subRender)
 			{
 				var preRenderService = this.Game.Services.GetService<IPreRenderService>();
 				preRenderService.AddOverlaidPrerender(subRender);
@@ -63,7 +63,7 @@ namespace Engine.RunTime.Managers
 		{
 			this._runTimeCollection.RemoveModel(drawable);
 
-			if (drawable is IRequirePreRender subRender)
+			if (drawable is IAmPreRenderable subRender)
 			{
 				var preRenderService = this.Game.Services.GetService<IPreRenderService>();
 				preRenderService.RemoveOverlaidPrerender(subRender);

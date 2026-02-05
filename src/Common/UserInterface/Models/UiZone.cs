@@ -22,7 +22,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IAmDebugDrawable, IAmScrollable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+	public class UiZone : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone name.
@@ -33,11 +33,6 @@ namespace Common.UserInterface.Models
 		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
 		/// </summary>
 		public bool ResetCalculateCachedOffsets { get; set; }
-
-		/// <summary>
-		/// Gets or sets the a value indicating whether to disable scrolling.
-		/// </summary>
-		public bool DisableScrolling { get; set; }
 
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -146,21 +141,15 @@ namespace Common.UserInterface.Models
 		/// <returns>A value indicating whether prerendering is needed.</returns>
 		public bool ShouldPreRender()
 		{
-			//if (null == this.ScrollState)
-			//	return false;
-
 			var contentHeight = this.Blocks.Sum(e => e.TotalHeight);
-			var result = contentHeight > this.Area.Height; //this.ScrollState.MaxVisibleHeight;
+			var hasExessHeight = contentHeight > this.ScrollState.MaxVisibleHeight;
 
-			if (null == this.ScrollState)
-				this.ScrollState = new ScrollState
-				{
-					VerticalScrollOffset = 0,
-					ScrollSpeed = 15,
-					MaxVisibleHeight = this.Area.Height
-				};
+			if (true == hasExessHeight)
+				return true;
 
-			return result;
+			var needsSubRender = this.Blocks.Any(e => true == e.ShouldPreRender());
+
+			return needsSubRender;
 		}
 
 		/// <summary>
@@ -170,7 +159,14 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game service.</param>
 		public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (null == this.ScrollState)
+			var subPrerenders = this.Blocks.Where(e => true == e.ShouldPreRender())
+										   .ToArray();
+
+			foreach (var subPrerender in subPrerenders ?? [])
+				subPrerender.PreRender(gameTime, gameServices, default, Color.White);
+
+			if ((null == this.ScrollState) ||
+				(true == this.ScrollState.DisableScrolling))
 				return;
 
 			var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
@@ -180,7 +176,7 @@ namespace Common.UserInterface.Models
 
 			if ((null == this.ScrollState.ScrollRenderTarget) ||
 				(this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
-				(this.ScrollState.ScrollRenderTarget.Height != this.ScrollState.MaxVisibleHeight))
+				(this.ScrollState.ScrollRenderTarget.Height != contentHeight))
 			{
 				this.ScrollState.ScrollRenderTarget?.Dispose();
 				this.ScrollState.ScrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, (int)contentHeight);
@@ -189,13 +185,11 @@ namespace Common.UserInterface.Models
 			var previousTargets = device.GetRenderTargets();
 			device.SetRenderTarget(this.ScrollState.ScrollRenderTarget);
 			device.Clear(Color.Transparent);
-
 			drawingService.BeginDraw();
 
 			this.DrawContents(gameTime, gameServices, default, Color.White);
 
 			drawingService.EndDraw();
-
 			device.SetRenderTargets(previousTargets);
 		}
 

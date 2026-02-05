@@ -3,9 +3,9 @@
 namespace Engine.RunTime.Models.Contracts
 {
 	/// <summary>
-	/// Represents something that needs pr rendering.
+	/// Represents that can be prerendered.
 	/// </summary>
-	public interface IRequirePreRender
+	public interface IAmPreRenderable
 	{
 		/// <summary>
 		/// Assess if prerendering is needed.

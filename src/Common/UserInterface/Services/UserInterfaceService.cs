@@ -143,12 +143,12 @@ namespace Common.UserInterface.Services
 		{
 			var uiZones = new List<UiZone>();
 
-			foreach (var uiZoneElementModel in uiGroupModel.Zones)
+			foreach (var uiZoneModel in uiGroupModel.Zones)
 			{
-				var uiZoneElement = this.GetUiZone(uiZoneElementModel);
+				var uiZone = this.GetUiZone(uiZoneModel);
 
-				if (null != uiZoneElement)
-					uiZones.Add(uiZoneElement);
+				if (null != uiZone)
+					uiZones.Add(uiZone);
 			}
 
 			var uiGroup = new UiGroup
@@ -157,7 +157,6 @@ namespace Common.UserInterface.Services
 				VisibilityGroupId = uiGroupModel.VisibilityGroupId,
 				Zones = uiZones
 			};
-
 			this.UserInterfaceGroups.Add(uiGroup);
 
 			if (true == uiGroupModel.IsVisible)
@@ -212,6 +211,16 @@ namespace Common.UserInterface.Services
 				this.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
 			}
 
+			if (contentHeight > uiScreenZone.Area.Height)
+			{ 
+				var exessHeight = contentHeight - uiScreenZone.Area.Height;
+				var scrollableBlocks = blocks.Where(e => false == e.ScrollState?.DisableScrolling)
+											 .ToArray();
+				var splitExessHeight = exessHeight / scrollableBlocks.Length;
+				foreach (var scrollableBlock in scrollableBlocks)
+					scrollableBlock.ScrollState.MaxVisibleHeight -= splitExessHeight;
+			}
+
 			IAmAGraphic background = null;
 
 			if (null != uiZoneModel.BackgroundTexture)
@@ -231,6 +240,13 @@ namespace Common.UserInterface.Services
 				// LOGGING
 			}
 
+			var scrollState = new ScrollState
+			{
+				DisableScrolling = true, //uiZoneModel.DisableScrolling,
+				VerticalScrollOffset = 0,
+				ScrollSpeed = 15,
+				MaxVisibleHeight = uiScreenZone.Area.Height,
+			};
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiZone>(uiScreenZone.Area.ToSubArea, null);
 			var uiZone = new UiZone
 			{
@@ -239,6 +255,7 @@ namespace Common.UserInterface.Services
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
 				VerticalJustificationType = uiZoneModel.VerticalJustificationType,
 				Graphic = background,
+				ScrollState = scrollState,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
 				UserInterfaceScreenZone = uiScreenZone,
@@ -294,7 +311,7 @@ namespace Common.UserInterface.Services
 				dynamicRow.Area.Width = dynamicWidth;
 
 			var margin = uiElementService.GetUiMarginFromModel(uiBlockModel.Margin);
-			var blockArea = new SubArea
+			var area = new SubArea
 			{
 				Width = zoneArea.Width,
 				Height = contentHeight
@@ -303,13 +320,13 @@ namespace Common.UserInterface.Services
 
 			if (null != uiBlockModel.BackgroundTexture)
 			{
-				var graphicArea = blockArea;
+				var graphicArea = area;
 
 				if (true == uiBlockModel.ExtendBackgroundToMargin)
 					graphicArea = new SubArea
 					{
-						Width = blockArea.Width,
-						Height = blockArea.Height + margin.TopMargin + margin.BottomMargin
+						Width = area.Width,
+						Height = area.Height + margin.TopMargin + margin.BottomMargin
 					};
 
 				background = imageService.GetImageFromModel(uiBlockModel.BackgroundTexture);
@@ -327,18 +344,26 @@ namespace Common.UserInterface.Services
 				// LOGGING
 			}
 
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(blockArea, null);
+			var scrollState = new ScrollState
+			{
+				DisableScrolling = uiBlockModel.DisableScrolling,
+				VerticalScrollOffset = 0,
+				ScrollSpeed = 15,
+				MaxVisibleHeight = area.Height,
+			};
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(area, null);
 			var result = new UiBlock
 			{
 				Name = uiBlockModel.Name,
 				FlexRows = true,
 				ExtendBackgroundToMargin = uiBlockModel.ExtendBackgroundToMargin,
 				AvailableWidth = zoneArea.Width,
-				Area = blockArea,
+				Area = area,
 				Margin = margin,
 				HorizontalJustificationType = uiBlockModel.HorizontalJustificationType,
 				VerticalJustificationType = uiBlockModel.VerticalJustificationType,
 				Graphic = background,
+				ScrollState = scrollState,
 				HoverCursor = hoverCursor,
 				CursorConfiguration = cursorConfiguration,
 				Rows = rows

@@ -166,11 +166,10 @@ namespace Common.Controls.Cursors.Models
 			if ((true == isDebugMode) &&
 				(true == hoverState.HoveredObjects.TryGetValue(typeof(UiZone), out var value)) &&
 				(value is UiZone hoveredUiZone))
-			{
 				commonDebugService.AddDebugUserInterfaceZone(hoveredUiZone);
-			}
 
-			if ((null != hoverState.BottomScrollable.ScrollState?.ScrollRenderTarget) &&
+			if ((null != hoverState.BottomScrollable?.ScrollState) &&
+				(false == hoverState.BottomScrollable.ScrollState.DisableScrolling) &&
 				(0 != controlState.MouseVerticalScrollDelta))
 				hoverState.BottomScrollable.ScrollState.Scroll(controlState.MouseVerticalScrollDelta);
 		}

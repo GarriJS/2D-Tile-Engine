@@ -201,6 +201,7 @@ namespace LevelEditor.Core.Initialization
 						new UiZoneModel
 						{
 							Name = "Disc Zone",
+							DisableScrolling = true,
 							UiZonePositionType = UiZonePositionType.Row3Col1,
 							BackgroundTexture = null,
 							VerticalJustificationType = UiVerticalJustificationType.Top,
@@ -209,12 +210,13 @@ namespace LevelEditor.Core.Initialization
 							[
 								new UiBlockModel
 								{
+									DisableScrolling = true,
 									FlexRows = true,
 									Rows =
 									[
 										new UiRowModel
 										{
-											Name = "Create/Save Level",
+											Name = "Create Level Row",
 											ExtendBackgroundToMargin = true,
 											Margin = new UiMarginModel
 											{
@@ -274,7 +276,32 @@ namespace LevelEditor.Core.Initialization
 														Y = 1
 													},
 													ClickEventName = UiEventName.CreateSceneClick
-												},
+												}
+											]
+										},
+										new UiRowModel
+										{
+											Name = "Save Level Row",
+											ExtendBackgroundToMargin = true,
+											Margin = new UiMarginModel
+											{
+												TopMargin = 20,
+											},
+											ResizeTexture = true,
+											BackgroundTexture = new SimpleImageModel
+											{
+												TextureName = "pallet",
+												TextureRegion = new TextureRegionModel
+												{
+													TextureRegionType = TextureRegionType.Fill,
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+												}
+											},
+											HoverCursorName = CommonCursorNames.BasicCursorName,
+											HorizontalJustificationType = UiHorizontalJustificationType.Left,
+											VerticalJustificationType = UiVerticalJustificationType.Center,
+											Elements =
+											[
 												new UiTextModel
 												{
 													Name = "Save Element Label",
@@ -316,7 +343,15 @@ namespace LevelEditor.Core.Initialization
 													ClickEventName = UiEventName.SaveSceneClick
 												}
 											]
-										},
+										}
+									]
+								},
+								new UiBlockModel
+								{
+									DisableScrolling = false,
+									FlexRows = true,
+									Rows =
+									[
 										new UiRowModel
 										{
 											Name = "Levels Header",

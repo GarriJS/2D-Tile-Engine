@@ -29,15 +29,18 @@ namespace Common.UserInterface.Services
 		public HoverState GetUiObjectAtScreenLocation(Vector2 location)
 		{
 			var hoverState = new HoverState
-			{ 
+			{
 				HoveredObjects = []
 			};
 
 			if (true == this.TryGetUiZoneAtLocation(location, out var uiZone))
 			{
+				if ((null != uiZone.ScrollState) &&
+					(false == uiZone.ScrollState.DisableScrolling))
+					hoverState.BottomScrollable = uiZone;
+
 				hoverState.TopCursorConfiguration = uiZone.CursorConfiguration;
 				hoverState.TopHoverCursor = uiZone.HoverCursor;
-				hoverState.BottomScrollable = uiZone;
 				hoverState.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
 				{
 					Location = uiZone.Position.Coordinates,
@@ -54,11 +57,16 @@ namespace Common.UserInterface.Services
 				if (locatedBlock.Subject.HoverCursor is not null)
 					hoverState.TopHoverCursor = locatedBlock.Subject.HoverCursor;
 
+				if ((null != locatedBlock.Subject.ScrollState) &&
+					(false == locatedBlock.Subject.ScrollState.DisableScrolling))
+					hoverState.BottomScrollable = locatedBlock.Subject;
+
 				hoverState.HoverObjectLocation = new LocationExtender<IHaveACursorConfiguration>
 				{
 					Location = locatedBlock.Location,
 					Subject = locatedBlock.Subject
 				};
+				hoverState.HoveredObjects[typeof(UiBlock)] = locatedBlock.Subject;
 			}
 
 			if (true == this.TryGetUiRowAtLocation(location, out var locatedRow))
@@ -74,6 +82,7 @@ namespace Common.UserInterface.Services
 					Location = locatedRow.Location,
 					Subject = locatedRow.Subject
 				};
+				hoverState.HoveredObjects[typeof(UiRow)] = locatedRow.Subject;
 			}
 
 			if (true == this.TryGetUiElementAtLocation(location, out var locatedElement))
@@ -89,6 +98,7 @@ namespace Common.UserInterface.Services
 					Location = locatedElement.Location,
 					Subject = locatedElement.Subject
 				};
+				hoverState.HoveredObjects[typeof(IAmAUiElement)] = locatedElement.Subject;
 			}
 
 			if (hoverState.HoverObjectLocation is null)
@@ -163,7 +173,7 @@ namespace Common.UserInterface.Services
 				(0 == locatedUiBlock.Subject.Rows.Count))
 				return false;
 
-			foreach (var rowLayout in locatedUiBlock.Subject.EnumerateLayout() ?? [])
+			foreach (var rowLayout in locatedUiBlock.Subject.EnumerateLayout(includeScrollOffset: true) ?? [])
 			{
 				var rowTop = locatedUiBlock.Location.Y + rowLayout.Offset.Y;
 				var rowBottom = rowTop + rowLayout.Row.InsideHeight;
