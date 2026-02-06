@@ -9,7 +9,7 @@ namespace Common.Controls.CursorInteraction.Services
 	/// Represents a cursor interaction service.
 	/// </summary>   
 	/// <remarks>
-	/// ConfigureService the cursor interaction service.
+	/// Initializes the cursor interaction service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class CursorInteractionService(GameServiceContainer gameServices) : ICursorInteractionService

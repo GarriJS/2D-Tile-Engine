@@ -188,7 +188,7 @@ namespace LevelEditor.Scenes.Services
 				]
 			};
 
-			var uiZone = uiService.GetUiZone(uiZoneModel);
+			var uiZone = uiService.GetUiZoneFromModel(uiZoneModel);
 
 			return uiZone;
 		}

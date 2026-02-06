@@ -9,17 +9,9 @@ namespace Engine.RunTime.Services
 	sealed public class RandomService : IRandomService
 	{
 		/// <summary>
-		/// Gets or sets the random generator.
+		/// The random generator.
 		/// </summary>
-		private Random Random { get; }
-
-		/// <summary>
-		/// Initializes a new instance of the random service.
-		/// </summary>
-		public RandomService()
-		{ 
-			this.Random = new Random();
-		}
+		readonly private Random _random = new();
 
 		/// <summary>
 		/// Gets a random int.
@@ -29,7 +21,7 @@ namespace Engine.RunTime.Services
 		/// <returns>A random int.</returns>
 		public int GetRandomInt(int lowerBound, int upperBound)
 		{
-			var result = this.Random.Next(lowerBound, upperBound + 1);
+			var result = this._random.Next(lowerBound, upperBound + 1);
 
 			return result;
 		}

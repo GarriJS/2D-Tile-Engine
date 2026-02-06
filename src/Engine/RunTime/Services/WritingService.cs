@@ -14,7 +14,7 @@ namespace Engine.RunTime.Services
 	/// <param name="gameServices">The game service.</param>
 	sealed public class WritingService(GameServiceContainer gameServices) : IWritingService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the spritebatch.

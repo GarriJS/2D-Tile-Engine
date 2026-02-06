@@ -1,4 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using BaseContent.BaseContentConstants.Images;
+using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
@@ -26,7 +27,7 @@ namespace Common.UserInterface.Services
 	/// Represents a user interface service.
 	/// </summary>
 	/// <remarks>
-	/// ConfigureService the user interface service.
+	/// Initializes the user interface service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
 	public class UserInterfaceService(GameServiceContainer gameServices) : IUserInterfaceService
@@ -135,17 +136,17 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface group.
+		/// Gets the user interface group from the model.
 		/// </summary>
 		/// <param name="uiGroupModel">The user interface group model.</param>
 		/// <returns>The user interface group.</returns>
-		public UiGroup GetUiGroup(UiGroupModel uiGroupModel)
+		public UiGroup GetUiGroupFromModel(UiGroupModel uiGroupModel)
 		{
 			var uiZones = new List<UiZone>();
 
 			foreach (var uiZoneModel in uiGroupModel.Zones)
 			{
-				var uiZone = this.GetUiZone(uiZoneModel);
+				var uiZone = this.GetUiZoneFromModel(uiZoneModel);
 
 				if (null != uiZone)
 					uiZones.Add(uiZone);
@@ -166,11 +167,11 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface zone.
+		/// Gets the user interface zone from the model.
 		/// </summary>
 		/// <param name="uiZoneModel">The user interface model.</param>
 		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZone(UiZoneModel uiZoneModel)
+		public UiZone GetUiZoneFromModel(UiZoneModel uiZoneModel)
 		{
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
@@ -178,6 +179,7 @@ namespace Common.UserInterface.Services
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
 
 			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue(uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
 				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiZonePositionType.Unknown];
@@ -186,7 +188,7 @@ namespace Common.UserInterface.Services
 
 			foreach (var uiBlockModel in uiZoneModel.Blocks ?? [])
 			{
-				var block = this.GetUiBlock(uiBlockModel);
+				var block = this.GetUiBlockFromModel(uiBlockModel);
 				blocks.Add(block);
 			}
 
@@ -207,16 +209,17 @@ namespace Common.UserInterface.Services
 			}
 
 			foreach (var dynamicRow in dynamicRows ?? [])
-			{
 				this.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
-			}
 
-			if (contentHeight > uiScreenZone.Area.Height)
+			if (((null == uiZoneModel.ScrollStateModel) ||
+				 (true == uiZoneModel.ScrollStateModel.DisableScrolling)) &&
+				(contentHeight > uiScreenZone.Area.Height))
 			{ 
 				var exessHeight = contentHeight - uiScreenZone.Area.Height;
 				var scrollableBlocks = blocks.Where(e => false == e.ScrollState?.DisableScrolling)
 											 .ToArray();
 				var splitExessHeight = exessHeight / scrollableBlocks.Length;
+
 				foreach (var scrollableBlock in scrollableBlocks)
 					scrollableBlock.ScrollState.MaxVisibleHeight -= splitExessHeight;
 			}
@@ -240,13 +243,7 @@ namespace Common.UserInterface.Services
 				// LOGGING
 			}
 
-			var scrollState = new ScrollState
-			{
-				DisableScrolling = true, //uiZoneModel.DisableScrolling,
-				VerticalScrollOffset = 0,
-				ScrollSpeed = 15,
-				MaxVisibleHeight = uiScreenZone.Area.Height,
-			};
+			var scrollState = scrollStateService.GetScrollStateFromModel(uiZoneModel.ScrollStateModel);
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiZone>(uiScreenZone.Area.ToSubArea, null);
 			var uiZone = new UiZone
 			{
@@ -266,23 +263,24 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Get the user interface uiBlock.
+		/// Get the user interface block from the model.
 		/// </summary>
-		/// <param name="uiBlockModel">The user interface uiBlock model.</param>
-		/// <returns>The user interface uiBlock.</returns>
-		public UiBlock GetUiBlock(UiBlockModel uiBlockModel)
+		/// <param name="uiBlockModel">The user interface block model.</param>
+		/// <returns>The user interface block.</returns>
+		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
+			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var rows = new List<UiRow>();
 
 			foreach (var rowModel in uiBlockModel.Rows ?? [])
 			{
-				var row = this.GetUiRow(rowModel);
+				var row = this.GetUiRowFromModel(rowModel);
 
 				if ((true == uiBlockModel.FlexRows) &&
 					(row.TotalWidth > zoneArea.Width))
@@ -294,7 +292,9 @@ namespace Common.UserInterface.Services
 					rows.Add(row);
 			}
 
-			var contentWidth = rows.Sum(e => e.TotalWidth);
+			var contentWidth = rows.Select(e => e.TotalWidth)
+								   .OrderDescending()
+								   .FirstOrDefault();
 			var contentHeight = rows.Sum(e => e.TotalHeight);
 			var dynamicRows = rows.Where(r => r.Elements.Any(e => DynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
@@ -325,7 +325,7 @@ namespace Common.UserInterface.Services
 				if (true == uiBlockModel.ExtendBackgroundToMargin)
 					graphicArea = new SubArea
 					{
-						Width = area.Width,
+						Width = zoneArea.Width,
 						Height = area.Height + margin.TopMargin + margin.BottomMargin
 					};
 
@@ -344,13 +344,7 @@ namespace Common.UserInterface.Services
 				// LOGGING
 			}
 
-			var scrollState = new ScrollState
-			{
-				DisableScrolling = uiBlockModel.DisableScrolling,
-				VerticalScrollOffset = 0,
-				ScrollSpeed = 15,
-				MaxVisibleHeight = area.Height,
-			};
+			var scrollState = scrollStateService.GetScrollStateFromModel(uiBlockModel.ScrollStateModel);
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(area, null);
 			var result = new UiBlock
 			{
@@ -373,11 +367,11 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface block.
+		/// Gets the user interface row.
 		/// </summary>
-		/// <param name="uiRowModel">The user interface block model.</param>
-		/// <returns>The user interface block.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel)
+		/// <param name="uiRowModel">The user interface block row.</param>
+		/// <returns>The user interface row.</returns>
+		public UiRow GetUiRowFromModel(UiRowModel uiRowModel)
 		{
 			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();

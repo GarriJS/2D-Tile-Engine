@@ -110,7 +110,8 @@ namespace Common.UserInterface.Models
 			if (null != this.ScrollState?.ScrollRenderTarget)
 			{
 				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
-				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White);
+				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White); 
+				this.ScrollState.Draw(gameTime, gameServices, this.Position.Coordinates, Color.White);
 			}
 			else
 				this.DrawContents(gameTime, gameServices, this.Position.Coordinates, Color.White);
@@ -141,15 +142,18 @@ namespace Common.UserInterface.Models
 		/// <returns>A value indicating whether prerendering is needed.</returns>
 		public bool ShouldPreRender()
 		{
+			var needsSubRender = this.Blocks.Any(e => true == e.ShouldPreRender());
+
+			if (true == needsSubRender)
+				return true;
+
+			if (null == this.ScrollState)
+				return false;
+
 			var contentHeight = this.Blocks.Sum(e => e.TotalHeight);
 			var hasExessHeight = contentHeight > this.ScrollState.MaxVisibleHeight;
 
-			if (true == hasExessHeight)
-				return true;
-
-			var needsSubRender = this.Blocks.Any(e => true == e.ShouldPreRender());
-
-			return needsSubRender;
+			return hasExessHeight;
 		}
 
 		/// <summary>
@@ -204,6 +208,7 @@ namespace Common.UserInterface.Models
 				blockLayout.Block.UpdateOffsets();
 			}
 
+			this.ScrollState?.UpdateOffset(this.Area.Width, this.Area.Width, 0);
 			this.ResetCalculateCachedOffsets = false;
 		}
 
@@ -279,6 +284,7 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
+			this.ScrollState.Dispose();
 			this.CursorConfiguration?.Dispose();
 
 			foreach (var elementRow in this.Blocks ?? [])

@@ -14,7 +14,7 @@ namespace Engine.Core.State
 	/// <param name="gameServices">The game services.</param>
 	sealed public class GameStateService(GameServiceContainer gameServices) : IGameStateService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets a value describing whether the engine should launch in debug mode.

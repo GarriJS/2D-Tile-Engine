@@ -14,12 +14,12 @@ namespace Engine.Core.Initialization.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class FunctionService(GameServiceContainer gameServices) : IFunctionService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the functions.
 		/// </summary>
-		private Dictionary<string, Delegate> Functions { get; } = [];
+		readonly private Dictionary<string, Delegate> Functions = [];
 
 		/// <summary>
 		/// Tries to add the function.

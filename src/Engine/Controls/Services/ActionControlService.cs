@@ -20,12 +20,12 @@ namespace Engine.Controls.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class ActionControlService(GameServiceContainer gameServices) : IActionControlServices
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the controls file name.
 		/// </summary>
-		private string ControlsFileName { get; } = "Controls";
+		readonly private string _controlsFileName = "Controls";
 
 		/// <summary>
 		/// Gets the action actionControlModels.
@@ -46,7 +46,7 @@ namespace Engine.Controls.Services
 
 				foreach (var controlName in controlNames)
 				{
-					using var stream = jsonService.GetJsonFileStream(contentManagerName, this.ControlsFileName, controlName);
+					using var stream = jsonService.GetJsonFileStream(contentManagerName, this._controlsFileName, controlName);
 					var actionControlModels = serializer.Deserialize(stream);
 
 					foreach (var actionControlModel in actionControlModels)

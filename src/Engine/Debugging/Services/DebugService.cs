@@ -3,11 +3,9 @@ using Engine.Core.State.Contracts;
 using Engine.Debugging.Models;
 using Engine.Debugging.Services.Contracts;
 using Engine.DiskModels.Physics;
-using Engine.Graphics.Models;
 using Engine.Physics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 
 namespace Engine.Debugging.Services
 {
@@ -20,7 +18,7 @@ namespace Engine.Debugging.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class DebugService(GameServiceContainer gameServices) : IDebugService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// The debug flag name. TODO find a proper place.
@@ -56,11 +54,6 @@ namespace Engine.Debugging.Services
 		/// Gets or sets the debug update runtime.
 		/// </summary>
 		public DebugUpdateRuntime DebugUpdateRuntime { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the screen area indicator images.
-		/// </summary>
-		private List<IndependentGraphic> ScreenAreaIndicatorImages { get; set; } = [];
 
 		/// <summary>
 		/// Configures the service.

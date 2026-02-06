@@ -59,7 +59,7 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// ConfigureService the user interface zones.
+		/// Initializes the user interface zones.
 		/// </summary>
 		public void InitializeUiScreenZones()
 		{

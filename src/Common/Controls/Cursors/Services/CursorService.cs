@@ -83,18 +83,18 @@ namespace Common.Controls.Cursors.Services
 				}
 			};
 
-			var cursor = this.GetCursor(cursorModel, addCursor: true);
+			var cursor = this.GetCursorFromModel(cursorModel, addCursor: true);
 			this.CursorControlComponent.SetPrimaryCursor(cursor);
 		}
 
 		/// <summary>
-		/// Gets the cursor.
+		/// Gets the cursor from the model.
 		/// </summary>
 		/// <param name="cursorModel">The cursor model.</param>
 		/// <param name="addCursor">A value indicating whether to add the cursors.</param>
 		/// <param name="drawLayerOffset">The draw layer offset.</param>
 		/// <returns>The cursor.</returns>
-		public Cursor GetCursor(CursorModel cursorModel, bool addCursor = false, byte drawLayerOffset = 0)
+		public Cursor GetCursorFromModel(CursorModel cursorModel, bool addCursor = false, byte drawLayerOffset = 0)
 		{
 			if (null == cursorModel)
 			{

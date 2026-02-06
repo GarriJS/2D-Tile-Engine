@@ -15,12 +15,12 @@ namespace Engine.Core.Fonts.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class FontService(GameServiceContainer gameServices) : IFontService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets or sets the sprite fonts.
+		/// The sprite fonts.
 		/// </summary>
-		private Dictionary<string, SpriteFont> SpriteFonts { get; set; } = [];
+		readonly private Dictionary<string, SpriteFont> _spriteFonts = [];
 
 		/// <summary>
 		/// Gets or sets the debug sprite font name.
@@ -58,7 +58,7 @@ namespace Engine.Core.Fonts.Services
 				foreach (var managerFontName in managerFontNames)
 				{
 					var font = contentManager.Load<SpriteFont>($@"{contentManagerName}\Fonts\{managerFontName}");
-					this.SpriteFonts.Add(managerFontName, font);
+					this._spriteFonts.Add(managerFontName, font);
 				}
 			}
 
@@ -72,7 +72,7 @@ namespace Engine.Core.Fonts.Services
 		/// <returns>The sprite font.</returns>
 		public SpriteFont GetSpriteFont(string spriteFontName)
 		{
-			if (true == this.SpriteFonts.TryGetValue(spriteFontName, out var font))
+			if (true == this._spriteFonts.TryGetValue(spriteFontName, out var font))
 				return font;
 
 			//LOGGING

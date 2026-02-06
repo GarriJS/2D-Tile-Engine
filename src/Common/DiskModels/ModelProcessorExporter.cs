@@ -25,6 +25,7 @@ namespace Common.DiskModels
 			var uiElementService = gameServices.GetService<IUserInterfaceElementService>();
 			var uiService = gameServices.GetService<IUserInterfaceService>();
 			var cursorService = gameServices.GetService<ICursorService>();
+			var scrollStateService = gameServices.GetService<IScrollStateService>();
 
 			(Type type, Delegate factory)[] result =
 			[
@@ -33,11 +34,12 @@ namespace Common.DiskModels
 				(typeof(TileModel), tileService.GetTileFromModel),
 				(typeof(UiMarginModel), uiElementService.GetUiMarginFromModel),
 				(typeof(GraphicalTextWithMarginModel), uiElementService.GetGraphicTextWithMarginFromModel),
-				(typeof(UiGroupModel), uiService.GetUiGroup),
-				(typeof(UiZoneModel), uiService.GetUiZone),
-				(typeof(UiBlockModel), uiService.GetUiBlock),
-				(typeof(UiRowModel), uiService.GetUiRow),
-				(typeof(CursorModel), cursorService.GetCursor)
+				(typeof(UiGroupModel), uiService.GetUiGroupFromModel),
+				(typeof(UiZoneModel), uiService.GetUiZoneFromModel),
+				(typeof(UiBlockModel), uiService.GetUiBlockFromModel),
+				(typeof(UiRowModel), uiService.GetUiRowFromModel),
+				(typeof(CursorModel), cursorService.GetCursorFromModel),
+				(typeof(ScrollStateModel), scrollStateService.GetScrollStateFromModel)
 			];
 
 			return result;

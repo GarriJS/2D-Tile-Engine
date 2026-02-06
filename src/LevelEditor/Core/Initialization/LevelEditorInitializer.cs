@@ -201,7 +201,6 @@ namespace LevelEditor.Core.Initialization
 						new UiZoneModel
 						{
 							Name = "Disc Zone",
-							DisableScrolling = true,
 							UiZonePositionType = UiZonePositionType.Row3Col1,
 							BackgroundTexture = null,
 							VerticalJustificationType = UiVerticalJustificationType.Top,
@@ -210,7 +209,6 @@ namespace LevelEditor.Core.Initialization
 							[
 								new UiBlockModel
 								{
-									DisableScrolling = true,
 									FlexRows = true,
 									Rows =
 									[
@@ -348,7 +346,6 @@ namespace LevelEditor.Core.Initialization
 								},
 								new UiBlockModel
 								{
-									DisableScrolling = false,
 									FlexRows = true,
 									Rows =
 									[

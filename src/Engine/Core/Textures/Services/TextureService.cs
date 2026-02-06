@@ -16,7 +16,7 @@ namespace Engine.Core.Textures.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class TextureService(GameServiceContainer gameServices) : ITextureService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the debug texture.

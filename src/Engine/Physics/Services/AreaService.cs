@@ -18,7 +18,7 @@ namespace Engine.Physics.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class AreaService(GameServiceContainer gameServices) : IAreaService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the area from the model.

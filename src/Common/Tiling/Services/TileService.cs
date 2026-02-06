@@ -55,7 +55,7 @@ namespace Common.Tiling.Services
 				CursorUpdaterName = CommonCursorUpdatersNames.TileGridCursorUpdater
 			};
 
-			_ = cursorService.GetCursor(cursorModel, addCursor: true);
+			_ = cursorService.GetCursorFromModel(cursorModel, addCursor: true);
 		}
 
 		/// <summary>

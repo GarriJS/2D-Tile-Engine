@@ -22,7 +22,7 @@ namespace Common.UserInterface.Services.Contracts
 		public Dictionary<UiZonePositionType, UiScreenZone> UserInterfaceScreenZones { get; set; }
 
 		/// <summary>
-		/// ConfigureService the user interface zones.
+		/// Initializes the user interface zones.
 		/// </summary>
 		public void InitializeUiScreenZones();
 	}

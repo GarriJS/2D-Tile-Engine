@@ -145,6 +145,7 @@ namespace Common.UserInterface.Models
 			{
 				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
 				drawingService.Draw(this.ScrollState.ScrollRenderTarget, coordinates + graphicOffset, sourceRectangle, Color.White);
+				this.ScrollState.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			}
 			else
 				this.DrawContents(gameTime, gameServices, coordinates, Color.White, graphicOffset);
@@ -234,6 +235,15 @@ namespace Common.UserInterface.Models
 				rowLayout.Row.CachedOffset = rowLayout.Offset;
 				rowLayout.Row.UpdateOffsets();
 			}
+
+			var contentWidth = this.Rows.Select(e => e.TotalWidth)
+										.OrderDescending()
+										.FirstOrDefault();
+			var smallestRowOffSet = this.Rows.Where(e => true == e.CachedOffset.HasValue)
+											 .Select(e => e.CachedOffset.Value.X)
+											 .Order()
+											 .FirstOrDefault();
+			this.ScrollState?.UpdateOffset(this.AvailableWidth, contentWidth, smallestRowOffSet);
 		}
 
 		/// <summary>
@@ -315,6 +325,9 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
+			this.ScrollState?.Dispose();
+			this.CursorConfiguration.Dispose();
+
 			foreach (var row in this.Rows ?? [])
 				row?.Dispose();
 		}

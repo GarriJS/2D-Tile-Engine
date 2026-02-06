@@ -37,7 +37,7 @@ namespace Common.UserInterface.Services.Contracts
 		/// </summary>
 		/// <param name="uiGroupModel">The user interface group model.</param>
 		/// <returns>The user interface group.</returns>
-		public UiGroup GetUiGroup(UiGroupModel uiGroupModel);
+		public UiGroup GetUiGroupFromModel(UiGroupModel uiGroupModel);
 
 		/// <summary>
 		/// Toggles the user interface group visibility.
@@ -46,24 +46,24 @@ namespace Common.UserInterface.Services.Contracts
 		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
 
 		/// <summary>
-		/// Gets the user interface zone.
+		/// Gets the user interface zone from the model.
 		/// </summary>
 		/// <param name="uiZoneModel">The user interface model.</param>
 		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZone(UiZoneModel uiZoneModel);
+		public UiZone GetUiZoneFromModel(UiZoneModel uiZoneModel);
 
 		/// <summary>
-		/// Get the user interface block.
+		/// Get the user interface block from the model.
 		/// </summary>
 		/// <param name="uiBlockModel">The user interface block model.</param>
 		/// <returns>The user interface block.</returns>
-		public UiBlock GetUiBlock(UiBlockModel uiBlockModel);
+		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel);
 
 		/// <summary>
-		/// Gets the user interface row.
+		/// Gets the user interface row from the model.
 		/// </summary>
 		/// <param name="uiRowModel">The user interface row model.</param>
 		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRow(UiRowModel uiRowModel);
+		public UiRow GetUiRowFromModel(UiRowModel uiRowModel);
 	}
 }

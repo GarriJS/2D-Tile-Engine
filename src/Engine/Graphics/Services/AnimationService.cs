@@ -17,7 +17,7 @@ namespace Engine.Graphics.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class AnimationService(GameServiceContainer gameServices) : IAnimationService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the animation from the model.

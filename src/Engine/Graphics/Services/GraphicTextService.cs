@@ -16,7 +16,7 @@ namespace Engine.Graphics.Services
 	/// <param name="gameService">The game services.</param>
 	sealed public class GraphicTextService(GameServiceContainer gameService) : IGraphicTextService
 	{
-		private readonly GameServiceContainer _gameServices = gameService;
+		readonly private GameServiceContainer _gameServices = gameService;
 
 		/// <summary>
 		/// Measures the string.

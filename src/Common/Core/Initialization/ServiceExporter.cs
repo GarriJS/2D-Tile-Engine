@@ -25,17 +25,20 @@ namespace Common.Core.Initialization
 		/// <returns>The service contract pairs.</returns>
 		static public (Type type, object provider)[] GetServiceContractPairs(Game game)
 		{
-			return
+			(Type type, object provider)[] result =
 			[
 				(typeof(ICommonDebugService), new CommonDebugService(game.Services)),
 				(typeof(ICursorService), new CursorService(game.Services)),
 				(typeof(ICursorInteractionService), new CursorInteractionService(game.Services)),
+				(typeof(IScrollStateService), new ScrollStateService(game.Services)),
 				(typeof(IUserInterfaceScreenZoneService), new UserInterfaceScreenZoneService(game.Services)),
 				(typeof(IUserInterfaceElementService), new UserInterfaceElementService(game.Services)),
 				(typeof(IUserInterfaceService), new UserInterfaceService(game.Services)),
 				(typeof(IUserInterfaceLocationService), new UserInterfaceLocationService(game.Services)),
 				(typeof(ITileService), new TileService(game.Services))
 			];
+
+			return result;
 		}
 	}
 }

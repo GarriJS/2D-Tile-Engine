@@ -23,7 +23,7 @@ namespace Engine.Graphics.Services
 	/// <param name="gameService">The game services.</param>
 	sealed public class ImageService(GameServiceContainer gameService) : IImageService
 	{
-		private readonly GameServiceContainer _gameServices = gameService;
+		readonly private GameServiceContainer _gameServices = gameService;
 
 		/// <summary>
 		/// Gets the image from the model.

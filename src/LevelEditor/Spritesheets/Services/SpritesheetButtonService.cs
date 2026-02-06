@@ -68,7 +68,7 @@ namespace LevelEditor.Spritesheets.Services
 				Graphic = elementGraphicModel,
 				CursorUpdaterName = LevelEditorCursorUpdatersNames.SpritesheetButtonCursorUpdater
 			};
-			var secondaryCursor = cursorService.GetCursor(secondaryCursorModel, addCursor: false, drawLayerOffset: 1);
+			var secondaryCursor = cursorService.GetCursorFromModel(secondaryCursorModel, addCursor: false, drawLayerOffset: 1);
 			cursorService.CursorControlComponent.AddSecondaryCursor(secondaryCursor, disableExisting: true);
 
 			if (false == cursorService.Cursors.TryGetValue(CommonCursorNames.BasicCursorName, out var primaryCursor))
@@ -88,7 +88,7 @@ namespace LevelEditor.Spritesheets.Services
 				},
 				Graphic = elementGraphicModel
 			};
-			var secondaryHoverCursor = cursorService.GetCursor(secondaryHoverCursorModel, addCursor: false);
+			var secondaryHoverCursor = cursorService.GetCursorFromModel(secondaryHoverCursorModel, addCursor: false);
 			cursorService.CursorControlComponent.AddSecondaryHoverCursor(secondaryHoverCursor, disableExisting: true);
 			var sceneEditService = this._gameServices.GetService<ISceneEditService>();
 			var addTileParams = new AddTileParams
@@ -167,7 +167,7 @@ namespace LevelEditor.Spritesheets.Services
 				]
 			};
 
-			return uiService.GetUiZone(uiZoneModel);
+			return uiService.GetUiZoneFromModel(uiZoneModel);
 		}
 
 		/// <summary>

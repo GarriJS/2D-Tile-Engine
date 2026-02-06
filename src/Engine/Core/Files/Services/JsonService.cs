@@ -13,12 +13,12 @@ namespace Engine.Core.Files.Services
 	/// <param name="gameServices">The game services.</param>
 	sealed public class JsonService(GameServiceContainer gameServices) : IJsonService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets or sets the current directory.
+		/// The current directory.
 		/// </summary>
-		private string CurrentDirectory {get; set;} = Directory.GetCurrentDirectory();
+		readonly private string _currentDirectory = Directory.GetCurrentDirectory();
 
 		/// <summary>
 		/// Gets the JSON file stream.
@@ -49,7 +49,7 @@ namespace Engine.Core.Files.Services
 		/// <returns>The JSON file path.</returns>
 		public string GetJsonFilePath(string contentManagerName, string folderName, string fileName, bool createDirectoryIfDoesNotExist = false)
 		{
-			var folderPath = Path.Combine(this.CurrentDirectory, contentManagerName, folderName);
+			var folderPath = Path.Combine(this._currentDirectory, contentManagerName, folderName);
 
 			if ((true == createDirectoryIfDoesNotExist) &&
 				(false == Directory.Exists(folderPath)))
@@ -68,7 +68,7 @@ namespace Engine.Core.Files.Services
 		/// <returns>The JSON file names.</returns>
 		public string[] GetJsonFileNames(string contentManagerName, string folderName)
 		{
-			var folderPath = Path.Combine(this.CurrentDirectory, contentManagerName, folderName);
+			var folderPath = Path.Combine(this._currentDirectory, contentManagerName, folderName);
 
 			if (false == Directory.Exists(folderPath))
 				return [];

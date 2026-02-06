@@ -10,9 +10,6 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
-		[JsonPropertyName("disableScrolling")]
-		public bool DisableScrolling { get; set; }
-
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
@@ -33,6 +30,9 @@ namespace Common.DiskModels.UserInterface
 
 		[JsonPropertyName("hoverCursorName")]
 		public string HoverCursorName { get; set; }
+		
+		[JsonPropertyName("scrollStateModel")]
+		public ScrollStateModel ScrollStateModel { get; set; }
 
 		[JsonPropertyName("backgroundTexture")]
 		public SimpleImageModel BackgroundTexture { get; set; }

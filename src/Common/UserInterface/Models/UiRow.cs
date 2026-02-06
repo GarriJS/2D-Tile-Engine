@@ -227,6 +227,8 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
+			this.CursorConfiguration.Dispose();
+
 			foreach (var subElement in this.Elements ?? Enumerable.Empty<IAmAUiElement>())
 				subElement?.Dispose();
 		}
