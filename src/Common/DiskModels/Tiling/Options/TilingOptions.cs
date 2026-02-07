@@ -6,7 +6,7 @@ namespace Common.DiskModels.Tiling.Options
 {
 	static public class TilingOptions 
 	{
-		static private readonly JsonSerializerOptions _tileMapOptions = new()
+		static readonly private JsonSerializerOptions _tileMapOptions = new()
 		{
 			Converters = { new RectangleJsonConverter() },
 			TypeInfoResolver = new DiskModelTypeResolver(),

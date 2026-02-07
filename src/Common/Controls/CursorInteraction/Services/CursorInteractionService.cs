@@ -12,9 +12,9 @@ namespace Common.Controls.CursorInteraction.Services
 	/// Initializes the cursor interaction service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class CursorInteractionService(GameServiceContainer gameServices) : ICursorInteractionService
+	sealed public class CursorInteractionService(GameServiceContainer gameServices) : ICursorInteractionService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the hover configuration.
@@ -27,7 +27,7 @@ namespace Common.Controls.CursorInteraction.Services
 		/// <returns>The hover configuration.</returns>
 		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, SubArea clickArea, Vector2 offset = default, Vector2 clickOffset = default)
 		{
-			var cursorConfiguration = new CursorConfiguration<T>
+			var result = new CursorConfiguration<T>
 			{
 				Area = area,
 				ClickArea = clickArea,
@@ -35,7 +35,7 @@ namespace Common.Controls.CursorInteraction.Services
 				ClickOffset = clickOffset
 			};
 
-			return cursorConfiguration;
+			return result;
 		}
 	}
 }

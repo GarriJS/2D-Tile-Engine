@@ -26,7 +26,7 @@ namespace Engine.Core.Initialization
 
 			foreach (var model in initialModels ?? [])
 			{
-				if (null == model)
+				if (model is null)
 					continue;
 
 				if (false == ModelProcessingMappings.TryGetValue(model.GetType(), out var func))

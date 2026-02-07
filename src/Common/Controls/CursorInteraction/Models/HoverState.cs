@@ -11,7 +11,7 @@ namespace Common.Controls.CursorInteraction.Models
 	/// <summary>
 	/// Represents a hover state.
 	/// </summary>
-	public class HoverState
+	sealed public class HoverState
 	{
 		/// <summary>
 		/// Gets or sets the top cursor configuration.
@@ -31,11 +31,11 @@ namespace Common.Controls.CursorInteraction.Models
 		/// <summary>
 		/// Gets or sets the hover object location.
 		/// </summary>
-		public LocationExtender<IHaveACursorConfiguration> HoverObjectLocation { get; set; }
+		public Vector2Extender<IHaveACursorConfiguration>? HoverObjectLocation { get; set; }
 
 		/// <summary>
-		/// Get or sets the hovered object.
+		/// The hovered object.
 		/// </summary>
-		public Dictionary<Type, object> HoveredObjects { get; set; }
+		readonly public Dictionary<Type, object> _hoveredObjects = [];
 	}
 }

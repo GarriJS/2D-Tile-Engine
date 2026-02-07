@@ -4,9 +4,9 @@ using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
-using Common.UserInterface.Models.LayoutInfo;
 using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
+using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
@@ -20,7 +20,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface row.
 	/// </summary>
-	public class UiRow : IAmSubDrawable, IAmDebugSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
+	sealed public class UiRow : IAmSubDrawable, IAmDebugSubDrawable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiRow>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -30,22 +30,22 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface row name.
 		/// </summary>
-		public string Name { get; set; }
+		required public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user interface row should flex.
 		/// </summary>
-		public bool Flex { get; set; }
+		required public bool Flex { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether to extend the background to the margins.
 		/// </summary>
-		public bool ExtendBackgroundToMargin { get; set; }
+		required public bool ExtendBackgroundToMargin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the available width to the row.
 		/// </summary>
-		public float AvailableWidth { get; set; }
+		required public float AvailableWidth { get; set; }
 
 		/// <summary>
 		/// Gets the total width.
@@ -70,32 +70,32 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface margin
 		/// </summary>
-		public UiMargin Margin { get; set; }
+		required public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface horizontal justification type. 
 		/// </summary>
-		public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
+		required public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface vertical justification type.
 		/// </summary>
-		public UiVerticalJustificationType VerticalJustificationType { get; set; }
+		required public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public SubArea Area { get; set; }
+		required public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
-		public IAmAGraphic Graphic { get; set; }
+		required public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets or sets the hover cursor.
 		/// </summary>
-		public Cursor HoverCursor { get; set; }
+		required public Cursor HoverCursor { get; set; }
 
 		/// <summary>
 		/// Gets the base hover configuration.
@@ -105,12 +105,12 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the hover configuration.
 		/// </summary>
-		public CursorConfiguration<UiRow> CursorConfiguration { get; set; }
+		required public CursorConfiguration<UiRow> CursorConfiguration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface elements.
+		/// The user interface elements.
 		/// </summary>
-		public List<IAmAUiElement> Elements { get; set; }
+		readonly public List<IAmAUiElement> _elements = [];
 
 		/// <summary>
 		/// Raises the hover event.
@@ -142,7 +142,7 @@ namespace Common.UserInterface.Models
 			var backgroundOffset = graphicOffset + marginGraphicOffset;
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, backgroundOffset);
 
-			foreach (var element in this.Elements ?? [])
+			foreach (var element in this._elements ?? [])
 				element.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
@@ -152,16 +152,16 @@ namespace Common.UserInterface.Models
 		public void UpdateOffsets()
 		{
 			foreach (var layout in this.EnumerateLayout() ?? [])
-				layout.Element.CachedOffset = layout.Offset;
+				layout.Subject.CachedOffset = layout.Vector;
 		}
 
 		/// <summary>
 		/// Enumerates the layout.
 		/// </summary>
 		/// <returns>The enumerated layout.</returns>
-		public IEnumerable<ElementLayoutInfo> EnumerateLayout()
+		public IEnumerable<Vector2Extender<IAmAUiElement>> EnumerateLayout()
 		{
-			var contentWidth = this.Elements.Sum(e => e.TotalWidth);
+			var contentWidth = this._elements.Sum(e => e.TotalWidth);
 			var horizontalOffset = this.HorizontalJustificationType switch
 			{
 				UiHorizontalJustificationType.Center => (this.TotalWidth - contentWidth) / 2,
@@ -172,7 +172,7 @@ namespace Common.UserInterface.Models
 			if (horizontalOffset < 0)
 				horizontalOffset = 0;
 
-			foreach (var element in this.Elements ?? [])
+			foreach (var element in this._elements ?? [])
 			{
 				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
 				var elementRight = elementLeft + element.InsideWidth;
@@ -188,14 +188,14 @@ namespace Common.UserInterface.Models
 
 				var elementTop = verticalOffset + element.Margin.TopMargin;
 				var elementBottom = elementTop + element.InsideHeight;
-				var result = new ElementLayoutInfo
+				var result = new Vector2Extender<IAmAUiElement>
 				{
-					Element = element,
-					Offset = new Vector2
+					Vector = new Vector2
 					{
 						X = elementLeft,
 						Y = elementTop
-					}
+					},
+					Subject = element,
 				};
 
 				yield return result;
@@ -216,7 +216,7 @@ namespace Common.UserInterface.Models
 		{
 			var graphicOffset = offset + (this.CachedOffset ?? default);
 
-			foreach (var element in this.Elements)
+			foreach (var element in this._elements)
 				element.DrawDebug(gameTime, gameServices, coordinates, color, graphicOffset);
 
 			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
@@ -229,7 +229,7 @@ namespace Common.UserInterface.Models
 		{
 			this.CursorConfiguration.Dispose();
 
-			foreach (var subElement in this.Elements ?? Enumerable.Empty<IAmAUiElement>())
+			foreach (var subElement in this._elements ?? Enumerable.Empty<IAmAUiElement>())
 				subElement?.Dispose();
 		}
 	}

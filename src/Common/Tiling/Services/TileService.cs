@@ -16,16 +16,16 @@ using System.Linq;
 
 namespace Common.Tiling.Services
 {
-    /// <summary>
-    /// Represents a tile service.
-    /// </summary>
-    /// <remarks>
-    /// Initializes the tile service.
-    /// </remarks>
-    /// <param name="gameServices">The game services.</param>
-    public class TileService(GameServiceContainer gameServices) : ITileService
+	/// <summary>
+	/// Represents a tile service.
+	/// </summary>
+	/// <remarks>
+	/// Initializes the tile service.
+	/// </remarks>
+	/// <param name="gameServices">The game services.</param>
+	sealed public class TileService(GameServiceContainer gameServices) : ITileService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Loads the content.
@@ -33,7 +33,6 @@ namespace Common.Tiling.Services
 		public void LoadContent()
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
-
 			var cursorModel = new CursorModel
 			{
 				CursorName = CommonCursorNames.TileGridCursorName,
@@ -54,7 +53,6 @@ namespace Common.Tiling.Services
 				},
 				CursorUpdaterName = CommonCursorUpdatersNames.TileGridCursorUpdater
 			};
-
 			_ = cursorService.GetCursorFromModel(cursorModel, addCursor: true);
 		}
 
@@ -83,7 +81,6 @@ namespace Common.Tiling.Services
 		{
 			var col = (int)coordinates.X / TileConstants.TILE_SIZE;
 			var row = (int)coordinates.Y / TileConstants.TILE_SIZE;
-
 			var result = new Vector2
 			{
 				X = (col + gridOffset) * TileConstants.TILE_SIZE,
@@ -101,7 +98,6 @@ namespace Common.Tiling.Services
 		public TileMap GetTileMapFromModel(TileMapModel tileMapModel)
 		{
 			var areaService = this._gameServices.GetService<IAreaService>();
-
 			var areaModel = new AreaModel
 			{
 				Position = new PositionModel
@@ -112,43 +108,33 @@ namespace Common.Tiling.Services
 				Width = 0,
 				Height = 0,
 			};
-
 			var area = areaService.GetAreaFromModel(areaModel);
-
 			var tileMap = new TileMap
 			{
 				TileMapName = tileMapModel.TileMapName,
+				DrawLayer = 0,
 				Area = area,
-				TileMapLayers = []
 			};
 
-			if (null == tileMapModel.TileMapLayers)
-			{
+			if (tileMapModel.TileMapLayers is null)
 				return tileMap;
-			}
 
 			var mapTileModels = tileMapModel.TileMapLayers.SelectMany(e => e.Tiles)
 													      .ToArray();
 
 			foreach (var mapTile in mapTileModels)
-			{
 				if ((mapTile is TileModel tileModel) &&
 					(true == tileMapModel.Graphics.TryGetValue(tileModel.GraphicId, out var tileImage)))
-				{
 					tileModel.Graphic = tileImage;
-				}
-			}
 
 			foreach (var tileMapLayerModel in tileMapModel.TileMapLayers)
 			{
 				var tileMapLayer = this.GetTileMapLayerFromModel(tileMapLayerModel);
 
-				if (null == tileMapLayer)
-				{
+				if (tileMapLayer is null)
 					continue;
-				}
 
-				tileMap.TileMapLayers.Add(tileMapLayer.Layer, tileMapLayer);
+				tileMap._tileMapLayers.Add(tileMapLayer.Layer, tileMapLayer);
 			}
 
 			return tileMap;
@@ -163,25 +149,20 @@ namespace Common.Tiling.Services
 		{
 			var tileMapLayer = new TileMapLayer
 			{
-				Layer = tileMapLayerModel.Layer,
-				Tiles = []
+				Layer = tileMapLayerModel.Layer
 			};
 
-			if (null == tileMapLayerModel.Tiles)
-			{
+			if (tileMapLayerModel.Tiles is null)
 				return tileMapLayer;
-			}
 
 			foreach (var tileModel in tileMapLayerModel.Tiles)
 			{
 				var tile = this.GetTileFromModel(tileModel);
 
-				if (null == tile)
-				{
+				if (tile is null)
 					continue;
-				}
 
-				tileMapLayer.Tiles.Add((tile.Row, tile.Column), tile);
+				tileMapLayer._tiles.Add((tile.Row, tile.Column), tile);
 			}
 
 			return tileMapLayer;
@@ -195,7 +176,6 @@ namespace Common.Tiling.Services
 		public Tile GetTileFromModel(TileModel tileModel)
 		{
 			var graphicService = this._gameServices.GetService<IGraphicService>();
-
 			var graphic = graphicService.GetGraphicFromModel(tileModel.Graphic);
 			var tile = new Tile
 			{

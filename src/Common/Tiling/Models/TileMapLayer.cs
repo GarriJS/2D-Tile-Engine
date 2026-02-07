@@ -10,17 +10,17 @@ namespace Common.Tiling.Models
 	/// <summary>
 	/// Represents a tile map layer.
 	/// </summary>
-	public class TileMapLayer: IAmSubDrawable, ICanBeSerialized<TileMapLayerModel>
+	sealed public class TileMapLayer: IAmSubDrawable, ICanBeSerialized<TileMapLayerModel>
 	{
 		/// <summary>
 		/// Gets or sets the layer.
 		/// </summary>
-		public int Layer { get; set; }
+		required public int Layer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the tiles.
+		/// The tiles.
 		/// </summary>
-		public Dictionary<(int row, int col), Tile> Tiles { get; set; } = [];
+		readonly public Dictionary<(int row, int col), Tile> _tiles = [];
 
 		/// <summary>
 		/// Adds the tile.
@@ -28,7 +28,7 @@ namespace Common.Tiling.Models
 		/// <param name="tile">The tile.</param>
 		public void AddTile(Tile tile)
 		{
-			this.Tiles[(tile.Row, tile.Column)] = tile;
+			this._tiles[(tile.Row, tile.Column)] = tile;
 		}
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Common.Tiling.Models
 		/// <param name="offset">The offset.</param>
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			foreach (var tile in this.Tiles.Values)
+			foreach (var tile in this._tiles.Values)
 				tile.Draw(gameTime, gameServices, coordinates, color, offset);
 		}
 
@@ -51,14 +51,15 @@ namespace Common.Tiling.Models
 		/// <returns>The serialization model.</returns>
 		public TileMapLayerModel ToModel()
 		{ 
-			var tileModels = this.Tiles.Values.Select(e => e.ToModel())
+			var tileModels = this._tiles.Values.Select(e => e.ToModel())
 											  .ToArray();
-
-			return new TileMapLayerModel
+			var result = new TileMapLayerModel
 			{
 				Layer = this.Layer,
 				Tiles = tileModels
 			};
+
+			return result;
 		}
 	}
 }

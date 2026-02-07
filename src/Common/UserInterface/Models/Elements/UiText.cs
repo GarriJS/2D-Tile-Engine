@@ -8,7 +8,7 @@ namespace Common.UserInterface.Models.Elements
 	/// <summary>
 	/// Represents a user interface text.
 	/// </summary>
-	public class UiText : UiElementBase, IHaveGraphicText
+	sealed public class UiText : UiElementBase, IHaveGraphicText
 	{
 		/// <summary>
 		/// Gets or sets the SimpleText text.
@@ -18,7 +18,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets or sets the simple text.
 		/// </summary>
-		public SimpleText SimpleText { get; set; }
+		required public SimpleText SimpleText { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.
@@ -33,7 +33,7 @@ namespace Common.UserInterface.Models.Elements
 			var graphicOffset = offset + this.CachedOffset ?? default;
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			
-			if (null != this.GraphicText)
+			if (this.GraphicText is not null)
 			{
 				var textDimensions = this.GraphicText.GetTextDimensions();
 				var centeredOffset = new Vector2

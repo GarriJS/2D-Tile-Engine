@@ -22,39 +22,39 @@ namespace Common.Controls.Cursors.Models
 	/// Initializes a cursor control Block.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class CursorControlComponent(GameServiceContainer gameServices) : IAmACursorControlContextComponent
+	sealed public class CursorControlComponent(GameServiceContainer gameServices) : IAmACursorControlContextComponent
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether hover cursors are active.
 		/// </summary>
-		public bool HoverCursorActive = false;
+		public bool HoverCursorActive { get; private set; } = false;
 
 		/// <summary>
 		/// Gets or sets the cursor position.
 		/// </summary>
-		public Position CursorPosition { get; set; }
+		required public Position CursorPosition { get; set; }
 
 		/// <summary>
 		/// Gets or sets the primary cursor.
 		/// </summary>
-		public Cursor PrimaryCursor { get; set; }
+		public Cursor PrimaryCursor { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the primary hover cursor.
 		/// </summary>
-		public Cursor PrimaryHoverCursor { get; set; }
+		public Cursor PrimaryHoverCursor { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the secondary cursors.
 		/// </summary>
-		public List<Cursor> SecondaryCursors { get; set; } = [];
+		readonly public List<Cursor> _secondaryCursors = [];
 
 		/// <summary>
 		/// Gets or sets the secondary cursors.
 		/// </summary>
-		public List<Cursor> SecondaryHoverCursors { get; set; } = [];
+		readonly public List<Cursor> _secondaryHoverCursors = [];
 
 		/// <summary>
 		/// Consumes the control state.
@@ -84,17 +84,17 @@ namespace Common.Controls.Cursors.Models
 			var gameStateService = this._gameServices.GetService<IGameStateService>();
 			commonDebugService.ClearDebugUserInterfaceZones();
 
-			if (null == controlState)
+			if (controlState is null)
 				return;
 
 			this.CursorPosition.Coordinates = controlState.MousePosition;
 
-			if (null != hoverState?.TopHoverCursor)
+			if (hoverState?.TopHoverCursor is not null)
 			{
 				this.SetHoverState();
 				this.SetPrimaryHoverCursor(hoverState.TopHoverCursor, clearSecondaryCursors: false);
 
-				foreach (var secondaryCursor in this.SecondaryHoverCursors)
+				foreach (var secondaryCursor in this._secondaryHoverCursors)
 					this.AddSecondaryHoverCursor(secondaryCursor, false);
 			}
 			else
@@ -102,17 +102,17 @@ namespace Common.Controls.Cursors.Models
 				this.ClearHoverState();
 				this.SetPrimaryCursor(this.PrimaryCursor, clearSecondaryCursors: false);
 
-				foreach (var secondaryCursor in this.SecondaryCursors)
+				foreach (var secondaryCursor in this._secondaryCursors)
 					this.AddSecondaryCursor(secondaryCursor, false);
 			}
 
 			this.UpdateActiveCursors(gameTime);
 
-			if (null == hoverState?.HoverObjectLocation)
+			if (hoverState?.HoverObjectLocation is null)
 				return;
 
-			var uiObject = hoverState.HoverObjectLocation.Subject;
-			var elementLocation = hoverState.HoverObjectLocation.Location;
+			var uiObject = hoverState.HoverObjectLocation.Value.Subject;
+			var elementLocation = hoverState.HoverObjectLocation.Value.Vector;
 
 			switch (uiObject)
 			{
@@ -121,8 +121,8 @@ namespace Common.Controls.Cursors.Models
 					var elementCursorInteraction = new CursorInteraction<IAmAUiElement>
 					{
 						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
-						ElementLocation = elementLocation,
-						Element = uiElement
+						SubjectLocation = elementLocation,
+						Subject = uiElement
 					};
 
 					if (true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick))
@@ -141,8 +141,8 @@ namespace Common.Controls.Cursors.Models
 					var rowCursorInteraction = new CursorInteraction<UiRow>
 					{
 						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
-						ElementLocation = elementLocation,
-						Element = uiRowWithLocation
+						SubjectLocation = elementLocation,
+						Subject = uiRowWithLocation
 					};
 					uiRowWithLocation.RaiseHoverEvent(rowCursorInteraction);
 
@@ -153,8 +153,8 @@ namespace Common.Controls.Cursors.Models
 					var zoneCursorInteraction = new CursorInteraction<UiZone>
 					{
 						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
-						ElementLocation = elementLocation,
-						Element = uiZone
+						SubjectLocation = elementLocation,
+						Subject = uiZone
 					};
 					uiZone.RaiseHoverEvent(zoneCursorInteraction);
 
@@ -164,11 +164,11 @@ namespace Common.Controls.Cursors.Models
 			gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var isDebugMode);
 
 			if ((true == isDebugMode) &&
-				(true == hoverState.HoveredObjects.TryGetValue(typeof(UiZone), out var value)) &&
+				(true == hoverState._hoveredObjects.TryGetValue(typeof(UiZone), out var value)) &&
 				(value is UiZone hoveredUiZone))
 				commonDebugService.AddDebugUserInterfaceZone(hoveredUiZone);
 
-			if ((null != hoverState.BottomScrollable?.ScrollState) &&
+			if ((hoverState.BottomScrollable?.ScrollState is not null) &&
 				(false == hoverState.BottomScrollable.ScrollState.DisableScrolling) &&
 				(0 != controlState.MouseVerticalScrollDelta))
 				hoverState.BottomScrollable.ScrollState.Scroll(controlState.MouseVerticalScrollDelta);
@@ -184,14 +184,14 @@ namespace Common.Controls.Cursors.Models
 			{
 				this.PrimaryCursor.Update(gameTime, this._gameServices);
 
-				foreach (var cursor in this.SecondaryCursors)
+				foreach (var cursor in this._secondaryCursors)
 					cursor.Update(gameTime, this._gameServices);
 			}
 			else
 			{
 				this.PrimaryHoverCursor.Update(gameTime, this._gameServices);
 
-				foreach (var hoverCursor in this.SecondaryHoverCursors)
+				foreach (var hoverCursor in this._secondaryHoverCursors)
 					hoverCursor.Update(gameTime, this._gameServices);
 			}
 		}
@@ -208,10 +208,10 @@ namespace Common.Controls.Cursors.Models
 
 			if (true == clearSecondaryCursors)
 			{
-				foreach (var secondaryCursor in this.SecondaryCursors)
+				foreach (var secondaryCursor in this._secondaryCursors)
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
 
-				this.SecondaryCursors.Clear();
+				this._secondaryCursors.Clear();
 			}
 
 			if ((true == this.HoverCursorActive) &&
@@ -224,7 +224,7 @@ namespace Common.Controls.Cursors.Models
 
 			this.HoverCursorActive = false;
 
-			if (null != this.PrimaryCursor)
+			if (this.PrimaryCursor is not null)
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryCursor);
 
 			this.PrimaryCursor = cursor;
@@ -243,7 +243,7 @@ namespace Common.Controls.Cursors.Models
 			if (this.PrimaryCursor == cursor)
 				return;
 
-			if (true == this.SecondaryCursors.Contains(cursor))
+			if (true == this._secondaryCursors.Contains(cursor))
 			{
 				if (false == this.HoverCursorActive)
 					runTimeOverlaidDrawService.AddDrawable(cursor);
@@ -253,13 +253,13 @@ namespace Common.Controls.Cursors.Models
 
 			if (true == disableExisting)
 			{
-				foreach (var secondaryCursor in this.SecondaryCursors)
+				foreach (var secondaryCursor in this._secondaryCursors)
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
 
-				this.SecondaryCursors.Clear();
+				this._secondaryCursors.Clear();
 			}
 
-			this.SecondaryCursors.Add(cursor);
+			this._secondaryCursors.Add(cursor);
 
 			if (false == this.HoverCursorActive)
 				runTimeOverlaidDrawService.AddDrawable(cursor);
@@ -277,10 +277,10 @@ namespace Common.Controls.Cursors.Models
 
 			if (true == clearSecondaryCursors)
 			{
-				foreach (var secondaryCursor in this.SecondaryHoverCursors)
+				foreach (var secondaryCursor in this._secondaryHoverCursors)
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
 
-				this.SecondaryCursors.Clear();
+				this._secondaryCursors.Clear();
 			}
 
 			if ((false == this.HoverCursorActive) &&
@@ -293,7 +293,7 @@ namespace Common.Controls.Cursors.Models
 
 			this.HoverCursorActive = true;
 
-			if (null != this.PrimaryHoverCursor)
+			if (this.PrimaryHoverCursor is not null)
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryHoverCursor);
 
 			this.PrimaryHoverCursor = cursor;
@@ -312,7 +312,7 @@ namespace Common.Controls.Cursors.Models
 			if (this.PrimaryHoverCursor == cursor)
 				return;
 
-			if (true == this.SecondaryHoverCursors.Contains(cursor))
+			if (true == this._secondaryHoverCursors.Contains(cursor))
 			{
 				if (true == this.HoverCursorActive)
 					runTimeOverlaidDrawService.AddDrawable(cursor);
@@ -322,13 +322,13 @@ namespace Common.Controls.Cursors.Models
 
 			if (true == disableExisting)
 			{
-				foreach (var secondaryCursor in this.SecondaryHoverCursors)
+				foreach (var secondaryCursor in this._secondaryHoverCursors)
 					runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
 
-				this.SecondaryHoverCursors.Clear();
+				this._secondaryHoverCursors.Clear();
 			}
 
-			this.SecondaryHoverCursors.Add(cursor);
+			this._secondaryHoverCursors.Add(cursor);
 
 			if (true == this.HoverCursorActive)
 				runTimeOverlaidDrawService.AddDrawable(cursor);
@@ -345,10 +345,10 @@ namespace Common.Controls.Cursors.Models
 			this.HoverCursorActive = false;
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
-			if (null != this.PrimaryHoverCursor)
+			if (this.PrimaryHoverCursor is not null)
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryHoverCursor);
 
-			foreach (var secondaryCursor in this.SecondaryHoverCursors)
+			foreach (var secondaryCursor in this._secondaryHoverCursors)
 				runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
 		}
 
@@ -363,10 +363,10 @@ namespace Common.Controls.Cursors.Models
 			this.HoverCursorActive = true;
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
-			if (null != this.PrimaryCursor)
+			if (this.PrimaryCursor is not null)
 				runTimeOverlaidDrawService.RemoveDrawable(this.PrimaryCursor);
 
-			foreach (var secondaryCursor in this.SecondaryCursors)
+			foreach (var secondaryCursor in this._secondaryCursors)
 				runTimeOverlaidDrawService.RemoveDrawable(secondaryCursor);
 		}
 	}

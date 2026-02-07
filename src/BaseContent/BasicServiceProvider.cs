@@ -13,7 +13,7 @@ namespace BaseContent
 	/// <param name="graphicsDeviceManager">The graphics device manager.</param>
 	public class BasicServiceProvider(GraphicsDeviceManager graphicsDeviceManager) : IServiceProvider
 	{
-		private readonly IGraphicsDeviceService _graphicsDeviceService = graphicsDeviceManager;
+		readonly private IGraphicsDeviceService _graphicsDeviceService = graphicsDeviceManager;
 
 		/// <summary>
 		/// Gets the service type.

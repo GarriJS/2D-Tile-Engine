@@ -57,7 +57,7 @@ namespace Engine.Graphics.Services
 			var areaService = this._gameServices.GetService<IAreaService>();
 			SubArea displayArea;
 
-			if (null != textureRegionModel.DisplayArea)
+			if (textureRegionModel.DisplayArea is not null)
 				displayArea = areaService.GetSubAreaFromModel(textureRegionModel.DisplayArea);
 			else
 				displayArea = new SubArea { Width = textureRegionModel.TextureBox.Width, Height = textureRegionModel.TextureBox.Height };

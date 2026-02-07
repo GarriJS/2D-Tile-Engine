@@ -3,15 +3,15 @@
 namespace Engine.Physics.Models
 {
 	/// <summary>
-	/// Represents a location extender.
+	/// Represents a vector2 extender.
 	/// </summary>
-	/// <typeparam name="T">The type being extended with location.</typeparam>
-	sealed public class LocationExtender<T>
+	/// <typeparam name="T">The type being extended with vector2.</typeparam>
+	public struct Vector2Extender<T>
 	{
 		/// <summary>
-		/// Gets or sets the location.
+		/// Gets or sets the vector.
 		/// </summary>
-		required public Vector2 Location { get; set; }
+		required public Vector2 Vector { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subject.

@@ -4,9 +4,9 @@ using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
-using Common.UserInterface.Models.LayoutInfo;
 using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
+using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
@@ -22,7 +22,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface block.
 	/// </summary>
-	public class UiBlock : IAmSubDrawable, IAmSubPreRenderable, IAmDebugSubDrawable, IAmScrollable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
+	sealed public class UiBlock : IAmSubDrawable, IAmSubPreRenderable, IAmDebugSubDrawable, IAmScrollable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -32,22 +32,22 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface block name.
 		/// </summary>
-		public string Name { get; set; }
+		required public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user interface block should flex the rows by vertically stacking them.
 		/// </summary>
-		public bool FlexRows { get; set; }
+		required public bool FlexRows { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether to extend the background to the margins.
 		/// </summary>
-		public bool ExtendBackgroundToMargin { get; set; }
+		required public bool ExtendBackgroundToMargin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the available width to the row.
 		/// </summary>
-		public float AvailableWidth { get; set; }
+		required public float AvailableWidth { get; set; }
 
 		/// <summary>
 		/// Gets the total width.
@@ -72,37 +72,37 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the user interface margin
 		/// </summary>
-		public UiMargin Margin { get; set; }
+		required public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface horizontal justification type. 
 		/// </summary>
-		public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
+		required public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface vertical justification type.
 		/// </summary>
-		public UiVerticalJustificationType VerticalJustificationType { get; set; }
+		required public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public SubArea Area { get; set; }
+		required public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.
 		/// </summary>
-		public IAmAGraphic Graphic { get; set; }
+		required public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets the scroll state.
 		/// </summary>
-		public ScrollState ScrollState { get; set; }
+		required public ScrollState ScrollState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the hover cursor.
 		/// </summary>
-		public Cursor HoverCursor { get; set; }
+		required public Cursor HoverCursor { get; set; }
 
 		/// <summary>
 		/// Gets the base hover configuration.
@@ -112,12 +112,12 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the hover configuration.
 		/// </summary>
-		public CursorConfiguration<UiBlock> CursorConfiguration { get; set; }
+		required public CursorConfiguration<UiBlock> CursorConfiguration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the rows.
+		/// The rows.
 		/// </summary>
-		public List<UiRow> Rows { get; set; }
+		readonly public List<UiRow> _rows = [];
 
 		/// <summary>
 		/// Raises the hover event.
@@ -141,7 +141,7 @@ namespace Common.UserInterface.Models
 			var drawingService = gameServices.GetService<IDrawingService>();
 			var graphicOffset = offset + (this.CachedOffset ?? default);
 
-			if (null != this.ScrollState?.ScrollRenderTarget)
+			if (this.ScrollState?.ScrollRenderTarget is not null)
 			{
 				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
 				drawingService.Draw(this.ScrollState.ScrollRenderTarget, coordinates + graphicOffset, sourceRectangle, Color.White);
@@ -171,7 +171,7 @@ namespace Common.UserInterface.Models
 			var backgroundOffset = offset + marginGraphicOffset;
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, backgroundOffset);
 
-			foreach (var elementRow in this.Rows ?? [])
+			foreach (var elementRow in this._rows ?? [])
 				elementRow.Draw(gameTime, gameServices, coordinates, color, offset);
 		}
 
@@ -181,10 +181,10 @@ namespace Common.UserInterface.Models
 		/// <returns>A value indicating whether prerendering is needed.</returns>
 		public bool ShouldPreRender()
 		{
-			if (null == this.ScrollState)
+			if (this.ScrollState is null)
 				return false;
 
-			var contentHeight = this.Rows.Sum(e => e.TotalHeight);
+			var contentHeight = this._rows.Sum(e => e.TotalHeight);
 			var result = contentHeight > this.ScrollState.MaxVisibleHeight;
 
 			return result;
@@ -197,16 +197,16 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game service.</param>
 		public void PreRender(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			if ((null == this.ScrollState) ||
+			if ((this.ScrollState is null) ||
 				(true == this.ScrollState.DisableScrolling))
 				return;
 
 			var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
 			var device = graphicDeviceService.GraphicsDevice;
 			var drawingService = gameServices.GetService<IDrawingService>();
-			var contentHeight = this.Rows.Sum(e => e.TotalHeight);
+			var contentHeight = this._rows.Sum(e => e.TotalHeight);
 
-			if ((null == this.ScrollState.ScrollRenderTarget) ||
+			if ((this.ScrollState.ScrollRenderTarget is null) ||
 				(this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
 				(this.ScrollState.ScrollRenderTarget.Height != contentHeight))
 			{
@@ -232,17 +232,17 @@ namespace Common.UserInterface.Models
 		{
 			foreach (var rowLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
 			{
-				rowLayout.Row.CachedOffset = rowLayout.Offset;
-				rowLayout.Row.UpdateOffsets();
+				rowLayout.Subject.CachedOffset = rowLayout.Vector;
+				rowLayout.Subject.UpdateOffsets();
 			}
 
-			var contentWidth = this.Rows.Select(e => e.TotalWidth)
-										.OrderDescending()
-										.FirstOrDefault();
-			var smallestRowOffSet = this.Rows.Where(e => true == e.CachedOffset.HasValue)
-											 .Select(e => e.CachedOffset.Value.X)
-											 .Order()
-											 .FirstOrDefault();
+			var contentWidth = this._rows.Select(e => e.TotalWidth)
+										 .OrderDescending()
+										 .FirstOrDefault();
+			var smallestRowOffSet = this._rows.Where(e => true == e.CachedOffset.HasValue)
+											  .Select(e => e.CachedOffset.Value.X)
+											  .Order()
+											  .FirstOrDefault();
 			this.ScrollState?.UpdateOffset(this.AvailableWidth, contentWidth, smallestRowOffSet);
 		}
 
@@ -251,9 +251,9 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		/// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
 		/// <returns>The enumerated rowLayout.</returns>
-		public IEnumerable<RowLayoutInfo> EnumerateLayout(bool includeScrollOffset)
+		public IEnumerable<Vector2Extender<UiRow>> EnumerateLayout(bool includeScrollOffset)
 		{
-			var contentHeight = this.Rows.Sum(e => e.TotalHeight);
+			var contentHeight = this._rows.Sum(e => e.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
 			{
 				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
@@ -265,10 +265,10 @@ namespace Common.UserInterface.Models
 				verticalOffset = 0;
 
 			if ((true == includeScrollOffset) &&
-				(null != this.ScrollState))
+				(this.ScrollState is not null))
 				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-			foreach (var row in this.Rows ?? [])
+			foreach (var row in this._rows ?? [])
 			{
 				var horizontalOffset = row.HorizontalJustificationType switch
 				{
@@ -276,19 +276,20 @@ namespace Common.UserInterface.Models
 					UiHorizontalJustificationType.Right => row.AvailableWidth - row.TotalWidth,
 					_ => 0
 				};
+
 				if (horizontalOffset < 0)
 					horizontalOffset = 0;
 
 				var rowTop = verticalOffset + row.Margin.TopMargin;
 				var rowLeft = horizontalOffset + row.Margin.LeftMargin;
-				var result = new RowLayoutInfo
+				var result = new Vector2Extender<UiRow>
 				{
-					Row = row,
-					Offset = new Vector2
+					Vector = new Vector2
 					{
 						X = rowLeft,
 						Y = rowTop
-					}
+					},
+					Subject = row,
 				};
 
 				yield return result;
@@ -314,7 +315,7 @@ namespace Common.UserInterface.Models
 			};
 			var graphicOffset = offset + scrollOffset + (this.CachedOffset ?? default);
 
-			foreach (var uiRow in this.Rows)
+			foreach (var uiRow in this._rows)
 				uiRow.DrawDebug(gameTime, gameServices, coordinates, color, graphicOffset);
 
 			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
@@ -328,7 +329,7 @@ namespace Common.UserInterface.Models
 			this.ScrollState?.Dispose();
 			this.CursorConfiguration.Dispose();
 
-			foreach (var row in this.Rows ?? [])
+			foreach (var row in this._rows ?? [])
 				row?.Dispose();
 		}
 	}

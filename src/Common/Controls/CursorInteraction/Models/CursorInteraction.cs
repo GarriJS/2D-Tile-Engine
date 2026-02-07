@@ -6,21 +6,21 @@ namespace Common.Controls.CursorInteraction.Models
 	/// Represents a cursor interaction.
 	/// </summary>
 	/// <typeparam name="T">The type that generated the cursor interaction.</typeparam>
-	public class CursorInteraction<T>
+	sealed public class CursorInteraction<T>
 	{
 		/// <summary>
 		/// Gets or sets the cursor location.
 		/// </summary>
-		public Vector2 CursorLocation { get; set; }
+		required public Vector2 CursorLocation { get; set; }
 
 		/// <summary>
-		/// Gets or sets the element location.
+		/// Gets or sets the Subject location.
 		/// </summary>
-		public Vector2 ElementLocation { get; set; }
+		required public Vector2 SubjectLocation { get; set; }
 
 		/// <summary>
-		/// Gets or sets the element.
+		/// Gets or sets the subject.
 		/// </summary>
-		public T Element { get; set; }
+		required public T Subject { get; set; }
 	}
 }

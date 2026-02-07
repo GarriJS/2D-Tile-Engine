@@ -10,32 +10,27 @@ namespace Common.Tiling.Models
 	/// <summary>
 	/// Represents a tile.
 	/// </summary>
-	public class Tile : IAmSubDrawable
+	sealed public class Tile : IAmSubDrawable
 	{
 		/// <summary>
 		/// Gets or sets the row.
 		/// </summary>
-		public int Row { get; set; }
+		required public int Row { get; set; }
 
 		/// <summary>
 		/// Gets or sets the columns.
 		/// </summary>
-		public int Column { get; set; }
-
-		/// <summary>
-		/// Gets or sets the draw layer.
-		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int Column { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public SubArea Area { get; set; }
+		required public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets the SimpleText.
 		/// </summary>
-		public IAmAGraphic Graphic { get; set; }
+		required public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.

@@ -7,7 +7,7 @@ namespace Common.Controls.CursorInteraction.Models
 	/// Represents a cursor configuration.
 	/// </summary>
 	/// <typeparam name="T">The parent type.</typeparam>
-	public class CursorConfiguration<T> : BaseCursorConfiguration
+	sealed public class CursorConfiguration<T> : BaseCursorConfiguration
 	{
 		/// <summary>
 		/// Gets or set the hover event.

@@ -8,22 +8,22 @@
 		/// <summary>
 		/// Gets or sets the top margin.
 		/// </summary>
-		public float TopMargin { get; set; }
+		required public float TopMargin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the bottom margin.
 		/// </summary>
-		public float BottomMargin { get; set; }
+		required public float BottomMargin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the left margin.
 		/// </summary>
-		public float LeftMargin { get; set; }
+		required public float LeftMargin { get; set; }
 
 		/// <summary>
 		/// Gets or sets the right margin.
 		/// </summary>
-		public float RightMargin { get; set; }
+		required public float RightMargin { get; set; }
 
 		/// <summary>
 		/// Gets a copy of the user interface margin.

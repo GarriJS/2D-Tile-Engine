@@ -11,7 +11,6 @@ using Engine.DiskModels.Physics;
 using Engine.Graphics.Enum;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Services.Contracts;
-using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -25,9 +24,9 @@ namespace Common.Controls.Cursors.Services
 	/// Initializes the cursor service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class CursorService(GameServiceContainer gameServices) : ICursorService
+	sealed public class CursorService(GameServiceContainer gameServices) : ICursorService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets the cursor control Block.
@@ -35,30 +34,31 @@ namespace Common.Controls.Cursors.Services
 		public CursorControlComponent CursorControlComponent { get; set; }
 
 		/// <summary>
+		/// The cursors.
+		/// </summary>
+		readonly public Dictionary<string, Cursor> _cursors = [];
+
+		/// <summary>
 		/// Gets the cursors.
 		/// </summary>
-		public Dictionary<string, Cursor> Cursors { get; private set; } = [];
+		public Dictionary<string, Cursor> Cursors { get => this._cursors; }
 
 		/// <summary>
 		/// Loads the content.
 		/// </summary>
 		public void LoadContent()
 		{
-			var runTimeUpdateService = this._gameServices.GetService<IRuntimeUpdateService>();
 			var positionService = this._gameServices.GetService<IPositionService>();
-
 			var positionModel = new PositionModel
 			{
 				X = default,
 				Y = default
 			};
-
 			var position = positionService.GetPositionFromModel(positionModel);
 			this.CursorControlComponent = new CursorControlComponent(this._gameServices)
 			{
 				CursorPosition = position
 			};
-
 			var cursorModel = new CursorModel
 			{
 				CursorName = CommonCursorNames.BasicCursorName,
@@ -82,7 +82,6 @@ namespace Common.Controls.Cursors.Services
 					}
 				}
 			};
-
 			var cursor = this.GetCursorFromModel(cursorModel, addCursor: true);
 			this.CursorControlComponent.SetPrimaryCursor(cursor);
 		}
@@ -96,18 +95,14 @@ namespace Common.Controls.Cursors.Services
 		/// <returns>The cursor.</returns>
 		public Cursor GetCursorFromModel(CursorModel cursorModel, bool addCursor = false, byte drawLayerOffset = 0)
 		{
-			if (null == cursorModel)
-			{
+			if (cursorModel is null)
 				return null;
-			}
 
 			var graphicSerivce = this._gameServices.GetService<IGraphicService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 
 			if (false == functionService.TryGetFunction<Action<Cursor, GameTime>>(cursorModel.CursorUpdaterName, out var cursorUpdater))
-			{
 				cursorUpdater = null;
-			}
 
 			var graphic = graphicSerivce.GetGraphicFromModel(cursorModel.Graphic);
 			var cursor = new Cursor
@@ -122,9 +117,7 @@ namespace Common.Controls.Cursors.Services
 			};
 
 			if (true == addCursor)
-			{
-				this.Cursors.Add(cursor.CursorName, cursor);
-			}
+				this._cursors.Add(cursor.CursorName, cursor);
 
 			return cursor;
 		}
@@ -136,7 +129,6 @@ namespace Common.Controls.Cursors.Services
 		public HoverState GetCursorHoverState()
 		{
 			var uiLocationService = this._gameServices.GetService<IUserInterfaceLocationService>();
-
 			var uiObject = uiLocationService.GetUiObjectAtScreenLocation(this.CursorControlComponent.CursorPosition.Coordinates);
 
 			return uiObject;

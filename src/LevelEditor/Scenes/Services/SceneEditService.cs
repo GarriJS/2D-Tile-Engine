@@ -42,7 +42,7 @@ namespace LevelEditor.Scenes.Services
 	/// <param name="gameServices"></param>
 	public class SceneEditService(GameServiceContainer gameServices) : ISceneEditService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the current scene.
@@ -68,7 +68,7 @@ namespace LevelEditor.Scenes.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			_ = this.CreateNewScene(setCurrent: true, cursorInteraction.Element.Name);
+			_ = this.CreateNewScene(setCurrent: true, cursorInteraction.Subject.Name);
 		}
 
 		/// <summary>
@@ -77,14 +77,14 @@ namespace LevelEditor.Scenes.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Element.Name);
+			var tileMapModel = this.LoadTileMapModel(cursorInteraction.Subject.Name);
 
 			if (tileMapModel is null)
 				return;
 
 			var tileService = this._gameServices.GetService<ITileService>();
 			var tileMap = tileService.GetTileMapFromModel(tileMapModel);
-			this.CreateNewScene(true, tileMap, cursorInteraction.Element.Name);
+			this.CreateNewScene(true, tileMap, cursorInteraction.Subject.Name);
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace LevelEditor.Scenes.Services
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetTileGridUserInterfaceZone()
 		{
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
 			var uiZoneModel = new UiZoneModel
 			{
 				Name = "Tile Grid User Interface Zone",
@@ -188,7 +188,7 @@ namespace LevelEditor.Scenes.Services
 				]
 			};
 
-			var uiZone = uiService.GetUiZoneFromModel(uiZoneModel);
+			var uiZone = uiZoneService.GetUiZoneFromModel(uiZoneModel);
 
 			return uiZone;
 		}
@@ -337,13 +337,13 @@ namespace LevelEditor.Scenes.Services
 		{
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var uiGroupService = this._gameServices.GetService<IUserInterfaceGroupService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiZonePositionType.Row3Col4);
 			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
-			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
-			uiService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
+			uiGroupService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
+			uiGroupService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
 			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
 			runTimeDrawService.AddDrawable(scene.TileMap);
 			var simpleImageModel = new SimpleImageModel
@@ -380,7 +380,7 @@ namespace LevelEditor.Scenes.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void SaveScene(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			if (null == this.CurrentScene)
+			if (this.CurrentScene is null)
 				return;
 
 			var jsonService = this._gameServices.GetService<IJsonService>();

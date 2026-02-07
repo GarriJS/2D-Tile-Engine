@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace Common.UserInterface.Services.Contracts
 {
 	/// <summary>
-	/// Represents a user interface service.
+	/// Represents a user interface group service.
 	/// </summary>
-	public interface IUserInterfaceService
+	public interface IUserInterfaceGroupService
 	{
 		/// <summary>
 		/// Gets the active visibility group id.
@@ -15,9 +15,9 @@ namespace Common.UserInterface.Services.Contracts
 		public int? ActiveVisibilityGroupId { get; }
 
 		/// <summary>
-		/// Gets or sets the user interface groups.
+		/// Gets the user interface groups.
 		/// </summary>
-		public List<UiGroup> UserInterfaceGroups { get; set; }
+		public List<UiGroup> UserInterfaceGroups { get; } 
 
 		/// <summary>
 		/// Adds the user interface zone to the user interface group.
@@ -38,32 +38,5 @@ namespace Common.UserInterface.Services.Contracts
 		/// <param name="uiGroupModel">The user interface group model.</param>
 		/// <returns>The user interface group.</returns>
 		public UiGroup GetUiGroupFromModel(UiGroupModel uiGroupModel);
-
-		/// <summary>
-		/// Toggles the user interface group visibility.
-		/// </summary>
-		/// <param name="uiGroup">The user interface group.</param>
-		public void ToggleUserInterfaceGroupVisibility(UiGroup uiGroup);
-
-		/// <summary>
-		/// Gets the user interface zone from the model.
-		/// </summary>
-		/// <param name="uiZoneModel">The user interface model.</param>
-		/// <returns>The user interface zone.</returns>
-		public UiZone GetUiZoneFromModel(UiZoneModel uiZoneModel);
-
-		/// <summary>
-		/// Get the user interface block from the model.
-		/// </summary>
-		/// <param name="uiBlockModel">The user interface block model.</param>
-		/// <returns>The user interface block.</returns>
-		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel);
-
-		/// <summary>
-		/// Gets the user interface row from the model.
-		/// </summary>
-		/// <param name="uiRowModel">The user interface row model.</param>
-		/// <returns>The user interface row.</returns>
-		public UiRow GetUiRowFromModel(UiRowModel uiRowModel);
 	}
 }

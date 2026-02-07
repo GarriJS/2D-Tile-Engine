@@ -12,9 +12,9 @@ namespace Common.UserInterface.Services
 	/// Initializes the scroll state service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class ScrollStateService(GameServiceContainer gameServices) : IScrollStateService
+	sealed public class ScrollStateService(GameServiceContainer gameServices) : IScrollStateService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the scroll state from the model.
@@ -23,7 +23,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The scroll state.</returns>
 		public ScrollState GetScrollStateFromModel(ScrollStateModel scrollStateModel)
 		{
-			if (null == scrollStateModel)
+			if (scrollStateModel is null)
 				return null;
 
 			var result = new ScrollState

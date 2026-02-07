@@ -17,9 +17,9 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface screen zone service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	public class UserInterfaceScreenZoneService(GameServiceContainer gameServices) : IUserInterfaceScreenZoneService
+	sealed public class UserInterfaceScreenZoneService(GameServiceContainer gameServices) : IUserInterfaceScreenZoneService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets the screen zone size.

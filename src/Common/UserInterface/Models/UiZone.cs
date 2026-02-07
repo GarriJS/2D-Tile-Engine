@@ -4,7 +4,6 @@ using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
-using Common.UserInterface.Models.LayoutInfo;
 using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
@@ -22,32 +21,32 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	public class UiZone : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+	sealed public class UiZone : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IHaveArea, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
 	{
-		/// <summary>
-		/// Gets or sets the user interface zone name.
-		/// </summary>
-		public string Name { get; set; }
-
 		/// <summary>
 		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
 		/// </summary>
-		public bool ResetCalculateCachedOffsets { get; set; }
+		required public bool ResetCalculateCachedOffsets { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user interface zone name.
+		/// </summary>
+		required public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the draw layer.
 		/// </summary>
-		public int DrawLayer { get; set; }
+		required public int DrawLayer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface zone vertical justification type. 
 		/// </summary>
-		public UiVerticalJustificationType VerticalJustificationType { get; set; }
+		required public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets the SimpleText.
 		/// </summary>
-		public IAmAGraphic Graphic { get; set; }
+		required public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets the position.
@@ -62,12 +61,12 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the scroll state.
 		/// </summary>
-		public ScrollState ScrollState { get; set; }
+		required public ScrollState ScrollState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the hover cursor.
 		/// </summary>
-		public Cursor HoverCursor { get; set; }
+		required public Cursor HoverCursor { get; set; }
 
 		/// <summary>
 		/// Gets the base cursor configuration.
@@ -77,17 +76,17 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the cursor configuration
 		/// </summary>
-		public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
+		required public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface screen zone.
 		/// </summary>
-		public UiScreenZone UserInterfaceScreenZone { get; set; }
+		required public UiScreenZone UserInterfaceScreenZone { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface blocks.
+		/// The user interface blocks.
 		/// </summary>
-		public List<UiBlock> Blocks { get; set; }
+		readonly public List<UiBlock> _blocks = [];
 
 		/// <summary>
 		/// Raises the hover event.
@@ -107,7 +106,7 @@ namespace Common.UserInterface.Models
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
 
-			if (null != this.ScrollState?.ScrollRenderTarget)
+			if (this.ScrollState?.ScrollRenderTarget is not null)
 			{
 				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
 				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White); 
@@ -132,7 +131,7 @@ namespace Common.UserInterface.Models
 			if (true == this.ResetCalculateCachedOffsets)
 				this.UpdateZoneOffsets();
 
-			foreach (var block in this.Blocks ?? [])
+			foreach (var block in this._blocks ?? [])
 				block.Draw(gameTime, gameServices, coordinates, color, offset);
 		}
 
@@ -142,15 +141,15 @@ namespace Common.UserInterface.Models
 		/// <returns>A value indicating whether prerendering is needed.</returns>
 		public bool ShouldPreRender()
 		{
-			var needsSubRender = this.Blocks.Any(e => true == e.ShouldPreRender());
+			var needsSubRender = this._blocks.Any(e => true == e.ShouldPreRender());
 
 			if (true == needsSubRender)
 				return true;
 
-			if (null == this.ScrollState)
+			if (this.ScrollState is null)
 				return false;
 
-			var contentHeight = this.Blocks.Sum(e => e.TotalHeight);
+			var contentHeight = this._blocks.Sum(e => e.TotalHeight);
 			var hasExessHeight = contentHeight > this.ScrollState.MaxVisibleHeight;
 
 			return hasExessHeight;
@@ -163,22 +162,22 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game service.</param>
 		public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			var subPrerenders = this.Blocks.Where(e => true == e.ShouldPreRender())
+			var subPrerenders = this._blocks.Where(e => true == e.ShouldPreRender())
 										   .ToArray();
 
 			foreach (var subPrerender in subPrerenders ?? [])
 				subPrerender.PreRender(gameTime, gameServices, default, Color.White);
 
-			if ((null == this.ScrollState) ||
+			if ((this.ScrollState is null) ||
 				(true == this.ScrollState.DisableScrolling))
 				return;
 
 			var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
 			var device = graphicDeviceService.GraphicsDevice;
 			var drawingService = gameServices.GetService<IDrawingService>();
-			var contentHeight = this.Blocks.Sum(e => e.TotalHeight);
+			var contentHeight = this._blocks.Sum(e => e.TotalHeight);
 
-			if ((null == this.ScrollState.ScrollRenderTarget) ||
+			if ((this.ScrollState.ScrollRenderTarget is null) ||
 				(this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
 				(this.ScrollState.ScrollRenderTarget.Height != contentHeight))
 			{
@@ -204,8 +203,8 @@ namespace Common.UserInterface.Models
 		{
 			foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
 			{
-				blockLayout.Block.CachedOffset = blockLayout.Offset;
-				blockLayout.Block.UpdateOffsets();
+				blockLayout.Subject.CachedOffset = blockLayout.Vector;
+				blockLayout.Subject.UpdateOffsets();
 			}
 
 			this.ScrollState?.UpdateOffset(this.Area.Width, this.Area.Width, 0);
@@ -217,9 +216,9 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		/// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
 		/// <returns>The enumerated Block blockLayout.</returns>
-		public IEnumerable<BlockLayoutInfo> EnumerateLayout(bool includeScrollOffset)
+		public IEnumerable<Vector2Extender<UiBlock>> EnumerateLayout(bool includeScrollOffset)
 		{
-			var contentHeight = this.Blocks.Sum(r => r.TotalHeight);
+			var contentHeight = this._blocks.Sum(r => r.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
 			{
 				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
@@ -231,10 +230,10 @@ namespace Common.UserInterface.Models
 				verticalOffset = 0;
 
 			if ((true == includeScrollOffset) &&
-				(null != this.ScrollState))
+				(this.ScrollState is not null))
 				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-			foreach (var block in this.Blocks ?? [])
+			foreach (var block in this._blocks ?? [])
 			{
 				var horizontalOffset = block.HorizontalJustificationType switch
 				{
@@ -244,14 +243,14 @@ namespace Common.UserInterface.Models
 				};
 				var blockTop = verticalOffset + block.Margin.TopMargin;
 				var blockLeft = horizontalOffset + block.Margin.LeftMargin;
-				var result = new BlockLayoutInfo
+				var result = new Vector2Extender<UiBlock>
 				{
-					Block = block,
-					Offset = new Vector2
+					Vector = new Vector2
 					{
 						X = blockLeft,
 						Y = blockTop
-					}
+					},
+					Subject = block
 				};
 
 				yield return result;
@@ -273,7 +272,7 @@ namespace Common.UserInterface.Models
 				Y = -this.ScrollState?.VerticalScrollOffset ?? default
 			};
 
-			foreach (var block in this.Blocks ?? [])
+			foreach (var block in this._blocks ?? [])
 				block.DrawDebug(gameTime, gameServices, this.Position.Coordinates, Color.MonoGameOrange, offset);
 
 			this.Area.Draw(gameTime, gameServices, Color.MonoGameOrange);
@@ -284,10 +283,10 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		public void Dispose()
 		{
-			this.ScrollState.Dispose();
+			this.ScrollState?.Dispose();
 			this.CursorConfiguration?.Dispose();
 
-			foreach (var elementRow in this.Blocks ?? [])
+			foreach (var elementRow in this._blocks ?? [])
 				elementRow?.Dispose();
 		}
 	}

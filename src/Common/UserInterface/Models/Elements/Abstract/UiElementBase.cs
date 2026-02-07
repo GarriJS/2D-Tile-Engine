@@ -22,27 +22,27 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <summary>
 		/// Gets or sets the user interface element name.
 		/// </summary>
-		public string Name { get; set; }
+		required public string Name { get; set; }
 
 		/// <summary>
 		/// Gets the total width.
 		/// </summary>
-		public float TotalWidth { get => Margin.LeftMargin + InsideWidth + Margin.RightMargin; }
+		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
 
 		/// <summary>
 		/// Gets the total height.
 		/// </summary>
-		public float TotalHeight { get => Margin.TopMargin + InsideHeight + Margin.BottomMargin; }
+		public float TotalHeight { get => this.Margin.TopMargin + this.InsideHeight + this.Margin.BottomMargin; }
 
 		/// <summary>
 		/// Gets the inside width.
 		/// </summary>
-		public float InsideWidth { get => Area.Width; }
+		public float InsideWidth { get => this.Area.Width; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => Area.Height; }
+		public float InsideHeight { get => this.Area.Height; }
 
 		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
@@ -57,32 +57,32 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public SubArea Area { get; set; }
+		required public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface margin.
 		/// </summary>
-		public UiMargin Margin { get; set; }
+		required public UiMargin Margin { get; set; }
 
 		/// <summary>
 		/// Gets the SimpleText.
 		/// </summary>
-		public IAmAGraphic Graphic { get; set; }
+		required public IAmAGraphic Graphic { get; set; }
 
 		/// <summary>
 		/// Gets or sets the hover cursor.
 		/// </summary>
-		public Cursor HoverCursor { get; set; }
+		required public Cursor HoverCursor { get; set; }
 
 		/// <summary>
 		/// Gets the base cursor configuration.
 		/// </summary>
-		public BaseCursorConfiguration BaseCursorConfiguration { get => CursorConfiguration; }
+		public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
 
 		/// <summary>
 		/// Gets or sets the cursor configuration
 		/// </summary>
-		public CursorConfiguration<IAmAUiElement> CursorConfiguration { get; set; }
+		required public CursorConfiguration<IAmAUiElement> CursorConfiguration { get; set; }
 
 		/// <summary>
 		/// Raises the hover event.
@@ -90,7 +90,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void RaiseHoverEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
+			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		public void RaisePressEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			CursorConfiguration?.RaisePressEvent(cursorInteraction);
+			this.CursorConfiguration?.RaisePressEvent(cursorInteraction);
 		}
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		virtual public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var graphicOffset = offset + CachedOffset ?? default;
-			Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
 		/// <summary>

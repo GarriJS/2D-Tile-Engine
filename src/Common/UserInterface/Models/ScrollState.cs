@@ -10,7 +10,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a scroll state.
 	/// </summary>
-	public class ScrollState : IAmSubDrawable, IDisposable
+	sealed public class ScrollState : IAmSubDrawable, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the cached offset.
@@ -73,7 +73,7 @@ namespace Common.UserInterface.Models
 		/// <param name="scrollDelta">The scroll delta.</param>
 		public void Scroll(float scrollDelta)
 		{
-			if ((null == this.ScrollRenderTarget) ||
+			if ((this.ScrollRenderTarget is null) ||
 				(true == this.DisableScrolling))
 				return;
 

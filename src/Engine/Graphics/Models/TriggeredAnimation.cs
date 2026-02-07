@@ -58,7 +58,7 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		override protected void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if ((null == this.FrameStartTime) ||
+			if ((this.FrameStartTime is null) ||
 				(this.CurrentFrameIndex == this.RestingFrameIndex))
 			{
 				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;

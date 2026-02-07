@@ -34,7 +34,7 @@ namespace LevelEditor.Spritesheets.Services
 	/// <param name="gameServices">The game services.</param>
 	public class SpritesheetButtonService(GameServiceContainer gameServices) : ISpritesheetButtonService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// The spritesheet button click event processor.
@@ -55,7 +55,7 @@ namespace LevelEditor.Spritesheets.Services
 			cursorService.CursorControlComponent.SetPrimaryCursor(tileGridCursor, maintainHoverState: true);
 			var position = controlService.ControlState.MousePosition;
 			var localTileLocation = tileService.GetLocalTileCoordinates(position);
-			var elementGraphicModel = cursorInteraction.Element.Graphic.ToModel();
+			var elementGraphicModel = cursorInteraction.Subject.Graphic.ToModel();
 			var secondaryCursorModel = new CursorModel
 			{
 				CursorName = LevelEditorCursorNames.SpritesheetButtonCursorName,
@@ -123,7 +123,7 @@ namespace LevelEditor.Spritesheets.Services
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiZonePositionType uiZonePositionType)
 		{
-			var uiService = this._gameServices.GetService<IUserInterfaceService>();
+			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
 			
 			var spritesheetButtons = this.GetUiButtonsForSpritesheet(spritesheetName, new Point(32, 32));
 			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();
@@ -167,7 +167,7 @@ namespace LevelEditor.Spritesheets.Services
 				]
 			};
 
-			return uiService.GetUiZoneFromModel(uiZoneModel);
+			return uiZoneService.GetUiZoneFromModel(uiZoneModel);
 		}
 
 		/// <summary>

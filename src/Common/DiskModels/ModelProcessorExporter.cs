@@ -22,8 +22,13 @@ namespace Common.DiskModels
 		static public (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var tileService = gameServices.GetService<ITileService>();
+			var uiMarginService = gameServices.GetService<IUserInterfaceMarginService>();
+			var uiGraphicalTextWithMarginService = gameServices.GetService<IUserInterfaceGraphicalTextWithMarginService>();
 			var uiElementService = gameServices.GetService<IUserInterfaceElementService>();
-			var uiService = gameServices.GetService<IUserInterfaceService>();
+			var uiGroupService = gameServices.GetService<IUserInterfaceGroupService>();
+			var uiZoneService = gameServices.GetService<IUserInterfaceZoneService>();
+			var uiBlockService = gameServices.GetService<IUserInterfaceBlockService>();
+			var uiRowService = gameServices.GetService<IUserInterfaceRowService>();
 			var cursorService = gameServices.GetService<ICursorService>();
 			var scrollStateService = gameServices.GetService<IScrollStateService>();
 
@@ -32,12 +37,12 @@ namespace Common.DiskModels
 				(typeof(TileMapModel), tileService.GetTileFromModel),
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayerFromModel),
 				(typeof(TileModel), tileService.GetTileFromModel),
-				(typeof(UiMarginModel), uiElementService.GetUiMarginFromModel),
-				(typeof(GraphicalTextWithMarginModel), uiElementService.GetGraphicTextWithMarginFromModel),
-				(typeof(UiGroupModel), uiService.GetUiGroupFromModel),
-				(typeof(UiZoneModel), uiService.GetUiZoneFromModel),
-				(typeof(UiBlockModel), uiService.GetUiBlockFromModel),
-				(typeof(UiRowModel), uiService.GetUiRowFromModel),
+				(typeof(UiMarginModel), uiMarginService.GetUiMarginFromModel),
+				(typeof(GraphicalTextWithMarginModel), uiGraphicalTextWithMarginService.GetGraphicTextWithMarginFromModel),
+				(typeof(UiGroupModel), uiGroupService.GetUiGroupFromModel),
+				(typeof(UiZoneModel), uiZoneService.GetUiZoneFromModel),
+				(typeof(UiBlockModel), uiBlockService.GetUiBlockFromModel),
+				(typeof(UiRowModel), uiRowService.GetUiRowFromModel),
 				(typeof(CursorModel), cursorService.GetCursorFromModel),
 				(typeof(ScrollStateModel), scrollStateService.GetScrollStateFromModel)
 			];

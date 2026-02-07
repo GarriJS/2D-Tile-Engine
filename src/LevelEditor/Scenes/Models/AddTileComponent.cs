@@ -15,6 +15,7 @@ using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Scenes.Services.Contracts;
 using Microsoft.Xna.Framework;
+using System.Net.NetworkInformation;
 
 namespace LevelEditor.Scenes.Models
 {
@@ -27,7 +28,7 @@ namespace LevelEditor.Scenes.Models
 	/// <param name="gameServices">The game services.</param>
 	public class AddTileComponent(GameServiceContainer gameServices) : IAmACursorControlContextComponent
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets a value indicating whether the background TileGraphic is active.
@@ -53,7 +54,6 @@ namespace LevelEditor.Scenes.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
-
 			var hoverState = cursorService.GetCursorHoverState();
 			this.ConsumeControlState(gameTime, controlState, priorControlState, hoverState);
 		}
@@ -68,24 +68,19 @@ namespace LevelEditor.Scenes.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState, HoverState hoverState)
 		{
 			if (false == controlState.ActionNameIsActive(BaseControlNames.LeftClick))
-			{
 				return;
-			}
 
 			var sceneEditService = this._gameServices.GetService<ISceneEditService>();
 
-			if ((null == sceneEditService.CurrentScene) ||
-				(null == this.AddTileParameters) ||
-				((null != hoverState) &&
-				 ((hoverState.HoverObjectLocation.Subject is not UiZone uiZone) ||
-				  (null != uiZone.Graphic))))
-			{
+			if ((sceneEditService.CurrentScene is null) ||
+				(this.AddTileParameters is null) ||
+				((hoverState is not null) &&
+				 ((hoverState.HoverObjectLocation?.Subject is not UiZone uiZone) ||
+				  (uiZone.Graphic is not null))))
 				return;
-			}
 
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var tileService = this._gameServices.GetService<ITileService>();
-
 			var tilePosition = tileService.GetLocalTileCoordinates(cursorService.CursorControlComponent.CursorPosition.Coordinates);
 			var tileModel = new TileModel
 			{
@@ -93,7 +88,6 @@ namespace LevelEditor.Scenes.Models
 				Column = (int)tilePosition.X / TileConstants.TILE_SIZE,
 				Graphic = this.AddTileParameters.TileGraphic,
 			};
-
 			var tile = tileService.GetTileFromModel(tileModel);
 			sceneEditService.CurrentScene.TileMap.AddTile(1, tile);
 		}
@@ -106,7 +100,6 @@ namespace LevelEditor.Scenes.Models
 		{
 			var independentGraphicService = this._gameServices.GetService<IIndependentGraphicService>();
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
-
 			var independentGraphicModel = new IndependentGraphicModel
 			{
 				Position = new PositionModel
@@ -117,18 +110,14 @@ namespace LevelEditor.Scenes.Models
 				Graphic = textureRegionImageModel
 			};
 
-			if ((null != this.BackgroundGraphic) &&
+			if ((this.BackgroundGraphic is not null) &&
 				(true == this.BackgroundGraphicActive))
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(this.BackgroundGraphic);
-			}
 
 			this.BackgroundGraphic = independentGraphicService.GetIndependentGraphicFromModel(independentGraphicModel);
 
 			if (true == this.BackgroundGraphicActive)
-			{
 				runTimeOverlaidDrawService.AddDrawable(this.BackgroundGraphic);
-			}
 		}
 
 		/// <summary>
@@ -139,13 +128,9 @@ namespace LevelEditor.Scenes.Models
 			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 
 			if (true == this.BackgroundGraphicActive)
-			{
 				runTimeOverlaidDrawService.RemoveDrawable(this.BackgroundGraphic);
-			}
 			else
-			{
 				runTimeOverlaidDrawService.AddDrawable(this.BackgroundGraphic);
-			}
 
 			this.BackgroundGraphicActive = false == this.BackgroundGraphicActive;
 		}

@@ -1,6 +1,7 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.UserInterface;
 using Common.DiskModels.UserInterface.Contracts;
@@ -14,10 +15,12 @@ using Common.UserInterface.Services.Contracts;
 using Engine.Core.Fonts.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Common.UserInterface.Services
 {
@@ -28,59 +31,9 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface element service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
+	sealed public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
-
-		/// <summary>
-		/// Gets the user interface margin from the model.
-		/// </summary>
-		/// <param name="model">The user interface margin model.</param>
-		/// <returns>The user interface margin.</returns>
-		public UiMargin GetUiMarginFromModel(UiMarginModel model)
-		{
-			if (model is null)
-			{ 
-				return new UiMargin();
-			}
-
-			var result = new UiMargin
-			{
-				TopMargin = model.TopMargin,
-				BottomMargin = model.BottomMargin,
-				LeftMargin = model.LeftMargin,
-				RightMargin = model.RightMargin,
-			};
-
-			return result;
-		}
-
-		/// <summary>
-		/// Gets the graphical text with margin from the model.
-		/// </summary>
-		/// <param name="model">The graphical text with margin.</param>
-		/// <returns>The graphical text with margin.</returns>
-		public GraphicalTextWithMargin GetGraphicTextWithMarginFromModel(GraphicalTextWithMarginModel model)
-		{
-			if (null == model)
-				return null;
-			
-			var fontService = this._gameServices.GetService<IFontService>();
-			var font = fontService.GetSpriteFont(model.FontName);
-			font ??= fontService.DebugSpriteFont;
-			var margin = this.GetUiMarginFromModel(model.Margin);
-			var result = new GraphicalTextWithMargin
-			{
-				MaxLineWidth = null,
-				FontName = model.FontName,
-				Text = model.Text,
-				TextColor = model.TextColor,
-				Font = font,
-				Margin = margin
-			};
-
-			return result;
-		}
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets the user interface element.
@@ -93,68 +46,161 @@ namespace Common.UserInterface.Services
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
-
-			var area = this.GetElementArea(uiElementModel);
+			var baseMembers = this.GetBaseElementMembers(uiElementModel);
 			IAmAUiElement uiElement = uiElementModel switch
 			{
-				UiTextModel uiTextModel => this.GetUiText(uiTextModel, area),
-				UiButtonModel uiButtonModel => this.GetUiButton(uiButtonModel, area),
+				UiTextModel uiTextModel => this.GetUiText(uiTextModel, baseMembers),
+				UiButtonModel uiButtonModel => this.GetUiButton(uiButtonModel, baseMembers),
 				_ => null,
 			};
 
-			if (null == uiElement)
+			if (uiElement is null)
 			{
 				// LOGGING
 
 				return null;
 			}
 
-			uiElement.Name = uiElementModel.Name;
-			uiElement.HorizontalSizeType = uiElementModel.HorizontalSizeType;
-			uiElement.VerticalSizeType = uiElementModel.VerticalSizeType;
-			uiElement.Area = area;
-			uiElement.Margin = this.GetUiMarginFromModel(uiElementModel.Margin);
+			if (uiElement is ICanBeClicked<IAmAUiElement> clickableElement)
+				uiElement.CursorConfiguration.AddPressSubscription(this.CheckForUiElementClick);
 
-			if (null != uiElementModel.Graphic)
+			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.HoverEventName, out var hoverAction))
+				uiElement.CursorConfiguration.AddHoverSubscription(hoverAction);
+
+			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.PressEventName, out var pressAction))
+				uiElement.CursorConfiguration.AddPressSubscription(pressAction);
+
+			return uiElement;
+		}
+
+		/// <summary>
+		/// Gets the base user interface element members.
+		/// </summary>
+		/// <param name="uiElementModel">The user interface element model.</param>
+		/// <returns>A dictionary binding the member name to the member.</returns>
+		private Dictionary<string, object> GetBaseElementMembers(IAmAUiElementModel uiElementModel)
+		{ 
+			if (uiElementModel is null)
+				return null;
+
+			var graphicService = this._gameServices.GetService<IGraphicService>();
+			var cursorService = this._gameServices.GetService<ICursorService>();
+			var uiMarginService = this._gameServices.GetService<IUserInterfaceMarginService>();
+			var result = new Dictionary<string, object>();
+			var area = this.GetElementArea(uiElementModel);
+			result["area"] = area;
+			var margin = uiMarginService.GetUiMarginFromModel(uiElementModel.Margin);
+			result["margin"] = margin;
+
+			if (uiElementModel.Graphic is not null)
 			{
-				uiElement.Graphic = graphicService.GetGraphicFromModel(uiElementModel.Graphic);
+				var graphic = graphicService.GetGraphicFromModel(uiElementModel.Graphic);
 
 				if ((true == uiElementModel.ResizeTexture) ||
-					(uiElement.Graphic is CompositeImage compositeImage))
+					(graphic is CompositeImage compositeImage))
 				{
 					var dimensions = new SubArea
 					{
-						Width = uiElement.InsideWidth,
-						Height = uiElement.InsideHeight
+						Width = area.Width,
+						Height = area.Height
 					};
-					uiElement.Graphic.SetDrawDimensions(dimensions);
+					graphic.SetDrawDimensions(dimensions);
 				}
+
+				result["graphic"] = graphic;
 			}
 
 			if ((false == string.IsNullOrEmpty(uiElementModel.HoverCursorName)) &&
 				(true == cursorService.Cursors.TryGetValue(uiElementModel.HoverCursorName, out var hoverCursor)))
-			{ 
-				uiElement.HoverCursor = hoverCursor;
-			}
+				result["hoverCursor"] = hoverCursor;
 
-			uiElement.CursorConfiguration ??= cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, null);
+			return result;
+		}
 
-			if (uiElement is ICanBeClicked<IAmAUiElement> clickableElement)
+		/// <summary>
+		/// Gets the user interface text.
+		/// </summary>
+		/// <param name="uiTextModel">The user interface text model.</param>
+		/// <param name="baseElements">The base elements.</param>
+		/// <returns>The user interface text.</returns>
+		private UiText GetUiText(UiTextModel uiTextModel, Dictionary<string, object> baseElements)
+		{
+			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+			var area = baseElements.GetValueOrDefault("area") as SubArea;
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, null);
+			var simpleText = graphicTextService.GetGraphicTextFromModel(uiTextModel.Text);
+			var uiText = new UiText
 			{
-				uiElement.CursorConfiguration.AddPressSubscription(this.CheckForUiElementClick);
-			}
+				Name = uiTextModel.Name,
+				HorizontalSizeType = uiTextModel.HorizontalSizeType,
+				VerticalSizeType = uiTextModel.VerticalSizeType,
+				Area = area,
+				Margin = baseElements.GetValueOrDefault("margin") as UiMargin? ?? default,
+				Graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic,
+				HoverCursor = baseElements.GetValueOrDefault("hoverCursor") as Cursor,
+				CursorConfiguration = cursorConfiguration,
+				SimpleText = simpleText
+			};
 
-			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.HoverEventName, out var hoverAction))
+			return uiText;
+		}
+
+		/// <summary>
+		/// Gets the user interface uiText.
+		/// </summary>
+		/// <param name="uiButtonModel">The user interface uiText model.</param>
+		/// <param name="baseElements">The base elements.</param>
+		/// <returns>The user interface uiText.</returns>
+		private UiButton GetUiButton(UiButtonModel uiButtonModel, Dictionary<string, object> baseElements)
+		{
+			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
+			var animationService = this._gameServices.GetService<IAnimationService>();
+			var functionService = this._gameServices.GetService<IFunctionService>();
+			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+			var area = baseElements.GetValueOrDefault("area") as SubArea;
+			var simpleText = graphicTextService.GetGraphicTextFromModel(uiButtonModel.Text);
+			var clickableArea = new SubArea
 			{
-				uiElement.CursorConfiguration.AddHoverSubscription(hoverAction);
-			}
-
-			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.PressEventName, out var pressAction))
+				Width = area.Width * uiButtonModel.ClickableAreaScaler.X,
+				Height = area.Height * uiButtonModel.ClickableAreaScaler.Y
+			};
+			var clickableOffset = new Vector2
 			{
-				uiElement.CursorConfiguration.AddPressSubscription(pressAction);
+				X = (area.Width - clickableArea.Width) / 2,
+				Y = (area.Height - clickableArea.Height) / 2
+			};
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, clickableArea, clickOffset: clickableOffset);
+
+			TriggeredAnimation clickAnimation = null;
+			if (uiButtonModel.ClickableAreaAnimation is not null)
+			{
+				var animation = animationService.GetFixedAnimationFromModel(uiButtonModel.ClickableAreaAnimation, (int)clickableArea.Width, (int)clickableArea.Height);
+			
+				if (animation is TriggeredAnimation triggeredAnimation)
+					clickAnimation = triggeredAnimation;
 			}
 
-			return uiElement;
+			var uiButton = new UiButton
+			{
+				Name = uiButtonModel.Name,
+				HorizontalSizeType = uiButtonModel.HorizontalSizeType,
+				VerticalSizeType = uiButtonModel.VerticalSizeType,
+				Area = area,
+				Margin = baseElements.GetValueOrDefault("margin") as UiMargin? ?? default,
+				Graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic,
+				HoverCursor = baseElements.GetValueOrDefault("hoverCursor") as Cursor,
+				CursorConfiguration = cursorConfiguration,
+				ClickableAreaScaler = uiButtonModel.ClickableAreaScaler,
+				SimpleText = simpleText,
+				ClickAnimation = clickAnimation
+			};
+			uiButton.CursorConfiguration?.AddClickSubscription(this.TriggerUiButtonClickAnimation);
+
+			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiButtonModel.ClickEventName, out var clickAction))
+				uiButton.CursorConfiguration?.AddClickSubscription(clickAction);
+
+			return uiButton;
 		}
 
 		/// <summary>
@@ -168,9 +214,7 @@ namespace Common.UserInterface.Services
 			element.Graphic.SetDrawDimensions(element.Area);
 
 			if (element is not UiButton uiButton)
-			{
 				return;
-			}
 
 			uiButton.CursorConfiguration.Area = new SubArea
 			{
@@ -185,10 +229,8 @@ namespace Common.UserInterface.Services
 
 			//TODO updates press and hover areas?
 
-			if (null == uiButton.ClickAnimation?.Frames)
-			{
+			if (uiButton.ClickAnimation?.Frames is null)
 				return;
-			}
 
 			foreach (var frame in uiButton.ClickAnimation.Frames)
 			{
@@ -216,34 +258,28 @@ namespace Common.UserInterface.Services
 				var fixedSize = elementModel.FixedSized.Value;
 
 				if (0 > fixedSize.X)
-				{
 					fixedSize.X = 0;
-				}
 
 				if (0 > fixedSize.Y)
-				{
 					fixedSize.Y = 0;
-				}
 
-				return new SubArea
+				var fixedResult = new SubArea
 				{
 					Width = fixedSize.X,
 					Height = fixedSize.Y,
 				};
+
+				return fixedResult;
 			}
 
-			if (null == uiScreenZoneService?.ScreenZoneSize)
-			{
+			if (uiScreenZoneService?.ScreenZoneSize is null)
 				return default;
-			}
 
 			SubArea elementFitDimensions = null;
 
 			if ((UiElementSizeType.FlexMin == elementModel.HorizontalSizeType) ||
 				(UiElementSizeType.FlexMin == elementModel.VerticalSizeType))
-			{
 				elementFitDimensions = this.GetElementFitDimensions(elementModel);
-			}
 
 			var uiElementHorizontalSize = elementModel.HorizontalSizeType switch
 			{
@@ -265,7 +301,6 @@ namespace Common.UserInterface.Services
 				UiElementSizeType.FlexMin => elementFitDimensions.Height,
 				_ => 0
 			};
-
 			var result = new SubArea
 			{
 				Width = uiElementHorizontalSize,
@@ -290,30 +325,20 @@ namespace Common.UserInterface.Services
 				Height = -1
 			};
 
-			if (null != elementModel.Graphic)
-			{
+			if (elementModel.Graphic is not null)
 				result = elementModel.Graphic.GetDimensions();
-			}
 
 			switch (elementModel)
 			{
 				case UiButtonModel uiButtonModel:
 
-					if (null == uiButtonModel.ClickableAreaAnimation)
-					{
+					if (uiButtonModel.ClickableAreaAnimation is null)
 						break;
-					}
 
 					var restingFrame = uiButtonModel.ClickableAreaAnimation?.Frames[uiButtonModel.ClickableAreaAnimation.RestingFrameIndex];
 
-					if (null != restingFrame)
-					{
+					if (restingFrame is not null)
 						result = restingFrame.GetDimensions();
-					}
-
-					break;
-
-				case UiTextModel uiTextModel:
 
 					break;
 			}
@@ -352,101 +377,26 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Gets the user interface text.
-		/// </summary>
-		/// <param name="uiTextModel">The user interface text model.</param>
-		/// <param name="area">The area.</param>
-		/// <returns>The user interface text.</returns>
-		private UiText GetUiText(UiTextModel uiTextModel, SubArea area)
-		{
-			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
-
-			var simpleText = graphicTextService.GetGraphicTextFromModel(uiTextModel.Text);
-			var uiText = new UiText
-			{
-				SimpleText = simpleText
-			};
-
-			return uiText;
-		}
-
-		/// <summary>
-		/// Gets the user interface uiText.
-		/// </summary>
-		/// <param name="uiButtonModel">The user interface uiText model.</param>
-		/// <param name="area">The area.</param>
-		/// <returns>The user interface uiText.</returns>
-		private UiButton GetUiButton(UiButtonModel uiButtonModel, SubArea area)
-		{
-			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
-			var animationService = this._gameServices.GetService<IAnimationService>();
-			var functionService = this._gameServices.GetService<IFunctionService>();
-			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-
-			var simpleText = graphicTextService.GetGraphicTextFromModel(uiButtonModel.Text);
-			var clickableArea = new SubArea
-			{
-				Width = area.Width * uiButtonModel.ClickableAreaScaler.X,
-				Height = area.Height * uiButtonModel.ClickableAreaScaler.Y
-			};
-			var clickableOffset = new Vector2
-			{
-				X = (area.Width - clickableArea.Width) / 2,
-				Y = (area.Height - clickableArea.Height) / 2
-			};
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, clickableArea, clickOffset: clickableOffset);
-			var uiButton = new UiButton
-			{
-				SimpleText = simpleText,
-				ClickableAreaScaler = uiButtonModel.ClickableAreaScaler,
-				CursorConfiguration = cursorConfiguration
-			};
-
-			uiButton.CursorConfiguration?.AddClickSubscription(this.TriggerUiButtonClickAnimation);
-
-			// LOGGING
-			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiButtonModel.ClickEventName, out var clickAction))
-			{
-				uiButton.CursorConfiguration?.AddClickSubscription(clickAction);
-			}
-
-			if (null != uiButtonModel.ClickableAreaAnimation)
-			{
-				var clickAnimation = animationService.GetFixedAnimationFromModel(uiButtonModel.ClickableAreaAnimation, (int)clickableArea.Width, (int)clickableArea.Height);
-
-				if (clickAnimation is TriggeredAnimation triggeredAnimation)
-				{
-					uiButton.ClickAnimation = triggeredAnimation;
-				}
-			}
-
-			return uiButton;
-		}
-
-
-		/// <summary>
 		/// Checks the user interface element for a click.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		private void CheckForUiElementClick(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			switch (cursorInteraction.Element)
+			switch (cursorInteraction.Subject)
 			{
 				case UiButton button:
 
 					var clickableLocation = new Vector2
 					{
-						X = cursorInteraction.ElementLocation.X + button.CursorConfiguration.ClickOffset.X + ((cursorInteraction.Element.Area.Width - button.CursorConfiguration.ClickArea.Width) / 2),
-						Y = cursorInteraction.ElementLocation.Y + button.CursorConfiguration.ClickOffset.Y + ((cursorInteraction.Element.Area.Height - button.CursorConfiguration.ClickArea.Height) / 2)
+						X = cursorInteraction.SubjectLocation.X + button.CursorConfiguration.ClickOffset.X + ((cursorInteraction.Subject.Area.Width - button.CursorConfiguration.ClickArea.Width) / 2),
+						Y = cursorInteraction.SubjectLocation.Y + button.CursorConfiguration.ClickOffset.Y + ((cursorInteraction.Subject.Area.Height - button.CursorConfiguration.ClickArea.Height) / 2)
 					};
 
 					if ((clickableLocation.X <= cursorInteraction.CursorLocation.X) &&
 						(clickableLocation.X + button.CursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
 						(clickableLocation.Y <= cursorInteraction.CursorLocation.Y) &&
 						(clickableLocation.Y + button.CursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
-					{
 						button.RaiseClickEvent(cursorInteraction);
-					}
 
 					break;
 			}
@@ -458,10 +408,8 @@ namespace Common.UserInterface.Services
 		/// <param name="cursorInteraction">The element with location.</param>
 		private void TriggerUiButtonClickAnimation(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			if (cursorInteraction.Element is UiButton button)
-			{
+			if (cursorInteraction.Subject is UiButton button)
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);
-			}
 		}
 	}
 }

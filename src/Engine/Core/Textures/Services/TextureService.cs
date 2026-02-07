@@ -211,7 +211,7 @@ namespace Engine.Core.Textures.Services
 		/// <param name="tilesetTexture">The tile set texture.</param>
 		private void LoadTiles(string tilesetName, Texture2D tilesetTexture = null)
 		{
-			if (null == tilesetTexture)
+			if (tilesetTexture is null)
 				tilesetTexture = this.Tilesets[tilesetName];
 
 			for (int x = 0; x < tilesetTexture.Width; x += TileConstants.TILE_SIZE)

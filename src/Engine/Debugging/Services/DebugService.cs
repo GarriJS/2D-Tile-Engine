@@ -91,7 +91,7 @@ namespace Engine.Debugging.Services
 			var positionService = this._gameServices.GetService<IPositionService>();
 			var spriteFont = fontService.DebugSpriteFont;
 
-			if (null == spriteFont)
+			if (spriteFont is null)
 				return;
 
 			var fpsPositionModel = new PositionModel

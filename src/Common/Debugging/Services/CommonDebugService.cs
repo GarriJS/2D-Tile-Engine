@@ -19,9 +19,9 @@ namespace Common.Debugging.Services
 	/// Initializes a new instance of the common debug service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	public class CommonDebugService(GameServiceContainer gameServices) : ICommonDebugService
+	sealed public class CommonDebugService(GameServiceContainer gameServices) : ICommonDebugService
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the screen area indicators are enabled.
@@ -29,14 +29,14 @@ namespace Common.Debugging.Services
 		private bool ScreenAreaIndicatorsEnabled { get; set; } = false;
 
 		/// <summary>
-		/// Gets or sets the screen area drawable rectangles.
+		/// The screen area drawable rectangles.
 		/// </summary>
-		private DrawableRectangle[] ScreenAreaDrawableRectangles { get; set; } = [];
+		readonly private List<DrawableRectangle> _screenAreaDrawableRectangles = [];
 
 		/// <summary>
-		/// Gets or sets a list of the active debug user interface zones.
+		/// The list of the active debug user interface zones.
 		/// </summary>
-		private List<UiZone> ActiveDebugUserInterfaceZones { get; set; } = [];
+		readonly private List<UiZone> _activeDebugUserInterfaceZones = [];
 
 		/// <summary>
 		/// Does the post load initialization.
@@ -51,7 +51,7 @@ namespace Common.Debugging.Services
 				Color = Color.MonoGameOrange,
 				Rectangle = e
 			}).ToArray();
-			this.ScreenAreaDrawableRectangles = drawableRectangles;
+			this._screenAreaDrawableRectangles.AddRange(drawableRectangles);
 			var gameStateService = this._gameServices.GetService<IGameStateService>();
 			gameStateService.SubscribeToFlag(DebugService.DebugFlagName, this.DebugFlagSubscription);
 
@@ -80,10 +80,10 @@ namespace Common.Debugging.Services
 			var debugService = this._gameServices.GetService<IDebugService>();
 
 			if (true == enable)
-				foreach (var drawableRectangle in this.ScreenAreaDrawableRectangles ?? [])
+				foreach (var drawableRectangle in this._screenAreaDrawableRectangles ?? [])
 					debugService.DebugOverlaidDrawRuntime.AddDrawable(drawableRectangle);
 			else
-				foreach (var drawableRectangle in this.ScreenAreaDrawableRectangles ?? [])
+				foreach (var drawableRectangle in this._screenAreaDrawableRectangles ?? [])
 					debugService.DebugOverlaidDrawRuntime.RemoveDrawable(drawableRectangle);
 
 			this.ScreenAreaIndicatorsEnabled = enable;
@@ -95,12 +95,12 @@ namespace Common.Debugging.Services
 		/// <param name="uiZone">The user interface zone.</param>
 		public void AddDebugUserInterfaceZone(UiZone uiZone)
 		{
-			if (true == this.ActiveDebugUserInterfaceZones.Contains(uiZone))
+			if (true == this._activeDebugUserInterfaceZones.Contains(uiZone))
 				return;
 
 			var debugService = this._gameServices.GetService<IDebugService>();
 			debugService.DebugOverlaidDrawRuntime.AddDrawable(uiZone);
-			this.ActiveDebugUserInterfaceZones.Add(uiZone);		
+			this._activeDebugUserInterfaceZones.Add(uiZone);		
 		}
 
 		/// <summary>
@@ -109,12 +109,12 @@ namespace Common.Debugging.Services
 		/// <param name="uiZone">The user interface zone.</param>
 		public void RemoveDebugUserInterfaceZone(UiZone uiZone)
 		{
-			if (false == this.ActiveDebugUserInterfaceZones.Contains(uiZone))
+			if (false == this._activeDebugUserInterfaceZones.Contains(uiZone))
 				return;
 
 			var debugService = this._gameServices.GetService<IDebugService>();
 			debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiZone);
-			this.ActiveDebugUserInterfaceZones.Remove(uiZone);
+			this._activeDebugUserInterfaceZones.Remove(uiZone);
 		}
 
 		/// <summary>
@@ -124,10 +124,10 @@ namespace Common.Debugging.Services
 		{
 			var debugService = this._gameServices.GetService<IDebugService>();
 
-			foreach (var uiZone in this.ActiveDebugUserInterfaceZones ?? [])
+			foreach (var uiZone in this._activeDebugUserInterfaceZones ?? [])
 				debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiZone);
 
-			this.ActiveDebugUserInterfaceZones.Clear();
+			this._activeDebugUserInterfaceZones.Clear();
 		}
 	}
 }

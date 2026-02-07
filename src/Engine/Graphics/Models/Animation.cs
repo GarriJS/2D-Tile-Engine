@@ -84,7 +84,7 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		virtual protected void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (null == this.FrameStartTime)
+			if (this.FrameStartTime is null)
 			{
 				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
 
@@ -117,7 +117,6 @@ namespace Engine.Graphics.Models
 		{
 			var frameModels = this.Frames.Select(e => e.ToModel())
 										 .ToArray();
-
 			var result = new AnimationModel
 			{
 				CurrentFrameIndex = this.CurrentFrameIndex,

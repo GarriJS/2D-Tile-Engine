@@ -88,7 +88,7 @@ namespace Engine.Controls.Managers
             //var direction = this.GetMovementDirection(actionControlNames);
             var freshActionTypes = actionControlNames;
 
-            if (null != this.PriorControlState?.ActiveActionNames)
+            if (this.PriorControlState?.ActiveActionNames is not null)
                 freshActionTypes = [.. actionControlNames.Where(e => false == this.PriorControlState.ActiveActionNames.Contains(e))];
 
             var result = new ControlState

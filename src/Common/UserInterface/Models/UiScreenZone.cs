@@ -1,19 +1,18 @@
 ﻿using Common.UserInterface.Enums;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
-using Microsoft.VisualBasic;
 
 namespace Common.UserInterface.Models
 {
 	/// <summary>
 	/// Represents a user screen interface zone.
 	/// </summary>
-	public class UiScreenZone : IHaveArea
+	sealed public class UiScreenZone : IHaveArea
 	{
 		/// <summary>
 		/// Gets or sets the user interface zone type.
 		/// </summary>
-		public UiZonePositionType UiZoneType { get; set; }
+		required public UiZonePositionType UiZoneType { get; set; }
 
 		/// <summary>
 		/// Gets the position.
@@ -23,6 +22,6 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public IAmAArea Area { get; set; }
+		required public IAmAArea Area { get; set; }
 	}
 }

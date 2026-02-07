@@ -53,7 +53,7 @@ namespace Engine.Graphics.Services
 		/// <returns>The graphical text.</returns>
 		public SimpleText GetGraphicTextFromModel(GraphicalTextModel model)
 		{
-			if (null == model)
+			if (model is null)
 				return null;
 
 			var fontService = this._gameServices.GetService<IFontService>();

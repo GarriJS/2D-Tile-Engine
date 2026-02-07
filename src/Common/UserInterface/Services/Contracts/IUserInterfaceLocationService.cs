@@ -30,7 +30,7 @@ namespace Common.UserInterface.Services.Contracts
 		/// <param name="location">The location.</param>
 		/// <param name="uiBlock">The located user interface block.</param>
 		/// <returns>A value indicating whether a user interface block was found at the location.</returns>
-		public bool TryGetUiBlockAtLocation(Vector2 location, out LocationExtender<UiBlock> uiBlock);
+		public bool TryGetUiBlockAtLocation(Vector2 location, out Vector2Extender<UiBlock> uiBlock);
 
 		/// <summary>
 		/// Tries to get the user interface row at the given location.
@@ -38,7 +38,7 @@ namespace Common.UserInterface.Services.Contracts
 		/// <param name="location">The location.</param>
 		/// <param name="locatedUiRow">The located user interface row.</param>
 		/// <returns>A value indicating whether a user interface row was found at the location.</returns>
-		public bool TryGetUiRowAtLocation(Vector2 location, out LocationExtender<UiRow> locatedUiRow);
+		public bool TryGetUiRowAtLocation(Vector2 location, out Vector2Extender<UiRow> locatedUiRow);
 
 		/// <summary>
 		/// Tries to get the user interface element at the location.
@@ -46,6 +46,6 @@ namespace Common.UserInterface.Services.Contracts
 		/// <param name="location">The location.</param>
 		/// <param name="locatedUiElement">The located user interface element.</param>
 		/// <returns>A value indicated whether a user interface element was found at the location.</returns>
-		public bool TryGetUiElementAtLocation(Vector2 location, out LocationExtender<IAmAUiElement> locatedUiElement);
+		public bool TryGetUiElementAtLocation(Vector2 location, out Vector2Extender<IAmAUiElement> locatedUiElement);
 	}
 }

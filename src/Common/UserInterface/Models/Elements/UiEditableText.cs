@@ -11,12 +11,12 @@ namespace Common.UserInterface.Models.Elements
 	/// <summary>
 	/// Represents user interface editable text.
 	/// </summary>
-	public class UiEditableText : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
+	sealed public class UiEditableText : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
 	{
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
 		/// </summary>
-		public Vector2 ClickableAreaScaler { get; set; }
+		required public Vector2 ClickableAreaScaler { get; set; }
 
 		/// <summary>
 		/// Gets the graphic text.
@@ -26,7 +26,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets or sets the writable text.
 		/// </summary>
-		public WritableText WritableText { get; set; }
+		required public WritableText WritableText { get; set; }
 
 		/// <summary>
 		/// Raises the click event.
@@ -50,7 +50,7 @@ namespace Common.UserInterface.Models.Elements
 			var graphicOffset = offset + this.CachedOffset ?? default;
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 
-			if (null != this.GraphicText)
+			if (this.GraphicText is not null)
 			{
 				var textDimensions = this.GraphicText.GetTextDimensions();
 				var centeredOffset = new Vector2

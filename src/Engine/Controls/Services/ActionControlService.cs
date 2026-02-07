@@ -70,7 +70,7 @@ namespace Engine.Controls.Services
 			Keys[] controlKeys = null;
 			MouseButtonTypes[] controlMouseButtons = null;
 
-			if ((null != actionControlModel.ControlKeys) &&
+			if ((actionControlModel.ControlKeys is not null) &&
 				(0 < actionControlModel.ControlKeys.Length))
 			{
 				controlKeys = new Keys[actionControlModel.ControlKeys.Length];
@@ -79,7 +79,7 @@ namespace Engine.Controls.Services
 					controlKeys[i] = (Keys)actionControlModel.ControlKeys[i];
 			}
 
-			if ((null != actionControlModel.ControlMouseButtons) &&
+			if ((actionControlModel.ControlMouseButtons is not null) &&
 				(0 < actionControlModel.ControlMouseButtons.Length))
 			{
 				controlMouseButtons = new MouseButtonTypes[actionControlModel.ControlMouseButtons.Length];
@@ -108,7 +108,7 @@ namespace Engine.Controls.Services
 			int[] controlKeys = null;
 			int[] controlMouseButtons = null;
 
-			if ((null != actionControl.ControlKeys) &&
+			if ((actionControl.ControlKeys is not null) &&
 				(0 < actionControl.ControlKeys.Length))
 			{
 				controlKeys = new int[actionControl.ControlKeys.Length];
@@ -117,7 +117,7 @@ namespace Engine.Controls.Services
 					controlKeys[i] = (int)actionControl.ControlKeys[i];
 			}
 
-			if ((null != actionControl.ControlMouseButtons) &&
+			if ((actionControl.ControlMouseButtons is not null) &&
 				(0 < actionControl.ControlMouseButtons.Length))
 			{
 				controlMouseButtons = new int[actionControl.ControlMouseButtons.Length];

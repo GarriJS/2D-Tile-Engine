@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 namespace Common.Scenes.Services
 {
@@ -19,14 +18,14 @@ namespace Common.Scenes.Services
 	/// Initializes a new instance of the scene service.
 	/// </remarks>
 	/// <param name="gameServices"></param>
-	public class SceneService(GameServiceContainer gameServices) : ILoadContent
+	sealed public class SceneService(GameServiceContainer gameServices) : ILoadContent
 	{
-		private readonly GameServiceContainer _gameServices = gameServices;
+		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
 		/// Gets or sets the scene models.
 		/// </summary>
-		public Dictionary<string, SceneModel> SceneModels { get; set; } = [];
+		readonly public Dictionary<string, SceneModel> _sceneModels = [];
 
 		/// <summary>
 		/// Loads the scene content.
@@ -35,26 +34,22 @@ namespace Common.Scenes.Services
 		{
 			var contentManager = this._gameServices.GetService<ContentManager>();
 			var scenePath = $@"{contentManager.RootDirectory}\Scenes";
-			string[] sceneFiles = Directory.GetFiles(scenePath);
+			var sceneFiles = Directory.GetFiles(scenePath);
 
-			if (false == sceneFiles.Any())
-			{
+			if (0 == sceneFiles.Length)
 				return;
-			}
 
 			foreach (string sceneFile in sceneFiles)
-			{
 				try
 				{
 					var sceneName = Path.GetFileNameWithoutExtension(sceneFile);
 					var scene = contentManager.Load<SceneModel>($@"Scenes\{sceneName}");
-					this.SceneModels.Add(scene.SceneName, scene);
+					this._sceneModels.Add(scene.SceneName, scene);
 				}
 				catch (Exception ex)
 				{
 					Debug.WriteLine($"Loading images failed for {sceneFile}: {ex.Message}");
 				}
-			}
 		}
 
 		/// <summary>
@@ -66,12 +61,13 @@ namespace Common.Scenes.Services
 		{
 			var tileService = this._gameServices.GetService<ITileService>();
 			var tileMap = tileService.GetTileMapFromModel(scene.TileMap);
-
-			return new Scene
+			var result = new Scene
 			{
 				SceneName = scene.SceneName,
 				TileMap = tileMap,
 			};
+
+			return result;
 		}
 	}
 }

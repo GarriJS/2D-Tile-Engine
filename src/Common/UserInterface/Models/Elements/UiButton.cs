@@ -8,10 +8,10 @@ using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Models.Elements
 {
-    /// <summary>
-    /// Represents a user interface button.
-    /// </summary>
-    public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
+	/// <summary>
+	/// Represents a user interface button.
+	/// </summary>
+	sealed public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
 	{
 		/// <summary>
 		/// Gets or sets the pressed text offset. 
@@ -21,7 +21,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
 		/// </summary>
-		public Vector2 ClickableAreaScaler { get; set; }
+		required public Vector2 ClickableAreaScaler { get; set; }
 
 		/// <summary>
 		/// Gets or sets the graphic text.
@@ -31,12 +31,12 @@ namespace Common.UserInterface.Models.Elements
 		/// <summary>
 		/// Gets or sets the simple text.
 		/// </summary>
-		public SimpleText SimpleText { get; set; }
+		required public SimpleText SimpleText { get; set; }
 
 		/// <summary>
 		/// Gets or sets the clickable animation.
 		/// </summary>
-		public TriggeredAnimation ClickAnimation { get; set; }
+		required public TriggeredAnimation ClickAnimation { get; set; }
 
 		/// <summary>
 		/// Raises the click event.
@@ -61,7 +61,7 @@ namespace Common.UserInterface.Models.Elements
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			this.ClickAnimation?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 
-			if (null != this.GraphicText)
+			if (this.GraphicText is not null)
 			{
 				var textDimensions = this.GraphicText.GetTextDimensions();
 				var centeredOffset = new Vector2
