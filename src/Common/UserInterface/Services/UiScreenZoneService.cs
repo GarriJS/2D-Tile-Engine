@@ -17,7 +17,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface screen zone service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	sealed public class UserInterfaceScreenZoneService(GameServiceContainer gameServices) : IUserInterfaceScreenZoneService
+	sealed public class UiScreenZoneService(GameServiceContainer gameServices) : IUiScreenZoneService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -29,7 +29,7 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public Dictionary<UiZonePositionType, UiScreenZone> UserInterfaceScreenZones { get; set; } = [];
+		public Dictionary<UiZonePositionType, UiScreenZone> UiScreenZones { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the zone type mapper.
@@ -80,7 +80,7 @@ namespace Common.UserInterface.Services
 					var col = (x / (int)this.ScreenZoneSize.Width) + 1;
 
 					if ((false == this.ZoneTypeMapper.TryGetValue((row, col), out var zoneType)) ||
-						(true == this.UserInterfaceScreenZones.ContainsKey(zoneType)))
+						(true == this.UiScreenZones.ContainsKey(zoneType)))
 					{
 						continue;
 					}
@@ -103,7 +103,7 @@ namespace Common.UserInterface.Services
 						Area = area
 					};
 
-					this.UserInterfaceScreenZones.TryAdd(zoneType, zone);
+					this.UiScreenZones.TryAdd(zoneType, zone);
 				}
 			}
 
@@ -125,7 +125,7 @@ namespace Common.UserInterface.Services
 				Area = noneArea
 			};
 
-			this.UserInterfaceScreenZones.TryAdd(UiZonePositionType.Unknown, noneZone);
+			this.UiScreenZones.TryAdd(UiZonePositionType.Unknown, noneZone);
 		}
 	}
 }

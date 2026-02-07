@@ -43,8 +43,8 @@ namespace Common.Debugging.Services
 		/// </summary>
 		public void PostLoadInitialize()
 		{
-			var uiScreenAreaService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
-			var uiScreenZonesRectangles = uiScreenAreaService.UserInterfaceScreenZones.Values.Select(e => e.Area.ToRectangle);
+			var uiScreenAreaService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiScreenZonesRectangles = uiScreenAreaService.UiScreenZones.Values.Select(e => e.Area.ToRectangle);
 			var drawableRectangles = uiScreenZonesRectangles.SelectMany(e => e.GetEdgeRectangles(1)).Select(e => new DrawableRectangle
 			{
 				DrawLayer = IDebugService.DebugDrawLayer,

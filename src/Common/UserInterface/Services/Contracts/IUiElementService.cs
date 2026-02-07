@@ -6,7 +6,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface element service.
 	/// </summary>
-	public interface IUserInterfaceElementService
+	public interface IUiElementService
 	{
 		/// <summary>
 		/// Gets the user interface element.

@@ -128,7 +128,7 @@ namespace Common.Controls.Cursors.Services
 		/// <returns>The hover state.</returns>
 		public HoverState GetCursorHoverState()
 		{
-			var uiLocationService = this._gameServices.GetService<IUserInterfaceLocationService>();
+			var uiLocationService = this._gameServices.GetService<IUiLocationService>();
 			var uiObject = uiLocationService.GetUiObjectAtScreenLocation(this.CursorControlComponent.CursorPosition.Coordinates);
 
 			return uiObject;

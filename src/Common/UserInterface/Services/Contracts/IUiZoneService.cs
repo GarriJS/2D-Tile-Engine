@@ -6,7 +6,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface zone service.
 	/// </summary>
-	public interface IUserInterfaceZoneService
+	public interface IUiZoneService
 	{
 		/// <summary>
 		/// Gets the user interface zone from the model.

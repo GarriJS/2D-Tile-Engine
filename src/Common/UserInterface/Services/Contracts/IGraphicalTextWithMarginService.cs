@@ -4,9 +4,9 @@ using Common.UserInterface.Models;
 namespace Common.UserInterface.Services.Contracts
 {
 	/// <summary>
-	/// Represents a user interface graphic text with margin service.
+	/// Represents a graphic text with margin service.
 	/// </summary>
-	public interface IUserInterfaceGraphicalTextWithMarginService
+	public interface IGraphicalTextWithMarginService
 	{
 		/// <summary>
 		/// Gets the graphical text with margin from the model.

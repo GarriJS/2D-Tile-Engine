@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Engine.Core.Initialization
 {
@@ -37,12 +38,12 @@ namespace Engine.Core.Initialization
 		}
 
 		/// <summary>
-		/// Invokes the model.
+		/// Tries to invokes the model.
 		/// </summary>
-		/// <param name="model"></param>
+		/// <param name="model">The initial model.</param>
 		/// <param name="result">The result of invoking the model.</param>
 		/// <returns>A value indicating whether the model processor was found for the provided model.</returns>
-		public static bool InvokeModel(object model, out object result)
+		public static bool TryInvokeModel(object model, out object result)
 		{
 			if (model is null)
 			{
@@ -63,6 +64,49 @@ namespace Engine.Core.Initialization
 			result = modelProcessor.DynamicInvoke(model);
 
 			return true;
+		}
+
+		/// <summary>
+		/// Tries to invoke the model to the explicit type.
+		/// </summary>
+		/// <typeparam name="Tresult">The desired result type.</typeparam>
+		/// <param name="model">The initial model.</param>
+		/// <param name="result">The result of invoking the model..</param>
+		/// <returns>A value indicating whether the model processor was found for the provided model to the desired type.</returns>
+		public static bool TryInvokeModel<Tresult>(object model, out Tresult result)
+		{
+			if ((true == TryInvokeModel(model, out var typelessResult)) &&
+				(typelessResult is Tresult typedResult))
+			{
+				result = typedResult;
+
+				return true;
+			}
+
+			result = default;
+
+			return false;
+		}
+
+		/// <summary>
+		/// Tries to invoke the model to the explicit type or throws.
+		/// </summary>
+		/// <typeparam name="Tresult">The desired result type.</typeparam>
+		/// <param name="model">The initial model.</param>
+		/// <param name="result">The result of invoking the model..</param>
+		/// <returns>A value indicating whether the model processor was found for the provided model to the desired type.</returns>
+		/// <exception cref="Exception">Thrown when the desired result type can't be produced from the provided model.</exception>
+		public static bool TryInvokeModelOrThrow<Tresult>(object model, out Tresult result)
+		{
+			if ((true == TryInvokeModel(model, out var typelessResult)) &&
+				(typelessResult is Tresult typedResult))
+			{
+				result = typedResult;
+
+				return true;
+			}
+
+			throw new Exception("Could not produced desired type from the provided model.");
 		}
 
 		/// <summary>

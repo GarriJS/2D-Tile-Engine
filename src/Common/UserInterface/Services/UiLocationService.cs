@@ -16,7 +16,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface location service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	sealed public class UserInterfaceLocationService(GameServiceContainer gameServices) : IUserInterfaceLocationService
+	sealed public class UiLocationService(GameServiceContainer gameServices) : IUiLocationService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 

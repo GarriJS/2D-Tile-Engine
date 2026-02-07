@@ -18,7 +18,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user group interface service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	sealed public class UserInterfaceGroupService(GameServiceContainer gameServices) : IUserInterfaceGroupService
+	sealed public class UiGroupService(GameServiceContainer gameServices) : IUserInterfaceGroupService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -136,7 +136,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface group.</returns>
 		public UiGroup GetUiGroupFromModel(UiGroupModel uiGroupModel)
 		{
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUiZoneService>();
 			var uiZones = new List<UiZone>();
 
 			foreach (var uiZoneModel in uiGroupModel.Zones)

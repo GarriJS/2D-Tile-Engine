@@ -22,13 +22,13 @@ namespace Common.DiskModels
 		static public (Type type, Delegate factory)[] GetModelProcessingMappings(GameServiceContainer gameServices)
 		{
 			var tileService = gameServices.GetService<ITileService>();
-			var uiMarginService = gameServices.GetService<IUserInterfaceMarginService>();
-			var uiGraphicalTextWithMarginService = gameServices.GetService<IUserInterfaceGraphicalTextWithMarginService>();
-			var uiElementService = gameServices.GetService<IUserInterfaceElementService>();
+			var uiMarginService = gameServices.GetService<IUiMarginService>();
+			var uiGraphicalTextWithMarginService = gameServices.GetService<IGraphicalTextWithMarginService>();
+			var uiElementService = gameServices.GetService<IUiElementService>();
 			var uiGroupService = gameServices.GetService<IUserInterfaceGroupService>();
-			var uiZoneService = gameServices.GetService<IUserInterfaceZoneService>();
-			var uiBlockService = gameServices.GetService<IUserInterfaceBlockService>();
-			var uiRowService = gameServices.GetService<IUserInterfaceRowService>();
+			var uiZoneService = gameServices.GetService<IUiZoneService>();
+			var uiBlockService = gameServices.GetService<IUiBlockService>();
+			var uiRowService = gameServices.GetService<IUiRowService>();
 			var cursorService = gameServices.GetService<ICursorService>();
 			var scrollStateService = gameServices.GetService<IScrollStateService>();
 

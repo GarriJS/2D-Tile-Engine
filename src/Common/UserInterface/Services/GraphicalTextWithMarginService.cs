@@ -7,13 +7,13 @@ using Microsoft.Xna.Framework;
 namespace Common.UserInterface.Services
 {
 	/// <summary>
-	/// Represents a user interface graphic text with margin service.
+	/// Represents a graphic text with margin service.
 	/// </summary>
 	/// <remarks>
-	/// Initializes the user interface graphic text with margin service.
+	/// Initializes the graphic text with margin service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	sealed public class UserInterfaceGraphicalTextWithMarginService(GameServiceContainer gameServices) : IUserInterfaceGraphicalTextWithMarginService
+	sealed public class GraphicalTextWithMarginService(GameServiceContainer gameServices) : IGraphicalTextWithMarginService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -28,7 +28,7 @@ namespace Common.UserInterface.Services
 				return null;
 
 			var fontService = this._gameServices.GetService<IFontService>();
-			var uiMarginService = this._gameServices.GetService<IUserInterfaceMarginService>();
+			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
 			var margin = uiMarginService.GetUiMarginFromModel(model.Margin);

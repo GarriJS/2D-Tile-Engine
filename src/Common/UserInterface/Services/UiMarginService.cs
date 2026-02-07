@@ -12,7 +12,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface margin service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	sealed public class UserInterfaceMarginService(GameServiceContainer gameServices) : IUserInterfaceMarginService
+	sealed public class UiMarginService(GameServiceContainer gameServices) : IUiMarginService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 

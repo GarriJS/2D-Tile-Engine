@@ -31,7 +31,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface element service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	sealed public class UserInterfaceElementService(GameServiceContainer gameServices) : IUserInterfaceElementService
+	sealed public class UiElementService(GameServiceContainer gameServices) : IUiElementService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -85,7 +85,7 @@ namespace Common.UserInterface.Services
 
 			var graphicService = this._gameServices.GetService<IGraphicService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
-			var uiMarginService = this._gameServices.GetService<IUserInterfaceMarginService>();
+			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
 			var result = new Dictionary<string, object>();
 			var area = this.GetElementArea(uiElementModel);
 			result["area"] = area;
@@ -251,7 +251,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The element area.</returns>
 		private SubArea GetElementArea(IAmAUiElementModel elementModel)
 		{
-			var uiScreenZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
+			var uiScreenZoneService = this._gameServices.GetService<IUiScreenZoneService>();
 
 			if (true == elementModel.FixedSized.HasValue)
 			{

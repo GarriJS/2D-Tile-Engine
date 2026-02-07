@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Common.UserInterface.Services.Contracts
 {
-	public interface IUserInterfaceLocationService
+	public interface IUiLocationService
 	{
 		/// <summary>
 		/// Gets the user interface hover state at the screen location.

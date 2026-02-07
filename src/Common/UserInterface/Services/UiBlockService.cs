@@ -22,7 +22,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface block service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	sealed public class UserInterfaceBlockService(GameServiceContainer gameServices) : IUserInterfaceBlockService
+	sealed public class UiBlockService(GameServiceContainer gameServices) : IUiBlockService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -33,14 +33,14 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface block.</returns>
 		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel)
 		{
-			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
+			var uiElementService = this._gameServices.GetService<IUiElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUiScreenZoneService>();
 			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
-			var uiMarginService = this._gameServices.GetService<IUserInterfaceMarginService>();
-			var uiRowService = this._gameServices.GetService<IUserInterfaceRowService>();
+			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
+			var uiRowService = this._gameServices.GetService<IUiRowService>();
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var rows = new List<UiRow>();
 
@@ -62,7 +62,7 @@ namespace Common.UserInterface.Services
 								   .OrderDescending()
 								   .FirstOrDefault();
 			var contentHeight = rows.Sum(e => e.TotalHeight);
-			var dynamicRows = rows.Where(r => r._elements.Any(e => UserInterfaceGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
+			var dynamicRows = rows.Where(r => r._elements.Any(e => UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicRows.Length;
 

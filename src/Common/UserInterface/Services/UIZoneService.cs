@@ -24,7 +24,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface zone service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	sealed public class UserInterfaceZoneService(GameServiceContainer gameServices) : IUserInterfaceZoneService
+	sealed public class UIZoneService(GameServiceContainer gameServices) : IUiZoneService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -35,18 +35,18 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetUiZoneFromModel(UiZoneModel uiZoneModel)
 		{
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
-			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
+			var uiZoneService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiElementService = this._gameServices.GetService<IUiElementService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
-			var uiBlockService = this._gameServices.GetService<IUserInterfaceBlockService>();
-			var uiRowService = this._gameServices.GetService<IUserInterfaceRowService>();
+			var uiBlockService = this._gameServices.GetService<IUiBlockService>();
+			var uiRowService = this._gameServices.GetService<IUiRowService>();
 
-			if (false == uiZoneService.UserInterfaceScreenZones.TryGetValue(uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
-				uiScreenZone = uiZoneService.UserInterfaceScreenZones[UiZonePositionType.Unknown];
+			if (false == uiZoneService.UiScreenZones.TryGetValue(uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
+				uiScreenZone = uiZoneService.UiScreenZones[UiZonePositionType.Unknown];
 
 			var blocks = new List<UiBlock>();
 
@@ -60,7 +60,7 @@ namespace Common.UserInterface.Services
 			var rows = blocks.Where(e => e._rows.Count != 0)
 							 .SelectMany(e => e._rows)
 							 .ToArray();
-			var dynamicRows = rows.Where(r => r._elements.Any(e => UserInterfaceGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
+			var dynamicRows = rows.Where(r => r._elements.Any(e => UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
 								  .ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
 			var dynamicHeight = remainingHeight / dynamicRows.Length;

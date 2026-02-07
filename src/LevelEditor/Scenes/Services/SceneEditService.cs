@@ -102,7 +102,7 @@ namespace LevelEditor.Scenes.Services
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetTileGridUserInterfaceZone()
 		{
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUiZoneService>();
 			var uiZoneModel = new UiZoneModel
 			{
 				Name = "Tile Grid User Interface Zone",

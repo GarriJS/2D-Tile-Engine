@@ -6,7 +6,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface block service.
 	/// </summary>
-	public interface IUserInterfaceBlockService
+	public interface IUiBlockService
 	{
 		/// <summary>
 		/// Get the user interface block from the model.

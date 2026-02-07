@@ -6,7 +6,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface margin service.
 	/// </summary>
-	public interface IUserInterfaceMarginService
+	public interface IUiMarginService
 	{
 		/// <summary>
 		/// Gets the user interface margin from the model.

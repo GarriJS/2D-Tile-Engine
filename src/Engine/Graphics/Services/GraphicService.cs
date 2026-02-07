@@ -28,23 +28,14 @@ namespace Engine.Graphics.Services
 			if (model is null)
 				return null;
 
-			var modelType = model.GetType();
-
-			if (modelType == typeof(GraphicBaseModel))
-			{
-				// LOGGING
-
-				return null;
-			}
-
-			if (false == ModelProcessor.InvokeModel(model, out var result))
+			if (false == ModelProcessor.TryInvokeModel<IAmAGraphic>(model, out var result))
 			{
 				// LOGGIGN
 
 				return null;
 			}
 
-			return result as IAmAGraphic;
+			return result;
 		}
 
 		/// <summary>

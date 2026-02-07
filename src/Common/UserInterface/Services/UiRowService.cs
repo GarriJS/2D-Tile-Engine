@@ -25,7 +25,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user interface row service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	sealed public class UserInterfaceRowService(GameServiceContainer gameServices) : IUserInterfaceRowService
+	sealed public class UiRowService(GameServiceContainer gameServices) : IUiRowService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 		
@@ -36,12 +36,12 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface row.</returns>
 		public UiRow GetUiRowFromModel(UiRowModel uiRowModel)
 		{
-			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
+			var uiElementService = this._gameServices.GetService<IUiElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceScreenZoneService>();
-			var uiMarginService = this._gameServices.GetService<IUserInterfaceMarginService>();
+			var uiZoneService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var subElements = new List<IAmAUiElement>();
 
@@ -295,8 +295,8 @@ namespace Common.UserInterface.Services
 			if (0 == uiRow._elements.Count)
 				return;
 
-			var uiElementService = this._gameServices.GetService<IUserInterfaceElementService>();
-			var dynamicHeightElements = uiRow._elements.Where(e => true == UserInterfaceGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))
+			var uiElementService = this._gameServices.GetService<IUiElementService>();
+			var dynamicHeightElements = uiRow._elements.Where(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))
 													   .ToList();
 
 			foreach (var uiElement in dynamicHeightElements ?? [])

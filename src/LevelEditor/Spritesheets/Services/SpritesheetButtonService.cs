@@ -123,7 +123,7 @@ namespace LevelEditor.Spritesheets.Services
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetUiZoneForSpritesheet(string spritesheetName, string backgroundTexture, UiZonePositionType uiZonePositionType)
 		{
-			var uiZoneService = this._gameServices.GetService<IUserInterfaceZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUiZoneService>();
 			
 			var spritesheetButtons = this.GetUiButtonsForSpritesheet(spritesheetName, new Point(32, 32));
 			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();

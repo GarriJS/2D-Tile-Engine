@@ -6,7 +6,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface row service.
 	/// </summary>
-	public interface IUserInterfaceRowService
+	public interface IUiRowService
 	{
 		/// <summary>
 		/// Gets the user interface row.
