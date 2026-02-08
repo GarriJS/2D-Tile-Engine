@@ -18,7 +18,7 @@ namespace Common.UserInterface.Services
 	/// Initializes the user group interface service.
 	/// </remarks>
 	/// <param name="gameServices">The game services.</param>
-	sealed public class UiGroupService(GameServiceContainer gameServices) : IUserInterfaceGroupService
+	sealed public class UiGroupService(GameServiceContainer gameServices) : IUiGroupService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -114,7 +114,7 @@ namespace Common.UserInterface.Services
 			foreach (var uiZone in uiGroup._zones)
 			{
 				runTimeOverlaidDrawService.AddDrawable(uiZone);
-				var clickAnimations = uiZone._blocks.SelectMany(e => e._rows)
+				var clickAnimations = uiZone.Blocks.SelectMany(e => e._rows)
 												   .SelectMany(e => e._elements)
 												   .OfType<UiButton>()
 												   .Where(e => e.ClickAnimation is not null)

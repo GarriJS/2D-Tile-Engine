@@ -337,7 +337,7 @@ namespace LevelEditor.Scenes.Services
 		{
 			var runTimeDrawService = this._gameServices.GetService<IRuntimeDrawService>();
 			var spritesheetButtonService = this._gameServices.GetService<ISpritesheetButtonService>();
-			var uiGroupService = this._gameServices.GetService<IUserInterfaceGroupService>();
+			var uiGroupService = this._gameServices.GetService<IUiGroupService>();
 			var controlService = this._gameServices.GetService<IControlService>();
 			var graphicDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var spritesheetButtonUiZone = spritesheetButtonService.GetUiZoneForSpritesheet("dark_grass_simplified", "gray_transparent", UiZonePositionType.Row3Col4);

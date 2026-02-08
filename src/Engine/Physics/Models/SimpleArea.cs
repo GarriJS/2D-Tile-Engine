@@ -2,6 +2,7 @@
 using Engine.DiskModels.Physics;
 using Engine.Monogame;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -27,6 +28,21 @@ namespace Engine.Physics.Models
 		/// Gets or sets the position.
 		/// </summary>
 		required public Position Position { get; set; }
+
+		/// <summary>
+		/// The area to its dimensions.
+		/// </summary>
+		public Vector2 ToVectorDimensions { get => new() { X = this.Width, Y = this.Height }; }
+
+		/// <summary>
+		/// The area to a rectangle.
+		/// </summary>
+		virtual public Rectangle ToRectangle { get => new() { X = (int)this.Position.X, Y = (int)this.Position.Y, Width = (int)this.Width, Height = (int)this.Height }; }
+
+		/// <summary>
+		/// The area to a sub area.
+		/// </summary>
+		public SubArea ToSubArea { get => new() { Width = this.Width, Height = this.Height }; }
 
 		/// <summary>
 		/// Determines if a the area contains the coordinate.

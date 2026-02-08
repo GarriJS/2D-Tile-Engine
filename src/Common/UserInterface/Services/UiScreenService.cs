@@ -11,13 +11,13 @@ using System.Collections.Generic;
 namespace Common.UserInterface.Services
 {
 	/// <summary>
-	/// Represents a user interface screen zone service.
+	/// Represents a user interface screen service.
 	/// </summary>
 	/// <remarks>
-	/// Initializes the user interface screen zone service.
+	/// Initializes the user interface screen service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	sealed public class UiScreenZoneService(GameServiceContainer gameServices) : IUiScreenZoneService
+	sealed public class UiScreenService(GameServiceContainer gameServices) : IUiScreenService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
@@ -29,12 +29,17 @@ namespace Common.UserInterface.Services
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public Dictionary<UiZonePositionType, UiScreenZone> UiScreenZones { get; set; } = [];
+		readonly private Dictionary<UiZonePositionType, UiScreenZone> _uiScreenZones = [];
+
+		/// <summary>
+		/// Gets or sets the user interface zones.
+		/// </summary>
+		public Dictionary<UiZonePositionType, UiScreenZone> UiScreenZones { get => this._uiScreenZones; }
 
 		/// <summary>
 		/// Gets or sets the zone type mapper.
 		/// </summary>
-		private Dictionary<(int row, int col), UiZonePositionType> ZoneTypeMapper { get; } = new()
+		readonly private Dictionary<(int row, int col), UiZonePositionType> _zoneTypeMapper = new()
 		{
 			{ (1, 1), UiZonePositionType.Row1Col1 },
 			{ (2, 1), UiZonePositionType.Row2Col1 },
@@ -65,7 +70,6 @@ namespace Common.UserInterface.Services
 		{
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var areaService = this._gameServices.GetService<IAreaService>();
-
 			this.ScreenZoneSize = new SubArea
 			{
 				Width = graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth / 4,
@@ -79,11 +83,9 @@ namespace Common.UserInterface.Services
 					var row = (y / (int)this.ScreenZoneSize.Height) + 1;
 					var col = (x / (int)this.ScreenZoneSize.Width) + 1;
 
-					if ((false == this.ZoneTypeMapper.TryGetValue((row, col), out var zoneType)) ||
-						(true == this.UiScreenZones.ContainsKey(zoneType)))
-					{
+					if ((false == this._zoneTypeMapper.TryGetValue((row, col), out var zoneType)) ||
+						(true == this._uiScreenZones.ContainsKey(zoneType)))
 						continue;
-					}
 
 					var areaModel = new AreaModel
 					{
@@ -95,15 +97,13 @@ namespace Common.UserInterface.Services
 						Width = this.ScreenZoneSize.Width,
 						Height = this.ScreenZoneSize.Height,
 					};
-
 					var area = areaService.GetAreaFromModel(areaModel);
 					var zone = new UiScreenZone
 					{
 						UiZoneType = zoneType,
 						Area = area
 					};
-
-					this.UiScreenZones.TryAdd(zoneType, zone);
+					this._uiScreenZones.TryAdd(zoneType, zone);
 				}
 			}
 
@@ -117,15 +117,13 @@ namespace Common.UserInterface.Services
 				Width = this.ScreenZoneSize.Width,
 				Height = this.ScreenZoneSize.Height,
 			};
-
 			var noneArea = areaService.GetAreaFromModel(noneAreaModel);
 			var noneZone = new UiScreenZone
 			{
 				UiZoneType = UiZonePositionType.Unknown,
 				Area = noneArea
 			};
-
-			this.UiScreenZones.TryAdd(UiZonePositionType.Unknown, noneZone);
+			this._uiScreenZones.TryAdd(UiZonePositionType.Unknown, noneZone);
 		}
 	}
 }

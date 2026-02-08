@@ -7,19 +7,19 @@ using System.Collections.Generic;
 namespace Common.UserInterface.Services.Contracts
 {
 	/// <summary>
-	/// Represents a user interface screen zone service.
+	/// Represents a user interface screen service.
 	/// </summary>
-	public interface IUiScreenZoneService : IDoConfiguration
+	public interface IUiScreenService : IDoConfiguration
 	{
 		/// <summary>
 		/// Gets or sets the screen zone size.
 		/// </summary>
-		public SubArea ScreenZoneSize { get; set; }
+		public SubArea ScreenZoneSize { get; }
 
 		/// <summary>
 		/// Gets or sets the user interface zones.
 		/// </summary>
-		public Dictionary<UiZonePositionType, UiScreenZone> UiScreenZones { get; set; }
+		public Dictionary<UiZonePositionType, UiScreenZone> UiScreenZones { get; }
 
 		/// <summary>
 		/// Initializes the user interface zones.

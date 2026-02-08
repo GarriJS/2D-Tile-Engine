@@ -30,18 +30,19 @@ namespace Common.UserInterface.Services
 		/// Get the user interface block from the model.
 		/// </summary>
 		/// <param name="uiBlockModel">The user interface block model.</param>
+		/// <param name="outterArea">The encapsulating area of the block.</param>
 		/// <returns>The user interface block.</returns>
-		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel)
+		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel, SubArea outterArea = null)
 		{
 			var uiElementService = this._gameServices.GetService<IUiElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-			var uiZoneService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiScreenService = this._gameServices.GetService<IUiScreenService>();
 			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
 			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
 			var uiRowService = this._gameServices.GetService<IUiRowService>();
-			var zoneArea = uiZoneService.ScreenZoneSize;
+			outterArea ??= uiScreenService.ScreenZoneSize;
 			var rows = new List<UiRow>();
 
 			foreach (var rowModel in uiBlockModel.Rows ?? [])
@@ -49,9 +50,9 @@ namespace Common.UserInterface.Services
 				var row = uiRowService.GetUiRowFromModel(rowModel);
 
 				if ((true == uiBlockModel.FlexRows) &&
-					(row.TotalWidth > zoneArea.Width))
+					(row.TotalWidth > outterArea.Width))
 				{
-					var splitRows = uiRowService.SplitRow(row, rowModel, zoneArea.Width);
+					var splitRows = uiRowService.SplitRow(row, rowModel, outterArea.Width);
 					rows.AddRange(splitRows);
 				}
 				else
@@ -63,13 +64,13 @@ namespace Common.UserInterface.Services
 								   .FirstOrDefault();
 			var contentHeight = rows.Sum(e => e.TotalHeight);
 			var dynamicRows = rows.Where(r => r._elements.Any(e => UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
-			var remainingWidth = zoneArea.Width - contentWidth;
+			var remainingWidth = outterArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicRows.Length;
 
-			if (zoneArea.Width * ElementSizesScalars.ExtraSmall.X > dynamicWidth)
+			if (outterArea.Width * ElementSizesScalars.ExtraSmall.X > dynamicWidth)
 			{
 				// LOGGING
-				dynamicWidth = zoneArea.Width * ElementSizesScalars.ExtraSmall.X;
+				dynamicWidth = outterArea.Width * ElementSizesScalars.ExtraSmall.X;
 			}
 
 			foreach (var dynamicRow in dynamicRows)
@@ -78,7 +79,7 @@ namespace Common.UserInterface.Services
 			var margin = uiMarginService.GetUiMarginFromModel(uiBlockModel.Margin);
 			var area = new SubArea
 			{
-				Width = zoneArea.Width,
+				Width = outterArea.Width,
 				Height = contentHeight
 			};
 			IAmAGraphic background = null;
@@ -90,7 +91,7 @@ namespace Common.UserInterface.Services
 				if (true == uiBlockModel.ExtendBackgroundToMargin)
 					graphicArea = new SubArea
 					{
-						Width = zoneArea.Width,
+						Width = outterArea.Width,
 						Height = area.Height + margin.TopMargin + margin.BottomMargin
 					};
 
@@ -116,7 +117,7 @@ namespace Common.UserInterface.Services
 				Name = uiBlockModel.Name,
 				FlexRows = true,
 				ExtendBackgroundToMargin = uiBlockModel.ExtendBackgroundToMargin,
-				AvailableWidth = zoneArea.Width,
+				AvailableWidth = outterArea.Width,
 				Area = area,
 				Margin = margin,
 				HorizontalJustificationType = uiBlockModel.HorizontalJustificationType,

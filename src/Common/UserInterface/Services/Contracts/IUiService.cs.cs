@@ -7,7 +7,7 @@ namespace Common.UserInterface.Services.Contracts
 	/// <summary>
 	/// Represents a user interface group service.
 	/// </summary>
-	public interface IUserInterfaceGroupService
+	public interface IUiGroupService
 	{
 		/// <summary>
 		/// Gets the active visibility group id.

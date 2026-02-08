@@ -105,6 +105,20 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
+		/// Tries to get the user interface modal at the given location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="uiModal">The user interface modal.</param>
+		/// <returns>A value indicating whether the user interface modal was found at the location.</returns>
+		public bool TryGetUiModalAtLocation(Vector2 location, out UiModal uiModal)
+		{
+			var uiModalService = this._gameServices.GetService<IUiModalService>();
+			uiModal = uiModalService.ActiveUiModals.FirstOrDefault(e => true == e.Area.Contains(location));
+
+			return uiModal is not null;
+		}
+
+		/// <summary>
 		/// Tries to get the user interface zone at the given location.
 		/// </summary>
 		/// <param name="location">The location.</param>
@@ -112,11 +126,38 @@ namespace Common.UserInterface.Services
 		/// <returns>A value indicating whether the user interface zone was found at the location.</returns>
 		public bool TryGetUiZoneAtLocation(Vector2 location, out UiZone uiZone)
 		{
-			var uiGroupService = this._gameServices.GetService<IUserInterfaceGroupService>();
+			var uiGroupService = this._gameServices.GetService<IUiGroupService>();
 			var activeUiGroup = uiGroupService.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == uiGroupService.ActiveVisibilityGroupId);
 			uiZone = activeUiGroup?._zones.FirstOrDefault(e => true == e.Area.Contains(location));
 
 			return uiZone is not null;
+		}
+
+		/// <summary>
+		/// Tries to get the user interface parent at the given location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="uiParent">The user interface parent.</param>
+		/// <returns>A value indicating whether the user interface parent was found at the location.</returns>
+		private bool TryGetUiParentAtLocation(Vector2 location, out IAmAUiParent uiParent)
+		{
+			if (true == this.TryGetUiModalAtLocation(location, out var uiModal))
+			{
+				uiParent = uiModal;
+
+				return true;
+			}
+
+			if (true == this.TryGetUiZoneAtLocation(location, out var uiZone))
+			{
+				uiParent = uiZone;
+
+				return true;
+			}
+
+			uiParent = null;
+
+			return false;
 		}
 
 		/// <summary>
@@ -129,8 +170,8 @@ namespace Common.UserInterface.Services
 		{
 			uiBlock = default;
 
-			if ((false == this.TryGetUiZoneAtLocation(location, out var uiZone)) ||
-				(0 == uiZone._blocks.Count))
+			if ((false == this.TryGetUiParentAtLocation(location, out var uiZone)) ||
+				(0 == uiZone.Blocks.Count))
 				return false;
 
 			var uiZoneLocation = uiZone.Position.Coordinates;

@@ -25,10 +25,11 @@ namespace Common.DiskModels
 			var uiMarginService = gameServices.GetService<IUiMarginService>();
 			var uiGraphicalTextWithMarginService = gameServices.GetService<IGraphicalTextWithMarginService>();
 			var uiElementService = gameServices.GetService<IUiElementService>();
-			var uiGroupService = gameServices.GetService<IUserInterfaceGroupService>();
+			var uiGroupService = gameServices.GetService<IUiGroupService>();
 			var uiZoneService = gameServices.GetService<IUiZoneService>();
 			var uiBlockService = gameServices.GetService<IUiBlockService>();
 			var uiRowService = gameServices.GetService<IUiRowService>();
+			var uiModalService = gameServices.GetService<IUiModalService>();
 			var cursorService = gameServices.GetService<ICursorService>();
 			var scrollStateService = gameServices.GetService<IScrollStateService>();
 
@@ -43,6 +44,7 @@ namespace Common.DiskModels
 				(typeof(UiZoneModel), uiZoneService.GetUiZoneFromModel),
 				(typeof(UiBlockModel), uiBlockService.GetUiBlockFromModel),
 				(typeof(UiRowModel), uiRowService.GetUiRowFromModel),
+				(typeof(UiModalModel), uiModalService.GetUiModalFromModel),
 				(typeof(CursorModel), cursorService.GetCursorFromModel),
 				(typeof(ScrollStateModel), scrollStateService.GetScrollStateFromModel)
 			];

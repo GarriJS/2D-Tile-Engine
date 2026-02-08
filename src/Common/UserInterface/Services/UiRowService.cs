@@ -40,7 +40,7 @@ namespace Common.UserInterface.Services
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-			var uiZoneService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUiScreenService>();
 			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var subElements = new List<IAmAUiElement>();

@@ -35,6 +35,11 @@ namespace Engine.Physics.Models
 		required public float HorizontalOffset { get; set; }
 
 		/// <summary>
+		/// The area to a rectangle.
+		/// </summary>
+		override public Rectangle ToRectangle { get => new() { X = (int)(this.Position.X + this.HorizontalOffset), Y = (int)(this.Position.Y + this.VerticalOffset), Width = (int)this.Width, Height = (int)this.Height }; }
+
+		/// <summary>
 		/// Determines if a the area contains the coordinate.
 		/// </summary>
 		/// <param name="coordinate">The coordinate.</param>

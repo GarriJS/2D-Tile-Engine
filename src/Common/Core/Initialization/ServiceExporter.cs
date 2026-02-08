@@ -33,12 +33,13 @@ namespace Common.Core.Initialization
 				(typeof(IScrollStateService), new ScrollStateService(game.Services)),
 				(typeof(IUiMarginService), new UiMarginService(game.Services)),
 				(typeof(IGraphicalTextWithMarginService), new GraphicalTextWithMarginService(game.Services)),
-				(typeof(IUiScreenZoneService), new UiScreenZoneService(game.Services)),
+				(typeof(IUiScreenService), new UiScreenService(game.Services)),
 				(typeof(IUiElementService), new UiElementService(game.Services)),
 				(typeof(IUiRowService), new UiRowService(game.Services)),
 				(typeof(IUiBlockService), new UiBlockService(game.Services)),
 				(typeof(IUiZoneService), new UIZoneService(game.Services)),
-				(typeof(IUserInterfaceGroupService), new UiGroupService(game.Services)),
+				(typeof(IUiGroupService), new UiGroupService(game.Services)),
+				(typeof(IUiModalService), new UiModalService(game.Services)),
 				(typeof(IUiLocationService), new UiLocationService(game.Services)),
 				(typeof(ITileService), new TileService(game.Services))
 			];

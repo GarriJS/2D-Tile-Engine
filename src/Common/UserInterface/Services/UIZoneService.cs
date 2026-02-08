@@ -35,7 +35,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface zone.</returns>
 		public UiZone GetUiZoneFromModel(UiZoneModel uiZoneModel)
 		{
-			var uiZoneService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiZoneService = this._gameServices.GetService<IUiScreenService>();
 			var uiElementService = this._gameServices.GetService<IUiElementService>();
 			var functionService = this._gameServices.GetService<IFunctionService>();
 			var imageService = this._gameServices.GetService<IImageService>();
@@ -60,7 +60,7 @@ namespace Common.UserInterface.Services
 			var rows = blocks.Where(e => e._rows.Count != 0)
 							 .SelectMany(e => e._rows)
 							 .ToArray();
-			var dynamicRows = rows.Where(r => r._elements.Any(e => UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
+			var dynamicRows = rows.Where(r => r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
 								  .ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
 			var dynamicHeight = remainingHeight / dynamicRows.Length;
@@ -120,7 +120,7 @@ namespace Common.UserInterface.Services
 				CursorConfiguration = cursorConfiguration,
 				UserInterfaceScreenZone = uiScreenZone
 			};
-			result._blocks.AddRange(blocks);
+			result.Blocks.AddRange(blocks);
 
 			return result;
 		}

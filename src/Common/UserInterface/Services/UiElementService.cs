@@ -251,7 +251,7 @@ namespace Common.UserInterface.Services
 		/// <returns>The element area.</returns>
 		private SubArea GetElementArea(IAmAUiElementModel elementModel)
 		{
-			var uiScreenZoneService = this._gameServices.GetService<IUiScreenZoneService>();
+			var uiScreenService = this._gameServices.GetService<IUiScreenService>();
 
 			if (true == elementModel.FixedSized.HasValue)
 			{
@@ -272,7 +272,7 @@ namespace Common.UserInterface.Services
 				return fixedResult;
 			}
 
-			if (uiScreenZoneService?.ScreenZoneSize is null)
+			if (uiScreenService?.ScreenZoneSize is null)
 				return default;
 
 			SubArea elementFitDimensions = null;
@@ -283,21 +283,21 @@ namespace Common.UserInterface.Services
 
 			var uiElementHorizontalSize = elementModel.HorizontalSizeType switch
 			{
-				UiElementSizeType.ExtraSmall => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.ExtraSmall.X,
-				UiElementSizeType.Small => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Small.X,
-				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Medium.X,
-				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.Large.X,
-				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Width * ElementSizesScalars.ExtraLarge.X,
+				UiElementSizeType.ExtraSmall => uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.ExtraSmall.X,
+				UiElementSizeType.Small => uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.Small.X,
+				UiElementSizeType.Medium => uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.Medium.X,
+				UiElementSizeType.Large => uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.Large.X,
+				UiElementSizeType.ExtraLarge => uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.ExtraLarge.X,
 				UiElementSizeType.FlexMin => elementFitDimensions.Width,
 				_ => 0
 			};
 			var uiElementVerticalSize = elementModel.VerticalSizeType switch
 			{
-				UiElementSizeType.ExtraSmall => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y,
-				UiElementSizeType.Small => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Small.Y,
-				UiElementSizeType.Medium => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Medium.Y,
-				UiElementSizeType.Large => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.Large.Y,
-				UiElementSizeType.ExtraLarge => uiScreenZoneService.ScreenZoneSize.Height * ElementSizesScalars.ExtraLarge.Y,
+				UiElementSizeType.ExtraSmall => uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y,
+				UiElementSizeType.Small => uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.Small.Y,
+				UiElementSizeType.Medium => uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.Medium.Y,
+				UiElementSizeType.Large => uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.Large.Y,
+				UiElementSizeType.ExtraLarge => uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.ExtraLarge.Y,
 				UiElementSizeType.FlexMin => elementFitDimensions.Height,
 				_ => 0
 			};

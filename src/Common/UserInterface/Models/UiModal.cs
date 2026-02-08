@@ -19,17 +19,17 @@ using System.Linq;
 namespace Common.UserInterface.Models
 {
 	/// <summary>
-	/// Represents a user interface zone.
+	/// Represents a user interface modal
 	/// </summary>
-	sealed public class UiZone : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+	public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
 	{
 		/// <summary>
-		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
+		/// Gets or sets a value indicating if the user interface modal will recalculate the cached offsets on the next draw.
 		/// </summary>
 		required public bool ResetCalculateCachedOffsets { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface zone name.
+		/// Gets or sets the user interface modal name.
 		/// </summary>
 		required public string Name { get; set; }
 
@@ -39,9 +39,19 @@ namespace Common.UserInterface.Models
 		required public int DrawLayer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user interface zone vertical justification type. 
+		/// Gets or sets the user interface modal vertical justification type. 
 		/// </summary>
 		required public UiVerticalJustificationType VerticalJustificationType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the horizontal modal size type.
+		/// </summary>
+		required public UiModalSizeType HorizontalModalSizeType { get; set; }
+		
+		/// <summary>
+		/// Gets or sets the vertical modal size type.
+		/// </summary>
+		required public UiModalSizeType VerticalModalSizeType { get; set; }
 
 		/// <summary>
 		/// Gets the SimpleText.
@@ -51,12 +61,12 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the position.
 		/// </summary>
-		public Position Position { get => this.UserInterfaceScreenZone?.Position; }
+		public Position Position { get => this.Area?.Position; }
 
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		public IAmAArea Area { get => this.UserInterfaceScreenZone?.Area; }
+		required public IAmAArea Area { get; set; }
 
 		/// <summary>
 		/// Gets the scroll state.
@@ -77,11 +87,6 @@ namespace Common.UserInterface.Models
 		/// Gets or sets the cursor configuration
 		/// </summary>
 		required public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user interface screen zone.
-		/// </summary>
-		required public UiScreenZone UserInterfaceScreenZone { get; set; }
 
 		/// <summary>
 		/// The user interface blocks.
@@ -114,7 +119,7 @@ namespace Common.UserInterface.Models
 			if (this.ScrollState?.ScrollRenderTarget is not null)
 			{
 				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
-				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White); 
+				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White);
 				this.ScrollState.Draw(gameTime, gameServices, this.Position.Coordinates, Color.White);
 			}
 			else
@@ -136,7 +141,7 @@ namespace Common.UserInterface.Models
 			if (true == this.ResetCalculateCachedOffsets)
 				this.UpdateZoneOffsets();
 
-			foreach (var block in this._blocks)
+			foreach (var block in this._blocks ?? [])
 				block.Draw(gameTime, gameServices, coordinates, color, offset);
 		}
 
@@ -202,7 +207,7 @@ namespace Common.UserInterface.Models
 		}
 
 		/// <summary>
-		/// Updates the zone offsets.
+		/// Updates the modal offsets.
 		/// </summary>
 		public void UpdateZoneOffsets()
 		{

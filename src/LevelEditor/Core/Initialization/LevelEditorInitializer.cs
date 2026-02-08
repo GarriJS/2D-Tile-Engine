@@ -138,6 +138,76 @@ namespace LevelEditor.Core.Initialization
 
 			return
 			[
+				new UiModalModel
+				{
+					Name = "Level Editor Label Modal",
+					ResizeTexture = true,
+					HorizontalJustificationType = UiHorizontalJustificationType.Center,
+					VerticalJustificationType = UiVerticalJustificationType.Center,
+					HorizontalModalSizeType = UiModalSizeType.Medium,
+					VerticalModalSizeType = UiModalSizeType.Medium,
+					BackgroundTexture = new SimpleImageModel
+					{
+						TextureName = "pallet",
+						TextureRegion = new TextureRegionModel
+						{
+							TextureRegionType = TextureRegionType.Fill,
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+						}
+					},
+					Blocks =
+					[
+						new UiBlockModel
+						{
+							HorizontalJustificationType = UiHorizontalJustificationType.Center,
+							VerticalJustificationType = UiVerticalJustificationType.Center,
+							Rows =
+							[
+								new UiRowModel
+								{
+									Name = "Level Editor Label Row",
+									ResizeTexture = true,
+									HorizontalJustificationType = UiHorizontalJustificationType.Center,
+									VerticalJustificationType = UiVerticalJustificationType.Center,
+									Elements =
+									[
+										new UiTextModel
+										{
+											Name = "Level Editor Label Element",
+											HoverCursorName = CommonCursorNames.BasicCursorName,
+											Margin = new UiMarginModel
+											{
+												LeftMargin = 10,
+												RightMargin = 10,
+											},
+											HorizontalSizeType = UiElementSizeType.FlexMin,
+											VerticalSizeType = UiElementSizeType.FlexMin,
+											Text = new GraphicalTextModel
+											{
+												Text = "Level Editor",
+												TextColor = PalletColors.Hex_BF6F4A,
+												FontName = FontNames.MonoBold
+											},
+											Graphic = new SimpleImageModel
+											{
+												TextureName = "pallet",
+												TextureRegion = new TextureRegionModel
+												{
+													TextureRegionType = TextureRegionType.Fill,
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+			];
+
+			return
+			[
 				new UiGroupModel
 				{
 					Name = "Level Editor Main UI",
