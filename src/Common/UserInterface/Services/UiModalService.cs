@@ -44,12 +44,19 @@ namespace Common.UserInterface.Services
 		public List<UiModal> ActiveUiModals { get => this._activeUiModals; }
 
 		/// <summary>
+		/// Gets the active user interface modal from the model.
+		/// </summary>
+		/// <param name="uiModalModel">The user interface modal model.</param>
+		/// <returns>The user interface modal.</returns>
+		public UiModal GeActivetUiModalFromModel(UiModalModel uiModalModel) => this.GetUiModalFromModel(uiModalModel, true);
+
+		/// <summary>
 		/// Gets the user interface modal from the model.
 		/// </summary>
 		/// <param name="uiModalModel">The user interface modal model.</param>
 		/// <param name="makeActive">A value indicating whether to make the modal active.</param>
 		/// <returns>The user interface modal.</returns>
-		public UiModal GetUiModalFromModel(UiModalModel uiModalModel, bool makeActive)
+		public UiModal GetUiModalFromModel(UiModalModel uiModalModel, bool makeActive = true)
 		{
 			var uiZoneService = this._gameServices.GetService<IUiScreenService>();
 			var uiElementService = this._gameServices.GetService<IUiElementService>();

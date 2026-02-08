@@ -44,7 +44,7 @@ namespace Common.DiskModels
 				(typeof(UiZoneModel), uiZoneService.GetUiZoneFromModel),
 				(typeof(UiBlockModel), uiBlockService.GetUiBlockFromModel),
 				(typeof(UiRowModel), uiRowService.GetUiRowFromModel),
-				(typeof(UiModalModel), uiModalService.GetUiModalFromModel),
+				(typeof(UiModalModel), uiModalService.GeActivetUiModalFromModel),
 				(typeof(CursorModel), cursorService.GetCursorFromModel),
 				(typeof(ScrollStateModel), scrollStateService.GetScrollStateFromModel)
 			];
