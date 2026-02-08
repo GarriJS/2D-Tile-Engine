@@ -1,5 +1,4 @@
 ﻿using Engine.DiskModels;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface
@@ -12,10 +11,9 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("visibilityGroupId")]
 		public int VisibilityGroupId { get; set; }
 
-		[JsonPropertyName("isVisible")]
-		public bool IsVisible { get; set; }
-
+		[JsonPropertyName("makeVisible")]
+		public bool MakeVisible { get; set; }
 		[JsonPropertyName("zones")]
-		public IList<UiZoneModel> Zones { get; set; }
+		public UiZoneModel[] Zones { get; set; }
 	}
 }

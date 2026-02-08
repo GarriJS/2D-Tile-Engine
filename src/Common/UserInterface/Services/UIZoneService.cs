@@ -57,10 +57,10 @@ namespace Common.UserInterface.Services
 			}
 
 			var contentHeight = blocks.Sum(e => e.TotalHeight);
-			var rows = blocks.Where(e => e._rows.Count != 0)
+			var rows = blocks.Where(e => 0 != e._rows.Count)
 							 .SelectMany(e => e._rows)
 							 .ToArray();
-			var dynamicRows = rows.Where(r => r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
+			var dynamicRows = rows.Where(r => true == r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
 								  .ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
 			var dynamicHeight = remainingHeight / dynamicRows.Length;

@@ -112,7 +112,7 @@ namespace BaseContent
 		/// <returns>The content manager.</returns>
 		public ContentManager InitializeContentManager(GraphicsDeviceManager graphicsDeviceManager)
 		{
-			var serviceProvider = new BasicServiceProvider(graphicsDeviceManager);
+			var serviceProvider = new BaseServiceProvider(graphicsDeviceManager);
 
 			return new ContentManager(serviceProvider, Directory.GetCurrentDirectory());
 		}

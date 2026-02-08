@@ -155,7 +155,7 @@ namespace Common.UserInterface.Services
 			uiGroup._zones.AddRange(uiZones);
 			this._userInterfaceGroups.Add(uiGroup);
 
-			if (true == uiGroupModel.IsVisible)
+			if (true == uiGroupModel.MakeVisible)
 				this.ToggleUserInterfaceGroupVisibility(uiGroup.VisibilityGroupId);
 
 			return uiGroup;

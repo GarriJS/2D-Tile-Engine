@@ -5,13 +5,13 @@ using System;
 namespace BaseContent
 {
 	/// <summary>
-	/// Represents a basic service provider.
+	/// Represents a base service provider.
 	/// </summary>
 	/// <remarks>
-	/// Initializes a new instance of the basic service provider.
+	/// Initializes a new instance of the base service provider.
 	/// </remarks>
 	/// <param name="graphicsDeviceManager">The graphics device manager.</param>
-	public class BasicServiceProvider(GraphicsDeviceManager graphicsDeviceManager) : IServiceProvider
+	public class BaseServiceProvider(GraphicsDeviceManager graphicsDeviceManager) : IServiceProvider
 	{
 		readonly private IGraphicsDeviceService _graphicsDeviceService = graphicsDeviceManager;
 

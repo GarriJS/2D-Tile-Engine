@@ -212,7 +212,7 @@ namespace LevelEditor.Core.Initialization
 				{
 					Name = "Level Editor Main UI",
 					VisibilityGroupId = 1,
-					IsVisible = true,
+					MakeVisible = true,
 					Zones =
 					[
 						new UiZoneModel

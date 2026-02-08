@@ -130,8 +130,12 @@ namespace Engine
 
 			this.InitialModelsProviders.Clear();
 			var controlService = this.Services.GetService<IControlService>();
-			var controlContext = (ControlContext)Activator.CreateInstance(this.InitialControlContextType, this.Services);
-			controlService.ControlContext = controlContext;
+
+			if (this.InitialControlContextType is not null)
+			{
+				var controlContext = (ControlContext)Activator.CreateInstance(this.InitialControlContextType, this.Services);
+				controlService.ControlContext = controlContext;
+			}
 		}
 
 		protected override void Update(GameTime gameTime)

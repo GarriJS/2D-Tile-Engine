@@ -168,9 +168,9 @@ namespace Common.UserInterface.Models
 		public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
 		{
 			var subPrerenders = this._blocks.Where(e => true == e.ShouldPreRender())
-										   .ToArray();
+										    .ToArray();
 
-			foreach (var subPrerender in subPrerenders ?? [])
+			foreach (var subPrerender in subPrerenders)
 				subPrerender.PreRender(gameTime, gameServices, default, Color.White);
 
 			if ((this.ScrollState is null) ||
