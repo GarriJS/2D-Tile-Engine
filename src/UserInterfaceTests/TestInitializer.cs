@@ -13,7 +13,7 @@ namespace UserInterfaceTests
 		/// <returns>The user interface models.</returns>
 		static public IList<object> GetInitialUiModels(GameServiceContainer gameServices)
 		{
-			var testModels = CornersTest.GetCornersTest1();
+			var testModels = CenterTests.GetCenterTest1();
 
 			return [testModels];
 		}

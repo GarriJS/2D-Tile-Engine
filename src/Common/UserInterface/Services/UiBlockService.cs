@@ -59,9 +59,7 @@ namespace Common.UserInterface.Services
 					rows.Add(row);
 			}
 
-			var contentWidth = rows.Select(e => e.TotalWidth)
-								   .OrderDescending()
-								   .FirstOrDefault();
+			var contentWidth = rows.Select(e => e.TotalWidth).OrderDescending().FirstOrDefault();
 			var contentHeight = rows.Sum(e => e.TotalHeight);
 			var dynamicRows = rows.Where(r => r._elements.Any(e => UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
 			var remainingWidth = outterArea.Width - contentWidth;
@@ -76,9 +74,7 @@ namespace Common.UserInterface.Services
 			foreach (var dynamicRow in dynamicRows)
 				dynamicRow.Area.Width = dynamicWidth;
 
-			contentWidth = rows.Select(e => e.TotalWidth)
-							   .OrderDescending()
-							   .FirstOrDefault();
+			contentWidth = rows.Select(e => e.TotalWidth).OrderDescending().FirstOrDefault();
 
 			if (contentWidth <= 0)
 			{

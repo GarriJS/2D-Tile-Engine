@@ -53,9 +53,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var contentWidth = subElements.Sum(e => e.TotalWidth);
-			var contentHeight = subElements.Select(e => e.TotalHeight)
-										   .OrderDescending()
-										   .FirstOrDefault();
+			var contentHeight = subElements.Select(e => e.TotalHeight).OrderDescending().FirstOrDefault();
 			var dynamicWidthElements = subElements.Where(e => UiElementSizeType.FlexMax == e.HorizontalSizeType)
 												  .ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
@@ -67,9 +65,7 @@ namespace Common.UserInterface.Services
 			foreach (var dynamicWidthElement in dynamicWidthElements)
 				dynamicWidthElement.Area.Width = dynamicWidth;
 
-			contentWidth = subElements.Select(e => e.TotalWidth)
-									  .OrderDescending()
-									  .FirstOrDefault();
+			contentWidth = subElements.Sum(e => e.TotalWidth);
 
 			if (contentWidth <= 0)
 			{

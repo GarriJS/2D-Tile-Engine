@@ -57,9 +57,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var contentHeight = blocks.Sum(e => e.TotalHeight);
-			var rows = blocks.Where(e => 0 != e._rows.Count)
-							 .SelectMany(e => e._rows)
-							 .ToArray();
+			var rows = blocks.Where(e => 0 != e._rows.Count).SelectMany(e => e._rows).ToArray();
 			var dynamicRows = rows.Where(r => true == r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
 								  .ToArray();
 			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
@@ -71,7 +69,7 @@ namespace Common.UserInterface.Services
 				dynamicHeight = uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y;
 			}
 
-			foreach (var dynamicRow in dynamicRows ?? [])
+			foreach (var dynamicRow in dynamicRows)
 				uiRowService.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
 
 			if (((uiZoneModel.ScrollStateModel is null) ||

@@ -12,7 +12,7 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 	/// <summary>
 	/// Contains tests for top, bottom, left, and right justifications.
 	/// </summary>
-	static public class CornersTest
+	static public class CornerTests
 	{
 		/// <summary>
 		/// Gets the first corners test. This tests that top, bottom, left, and right justifications are working.
