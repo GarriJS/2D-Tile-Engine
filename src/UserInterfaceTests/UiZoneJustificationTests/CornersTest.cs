@@ -9,9 +9,18 @@ using Microsoft.Xna.Framework;
 
 namespace UserInterfaceTests.UiZoneJustificationTests
 {
+	/// <summary>
+	/// Contains tests for top, bottom, left, and right justifications.
+	/// </summary>
 	static public class CornersTest
 	{
-
+		/// <summary>
+		/// Gets the first corners test. This tests that top, bottom, left, and right justifications are working.
+		/// A blue square should appear in the four screen zone corners, and in each one a dark gray square should appear in the corner of the screen.
+		/// Inside the dark gray square should be a purple square, and inside the purple square should be a light gray square.
+		/// Inside the light gray square should be text describing the corner its in.
+		/// </summary>
+		/// <returns>The first corners test.</returns>
 		static public UiGroupModel GetCornersTest1()
 		{
 			var zones = GetCornersTest1Zones();
@@ -26,6 +35,10 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 			return result;
 		}
 
+		/// <summary>
+		/// Gets the corner tests 1 zones.
+		/// </summary>
+		/// <returns>The corner tests 1 zones.</returns>
 		private static UiZoneModel[] GetCornersTest1Zones()
 		{
 			UiZoneModel[] result =
@@ -135,7 +148,7 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 						TextureRegion = new TextureRegionModel
 						{
 							TextureRegionType = TextureRegionType.Fill,
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_0069AA)
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_00396D)
 						}
 					},
 					Blocks =
@@ -228,7 +241,7 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 						TextureRegion = new TextureRegionModel
 						{
 							TextureRegionType = TextureRegionType.Fill,
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_0098DC)
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_00396D)
 						}
 					},
 					Blocks =
@@ -321,7 +334,7 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 						TextureRegion = new TextureRegionModel
 						{
 							TextureRegionType = TextureRegionType.Fill,
-							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_00CDF9)
+							TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_00396D)
 						}
 					},
 					Blocks =

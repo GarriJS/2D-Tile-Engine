@@ -59,6 +59,7 @@ namespace Common.Controls.Cursors.Services
 			{
 				CursorPosition = position
 			};
+			//TODO find a better way to load the cursor
 			var cursorModel = new CursorModel
 			{
 				CursorName = CommonCursorNames.BasicCursorName,
