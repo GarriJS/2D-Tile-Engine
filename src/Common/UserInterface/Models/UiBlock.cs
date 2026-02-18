@@ -256,8 +256,8 @@ namespace Common.UserInterface.Models
 			var contentHeight = this._rows.Sum(e => e.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
 			{
-				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
-				UiVerticalJustificationType.Bottom => this.Area.Height - contentHeight,
+				UiVerticalJustificationType.Center => (this.InsideHeight - contentHeight) / 2,
+				UiVerticalJustificationType.Bottom => this.InsideHeight - contentHeight,
 				_ => 0
 			};
 
@@ -268,12 +268,12 @@ namespace Common.UserInterface.Models
 				(this.ScrollState is not null))
 				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-			foreach (var row in this._rows ?? [])
+			foreach (var row in this._rows)
 			{
 				var horizontalOffset = row.HorizontalJustificationType switch
 				{
-					UiHorizontalJustificationType.Center => (row.AvailableWidth - row.TotalWidth) / 2,
-					UiHorizontalJustificationType.Right => row.AvailableWidth - row.TotalWidth,
+					UiHorizontalJustificationType.Center => (this.InsideWidth - row.TotalWidth) / 2,
+					UiHorizontalJustificationType.Right => this.InsideWidth - row.TotalWidth,
 					_ => 0
 				};
 

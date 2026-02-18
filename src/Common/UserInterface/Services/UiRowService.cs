@@ -42,6 +42,7 @@ namespace Common.UserInterface.Services
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var uiZoneService = this._gameServices.GetService<IUiScreenService>();
 			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
+			var uiScreenService = this._gameServices.GetService<IUiScreenService>();
 			var zoneArea = uiZoneService.ScreenZoneSize;
 			var subElements = new List<IAmAUiElement>();
 
@@ -65,6 +66,22 @@ namespace Common.UserInterface.Services
 
 			foreach (var dynamicWidthElement in dynamicWidthElements)
 				dynamicWidthElement.Area.Width = dynamicWidth;
+
+			contentWidth = subElements.Select(e => e.TotalWidth)
+									  .OrderDescending()
+									  .FirstOrDefault();
+
+			if (contentWidth <= 0)
+			{
+				// LOGGING
+				contentWidth = uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.ExtraSmall.X;
+			}
+
+			if (contentHeight <= 0)
+			{
+				// LOGGING
+				contentHeight = uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y;
+			}
 
 			var margin = uiMarginService.GetUiMarginFromModel(uiRowModel.Margin);
 			var rowArea = new SubArea

@@ -164,18 +164,16 @@ namespace Common.UserInterface.Models
 			var contentWidth = this._elements.Sum(e => e.TotalWidth);
 			var horizontalOffset = this.HorizontalJustificationType switch
 			{
-				UiHorizontalJustificationType.Center => (this.TotalWidth - contentWidth) / 2,
-				UiHorizontalJustificationType.Right => this.TotalWidth - contentWidth,
+				UiHorizontalJustificationType.Center => (this.InsideWidth - contentWidth) / 2,
+				UiHorizontalJustificationType.Right => this.InsideWidth - contentWidth,
 				_ => 0
 			};
 
 			if (horizontalOffset < 0)
 				horizontalOffset = 0;
 
-			foreach (var element in this._elements ?? [])
+			foreach (var element in this._elements)
 			{
-				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
-				var elementRight = elementLeft + element.InsideWidth;
 				var verticalOffset = this.VerticalJustificationType switch
 				{
 					UiVerticalJustificationType.Center => (element.TotalHeight - this.InsideHeight) / 2,
@@ -186,8 +184,8 @@ namespace Common.UserInterface.Models
 				if (verticalOffset < 0)
 					verticalOffset = 0;
 
+				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
 				var elementTop = verticalOffset + element.Margin.TopMargin;
-				var elementBottom = elementTop + element.InsideHeight;
 				var result = new Vector2Extender<IAmAUiElement>
 				{
 					Vector = new Vector2

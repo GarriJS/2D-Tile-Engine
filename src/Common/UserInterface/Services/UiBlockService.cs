@@ -76,17 +76,37 @@ namespace Common.UserInterface.Services
 			foreach (var dynamicRow in dynamicRows)
 				dynamicRow.Area.Width = dynamicWidth;
 
+			contentWidth = rows.Select(e => e.TotalWidth)
+							   .OrderDescending()
+							   .FirstOrDefault();
+
+			if (contentWidth <= 0)
+			{
+				// LOGGING
+				contentWidth = uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.ExtraSmall.X;
+			}
+
+			if (contentHeight <= 0)
+			{
+				// LOGGING
+				contentHeight = uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y;
+			}
+
 			var margin = uiMarginService.GetUiMarginFromModel(uiBlockModel.Margin);
 			var area = new SubArea
 			{
-				Width = outterArea.Width,
+				Width = contentWidth,
 				Height = contentHeight
 			};
 			IAmAGraphic background = null;
 
 			if (uiBlockModel.BackgroundTexture is not null)
 			{
-				var graphicArea = area;
+				var graphicArea = new SubArea
+				{ 
+					Width = area.Width,
+					Height = area.Height
+				};
 
 				if (true == uiBlockModel.ExtendBackgroundToMargin)
 					graphicArea = new SubArea

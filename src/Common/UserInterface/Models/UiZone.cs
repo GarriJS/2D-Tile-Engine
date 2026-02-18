@@ -242,8 +242,8 @@ namespace Common.UserInterface.Models
 			{
 				var horizontalOffset = block.HorizontalJustificationType switch
 				{
-					UiHorizontalJustificationType.Center => (block.AvailableWidth - block.TotalWidth) / 2,
-					UiHorizontalJustificationType.Right => block.AvailableWidth - block.TotalWidth,
+					UiHorizontalJustificationType.Center => (this.Area.Width - block.TotalWidth) / 2,
+					UiHorizontalJustificationType.Right => this.Area.Width - block.TotalWidth,
 					_ => 0
 				};
 				var blockTop = verticalOffset + block.Margin.TopMargin;
