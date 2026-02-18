@@ -6,16 +6,23 @@ using Common.UserInterface.Enums;
 using Engine.DiskModels.Drawing;
 using Engine.Graphics.Enum;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UserInterfaceTests.UiZoneJustificationTests
 {
+	/// <summary>
+	/// Contains tests for the center justification.
+	/// </summary>
 	static public class CenterTests
 	{
+		/// <summary>
+		/// Gets the first center test.
+		/// This tests that the center justification is working.
+		/// A blue square should appear in the four screen zone corners, and in each one a dark gray square should appear in the middle left of the screen.
+		/// Inside the dark gray square should be a purple square, and inside the purple square should be a light gray square.
+		/// Inside the light gray square should be text describing the where it is.
+		/// On the middle right of the screen the same thing will appear, but the inner squares will appear 3 times in a column.
+		/// </summary>
+		/// <returns>The first center test.</returns>
 		static public UiGroupModel GetCenterTest1()
 		{
 			var zones = GetCenterTest1Zones();
@@ -29,7 +36,11 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 
 			return result;
 		}
-
+		
+		/// <summary>
+		/// Gets the center tests 1 zones.
+		/// </summary>
+		/// <returns>The center tests 1 zones.</returns>
 		private static UiZoneModel[] GetCenterTest1Zones()
 		{
 			UiZoneModel[] result =

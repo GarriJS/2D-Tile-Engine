@@ -15,7 +15,8 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 	static public class CornerTests
 	{
 		/// <summary>
-		/// Gets the first corners test. This tests that top, bottom, left, and right justifications are working.
+		/// Gets the first corners test. 
+		/// This tests that top, bottom, left, and right justifications are working.
 		/// A blue square should appear in the four screen zone corners, and in each one a dark gray square should appear in the corner of the screen.
 		/// Inside the dark gray square should be a purple square, and inside the purple square should be a light gray square.
 		/// Inside the light gray square should be text describing the corner its in.
