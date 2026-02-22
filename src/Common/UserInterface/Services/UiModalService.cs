@@ -214,24 +214,29 @@ namespace Common.UserInterface.Services
 			}
 
 			var uiScreenService = this._gameServices.GetService<IUiScreenService>();
+			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 
 			if (uiScreenService?.ScreenZoneSize is null)
 				return default;
 
 			var uiElementHorizontalSize = uiModalModel.HorizontalModalSizeType switch
 			{
+				UiModalSizeType.ExtraSmall => uiScreenService.ScreenZoneSize.Width * ModalSizesScalars.ExtraSmall.X,
 				UiModalSizeType.Small => uiScreenService.ScreenZoneSize.Width * ModalSizesScalars.Small.X,
 				UiModalSizeType.Medium => uiScreenService.ScreenZoneSize.Width * ModalSizesScalars.Medium.X,
 				UiModalSizeType.Large => uiScreenService.ScreenZoneSize.Width * ModalSizesScalars.Large.X,
 				UiModalSizeType.ExtraLarge => uiScreenService.ScreenZoneSize.Width * ModalSizesScalars.ExtraLarge.X,
+				UiModalSizeType.Fullscreen => graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth,
 				_ => 0
 			};
 			var uiElementVerticalSize = uiModalModel.VerticalModalSizeType switch
 			{
+				UiModalSizeType.ExtraSmall => uiScreenService.ScreenZoneSize.Height * ModalSizesScalars.ExtraSmall.Y,
 				UiModalSizeType.Small => uiScreenService.ScreenZoneSize.Height * ModalSizesScalars.Small.Y,
 				UiModalSizeType.Medium => uiScreenService.ScreenZoneSize.Height * ModalSizesScalars.Medium.Y,
 				UiModalSizeType.Large => uiScreenService.ScreenZoneSize.Height * ModalSizesScalars.Large.Y,
 				UiModalSizeType.ExtraLarge => uiScreenService.ScreenZoneSize.Height * ModalSizesScalars.ExtraLarge.Y,
+				UiModalSizeType.Fullscreen => graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight,
 				_ => 0
 			};
 			var position = this.GetModalPostion(uiModalModel, uiElementHorizontalSize, uiElementVerticalSize);
@@ -256,18 +261,18 @@ namespace Common.UserInterface.Services
 		{
 			var graphicsDeviceService = this._gameServices.GetService<IGraphicsDeviceService>();
 			var positionService = this._gameServices.GetService<IPositionService>();
-			var x = uiModalModel.HorizontalJustificationType switch
+			var x = uiModalModel.HorizontalLocationType switch
 			{
-				UiHorizontalJustificationType.Left => 0f,
-				UiHorizontalJustificationType.Center => (graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth - width) / 2,
-				UiHorizontalJustificationType.Right => graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth - width,
+				UiModalHorizontalLocationType.Left => 0f,
+				UiModalHorizontalLocationType.Center => (graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth - width) / 2,
+				UiModalHorizontalLocationType.Right => graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferWidth - width,
 				_ => 0
 			};
-			var y = uiModalModel.VerticalJustificationType switch
+			var y = uiModalModel.VerticalLocationType switch
 			{
-				UiVerticalJustificationType.Top => 0f,
-				UiVerticalJustificationType.Center => (graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight - height) / 2,
-				UiVerticalJustificationType.Bottom => graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight - height,
+				UiModalVerticalLocationType.Top => 0f,
+				UiModalVerticalLocationType.Center => (graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight - height) / 2,
+				UiModalVerticalLocationType.Bottom => graphicsDeviceService.GraphicsDevice.PresentationParameters.BackBufferHeight - height,
 				_ => 0
 			};
 			var positionModel = new PositionModel

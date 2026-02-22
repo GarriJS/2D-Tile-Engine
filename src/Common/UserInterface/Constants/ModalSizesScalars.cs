@@ -8,6 +8,11 @@ namespace Common.UserInterface.Constants
 	static public class ModalSizesScalars
     {
 		/// <summary>
+		/// The extra small modal size scalars.
+		/// </summary>
+		static public Vector2 ExtraSmall { get; } = new Vector2(.5f, .5f);
+
+		/// <summary>
 		/// The small modal size scalars.
 		/// </summary>
 		static public Vector2 Small { get; } = new Vector2(1f, 1f);

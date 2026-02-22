@@ -14,6 +14,12 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("resizeTexture")]
 		public bool ResizeTexture { get; set; }
 
+		[JsonPropertyName("horizontalLocationType")]
+		public UiModalHorizontalLocationType HorizontalLocationType { get; set; }
+
+		[JsonPropertyName("verticalLocationType")]
+		public UiModalVerticalLocationType VerticalLocationType { get; set; }
+
 		[JsonPropertyName("horizontalJustificationType")]
 		public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
 
