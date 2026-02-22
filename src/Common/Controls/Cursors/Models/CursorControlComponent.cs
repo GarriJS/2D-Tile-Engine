@@ -83,6 +83,7 @@ namespace Common.Controls.Cursors.Models
 			var commonDebugService = this._gameServices.GetService<ICommonDebugService>();
 			var gameStateService = this._gameServices.GetService<IGameStateService>();
 			commonDebugService.ClearDebugUserInterfaceZones();
+			commonDebugService.ClearDebugUserInterfaceModals();
 
 			if (controlState is null)
 				return;
@@ -164,9 +165,14 @@ namespace Common.Controls.Cursors.Models
 			gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var isDebugMode);
 
 			if ((true == isDebugMode) &&
-				(true == hoverState._hoveredObjects.TryGetValue(typeof(UiZone), out var value)) &&
-				(value is UiZone hoveredUiZone))
-				commonDebugService.AddDebugUserInterfaceZone(hoveredUiZone);
+				(true == hoverState._hoveredObjects.TryGetValue(typeof(UiZone), out var value)))
+			{
+				if (value is UiZone hoveredUiZone)
+					commonDebugService.AddDebugUserInterfaceZone(hoveredUiZone);
+
+				if (value is UiModal hoveredUiModal)
+					commonDebugService.AddDebugUserInterfaceModal(hoveredUiModal);
+			}
 
 			if ((hoverState.BottomScrollable?.ScrollState is not null) &&
 				(false == hoverState.BottomScrollable.ScrollState.DisableScrolling) &&

@@ -30,20 +30,21 @@ namespace Common.UserInterface.Services
 		{
 			var hoverState = new HoverState();
 
-			if (true == this.TryGetUiZoneAtLocation(location, out var uiZone))
+			if (true == this.TryGetUiParentAtLocation(location, out var uiParent))
 			{
-				if ((uiZone.ScrollState is not null) &&
-					(false == uiZone.ScrollState.DisableScrolling))
-					hoverState.BottomScrollable = uiZone;
+				if ((uiParent is IAmScrollable scrollable) &&
+					(scrollable.ScrollState is not null) &&
+					(false == scrollable.ScrollState.DisableScrolling))
+					hoverState.BottomScrollable = scrollable;
 
-				hoverState.TopCursorConfiguration = uiZone.CursorConfiguration;
-				hoverState.TopHoverCursor = uiZone.HoverCursor;
+				hoverState.TopCursorConfiguration = uiParent.BaseCursorConfiguration;
+				hoverState.TopHoverCursor = uiParent.HoverCursor;
 				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
 				{
-					Vector = uiZone.Position.Coordinates,
-					Subject = uiZone
+					Vector = uiParent.Position.Coordinates,
+					Subject = uiParent
 				};
-				hoverState._hoveredObjects[typeof(UiZone)] = uiZone;
+				hoverState._hoveredObjects[typeof(UiZone)] = uiParent;
 			}
 
 			if (true == this.TryGetUiBlockAtLocation(location, out var locatedBlock))

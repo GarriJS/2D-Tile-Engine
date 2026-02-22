@@ -27,8 +27,25 @@ namespace Common.Debugging.Services.Contracts
 		public void RemoveDebugUserInterfaceZone(UiZone uiZone);
 
 		/// <summary>
-		/// Adds the user interface zone rectangles.
+		/// Clears the debug user interface zones.
 		/// </summary>
 		public void ClearDebugUserInterfaceZones();
+
+		/// <summary>
+		/// Adds the user interface modal from debugging.
+		/// </summary>
+		/// <param name="uiModal">The user interface modal.</param>
+		public void AddDebugUserInterfaceModal(UiModal uiModal);
+
+		/// <summary>
+		/// Removes the user interface modal from debugging.
+		/// </summary>
+		/// <param name="uiModal">The user interface modal.</param>
+		public void RemoveDebugUserInterfaceModal(UiModal uiModal);
+
+		/// <summary>
+		/// Clears the debug user interface modals.
+		/// </summary>
+		public void ClearDebugUserInterfaceModals();
 	}
 }

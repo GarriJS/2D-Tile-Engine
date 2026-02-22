@@ -17,6 +17,14 @@ namespace Common.UserInterface.Services.Contracts
 		public HoverState GetUiObjectAtScreenLocation(Vector2 location);
 
 		/// <summary>
+		/// Tries to get the user interface modal at the given location.
+		/// </summary>
+		/// <param name="location">The location.</param>
+		/// <param name="uiModal">The user interface modal.</param>
+		/// <returns>A value indicating whether the user interface modal was found at the location.</returns>
+		public bool TryGetUiModalAtLocation(Vector2 location, out UiModal uiModal);
+
+		/// <summary>
 		/// Tries to get the user interface zone at the given location.
 		/// </summary>
 		/// <param name="location">The location.</param>

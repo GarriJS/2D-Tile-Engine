@@ -1,4 +1,5 @@
-﻿using Engine.Physics.Models;
+﻿using Common.Controls.CursorInteraction.Models.Contracts;
+using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using System.Collections.Generic;
 
@@ -7,7 +8,7 @@ namespace Common.UserInterface.Models.Contracts
 	/// <summary>
 	/// Represents a user interface parent.
 	/// </summary>
-	public interface IAmAUiParent : IHaveArea
+	public interface IAmAUiParent : IHaveArea, IHaveAHoverCursor, IHaveACursorConfiguration
 	{
 		/// <summary>
 		/// The user interface blocks.

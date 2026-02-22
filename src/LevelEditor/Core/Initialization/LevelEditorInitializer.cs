@@ -131,7 +131,6 @@ namespace LevelEditor.Core.Initialization
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var sceneEditService = gameServices.GetService<ISceneEditService>();
-
 			var spritesheetButtons = spritesheetButtonService.GetUiButtonsForSpritesheet("dark_grass_simplified", new Point(32, 32));
 			var flattenedButtons = spritesheetButtons?.SelectMany(row => row).ToArray();
 			var savedTileMapsRowModel = sceneEditService.GetSavedTileMapUserInterfaceRows();
@@ -143,11 +142,11 @@ namespace LevelEditor.Core.Initialization
 					Name = "Test Modal",
 					ResizeTexture = true,
 					HorizontalLocationType = UiModalHorizontalLocationType.Center,
-					VerticalLocationType = UiModalVerticalLocationType.Bottom,
+					VerticalLocationType = UiModalVerticalLocationType.Center,
 					HorizontalJustificationType = UiHorizontalJustificationType.Center,
 					VerticalJustificationType = UiVerticalJustificationType.Center,
-					HorizontalModalSizeType = UiModalSizeType.Fullscreen,
-					VerticalModalSizeType = UiModalSizeType.ExtraSmall,
+					HorizontalModalSizeType = UiModalSizeType.Small,
+					VerticalModalSizeType = UiModalSizeType.Small,
 					BackgroundTexture = new SimpleImageModel
 					{
 						TextureName = "pallet",

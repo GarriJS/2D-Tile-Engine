@@ -39,6 +39,11 @@ namespace Common.Debugging.Services
 		readonly private List<UiZone> _activeDebugUserInterfaceZones = [];
 
 		/// <summary>
+		/// The list of the active debug user interface modals.
+		/// </summary>
+		readonly private List<UiModal> _activeDebugUserInterfaceModals = [];
+
+		/// <summary>
 		/// Does the post load initialization.
 		/// </summary>
 		public void PostLoadInitialize()
@@ -118,7 +123,7 @@ namespace Common.Debugging.Services
 		}
 
 		/// <summary>
-		/// Adds the user interface zone rectangles.
+		/// Clears the debug user interface zones.
 		/// </summary>
 		public void ClearDebugUserInterfaceZones()
 		{
@@ -128,6 +133,47 @@ namespace Common.Debugging.Services
 				debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiZone);
 
 			this._activeDebugUserInterfaceZones.Clear();
+		}
+
+		/// <summary>
+		/// Adds the user interface modal from debugging.
+		/// </summary>
+		/// <param name="uiModal">The user interface modal.</param>
+		public void AddDebugUserInterfaceModal(UiModal uiModal)
+		{
+			if (true == this._activeDebugUserInterfaceModals.Contains(uiModal))
+				return;
+
+			var debugService = this._gameServices.GetService<IDebugService>();
+			debugService.DebugOverlaidDrawRuntime.AddDrawable(uiModal);
+			this._activeDebugUserInterfaceModals.Add(uiModal);
+		}
+
+		/// <summary>
+		/// Removes the user interface modal from debugging.
+		/// </summary>
+		/// <param name="uiModal">The user interface modal.</param>
+		public void RemoveDebugUserInterfaceModal(UiModal uiModal)
+		{
+			if (false == this._activeDebugUserInterfaceModals.Contains(uiModal))
+				return;
+
+			var debugService = this._gameServices.GetService<IDebugService>();
+			debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiModal);
+			this._activeDebugUserInterfaceModals.Remove(uiModal);
+		}
+
+		/// <summary>
+		/// Clears the debug user interface modals.
+		/// </summary>
+		public void ClearDebugUserInterfaceModals()
+		{
+			var debugService = this._gameServices.GetService<IDebugService>();
+
+			foreach (var uiZone in this._activeDebugUserInterfaceModals ?? [])
+				debugService.DebugOverlaidDrawRuntime.RemoveDrawable(uiZone);
+
+			this._activeDebugUserInterfaceModals.Clear();
 		}
 	}
 }
