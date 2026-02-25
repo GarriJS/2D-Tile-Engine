@@ -1,5 +1,4 @@
-﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Abstract;
+﻿using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,16 +13,16 @@ namespace Engine.Graphics.Services.Contracts
 		/// <summary>
 		/// Gets the image from the model.
 		/// </summary>
-		/// <param name="imageModel">The image model.</param>
+		/// <param name="model">The model.</param>
 		/// <returns>The image.</returns>
-		public IAmAImage GetImageFromModel(ImageBaseModel imageModel);
+		public IAmAImage GetImageFromModel(ImageBaseModel model);
 
 		/// <summary>
 		/// Gets the image from the model.
 		/// </summary>
-		/// <param name="imageModel">The image model.</param>
+		/// <param name="model">The model.</param>
 		/// <returns>The image.</returns>
-		public T GetImageFromModel<T>(ImageBaseModel imageModel) where T : IAmAImage;
+		public T GetImageFromModel<T>(ImageBaseModel model) where T : IAmAImage;
 
 		/// <summary>
 		/// Gets the image.

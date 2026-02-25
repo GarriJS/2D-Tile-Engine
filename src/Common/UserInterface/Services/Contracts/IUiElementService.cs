@@ -19,6 +19,13 @@ namespace Common.UserInterface.Services.Contracts
 		/// Updates the element height.
 		/// </summary>
 		/// <param name="element">The element.</param>
+		/// <param name="width">The width.</param>
+		public void UpdateElementWidth(IAmAUiElement element, float width);
+
+		/// <summary>
+		/// Updates the element height.
+		/// </summary>
+		/// <param name="element">The element.</param>
 		/// <param name="height">The height.</param>
 		public void UpdateElementHeight(IAmAUiElement element, float height);
 	}

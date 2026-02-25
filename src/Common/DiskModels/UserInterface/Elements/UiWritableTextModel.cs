@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface.Elements
 {
-	public class UiTextModel : IAmAUiElementWithTextModel
+	public class UiWritableTextModel : IAmAUiElementModel
 	{
 		[JsonPropertyName("name")]
 		public string Name { get; set; }
@@ -39,7 +39,10 @@ namespace Common.DiskModels.UserInterface.Elements
 		[JsonPropertyName("graphic")]
 		public GraphicBaseModel Graphic { get; set; }
 
-		[JsonPropertyName("text")]
-		public SimpleTextModel Text { get; set; }
+		[JsonPropertyName("writeableText")]
+		public WritableTextModel Text { get; set; }
+
+		[JsonPropertyName("clickableAreaScaler")]
+		public Vector2 ClickableAreaScaler { get; set; }
 	}
 }

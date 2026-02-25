@@ -13,7 +13,7 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents simple text.
 	/// </summary>
-	public class SimpleText : IAmGraphicText, ICanBeSerialized<GraphicalTextModel>
+	public class SimpleText : IAmGraphicText, ICanBeSerialized<SimpleTextModel>
 	{
 		/// <summary>
 		/// Gets or sets the max line width.
@@ -119,9 +119,9 @@ namespace Engine.Graphics.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		virtual public GraphicalTextModel ToModel()
+		virtual public SimpleTextModel ToModel()
 		{
-			var result = new GraphicalTextModel
+			var result = new SimpleTextModel
 			{
 				Text = this.Text,
 				TextColor = this.TextColor,

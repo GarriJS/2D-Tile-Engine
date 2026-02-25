@@ -8,7 +8,7 @@
 		/// <summary>
 		/// The flex minimum type.
 		/// </summary>
-		FlexMin = 0,
+		FitContent = 0,
 
 		/// <summary>
 		/// The flex maximum type.

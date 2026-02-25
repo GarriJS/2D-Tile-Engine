@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework;
 namespace Common.UserInterface.Models
 {
 	/// <summary>
-	/// Represents graphical text with margin.
+	/// Represents simple text with margin.
 	/// </summary>
-	sealed public class GraphicalTextWithMargin : SimpleText
+	sealed public class SimpleTextWithMargin : SimpleText
 	{
 		/// <summary>
 		/// Gets or sets the user interface margin.
@@ -53,14 +53,14 @@ namespace Common.UserInterface.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		override public GraphicalTextWithMarginModel ToModel()
+		new public SinmpleTextWithMarginModel ToModel()
 		{
-			var result = new GraphicalTextWithMarginModel
+			var result = new SinmpleTextWithMarginModel
 			{
 				Text = this.Text,
 				TextColor = this.TextColor,
 				FontName = this.FontName,
-				//Margin = 
+				Margin = this.Margin.ToModel()
 			};
 
 			return result;

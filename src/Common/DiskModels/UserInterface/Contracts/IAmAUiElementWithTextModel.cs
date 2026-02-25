@@ -6,6 +6,6 @@ namespace Common.DiskModels.UserInterface.Contracts
 	public interface IAmAUiElementWithTextModel : IAmAUiElementModel
 	{
 		[JsonPropertyName("text")]
-		public GraphicalTextModel Text { get; set; }
+		public SimpleTextModel Text { get; set; }
 	}
 }

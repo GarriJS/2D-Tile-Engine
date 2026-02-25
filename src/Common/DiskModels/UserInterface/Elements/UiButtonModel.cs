@@ -40,7 +40,7 @@ namespace Common.DiskModels.UserInterface.Elements
 		public GraphicBaseModel Graphic { get; set; }
 
 		[JsonPropertyName("text")]
-		public GraphicalTextModel Text { get; set; }
+		public SimpleTextModel Text { get; set; }
 
 		[JsonPropertyName("clickableAreaAnimation")]
 		public TriggeredAnimationModel ClickableAreaAnimation { get; set; }

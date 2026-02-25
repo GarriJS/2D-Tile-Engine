@@ -28,11 +28,11 @@ namespace Engine.Graphics.Services
 		/// <summary>
 		/// Gets the image from the model.
 		/// </summary>
-		/// <param name="imageModel">The image model.</param>
+		/// <param name="model">The model.</param>
 		/// <returns>The image.</returns>
-		public IAmAImage GetImageFromModel(ImageBaseModel imageModel)
+		public IAmAImage GetImageFromModel(ImageBaseModel model)
 		{
-			var result = this.GetImageFromModel<IAmAImage>(imageModel);
+			var result = this.GetImageFromModel<IAmAImage>(model);
 
 			return result;
 		}
@@ -40,28 +40,29 @@ namespace Engine.Graphics.Services
 		/// <summary>
 		/// Gets the image from the model.
 		/// </summary>
-		/// <param name="imageModel">The image model.</param>
+		/// <typeparam name="T">The type of image.</typeparam>
+		/// <param name="model">The model.</param>
 		/// <returns>The image.</returns>
-		public T GetImageFromModel<T>(ImageBaseModel imageModel) where T : IAmAImage
+		public T GetImageFromModel<T>(ImageBaseModel model) where T : IAmAImage
 		{
 			var textureService = this._gameServices.GetService<ITextureService>();
 			var graphicService = this._gameServices.GetService<IGraphicService>();
 
-			if (false == textureService.TryGetTexture(imageModel.TextureName, out var texture))
+			if (false == textureService.TryGetTexture(model.TextureName, out var texture))
 				texture = textureService.DebugTexture;
 
 			//TODO switch around so we can set the actual texture region value here
-			IAmAImage image = imageModel switch
+			IAmAImage image = model switch
 			{
 				CompositeImageModel => new CompositeImage
 				{
-					TextureName = imageModel.TextureName,
+					TextureName = model.TextureName,
 					Texture = texture,
 					TextureRegions = []
 				},
 				_ => new SimpleImage
 				{
-					TextureName = imageModel.TextureName,
+					TextureName = model.TextureName,
 					Texture = texture,
 					TextureRegion = null
 				}
@@ -69,13 +70,13 @@ namespace Engine.Graphics.Services
 
 			if (image is SimpleImage simpleImage)
 			{
-				var simpleImageModel = imageModel as SimpleImageModel;
+				var simpleImageModel = model as SimpleImageModel;
 				simpleImage.TextureRegion = graphicService.GetTextureRegionFromModel(simpleImageModel.TextureRegion);
 			}
 
 			if (image is CompositeImage compositeImage)
 			{
-				var compositeImageModel = imageModel as CompositeImageModel;
+				var compositeImageModel = model as CompositeImageModel;
 				compositeImage.TextureRegions = new TextureRegion[compositeImageModel.TextureRegions.Length][];
 
 				for (int i = 0; i < compositeImageModel.TextureRegions.Length; i++)

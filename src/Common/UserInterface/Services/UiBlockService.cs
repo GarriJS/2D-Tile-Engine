@@ -61,7 +61,7 @@ namespace Common.UserInterface.Services
 
 			var contentWidth = rows.Select(e => e.TotalWidth).OrderDescending().FirstOrDefault();
 			var contentHeight = rows.Sum(e => e.TotalHeight);
-			var dynamicRows = rows.Where(r => r._elements.Any(e => UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
+			var dynamicRows = rows.Where(r => r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
 			var remainingWidth = outterArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicRows.Length;
 

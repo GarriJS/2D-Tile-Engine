@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework;
 namespace Common.UserInterface.Models.Elements
 {
 	/// <summary>
-	/// Represents user interface editable text.
+	/// Represents user interface writable text.
 	/// </summary>
-	sealed public class UiEditableText : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
+	sealed public class UiWritableText : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
 	{
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
@@ -27,6 +27,11 @@ namespace Common.UserInterface.Models.Elements
 		/// Gets or sets the writable text.
 		/// </summary>
 		required public WritableText WritableText { get; set; }
+
+		/// <summary>
+		/// Gets or sets the clickable animation.
+		/// </summary>
+		required public TriggeredAnimation ClickAnimation { get; set; }
 
 		/// <summary>
 		/// Raises the click event.

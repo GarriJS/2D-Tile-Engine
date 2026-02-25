@@ -7,22 +7,22 @@ using Microsoft.Xna.Framework;
 namespace Common.UserInterface.Services
 {
 	/// <summary>
-	/// Represents a graphic text with margin service.
+	/// Represents a simple text with margin service.
 	/// </summary>
 	/// <remarks>
-	/// Initializes the graphic text with margin service.
+	/// Initializes the simple text with margin service.
 	/// </remarks>
 	/// <param name="gameServices">The game service.</param>
-	sealed public class GraphicalTextWithMarginService(GameServiceContainer gameServices) : IGraphicalTextWithMarginService
+	sealed public class GraphicalTextWithMarginService(GameServiceContainer gameServices) : ISimpleTextWithMarginService
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
 		/// <summary>
-		/// Gets the graphical text with margin from the model.
+		/// Gets the simple text with margin from the model.
 		/// </summary>
-		/// <param name="model">The graphical text with margin.</param>
-		/// <returns>The graphical text with margin.</returns>
-		public GraphicalTextWithMargin GetGraphicTextWithMarginFromModel(GraphicalTextWithMarginModel model)
+		/// <param name="model">The simple text with margin.</param>
+		/// <returns>The simple text with margin.</returns>
+		public SimpleTextWithMargin GetSimpleTextWithMarginFromModel(SinmpleTextWithMarginModel model)
 		{
 			if (model is null)
 				return null;
@@ -32,7 +32,7 @@ namespace Common.UserInterface.Services
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
 			var margin = uiMarginService.GetUiMarginFromModel(model.Margin);
-			var result = new GraphicalTextWithMargin
+			var result = new SimpleTextWithMargin
 			{
 				MaxLineWidth = null,
 				FontName = model.FontName,

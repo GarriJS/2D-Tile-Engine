@@ -54,7 +54,7 @@ namespace Common.UserInterface.Services
 
 			var contentWidth = subElements.Sum(e => e.TotalWidth);
 			var contentHeight = subElements.Select(e => e.TotalHeight).OrderDescending().FirstOrDefault();
-			var dynamicWidthElements = subElements.Where(e => UiElementSizeType.FlexMax == e.HorizontalSizeType)
+			var dynamicWidthElements = subElements.Where(e => true == UiGroupService._dynamicSizedTypes.Contains(e.HorizontalSizeType))
 												  .ToArray();
 			var remainingWidth = zoneArea.Width - contentWidth;
 			var dynamicWidth = remainingWidth / dynamicWidthElements.Length;
@@ -63,7 +63,7 @@ namespace Common.UserInterface.Services
 				dynamicWidth = zoneArea.Width * ElementSizesScalars.ExtraSmall.X;
 
 			foreach (var dynamicWidthElement in dynamicWidthElements)
-				dynamicWidthElement.Area.Width = dynamicWidth;
+				uiElementService.UpdateElementWidth(dynamicWidthElement, dynamicWidth);
 
 			contentWidth = subElements.Sum(e => e.TotalWidth);
 

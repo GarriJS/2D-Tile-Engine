@@ -172,18 +172,24 @@ namespace LevelEditor.Core.Initialization
 									VerticalJustificationType = UiVerticalJustificationType.Center,
 									Elements =
 									[
-										new UiTextModel
+										new UiWritableTextModel
 										{
 											Name = "Level Editor Label Element",
 											HoverCursorName = CommonCursorNames.BasicCursorName,
+											ResizeTexture = true,
+											ClickableAreaScaler = new Vector2
+											{
+												X = 1,
+												Y = 1
+											},
 											Margin = new UiMarginModel
 											{
 												LeftMargin = 10,
 												RightMargin = 10,
 											},
-											HorizontalSizeType = UiElementSizeType.FlexMin,
-											VerticalSizeType = UiElementSizeType.FlexMin,
-											Text = new GraphicalTextModel
+											HorizontalSizeType = UiElementSizeType.FitContent,
+											VerticalSizeType = UiElementSizeType.FitContent,
+											Text = new WritableTextModel
 											{
 												Text = "Level Editor",
 												TextColor = PalletColors.Hex_BF6F4A,
@@ -195,7 +201,7 @@ namespace LevelEditor.Core.Initialization
 												TextureRegion = new TextureRegionModel
 												{
 													TextureRegionType = TextureRegionType.Fill,
-													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1C121C)
 												}
 											}
 										}
@@ -245,9 +251,9 @@ namespace LevelEditor.Core.Initialization
 														LeftMargin = 10,
 														RightMargin = 10,
 													},
-													HorizontalSizeType = UiElementSizeType.FlexMin,
-													VerticalSizeType = UiElementSizeType.FlexMin,
-													Text = new GraphicalTextModel
+													HorizontalSizeType = UiElementSizeType.FitContent,
+													VerticalSizeType = UiElementSizeType.FitContent,
+													Text = new SimpleTextModel
 													{
 														Text = "Level Editor",
 														TextColor = PalletColors.Hex_BF6F4A,
@@ -314,20 +320,20 @@ namespace LevelEditor.Core.Initialization
 														LeftMargin = 10,
 														RightMargin = 5,
 													},
-													Text = new GraphicalTextModel
+													Text = new SimpleTextModel
 													{
 														Text = "Create Level",
 														TextColor = PalletColors.Hex_BF6F4A,
 														FontName = FontNames.MonoBold
 													},
-													HorizontalSizeType = UiElementSizeType.FlexMin,
-													VerticalSizeType = UiElementSizeType.FlexMin
+													HorizontalSizeType = UiElementSizeType.FitContent,
+													VerticalSizeType = UiElementSizeType.FitContent
 												},
 												new UiButtonModel
 												{
 													Name = "Create Level Button",
-													HorizontalSizeType = UiElementSizeType.FlexMin,
-													VerticalSizeType = UiElementSizeType.FlexMin,
+													HorizontalSizeType = UiElementSizeType.FitContent,
+													VerticalSizeType = UiElementSizeType.FitContent,
 													ClickableAreaAnimation = new TriggeredAnimationModel
 													{
 														CurrentFrameIndex = 0,
@@ -379,20 +385,20 @@ namespace LevelEditor.Core.Initialization
 														LeftMargin = 10,
 														RightMargin = 5,
 													},
-													Text = new GraphicalTextModel
+													Text = new SimpleTextModel
 													{
 														Text = "Save Level",
 														TextColor = PalletColors.Hex_BF6F4A,
 														FontName = FontNames.MonoBold
 													},
-													HorizontalSizeType = UiElementSizeType.FlexMin,
-													VerticalSizeType = UiElementSizeType.FlexMin
+													HorizontalSizeType = UiElementSizeType.FitContent,
+													VerticalSizeType = UiElementSizeType.FitContent
 												},
 												new UiButtonModel
 												{
 													Name = "Save Level Button",
-													HorizontalSizeType = UiElementSizeType.FlexMin,
-													VerticalSizeType = UiElementSizeType.FlexMin,
+													HorizontalSizeType = UiElementSizeType.FitContent,
+													VerticalSizeType = UiElementSizeType.FitContent,
 													ClickableAreaAnimation = new TriggeredAnimationModel
 													{
 														CurrentFrameIndex = 0,
@@ -447,14 +453,14 @@ namespace LevelEditor.Core.Initialization
 												new UiTextModel
 												{
 													Name = "Saved Levels Element",
-													Text = new GraphicalTextModel
+													Text = new SimpleTextModel
 													{
 														Text = "Saved Levels",
 														TextColor = PalletColors.Hex_BF6F4A,
 														FontName = FontNames.MonoBold
 													},
-													HorizontalSizeType = UiElementSizeType.FlexMin,
-													VerticalSizeType = UiElementSizeType.FlexMin
+													HorizontalSizeType = UiElementSizeType.FitContent,
+													VerticalSizeType = UiElementSizeType.FitContent
 												}
 											]
 										},

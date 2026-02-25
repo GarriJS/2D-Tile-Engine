@@ -32,7 +32,7 @@ namespace Common.Core.Initialization
 				(typeof(ICursorInteractionService), new CursorInteractionService(game.Services)),
 				(typeof(IScrollStateService), new ScrollStateService(game.Services)),
 				(typeof(IUiMarginService), new UiMarginService(game.Services)),
-				(typeof(IGraphicalTextWithMarginService), new GraphicalTextWithMarginService(game.Services)),
+				(typeof(ISimpleTextWithMarginService), new GraphicalTextWithMarginService(game.Services)),
 				(typeof(IUiScreenService), new UiScreenService(game.Services)),
 				(typeof(IUiElementService), new UiElementService(game.Services)),
 				(typeof(IUiRowService), new UiRowService(game.Services)),

@@ -145,14 +145,14 @@ namespace LevelEditor.Scenes.Services
 										{
 											RightMargin = 5
 										},
-										Text = new GraphicalTextModel
+										Text = new SimpleTextModel
 										{
 											Text = "Toggle Tile Grid",
 											TextColor = PalletColors.Hex_BF6F4A,
 											FontName = FontNames.MonoBold
 										},
-										HorizontalSizeType = UiElementSizeType.FlexMin,
-										VerticalSizeType = UiElementSizeType.FlexMin,
+										HorizontalSizeType = UiElementSizeType.FitContent,
+										VerticalSizeType = UiElementSizeType.FitContent,
 									},
 									new UiButtonModel
 									{
@@ -161,8 +161,8 @@ namespace LevelEditor.Scenes.Services
 										{
 											RightMargin = 10
 										},
-										HorizontalSizeType = UiElementSizeType.FlexMin,
-										VerticalSizeType = UiElementSizeType.FlexMin,
+										HorizontalSizeType = UiElementSizeType.FitContent,
+										VerticalSizeType = UiElementSizeType.FitContent,
 										ClickableAreaAnimation = new TriggeredAnimationModel
 										{
 											CurrentFrameIndex = 0,
@@ -230,8 +230,8 @@ namespace LevelEditor.Scenes.Services
 						{
 							Name = savedTileMapNames[i],
 							ResizeTexture = true,
-							HorizontalSizeType = UiElementSizeType.FlexMin,
-							VerticalSizeType = UiElementSizeType.FlexMin,
+							HorizontalSizeType = UiElementSizeType.FitContent,
+							VerticalSizeType = UiElementSizeType.FitContent,
 							Margin = new UiMarginModel
 							{
 								TopMargin = 5,
@@ -248,7 +248,7 @@ namespace LevelEditor.Scenes.Services
 								],
 								RestingFrameIndex = 0
 							},
-							Text = new GraphicalTextWithMarginModel
+							Text = new SinmpleTextWithMarginModel
 							{
 								Text = savedTileMapNames[i],
 								TextColor = PalletColors.Hex_BF6F4A,

@@ -23,7 +23,7 @@ namespace Common.DiskModels
 		{
 			var tileService = gameServices.GetService<ITileService>();
 			var uiMarginService = gameServices.GetService<IUiMarginService>();
-			var uiGraphicalTextWithMarginService = gameServices.GetService<IGraphicalTextWithMarginService>();
+			var uiGraphicalTextWithMarginService = gameServices.GetService<ISimpleTextWithMarginService>();
 			var uiElementService = gameServices.GetService<IUiElementService>();
 			var uiGroupService = gameServices.GetService<IUiGroupService>();
 			var uiZoneService = gameServices.GetService<IUiZoneService>();
@@ -39,7 +39,7 @@ namespace Common.DiskModels
 				(typeof(TileMapLayerModel), tileService.GetTileMapLayerFromModel),
 				(typeof(TileModel), tileService.GetTileFromModel),
 				(typeof(UiMarginModel), uiMarginService.GetUiMarginFromModel),
-				(typeof(GraphicalTextWithMarginModel), uiGraphicalTextWithMarginService.GetGraphicTextWithMarginFromModel),
+				(typeof(SinmpleTextWithMarginModel), uiGraphicalTextWithMarginService.GetSimpleTextWithMarginFromModel),
 				(typeof(UiGroupModel), uiGroupService.GetUiGroupFromModel),
 				(typeof(UiZoneModel), uiZoneService.GetUiZoneFromModel),
 				(typeof(UiBlockModel), uiBlockService.GetUiBlockFromModel),

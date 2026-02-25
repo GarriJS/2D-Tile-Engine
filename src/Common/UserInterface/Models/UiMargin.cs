@@ -1,4 +1,6 @@
-﻿namespace Common.UserInterface.Models
+﻿using Common.DiskModels.UserInterface;
+
+namespace Common.UserInterface.Models
 {
 	/// <summary>
 	/// Represents a user interface margin.
@@ -35,6 +37,23 @@
 			{ 
 				TopMargin = this.TopMargin,
 				BottomMargin = this.BottomMargin,	
+				LeftMargin = this.LeftMargin,
+				RightMargin = this.RightMargin
+			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Converts the object to a serialization model.
+		/// </summary>
+		/// <returns>The serialization model.</returns>
+		readonly public UiMarginModel ToModel()
+		{
+			var result = new UiMarginModel
+			{
+				TopMargin = this.TopMargin,
+				BottomMargin = this.BottomMargin,
 				LeftMargin = this.LeftMargin,
 				RightMargin = this.RightMargin
 			};

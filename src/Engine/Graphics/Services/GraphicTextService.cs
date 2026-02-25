@@ -1,6 +1,8 @@
 ﻿using Engine.Core.Fonts.Services.Contracts;
 using Engine.DiskModels.Drawing;
+using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
+using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,7 +28,7 @@ namespace Engine.Graphics.Services
 		/// <returns>The string measurements.</returns>
 		public Vector2 MeasureString(string fontName, string text)
 		{
-			var fontService = _gameServices.GetService<IFontService>();
+			var fontService = this._gameServices.GetService<IFontService>();
 			var font = fontService.GetSpriteFont(fontName);
 			var result = font.MeasureString(text);
 
@@ -49,9 +51,46 @@ namespace Engine.Graphics.Services
 		/// <summary>
 		/// Gets the graphic text from the model.
 		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <returns></returns>
+		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextBaseModel model)
+		{ 
+			var result = this.GetGraphicTextFromModel<IAmGraphicText>(model);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the graphic text from the model.
+		/// </summary>
+		/// <typeparam name="T">The type of graphic text.</typeparam>
+		/// <param name="model">The model.</param>
+		/// <returns>The graphic text.</returns>
+		public T GetGraphicTextFromModel<T>(GraphicalTextBaseModel model) where T : IAmGraphicText
+		{
+			IAmGraphicText text = model switch
+			{
+				WritableTextModel writeableTextModel => this.GetWritableTextFromModel(writeableTextModel),
+				SimpleTextModel simpleTextModel => this.GetSimpleTextFromModel(simpleTextModel),
+				_ => null
+			};
+
+			if (text is null)
+			{
+				// LOGGING
+
+				return default;
+			}
+
+			return (T)text;
+		}
+
+		/// <summary>
+		/// Gets the simple text from the model.
+		/// </summary>
 		/// <param name="model">The graphic text model.</param>
-		/// <returns>The graphical text.</returns>
-		public SimpleText GetGraphicTextFromModel(GraphicalTextModel model)
+		/// <returns>The simple text.</returns>
+		public SimpleText GetSimpleTextFromModel(SimpleTextModel model)
 		{
 			if (model is null)
 				return null;
@@ -61,7 +100,32 @@ namespace Engine.Graphics.Services
 			font ??= fontService.DebugSpriteFont;
 			var result = new SimpleText
 			{
-				MaxLineWidth = null,
+				MaxLineWidth = model.MaxLineWidth,
+				FontName = model.FontName,
+				Text = model.Text,
+				TextColor = model.TextColor,
+				Font = font
+			};
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the writable text from the model.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <returns>The writable text.</returns>
+		public WritableText GetWritableTextFromModel(WritableTextModel model)
+		{
+			if (model is null)
+				return null;
+
+			var fontService = this._gameServices.GetService<IFontService>();
+			var font = fontService.GetSpriteFont(model.FontName);
+			font ??= fontService.DebugSpriteFont;
+			var result = new WritableText
+			{
+				MaxLineWidth = model.MaxLineWidth,
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,
