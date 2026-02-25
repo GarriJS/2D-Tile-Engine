@@ -57,6 +57,9 @@ namespace Engine.Graphics.Models
 		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain the existing line breaks in the text.</param>
 		public void ConformTextToMaxWidth(bool maintainExistingLineBreaks = false)
 		{
+			if (false == this.MaxLineWidth.HasValue)
+				return;
+
 			var finalLines = new List<string>();
 			var sourceText = this.Text.ReplaceLineEndings();
 			var paragraphs = maintainExistingLineBreaks

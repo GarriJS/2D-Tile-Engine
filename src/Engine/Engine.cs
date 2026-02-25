@@ -134,7 +134,7 @@ namespace Engine
 			if (this.InitialControlContextType is not null)
 			{
 				var controlContext = (ControlContext)Activator.CreateInstance(this.InitialControlContextType, this.Services);
-				controlService.ControlContext = controlContext;
+				controlService.SetControlContext(controlContext);
 			}
 		}
 
@@ -146,8 +146,7 @@ namespace Engine
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			if (false == KeyboardTyping.OldPressedKeys.Any(e => e == Keys.G) &&
-				Keyboard.GetState().IsKeyDown(Keys.G))
+			if (true == controlState.FreshPressedKeys.Any(e => e == Keys.G))
 			{
 				var gameStateService = this.Services.GetService<IGameStateService>();
 
@@ -157,7 +156,6 @@ namespace Engine
 			}
 
 			base.Update(gameTime);
-			KeyboardTyping.OldPressedKeys = Keyboard.GetState().GetPressedKeys();
 		}
 
 		protected override void Draw(GameTime gameTime)

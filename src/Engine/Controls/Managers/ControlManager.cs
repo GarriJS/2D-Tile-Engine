@@ -27,7 +27,7 @@ namespace Engine.Controls.Managers
         /// <summary>
         /// Gets or sets the control context.
         /// </summary>
-        public ControlContext ControlContext { get; set; }
+        public ControlContext ControlContext { get; private set; }
 
         /// <summary>
         /// Gets or sets the prior control state.
@@ -52,10 +52,21 @@ namespace Engine.Controls.Managers
                 Direction = null,
                 MouseState = default,
                 MouseVerticalScrollDelta = default,
+                FreshPressedKeys = [],
+                PressedKeys = [],
                 FreshActionNames = [],
                 ActiveActionNames = []
             };
             base.Initialize();
+        }
+
+        /// <summary>
+        /// Sets the control context.
+        /// </summary>
+        /// <param name="controlContext">The control context.</param>
+        public void SetControlContext(ControlContext controlContext)
+        {
+            this.ControlContext = controlContext;
         }
 
         /// <summary>
@@ -66,7 +77,7 @@ namespace Engine.Controls.Managers
         {
             this.PriorControlState = this.ControlState;
             this.ControlState = this.GetCurrentControlState();
-            this.ControlContext?.ProcessControlState(gameTime, this.Game.Services, this.ControlState, this.PriorControlState);
+            this.ControlContext?.ProcessControlState(gameTime, this.ControlState, this.PriorControlState);
 
             base.Update(gameTime);
         }
@@ -77,7 +88,9 @@ namespace Engine.Controls.Managers
         /// <returns>The control state.</returns>
         private ControlState GetCurrentControlState()
         {
-            var pressedKeys = Keyboard.GetState().GetPressedKeys();
+            var pressedKeys = Keyboard.GetState()
+                                      .GetPressedKeys()
+									  .ToList();
             var mouseState = Mouse.GetState();
             var pressedMouseButtons = GetPressedMouseButtons(mouseState);
             var mouseVerticalScrollDelta = GetMouseVerticalScrollDelta(mouseState, this.PriorControlState.MouseState);
@@ -85,10 +98,14 @@ namespace Engine.Controls.Managers
                                                                     (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
                                                         .Select(e => e.ActionName)
                                                         .ToList();
-            //var direction = this.GetMovementDirection(actionControlNames);
-            var freshActionTypes = actionControlNames;
 
-            if (this.PriorControlState?.ActiveActionNames is not null)
+            var freshPressedKeys = pressedKeys;
+			var freshActionTypes = actionControlNames;
+
+			if (this.PriorControlState?.PressedKeys is not null)
+				freshPressedKeys = [.. pressedKeys.Where(e => false == this.PriorControlState.PressedKeys.Contains(e))];
+
+			if (this.PriorControlState?.ActiveActionNames is not null)
                 freshActionTypes = [.. actionControlNames.Where(e => false == this.PriorControlState.ActiveActionNames.Contains(e))];
 
             var result = new ControlState
@@ -96,6 +113,8 @@ namespace Engine.Controls.Managers
                 Direction = null,
                 MouseState = mouseState,
                 MouseVerticalScrollDelta = mouseVerticalScrollDelta,
+                FreshPressedKeys = freshPressedKeys,
+                PressedKeys = pressedKeys,
 				FreshActionNames = freshActionTypes,
 				ActiveActionNames = actionControlNames
             };

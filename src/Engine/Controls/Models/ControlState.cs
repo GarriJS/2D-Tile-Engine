@@ -30,6 +30,16 @@ namespace Engine.Controls.Models
 		required public float MouseVerticalScrollDelta { get; set; }
 
 		/// <summary>
+		/// Gets or sets the fresh pressed keys.
+		/// </summary>
+		required public List<Keys> FreshPressedKeys { get; set; }
+
+		/// <summary>
+		/// Gets or sets the pressed keys.
+		/// </summary>
+		required public List<Keys> PressedKeys { get; set; }
+
+		/// <summary>
 		/// Gets or sets the fresh action names. 
 		/// </summary>
 		required public List<string> FreshActionNames { get; set; }

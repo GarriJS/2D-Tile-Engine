@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace Engine.Controls.Typing
 {
@@ -8,11 +7,6 @@ namespace Engine.Controls.Typing
 	/// </summary>
 	static public class KeyboardTyping
 	{
-		/// <summary>
-		/// Gets or sets the old pressed keys.
-		/// </summary>
-		static public Keys[] OldPressedKeys { get; set; } = Array.Empty<Keys>();
-
 		/// <summary>
 		/// Gets the matching char for the key.
 		/// </summary>

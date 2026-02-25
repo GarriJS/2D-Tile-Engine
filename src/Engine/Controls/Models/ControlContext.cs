@@ -9,6 +9,8 @@ namespace Engine.Controls.Models
 	/// </summary>
 	abstract public class ControlContext
 	{
+		readonly protected GameServiceContainer _gameServices;
+
 		/// <summary>
 		/// Gets or sets the control context components.
 		/// </summary>
@@ -20,22 +22,21 @@ namespace Engine.Controls.Models
 		/// <param name="gameServices">The game services.</param>
 		protected ControlContext(GameServiceContainer gameServices) 
 		{
-			this.Initialize(gameServices);
+			this._gameServices = gameServices;
+			this.Initialize();
 		}
 
 		/// <summary>
 		/// Initializes the control context.
 		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		abstract public void Initialize(GameServiceContainer gameServices);
+		abstract public void Initialize();
 
 		/// <summary>
 		/// Processes the control state.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game service.</param>
 		/// <param name="controlState">The control state.</param>
 		/// <param name="priorControlState">The prior control state.</param>
-		abstract public void ProcessControlState(GameTime gameTime, GameServiceContainer gameServices, ControlState controlState, ControlState priorControlState);
+		abstract public void ProcessControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState);
 	}
 }

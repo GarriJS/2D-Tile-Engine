@@ -11,7 +11,7 @@ namespace Common.UserInterface.Models.Elements
 	/// <summary>
 	/// Represents a user interface button.
 	/// </summary>
-	sealed public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>
+	sealed public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>, IHaveAClickAnimation
 	{
 		/// <summary>
 		/// Gets or sets the pressed text offset. 

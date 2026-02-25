@@ -17,11 +17,9 @@ namespace LevelEditor.Controls.Contexts
 		/// <summary>
 		/// Initializes the control context.
 		/// </summary>
-		/// <param name="gameServices">The game services.</param>
-		public override void Initialize(GameServiceContainer gameServices)
+		public override void Initialize()
 		{
-			var cursorService = gameServices.GetService<ICursorService>();
-
+			var cursorService = this._gameServices.GetService<ICursorService>();
 			this.ControlContextComponents.Add(cursorService.CursorControlComponent);
 		}
 
@@ -32,10 +30,9 @@ namespace LevelEditor.Controls.Contexts
 		/// <param name="gameServices">The game service.</param>
 		/// <param name="controlState">The control state.</param>
 		/// <param name="priorControlState">The prior control state.</param>
-		public override void ProcessControlState(GameTime gameTime, GameServiceContainer gameServices, ControlState controlState, ControlState priorControlState)
+		public override void ProcessControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
-			var cursorService = gameServices.GetService<ICursorService>();
-
+			var cursorService = this._gameServices.GetService<ICursorService>();
 			var hoverState = cursorService.GetCursorHoverState();
 
 			foreach (var component in this.ControlContextComponents)

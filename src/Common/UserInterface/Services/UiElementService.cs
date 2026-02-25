@@ -1,4 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using Common.Controls.Contexts;
+using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Contracts;
 using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
@@ -12,6 +13,7 @@ using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements;
 using Common.UserInterface.Services.Contracts;
+using Engine.Controls.Services.Contracts;
 using Engine.Core.Fonts.Services.Contracts;
 using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
@@ -172,6 +174,7 @@ namespace Common.UserInterface.Services
 			var writableText = graphicTextService.GetWritableTextFromModel(uiWritableTextModel.Text);
 			var uiWritableText = new UiWritableText
 			{
+				Active = false,
 				Name = uiWritableTextModel.Name,
 				HorizontalSizeType = uiWritableTextModel.HorizontalSizeType,
 				VerticalSizeType = uiWritableTextModel.VerticalSizeType,
@@ -182,7 +185,7 @@ namespace Common.UserInterface.Services
 				CursorConfiguration = cursorConfiguration,
 				ClickableAreaScaler = uiWritableTextModel.ClickableAreaScaler,
 				WritableText = writableText,
-				ClickAnimation = null
+				ActiveGraphic = null
 			};
 			uiWritableText.CursorConfiguration?.AddClickSubscription(this.TriggerUiWriting);
 
@@ -272,10 +275,15 @@ namespace Common.UserInterface.Services
 
 			//TODO updates press and hover areas?
 
-			if (clickable.ClickAnimation?.Frames is null)
+			if (element is not IHaveAClickAnimation hasAClickAnimation)
+			{
+				return;
+			}
+
+			if (hasAClickAnimation.ClickAnimation?.Frames is null)
 				return;
 
-			foreach (var frame in clickable.ClickAnimation.Frames)
+			foreach (var frame in hasAClickAnimation.ClickAnimation.Frames)
 			{
 				var subArea = new SubArea
 				{
@@ -313,10 +321,15 @@ namespace Common.UserInterface.Services
 
 			//TODO updates press and hover areas?
 
-			if (clickable.ClickAnimation?.Frames is null)
+			if (element is not IHaveAClickAnimation hasAClickAnimation)
+			{
+				return;
+			}
+
+			if (hasAClickAnimation.ClickAnimation?.Frames is null)
 				return;
 
-			foreach (var frame in clickable.ClickAnimation.Frames)
+			foreach (var frame in hasAClickAnimation.ClickAnimation.Frames)
 			{
 				var subArea = new SubArea
 				{
@@ -537,8 +550,14 @@ namespace Common.UserInterface.Services
 		/// <param name="cursorInteraction">The cursor interaction.</param>
 		private void TriggerUiWriting(CursorInteraction<IAmAUiElement> cursorInteraction)
 		{
-			if (cursorInteraction.Subject is UiWritableText writableText)
-				writableText.WritableText.UpdateText(writableText.WritableText.Text + "a");
+			if (cursorInteraction.Subject is not UiWritableText writableText)
+				return;
+
+			var controlService = this._gameServices.GetService<IControlService>();
+			var uiWritableTextControlContext = new UiWritableTextControlContext(this._gameServices);
+			uiWritableTextControlContext.SetWritableText(writableText);
+			controlService.SetControlContext(uiWritableTextControlContext);
+			writableText.Active = true;
 		}
 	}
 }

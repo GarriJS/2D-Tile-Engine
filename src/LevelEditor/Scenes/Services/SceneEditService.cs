@@ -344,7 +344,7 @@ namespace LevelEditor.Scenes.Services
 			var tileGridUserInterfaceZone = this.GetTileGridUserInterfaceZone();
 			uiGroupService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, spritesheetButtonUiZone);
 			uiGroupService.AddUserInterfaceZoneToUserInterfaceGroup(visibilityGroupId: 1, tileGridUserInterfaceZone);
-			controlService.ControlContext = new SceneEditControlContext(this._gameServices);
+			controlService.SetControlContext(new SceneEditControlContext(this._gameServices));
 			runTimeDrawService.AddDrawable(scene.TileMap);
 			var simpleImageModel = new SimpleImageModel
 			{
