@@ -33,7 +33,7 @@ namespace Engine.Graphics.Models
 				(this.RestingFrameIndex != this.CurrentFrameIndex))
 				return;
 
-			this.FrameStartTime = null;
+			this.ElaspedFrameDuration = 0;
 			this.CurrentFrameIndex = this.RestingFrameIndex;
 
 			if (this.CurrentFrameIndex < this.Frames.Length - 1)
@@ -47,7 +47,7 @@ namespace Engine.Graphics.Models
 		/// </summary>>
 		public void ResetTriggeredAnimation()
 		{
-			this.FrameStartTime = null;
+			this.ElaspedFrameDuration = 0;
 			this.CurrentFrameIndex = this.RestingFrameIndex;
 		}
 
@@ -58,30 +58,32 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		override protected void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if ((this.FrameStartTime is null) ||
+			if ((this.ElaspedFrameDuration == 0) ||
 				(this.CurrentFrameIndex == this.RestingFrameIndex))
 			{
-				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+				this.ElaspedFrameDuration += gameTime.ElapsedGameTime.TotalMilliseconds;
 
 				return;
 			}
 
-			if (gameTime.TotalGameTime.TotalMilliseconds >= this.FrameStartTime + this.FrameDuration)
+			if (this.ElaspedFrameDuration > this.CurrentFrameDuration)
 			{
-				if ((true == this.FrameMinDuration.HasValue) &&
-					(true == this.FrameMaxDuration.HasValue))
-				{
-					var randomService = gameServices.GetService<IRandomService>();
-					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
-				}
-
 				if (this.CurrentFrameIndex < this.Frames.Length - 1)
 					this.CurrentFrameIndex++;
 				else
 					this.CurrentFrameIndex = 0;
 
-				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+				if ((true == this.FrameMinDuration.HasValue) &&
+					(true == this.FrameMaxDuration.HasValue))
+				{
+					var randomService = gameServices.GetService<IRandomService>();
+					this.CurrentFrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
+				}
+
+				this.ElaspedFrameDuration = 0;
 			}
+			else
+				this.ElaspedFrameDuration += gameTime.ElapsedGameTime.TotalMilliseconds;
 		}
 
 		/// <summary>
@@ -98,7 +100,7 @@ namespace Engine.Graphics.Models
 			var result = new TriggeredAnimationModel
 			{
 				CurrentFrameIndex = this.CurrentFrameIndex,
-				FrameDuration = this.FrameDuration,
+				FrameDuration = this.CurrentFrameDuration,
 				FrameMinDuration = this.FrameMinDuration,
 				FrameMaxDuration = this.FrameMaxDuration,
 				Frames = frameModels,

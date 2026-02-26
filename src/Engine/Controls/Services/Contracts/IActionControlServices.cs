@@ -12,13 +12,13 @@ namespace Engine.Controls.Services.Contracts
 		/// <summary>
 		/// Gets the action controls.
 		/// </summary>
-		public List<ActionControl> GetActionControls();
+		public List<ActionControlConfiguration> GetActionControls();
 
 		/// <summary>
 		/// Gets the action control from the model.
 		/// </summary>
 		/// <param name="actionControlModel">The action control model.</param>
 		/// <returns>The action control.</returns>
-		public ActionControl GetActionControlFromModel(ActionControlModel actionControlModel);
+		public ActionControlConfiguration GetActionControlFromModel(ActionControlModel actionControlModel);
 	}
 }

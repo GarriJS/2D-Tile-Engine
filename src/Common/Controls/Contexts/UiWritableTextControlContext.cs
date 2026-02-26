@@ -100,7 +100,7 @@ namespace Common.Controls.Contexts
 		/// <param name="priorControlState">The prior control state.</param>
 		private bool ExistCondition(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
-			var result = controlState.PressedKeys.Contains(Keys.OemTilde);
+			var result = controlState.KeyIsActive(Keys.Escape);
 
 			return result;
 		}

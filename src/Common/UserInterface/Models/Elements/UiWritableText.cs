@@ -1,15 +1,13 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements.Abstract;
 using Engine.Controls.Models;
 using Engine.Controls.Models.Contracts;
-using Engine.Controls.Typing;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System.Linq;
 
 namespace Common.UserInterface.Models.Elements
 {
@@ -27,6 +25,11 @@ namespace Common.UserInterface.Models.Elements
 		/// Gets or sets a value indicating whether the user interface writable text is being written to.
 		/// </summary>
 		required public bool Active { get; set; }
+
+		/// <summary>
+		/// Get or sets the horizontal text justification type.
+		/// </summary>
+		required public UiHorizontalTextJustification HorizontalTextJustificationType { get; set; }
 
 		/// <summary>
 		/// Gets the graphic text.
@@ -63,17 +66,34 @@ namespace Common.UserInterface.Models.Elements
 		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var graphicOffset = offset + this.CachedOffset ?? default;
-			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+
+			if (this.Active)
+				this.ActiveGraphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+			else
+				this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 
 			if (this.GraphicText is not null)
 			{
 				var textDimensions = this.GraphicText.GetTextDimensions();
-				var centeredOffset = new Vector2
+				var textJustificationOffset = this.HorizontalTextJustificationType switch
 				{
-					X = (this.Area.Width - textDimensions.X) / 2f,
-					Y = (this.Area.Height - textDimensions.Y) / 2f
+					UiHorizontalTextJustification.Center => new Vector2
+					{
+						X = (this.Area.Width - textDimensions.X) / 2f,
+						Y = (this.Area.Height - textDimensions.Y) / 2f
+					},
+					UiHorizontalTextJustification.Right => new Vector2
+					{
+						X = (this.Area.Width - textDimensions.X),
+						Y = (this.Area.Height - textDimensions.Y)
+					},
+					_ => new Vector2
+					{
+						X = 0,
+						Y = 0
+					}
 				};
-				var graphicTextOffset = graphicOffset + centeredOffset;
+				var graphicTextOffset = graphicOffset + textJustificationOffset;
 				this.GraphicText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
 			}
 		}
@@ -86,22 +106,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="priorControlState">The prior control state.</param>
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
-			string newText = string.Empty;
-			var shiftIsPressed = true == controlState.PressedKeys.Any(e => e == Keys.LeftShift || e == Keys.RightShift);
-			var backSpaceIsPressed = true == controlState.FreshPressedKeys.Any(e => e == Keys.Back || e == Keys.Delete);
-
-			foreach (var key in controlState.FreshPressedKeys)
-			{
-				if (key != Keys.Back &&
-					key != Keys.Delete)
-					newText += KeyboardTyping.ToChar(key, shiftIsPressed);
-			}
-
-			this.WritableText.UpdateText(this.WritableText.Text + newText);
-
-			if (backSpaceIsPressed &&
-				this.WritableText.Text.Length > 0)
-				this.WritableText.UpdateText(this.WritableText.Text[..^1]);
+			this.WritableText.UpdateText(controlState.FreshPressedKeys, controlState.PressedKeys);
 		}
 
 		/// <summary>

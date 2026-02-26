@@ -21,6 +21,9 @@ namespace Common.DiskModels.UserInterface.Elements
 		[JsonPropertyName("verticalSizeType")]
 		public UiElementSizeType VerticalSizeType { get; set; }
 
+		[JsonPropertyName("horizontalTextJustificationType")]
+		public UiHorizontalTextJustification HorizontalTextJustificationType { get; set; }
+
 		[JsonPropertyName("insidePadding")]
 		public UiMarginModel Margin { get; set; }
 
@@ -38,6 +41,9 @@ namespace Common.DiskModels.UserInterface.Elements
 
 		[JsonPropertyName("graphic")]
 		public GraphicBaseModel Graphic { get; set; }
+
+		[JsonPropertyName("activeGraphic")]
+		public GraphicBaseModel ActiveGraphic { get; set; }
 
 		[JsonPropertyName("writeableText")]
 		public WritableTextModel Text { get; set; }

@@ -1,6 +1,5 @@
 ﻿using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
-using Engine.Controls.Typing;
 using Engine.Core.Contracts;
 using Engine.Core.Initialization;
 using Engine.Core.Initialization.Services.Contracts;
@@ -143,7 +142,7 @@ namespace Engine
 			var controlService = this.Services.GetService<IControlService>();
 			var controlState = controlService.ControlState;
 
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.OemTilde))
 				Exit();
 
 			if (true == controlState.FreshPressedKeys.Any(e => e == Keys.G))

@@ -189,6 +189,7 @@ namespace LevelEditor.Core.Initialization
 											},
 											HorizontalSizeType = UiElementSizeType.FitContent,
 											VerticalSizeType = UiElementSizeType.FitContent,
+											HorizontalTextJustificationType = UiHorizontalTextJustification.Left,
 											Text = new WritableTextModel
 											{
 												Text = "Level Editor",
@@ -203,7 +204,16 @@ namespace LevelEditor.Core.Initialization
 													TextureRegionType = TextureRegionType.Fill,
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1C121C)
 												}
-											}
+											},
+											ActiveGraphic = new SimpleImageModel
+											{
+												TextureName = "pallet",
+												TextureRegion = new TextureRegionModel
+												{
+													TextureRegionType = TextureRegionType.Fill,
+													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1E6F50)
+												}
+											},
 										}
 									]
 								}

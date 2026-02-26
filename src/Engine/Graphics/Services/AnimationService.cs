@@ -37,31 +37,31 @@ namespace Engine.Graphics.Services
 				TriggeredAnimationModel triggeredAnimationModel => new TriggeredAnimation
 				{
 					CurrentFrameIndex = triggeredAnimationModel.CurrentFrameIndex,
-					FrameDuration = triggeredAnimationModel.FrameDuration,
+					CurrentFrameDuration = triggeredAnimationModel.FrameDuration,
 					FrameMinDuration = triggeredAnimationModel.FrameMinDuration,
 					FrameMaxDuration = triggeredAnimationModel.FrameMaxDuration,
-					FrameStartTime = null,
+					ElaspedFrameDuration = 0,
 					Frames = frames,
 					RestingFrameIndex = triggeredAnimationModel.RestingFrameIndex,
 				},
 				_ => new Animation
 				{
 					CurrentFrameIndex = animationModel.CurrentFrameIndex,
-					FrameDuration = animationModel.FrameDuration,
+					CurrentFrameDuration = animationModel.FrameDuration,
 					FrameMinDuration = animationModel.FrameMinDuration,
 					FrameMaxDuration = animationModel.FrameMaxDuration,
-					FrameStartTime = null,
+					ElaspedFrameDuration = 0,
 					Frames = frames
 				}
 			};
 
 			if (true == animationModel.FrameDuration.HasValue)
-				animation.FrameDuration = animationModel.FrameDuration.Value;
+				animation.CurrentFrameDuration = animationModel.FrameDuration.Value;
 			else
 			{
 				var randomService = this._gameServices.GetService<RandomService>();
 
-				animation.FrameDuration = randomService.GetRandomInt(animationModel.FrameMinDuration.Value, animationModel.FrameMaxDuration.Value);
+				animation.CurrentFrameDuration = randomService.GetRandomInt(animationModel.FrameMinDuration.Value, animationModel.FrameMaxDuration.Value);
 			}
 
 			return animation;

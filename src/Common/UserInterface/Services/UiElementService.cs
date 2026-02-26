@@ -82,7 +82,7 @@ namespace Common.UserInterface.Services
 		/// <param name="uiElementModel">The user interface element model.</param>
 		/// <returns>A dictionary binding the member name to the member.</returns>
 		private Dictionary<string, object> GetBaseElementMembers(IAmAUiElementModel uiElementModel)
-		{ 
+		{
 			if (uiElementModel is null)
 				return null;
 
@@ -159,6 +159,7 @@ namespace Common.UserInterface.Services
 		{
 			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
+			var graphicService = this._gameServices.GetService<IGraphicService>();
 			var area = baseElements.GetValueOrDefault("area") as SubArea;
 			var clickableArea = new SubArea
 			{
@@ -172,20 +173,24 @@ namespace Common.UserInterface.Services
 			};
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, clickableArea, clickOffset: clickableOffset);
 			var writableText = graphicTextService.GetWritableTextFromModel(uiWritableTextModel.Text);
+			var graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic;
+			var activeGraphic = graphicService.GetGraphicFromModel(uiWritableTextModel.ActiveGraphic);
+			activeGraphic.SetDrawDimensions(graphic.Dimensions);
 			var uiWritableText = new UiWritableText
 			{
 				Active = false,
 				Name = uiWritableTextModel.Name,
 				HorizontalSizeType = uiWritableTextModel.HorizontalSizeType,
 				VerticalSizeType = uiWritableTextModel.VerticalSizeType,
+				HorizontalTextJustificationType = uiWritableTextModel.HorizontalTextJustificationType,
 				Area = area,
 				Margin = baseElements.GetValueOrDefault("margin") as UiMargin? ?? default,
-				Graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic,
+				Graphic = graphic,
 				HoverCursor = baseElements.GetValueOrDefault("hoverCursor") as Cursor,
 				CursorConfiguration = cursorConfiguration,
 				ClickableAreaScaler = uiWritableTextModel.ClickableAreaScaler,
 				WritableText = writableText,
-				ActiveGraphic = null
+				ActiveGraphic = activeGraphic
 			};
 			uiWritableText.CursorConfiguration?.AddClickSubscription(this.TriggerUiWriting);
 
@@ -222,7 +227,7 @@ namespace Common.UserInterface.Services
 			if (uiButtonModel.ClickableAreaAnimation is not null)
 			{
 				var animation = animationService.GetFixedAnimationFromModel(uiButtonModel.ClickableAreaAnimation, (int)clickableArea.Width, (int)clickableArea.Height);
-			
+
 				if (animation is TriggeredAnimation triggeredAnimation)
 					clickAnimation = triggeredAnimation;
 			}
@@ -259,19 +264,24 @@ namespace Common.UserInterface.Services
 			element.Area.Width = width;
 			element.Graphic.SetDrawDimensions(element.Area);
 
-			if (element is not ICanBeClicked<IAmAUiElement> clickable)
-				return;
+			if (element is ICanBeClicked<IAmAUiElement> clickable)
+			{
+				clickable.CursorConfiguration.Area = new SubArea
+				{
+					Width = clickable.Area.Width * clickable.ClickableAreaScaler.X,
+					Height = clickable.Area.Height * clickable.ClickableAreaScaler.Y
+				};
+				clickable.CursorConfiguration.ClickOffset = new Vector2
+				{
+					X = (clickable.Area.Width - clickable.CursorConfiguration.ClickArea.Width) / 2,
+					Y = (clickable.Area.Height - clickable.CursorConfiguration.ClickArea.Height) / 2
+				};
+			}
 
-			clickable.CursorConfiguration.Area = new SubArea
-			{
-				Width = clickable.Area.Width * clickable.ClickableAreaScaler.X,
-				Height = clickable.Area.Height * clickable.ClickableAreaScaler.Y
-			};
-			clickable.CursorConfiguration.ClickOffset = new Vector2
-			{
-				X = (clickable.Area.Width - clickable.CursorConfiguration.ClickArea.Width) / 2,
-				Y = (clickable.Area.Height - clickable.CursorConfiguration.ClickArea.Height) / 2
-			};
+			if (element is UiWritableText writableText)
+			{ 
+				writableText.ActiveGraphic.SetDrawDimensions(element.Area);
+			}
 
 			//TODO updates press and hover areas?
 
@@ -287,7 +297,7 @@ namespace Common.UserInterface.Services
 			{
 				var subArea = new SubArea
 				{
-					Width = (int)(element.Graphic.Dimensions.Width * clickable.ClickableAreaScaler.X),
+					Width = element.CursorConfiguration.Area.Width,
 					Height = frame.Dimensions.Width
 				};
 
@@ -305,19 +315,24 @@ namespace Common.UserInterface.Services
 			element.Area.Height = height;
 			element.Graphic.SetDrawDimensions(element.Area);
 
-			if (element is not ICanBeClicked<IAmAUiElement> clickable)
-				return;
+			if (element is ICanBeClicked<IAmAUiElement> clickable)
+			{
+				clickable.CursorConfiguration.Area = new SubArea
+				{
+					Width = clickable.Area.Width * clickable.ClickableAreaScaler.X,
+					Height = clickable.Area.Height * clickable.ClickableAreaScaler.Y
+				};
+				clickable.CursorConfiguration.ClickOffset = new Vector2
+				{
+					X = (clickable.Area.Width - clickable.CursorConfiguration.ClickArea.Width) / 2,
+					Y = (clickable.Area.Height - clickable.CursorConfiguration.ClickArea.Height) / 2
+				};
+			}
 
-			clickable.CursorConfiguration.Area = new SubArea
+			if (element is UiWritableText writableText)
 			{
-				Width = clickable.Area.Width * clickable.ClickableAreaScaler.X,
-				Height = clickable.Area.Height * clickable.ClickableAreaScaler.Y
-			};
-			clickable.CursorConfiguration.ClickOffset = new Vector2
-			{
-				X = (clickable.Area.Width - clickable.CursorConfiguration.ClickArea.Width) / 2,
-				Y = (clickable.Area.Height - clickable.CursorConfiguration.ClickArea.Height) / 2
-			};
+				writableText.ActiveGraphic.SetDrawDimensions(element.Area);
+			}
 
 			//TODO updates press and hover areas?
 
@@ -334,7 +349,7 @@ namespace Common.UserInterface.Services
 				var subArea = new SubArea
 				{
 					Width = frame.Dimensions.Width,
-					Height = (int)(element.Graphic.Dimensions.Height * clickable.ClickableAreaScaler.Y)
+					Height = element.CursorConfiguration.Area.Height
 				};
 
 				frame.SetDrawDimensions(subArea);
@@ -518,7 +533,7 @@ namespace Common.UserInterface.Services
 						(clickableLocation.X + writableText.CursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
 						(clickableLocation.Y <= cursorInteraction.CursorLocation.Y) &&
 						(clickableLocation.Y + writableText.CursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
-					writableText.RaiseClickEvent(cursorInteraction);
+						writableText.RaiseClickEvent(cursorInteraction);
 
 					break;
 
@@ -528,7 +543,7 @@ namespace Common.UserInterface.Services
 						(clickableLocation.X + button.CursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
 						(clickableLocation.Y <= cursorInteraction.CursorLocation.Y) &&
 						(clickableLocation.Y + button.CursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
-					button.RaiseClickEvent(cursorInteraction);
+						button.RaiseClickEvent(cursorInteraction);
 
 					break;
 			}

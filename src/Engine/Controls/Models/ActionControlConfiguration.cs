@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Input;
 namespace Engine.Controls.Models
 {
     /// <summary>
-    /// Represents a action control.
+    /// Represents a action control configuration.
     /// </summary>
-    public class ActionControl
+    public class ActionControlConfiguration
 	{
 		/// <summary>
 		/// Gets or sets the action name.

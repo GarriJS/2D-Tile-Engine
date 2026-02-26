@@ -21,7 +21,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the current frame duration in milliseconds.
 		/// </summary>
-		required public int? FrameDuration { get; set; }
+		required public int? CurrentFrameDuration { get; set; }
 
 		/// <summary>
 		/// Gets or sets the frame min duration in milliseconds.
@@ -36,7 +36,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the current frame start time in milliseconds.
 		/// </summary>
-		required public double? FrameStartTime { get; set; }
+		required public double ElaspedFrameDuration { get; set; }
 
 		/// <summary>
 		/// Gets the dimensions.
@@ -84,29 +84,24 @@ namespace Engine.Graphics.Models
 		/// <param name="gameServices">The game services.</param>
 		virtual protected void UpdateFrame(GameTime gameTime, GameServiceContainer gameServices)
 		{
-			if (this.FrameStartTime is null)
+			if (this.ElaspedFrameDuration > this.CurrentFrameDuration)
 			{
-				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
-
-				return;
-			}
-
-			if (gameTime.TotalGameTime.TotalMilliseconds >= this.FrameStartTime + this.FrameDuration)
-			{
-				if ((true == this.FrameMinDuration.HasValue) &&
-					(true == this.FrameMaxDuration.HasValue))
-				{
-					var randomService = gameServices.GetService<IRandomService>();
-					this.FrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
-				}
-
 				if (this.CurrentFrameIndex < this.Frames.Length - 1)
 					this.CurrentFrameIndex++;
 				else
 					this.CurrentFrameIndex = 0;
 
-				this.FrameStartTime = gameTime.TotalGameTime.TotalMilliseconds;
+				if ((true == this.FrameMinDuration.HasValue) &&
+					(true == this.FrameMaxDuration.HasValue))
+				{
+					var randomService = gameServices.GetService<IRandomService>();
+					this.CurrentFrameDuration = randomService.GetRandomInt(this.FrameMinDuration.Value, this.FrameMaxDuration.Value);
+				}
+
+				this.ElaspedFrameDuration = 0;
 			}
+			else
+				this.ElaspedFrameDuration += gameTime.ElapsedGameTime.TotalMilliseconds;
 		}
 
 		/// <summary>
@@ -120,7 +115,7 @@ namespace Engine.Graphics.Models
 			var result = new AnimationModel
 			{
 				CurrentFrameIndex = this.CurrentFrameIndex,
-				FrameDuration = this.FrameDuration,
+				FrameDuration = this.CurrentFrameDuration,
 				FrameMinDuration = this.FrameMinDuration,
 				FrameMaxDuration = this.FrameMaxDuration,
 				//Frames = frameModels TODO

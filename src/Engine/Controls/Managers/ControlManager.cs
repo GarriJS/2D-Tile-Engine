@@ -1,6 +1,7 @@
 ﻿using Engine.Controls.Enums;
 using Engine.Controls.Models;
 using Engine.Controls.Services.Contracts;
+using Engine.Physics.Models;
 using Engine.RunTime.Constants;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -20,9 +21,9 @@ namespace Engine.Controls.Managers
     sealed public class ControlManager(Game game) : GameComponent(game), IControlService
     {
         /// <summary>
-        /// Gets or sets the action controls.
+        /// Gets or sets the action control configurations.
         /// </summary>
-        private List<ActionControl> ActionControls { get; set; }
+        private List<ActionControlConfiguration> ActionControlConfigurations { get; set; }
 
         /// <summary>
         /// Gets or sets the control context.
@@ -46,7 +47,7 @@ namespace Engine.Controls.Managers
         {
             var actionControlServices = this.Game.Services.GetService<IActionControlServices>();
 			this.UpdateOrder = ManagerOrderConstants.ControlManagerUpdateOrder;
-			this.ActionControls = actionControlServices.GetActionControls();
+			this.ActionControlConfigurations = actionControlServices.GetActionControls();
 			this.ControlState = new ControlState
             {
                 Direction = null,
@@ -54,8 +55,8 @@ namespace Engine.Controls.Managers
                 MouseVerticalScrollDelta = default,
                 FreshPressedKeys = [],
                 PressedKeys = [],
-                FreshActionNames = [],
-                ActiveActionNames = []
+                FreshActionControls = [],
+                ActiveActionControls = []
             };
             base.Initialize();
         }
@@ -76,37 +77,73 @@ namespace Engine.Controls.Managers
         public override void Update(GameTime gameTime)
         {
             this.PriorControlState = this.ControlState;
-            this.ControlState = this.GetCurrentControlState();
+            this.ControlState = this.GetCurrentControlState(gameTime);
             this.ControlContext?.ProcessControlState(gameTime, this.ControlState, this.PriorControlState);
 
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// Gets the current control state.
-        /// </summary>
-        /// <returns>The control state.</returns>
-        private ControlState GetCurrentControlState()
+		/// <summary>
+		/// Gets the current control state.
+		/// </summary>
+		/// <param name="gameTime">The game time.</param>
+		/// <returns>The control state.</returns>
+		private ControlState GetCurrentControlState(GameTime gameTime)
         {
-            var pressedKeys = Keyboard.GetState()
-                                      .GetPressedKeys()
-									  .ToList();
+            //TODO reduce lingQ usage 
+            var activeKeys = Keyboard.GetState()
+                                     .GetPressedKeys()
+									 .ToList();
             var mouseState = Mouse.GetState();
             var pressedMouseButtons = GetPressedMouseButtons(mouseState);
             var mouseVerticalScrollDelta = GetMouseVerticalScrollDelta(mouseState, this.PriorControlState.MouseState);
-            var actionControlNames = this.ActionControls.Where(e => (true == pressedKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
-                                                                    (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m))))
-                                                        .Select(e => e.ActionName)
-                                                        .ToList();
+            var activeActionControls = new List<ElaspedTimeExtender<ActionControlConfiguration>>();
+			var pressedKeys = new List<ElaspedTimeExtender<Keys>>();
 
-            var freshPressedKeys = pressedKeys;
-			var freshActionTypes = actionControlNames;
+			foreach (var priorActiveActionControl in this.PriorControlState.ActiveActionControls)
+            {
+                if ((false == activeKeys.Any(k => true == priorActiveActionControl.Subject.ControlKeys?.Contains(k))) &&
+                    (false == pressedMouseButtons.Any(m => true == priorActiveActionControl.Subject.ControlMouseButtons?.Contains(m))))
+                    continue;
 
-			if (this.PriorControlState?.PressedKeys is not null)
-				freshPressedKeys = [.. pressedKeys.Where(e => false == this.PriorControlState.PressedKeys.Contains(e))];
+                var activeActionControl = new ElaspedTimeExtender<ActionControlConfiguration>()
+                {
+                    ElaspedTime = priorActiveActionControl.ElaspedTime + gameTime.ElapsedGameTime.TotalMilliseconds,
+                    Subject = priorActiveActionControl.Subject
+                };
+				activeActionControls.Add(activeActionControl);
+			}
 
-			if (this.PriorControlState?.ActiveActionNames is not null)
-                freshActionTypes = [.. actionControlNames.Where(e => false == this.PriorControlState.ActiveActionNames.Contains(e))];
+			var freshActionControls = this.ActionControlConfigurations.Where(e => (false == activeActionControls.Any(a => a.Subject == e)) &&
+                                                                                  ((true == activeKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
+                                                                                   (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m)))))
+                                                                      .ToList();
+            activeActionControls.AddRange(freshActionControls.Select(e => new ElaspedTimeExtender<ActionControlConfiguration>
+            {
+                ElaspedTime = 0,
+                Subject = e,
+            }));
+
+            foreach (var priorPressedKey in this.PriorControlState.PressedKeys)
+            {
+                if (false == activeKeys.Contains(priorPressedKey.Subject))
+                    continue;
+
+				var activeActionControl = new ElaspedTimeExtender<Keys>()
+				{
+					ElaspedTime = priorPressedKey.ElaspedTime + gameTime.ElapsedGameTime.TotalMilliseconds,
+					Subject = priorPressedKey.Subject
+				};
+				pressedKeys.Add(activeActionControl);
+			}
+
+            var freshPressedKeys = activeKeys.Where(e => false == pressedKeys.Any(k => k.Subject == e))
+                                             .ToList();
+            pressedKeys.AddRange(freshPressedKeys.Select(e => new ElaspedTimeExtender<Keys>
+            {
+                ElaspedTime = 0,
+                Subject = e
+            }));
 
             var result = new ControlState
             {
@@ -115,9 +152,9 @@ namespace Engine.Controls.Managers
                 MouseVerticalScrollDelta = mouseVerticalScrollDelta,
                 FreshPressedKeys = freshPressedKeys,
                 PressedKeys = pressedKeys,
-				FreshActionNames = freshActionTypes,
-				ActiveActionNames = actionControlNames
-            };
+				FreshActionControls = freshActionControls,
+				ActiveActionControls = activeActionControls
+			};
 
             return result;
         }

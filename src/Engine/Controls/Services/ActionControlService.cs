@@ -30,10 +30,10 @@ namespace Engine.Controls.Services
 		/// <summary>
 		/// Gets the action actionControlModels.
 		/// </summary>
-		public List<ActionControl> GetActionControls()
+		public List<ActionControlConfiguration> GetActionControls()
 		{
 			var jsonService = this._gameServices.GetService<IJsonService>();
-			var actionControls = new List<ActionControl>();
+			var actionControls = new List<ActionControlConfiguration>();
 			var contentManagerNames = LoadingInstructionsContainer.GetContentManagerNames();
 			var serializer = new ModelSerializer<ActionControlModel[]>();
 
@@ -65,7 +65,7 @@ namespace Engine.Controls.Services
 		/// </summary>
 		/// <param name="actionControlModel">The action actionControlModel model.</param>
 		/// <returns>The action actionControlModel.</returns>
-		public ActionControl GetActionControlFromModel(ActionControlModel actionControlModel)
+		public ActionControlConfiguration GetActionControlFromModel(ActionControlModel actionControlModel)
 		{
 			Keys[] controlKeys = null;
 			MouseButtonTypes[] controlMouseButtons = null;
@@ -88,7 +88,7 @@ namespace Engine.Controls.Services
 					controlMouseButtons[i] = (MouseButtonTypes)actionControlModel.ControlMouseButtons[i];
 			}
 
-			var result = new ActionControl
+			var result = new ActionControlConfiguration
 			{ 
 				ActionName = actionControlModel.ActionName,
 				ControlKeys = controlKeys,
@@ -103,7 +103,7 @@ namespace Engine.Controls.Services
 		/// </summary>
 		/// <param name="actionControl">The action actionControlModel.</param>
 		/// <returns>The action actionControlModel model.</returns>
-		private ActionControlModel GetActionControlModel(ActionControl actionControl)
+		private ActionControlModel GetActionControlModel(ActionControlConfiguration actionControl)
 		{
 			int[] controlKeys = null;
 			int[] controlMouseButtons = null;
