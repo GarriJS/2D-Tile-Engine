@@ -1,4 +1,5 @@
-﻿using Engine.Physics.Models;
+﻿using Engine.Controls.Typing.Models;
+using Engine.Physics.Models;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,31 @@ namespace Engine.Controls.Typing
 	/// </summary>
 	static public class KeyboardTyping
 	{
+		/// <summary>
+		/// The short press time.
+		/// </summary>
+		static readonly public int ShortPressTime = 500;
+
+		/// <summary>
+		/// The long press time.
+		/// </summary>
+		static readonly public int LongPressTime = 750;
+
+		/// <summary>
+		/// The remove text keys.`
+		/// </summary>
+		static readonly List<Keys> RemoveTextKeys = [Keys.Back, Keys.Delete];
+
+		/// <summary>
+		/// The shift keys.
+		/// </summary>
+		static readonly List<Keys> ShiftKeys = [Keys.LeftShift, Keys.RightShift];
+
+		/// <summary>
+		/// The highlight text keys.
+		/// </summary>
+		static readonly List<Keys> HighlightTextKeys = [Keys.Left, Keys.Right];
+
 		/// <summary>
 		/// Formats the string for drawing.
 		/// </summary>
@@ -27,25 +53,31 @@ namespace Engine.Controls.Typing
 		/// Modifies the text from the keys.
 		/// </summary>
 		/// <param name="text">The text.</param>
+		/// <param name="existingTextEditingState">The existing text editing state.</param>
 		/// <param name="freshKeys">The fresh keys.</param>
 		/// <param name="pressedKeys">The pressed keys.</param>
 		/// <returns>The text modified from the keys.</returns>
-		static public string ModifyTextFromKeys(string text, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+		static public TypingResult ModifyTextFromKeys(string text, TextEditingState existingTextEditingState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
 		{
-			var removeText = freshKeys.Any(e => e == Keys.Back || e == Keys.Delete) || 
-							 pressedKeys.Any(e => (e.Subject == Keys.Back || e.Subject  == Keys.Delete) &&
-												  ((int)e.ElaspedTime % 3 == 0 || e.ElaspedTime > 3000) && 
-												  (e.ElaspedTime >= 1000));
+			var resultTextEditingState = GetTextEditingStateFromKeys(text, existingTextEditingState, freshKeys, pressedKeys);
+			var removeText = freshKeys.Any(RemoveTextKeys.Contains) ||
+							 pressedKeys.Any(e => (true == RemoveTextKeys.Contains(e.Subject)) &&
+												  (e.ElaspedTime > LongPressTime) &&
+												  (e.ElaspedTime >= ShortPressTime));
 			var newText = GetTextFromKeys(freshKeys, pressedKeys);
-			var combinedText = text + newText;
+			var resultText = text + newText;
 
-			if ((false == removeText) ||
-				(0 == combinedText.Length))
-				return combinedText;
+			if ((true == removeText) &&
+				(0 != resultText.Length))
+				resultText = resultText[..^1];
 
-			var resultText = combinedText[..^1];
+			var result = new TypingResult
+			{
+				Text = resultText,
+				TextEditingState = resultTextEditingState
+			};
 
-			return resultText;
+			return result;
 		}
 
 		/// <summary>
@@ -57,16 +89,49 @@ namespace Engine.Controls.Typing
 		static public string GetTextFromKeys(List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
 		{
 			var textKeys = freshKeys.ToList();
-			var heldKeys = pressedKeys.Where(e => ((int)e.ElaspedTime % 2 == 0 || e.ElaspedTime > 3000) &&
-												  (e.ElaspedTime >= 1000))
+			var heldKeys = pressedKeys.Where(e => (e.ElaspedTime > LongPressTime) &&
+												  (e.ElaspedTime >= ShortPressTime))
 									  .Select(e => e.Subject)
 									  .ToArray();
 			textKeys.AddRange(heldKeys);
-			var isShiftPressed = pressedKeys.Any(e => e.Subject == Keys.LeftShift || e.Subject == Keys.RightShift);
+			var isShiftPressed = pressedKeys.Any(e => ShiftKeys.Contains(e.Subject));
 			var rawResult = ToString(textKeys, isShiftPressed);
 			var result = FormatForDrawString(rawResult);
 
 			return result;
+		}
+
+		/// <summary>
+		/// Gets the text range from the keys.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="existingTextEditingState">The existing text editing state.</param>
+		/// <param name="freshKeys">The fresh keys.</param>
+		/// <param name="pressedKeys">The pressed keys.</param>
+		/// <returns>The text range from the keys.</returns>
+		static TextEditingState GetTextEditingStateFromKeys(string text, TextEditingState existingTextEditingState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+		{
+			var leftActive = freshKeys.Contains(Keys.Left) ||
+							 pressedKeys.Any(e => (e.Subject == Keys.Left) &&
+												  (e.ElaspedTime > LongPressTime) &&
+												  (e.ElaspedTime >= ShortPressTime));
+			var rightActive = freshKeys.Contains(Keys.Right) ||
+							  pressedKeys.Any(e => (e.Subject == Keys.Right) &&
+												   (e.ElaspedTime > LongPressTime) &&
+												   (e.ElaspedTime >= ShortPressTime));
+
+			if (leftActive && rightActive)
+				return existingTextEditingState;
+
+			if ((true == leftActive) &&
+				(0 != existingTextEditingState.TextEditorPosition + existingTextEditingState.SelectionOffset))
+				existingTextEditingState.SelectionOffset--;
+
+			if ((true == rightActive) &&
+				(text.Length != existingTextEditingState.TextEditorPosition + existingTextEditingState.SelectionOffset))
+				existingTextEditingState.SelectionOffset++;
+
+			return existingTextEditingState;
 		}
 
 		/// <summary>
@@ -80,7 +145,7 @@ namespace Engine.Controls.Typing
 			var text = new StringBuilder();
 
 			foreach (var key in keys)
-			{ 
+			{
 				var keyChar = ToChar(key, isShiftPressed);
 
 				if (false == keyChar.HasValue)

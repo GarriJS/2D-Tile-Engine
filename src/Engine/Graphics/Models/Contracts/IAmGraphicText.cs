@@ -37,8 +37,9 @@ namespace Engine.Graphics.Models.Contracts
 		/// <summary>
 		/// Gets the text dimensions.
 		/// </summary>
+		/// <param name="alwaysGetFontHeight">A value indicating whether to always get the font height.</param>
 		/// <returns>The text dimensions.</returns>
-		public Vector2 GetTextDimensions();
+		public Vector2 GetTextDimensions(bool alwaysGetFontHeight = false);
 
 		/// <summary>
 		/// Conforms the text to the max width.

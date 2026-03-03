@@ -1,9 +1,11 @@
-﻿using Engine.Core.Fonts.Services.Contracts;
+﻿using Engine.Controls.Typing.Models;
+using Engine.Core.Fonts.Services.Contracts;
 using Engine.DiskModels.Drawing;
 using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -129,7 +131,29 @@ namespace Engine.Graphics.Services
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,
-				Font = font
+				Font = font,
+				TextEditingState = new TextEditingState
+				{
+					TypingCursorColor = Color.DarkSlateGray,
+					TextHighlightColor = new Color(
+						Color.DarkSlateBlue.R,
+						Color.DarkSlateBlue.G,
+						Color.DarkSlateBlue.B,
+						(byte)51),
+					TextEditorPosition = model.Text.Length,
+					SelectionOffset = 0,
+					TypingCursor = new TypingCursor
+					{
+						Blink = true,
+						IsVisible = true,
+						ElaspedFrameDuration = 0,
+						Area = new SubArea
+						{
+							Width = 2,
+							Height = 15
+						}
+					}
+				}
 			};
 
 			return result;

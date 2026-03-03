@@ -19,7 +19,7 @@ namespace Engine.Graphics.Models
 		required public int CurrentFrameIndex { get; set; }
 
 		/// <summary>
-		/// Gets or sets the current frame duration in milliseconds.
+		/// Gets or sets the current frame actual duration in milliseconds.
 		/// </summary>
 		required public int? CurrentFrameDuration { get; set; }
 
@@ -34,7 +34,7 @@ namespace Engine.Graphics.Models
 		required public int? FrameMaxDuration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the current frame start time in milliseconds.
+		/// Gets or sets the current frame time in milliseconds.
 		/// </summary>
 		required public double ElaspedFrameDuration { get; set; }
 

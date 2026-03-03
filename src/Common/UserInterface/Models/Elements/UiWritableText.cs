@@ -72,9 +72,9 @@ namespace Common.UserInterface.Models.Elements
 			else
 				this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 
-			if (this.GraphicText is not null)
+			if (this.WritableText is not null)
 			{
-				var textDimensions = this.GraphicText.GetTextDimensions();
+				var textDimensions = this.GraphicText.GetTextDimensions(alwaysGetFontHeight: true);
 				var textJustificationOffset = this.HorizontalTextJustificationType switch
 				{
 					UiHorizontalTextJustification.Center => new Vector2
@@ -94,7 +94,18 @@ namespace Common.UserInterface.Models.Elements
 					}
 				};
 				var graphicTextOffset = graphicOffset + textJustificationOffset;
-				this.GraphicText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
+				this.WritableText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
+
+				if (this.Active)
+				{
+					var textCursorOffset = graphicOffset + new Vector2
+					{
+						X = textDimensions.X,
+						Y = (textDimensions.Y - this.WritableText.TextEditingState.TypingCursor.Area.Height) / 2
+					};
+					this.WritableText.DrawTextCursor(gameTime, gameServices, coordinates, textCursorOffset);
+					this.WritableText.DrawHighlightedTextIndicator(gameTime, gameServices, coordinates, textCursorOffset);
+				}
 			}
 		}
 
@@ -103,7 +114,7 @@ namespace Common.UserInterface.Models.Elements
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
 		/// <param name="controlState">The control state.</param>
-		/// <param name="priorControlState">The prior control state.</param>
+		/// <param name="priorControlState">The prior control state.if </param>
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
 			this.WritableText.UpdateText(controlState.FreshPressedKeys, controlState.PressedKeys);

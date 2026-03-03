@@ -1,5 +1,6 @@
 ﻿using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Physics;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Physics.Models.SubAreas
 {
@@ -17,6 +18,26 @@ namespace Engine.Physics.Models.SubAreas
 		/// Gets or sets the vertical offset.
 		/// </summary>
 		public float VerticalOffset { get; set; }
+
+		/// <summary>
+		/// Coverts the offset sub area to a rectangle.
+		/// </summary>
+		/// <param name="location">The location of the rectangle.</param>
+		/// <returns>The rectangle.</returns>
+		override public Rectangle ToRectangle(Vector2? location)
+		{
+			location ??= default;
+
+			var result = new Rectangle
+			{
+				X = (int)(location.Value.X + this.HorizontalOffset),
+				Y = (int)(location.Value.Y + this.VerticalOffset),
+				Width = (int)this.Width,
+				Height = (int)this.Height
+			};
+
+			return result;
+		}
 
 		/// <summary>
 		/// Converts the object to a serialization model.

@@ -18,10 +18,19 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the text dimensions.
 		/// </summary>
+		/// <param name="alwaysGetFontHeight">A value indicating whether to always get the font height.</param>
 		/// <returns>The text dimensions.</returns>
-		override public Vector2 GetTextDimensions()
+		override public Vector2 GetTextDimensions(bool alwaysGetFontHeight = false)
 		{
 			var result = this.Font.MeasureString(this.Text);
+
+			if (alwaysGetFontHeight &&
+				result.Y <= 0)
+			{
+				var simpleMeasure = this.Font.MeasureString("a");
+				result.Y = simpleMeasure.Y;
+			}
+
 			result.X = result.X + this.Margin.LeftMargin + this.Margin.RightMargin;
 			result.Y = result.Y + this.Margin.TopMargin + this.Margin.BottomMargin;
 

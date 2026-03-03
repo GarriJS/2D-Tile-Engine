@@ -43,10 +43,18 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets the text dimensions.
 		/// </summary>
+		/// <param name="alwaysGetFontHeight">A value indicating whether to always get the font height.</param>
 		/// <returns>The text dimensions.</returns>
-		virtual public Vector2 GetTextDimensions()
+		virtual public Vector2 GetTextDimensions(bool alwaysGetFontHeight = false)
 		{
 			var result = this.Font.MeasureString(this.Text);
+
+			if (alwaysGetFontHeight &&
+				result.Y <= 0)
+			{
+				var simpleMeasure = this.Font.MeasureString("a");
+				result.Y = simpleMeasure.Y;
+			}
 
 			return result;
 		}
@@ -116,7 +124,6 @@ namespace Engine.Graphics.Models
 			var textOffset = coordinates + offset;
 			writingService.Draw(this.Font, this.Text, textOffset, this.TextColor);
 		}
-
 
 		/// <summary>
 		/// Converts the object to a serialization model.

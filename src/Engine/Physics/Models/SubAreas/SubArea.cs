@@ -28,21 +28,6 @@ namespace Engine.Physics.Models.SubAreas
 		public Vector2 ToVector => new() { X = Width, Y = Height };
 
 		/// <summary>
-		/// Initializes the sub area.
-		/// </summary>
-		public SubArea() { }
-
-		/// <summary>
-		/// Initializes the sub area.
-		/// </summary>
-		/// <param name="vector">The vector.</param>
-		public SubArea(Vector2 vector)
-		{
-			this.Width = vector.X;
-			this.Height = vector.Y;
-		}
-
-		/// <summary>
 		/// Draws the sub drawable.
 		/// </summary>
 		/// <param name="gameTime">The game time.</param>
@@ -65,6 +50,25 @@ namespace Engine.Physics.Models.SubAreas
 
 			foreach (var sideRectangle in sideRectangles ?? [])
 				drawingService.DrawRectangle(sideRectangle, color);
+		}
+
+		/// <summary>
+		/// Coverts the sub area to a rectangle.
+		/// </summary>
+		/// <param name="location">The location of the rectangle.</param>
+		/// <returns>The rectangle.</returns>
+		virtual public Rectangle ToRectangle(Vector2? location)
+		{
+			location ??= default;
+			var result = new Rectangle
+			{
+				X = (int)location.Value.X,
+				Y = (int)location.Value.Y,
+				Width = (int)this.Width,
+				Height = (int)this.Height
+			};
+
+			return result;
 		}
 
 		/// <summary>
