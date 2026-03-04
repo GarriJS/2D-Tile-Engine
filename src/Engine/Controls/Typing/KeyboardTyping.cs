@@ -33,11 +33,6 @@ namespace Engine.Controls.Typing
 		static readonly List<Keys> ShiftKeys = [Keys.LeftShift, Keys.RightShift];
 
 		/// <summary>
-		/// The highlight text keys.
-		/// </summary>
-		static readonly List<Keys> HighlightTextKeys = [Keys.Left, Keys.Right];
-
-		/// <summary>
 		/// Formats the string for drawing.
 		/// </summary>
 		/// <param name="text">The text.</param>

@@ -103,8 +103,7 @@ namespace Common.UserInterface.Models.Elements
 						X = textDimensions.X,
 						Y = (textDimensions.Y - this.WritableText.TextEditingState.TypingCursor.Area.Height) / 2
 					};
-					this.WritableText.TextEditingState.UpdateTextEditorOffset(this.WritableText.Text, this.WritableText.Font, coordinates, textCursorOffset);
-					this.WritableText.TextEditingState.UpdateHighlightedRectangle(this.WritableText.Text, this.WritableText.Font, coordinates, textCursorOffset);
+					this.WritableText.TextEditingState.UpdateTextEditorOffsets(this.WritableText.Text, this.WritableText.Font, coordinates, textCursorOffset);
 					this.WritableText.TextEditingState.Draw(gameTime, gameServices, coordinates, color, textCursorOffset);
 				}
 			}

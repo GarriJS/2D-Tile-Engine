@@ -52,13 +52,26 @@ namespace Engine.Controls.Typing.Models
 		required public TypingCursor TypingCursor { get; set; }
 
 		/// <summary>
+		/// Updates the text editor offsets.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="font">The font.</param>
+		/// <param name="coordinates">The coordinates.</param>
+		/// <param name="offset">The offset.</param>
+		public void UpdateTextEditorOffsets(string text, SpriteFont font, Vector2 coordinates, Vector2 offset = default)
+		{
+			this.UpdateTextEditorOffset(text, font, coordinates, offset);
+			this.UpdateHighlightedRectangle(text, font);
+		}
+
+		/// <summary>
 		/// Updates the text editor offset.
 		/// </summary>
 		/// <param name="text">The text.</param>
 		/// <param name="font">The font.</param>
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="offset">The offset.</param>
-		public void UpdateTextEditorOffset(string text, SpriteFont font, Vector2 coordinates, Vector2 offset = default)
+		private void UpdateTextEditorOffset(string text, SpriteFont font, Vector2 coordinates, Vector2 offset = default)
 		{
 			if ((text.Length < this.TextEditorPosition) ||
 				(0 > this.TextEditorPosition))
@@ -80,7 +93,7 @@ namespace Engine.Controls.Typing.Models
 		/// <param name="font">The font.</param>
 		/// <param name="coordinates">The coordinates.</param>
 		/// <param name="offset">The offset.</param>
-		public void UpdateHighlightedRectangle(string text, SpriteFont font, Vector2 coordinates, Vector2 offset = default)
+		private void UpdateHighlightedRectangle(string text, SpriteFont font)
 		{
 			this.HighlightedRectangle = null;
 
@@ -100,7 +113,7 @@ namespace Engine.Controls.Typing.Models
 			this.HighlightedRectangle = new Rectangle
 			{
 				X = horizontalPosition,
-				Y = (int)this.TextEditorCoordinates.Y,
+				Y = (int)this.TextEditorCoordinates.Y - 2,
 				Width = (int)highlightedDimensions.X,
 				Height = (int)highlightedDimensions.Y
 			};
