@@ -65,11 +65,56 @@ namespace Engine.Controls.Typing
 												  (e.ElaspedTime > LongPressTime) &&
 												  (e.ElaspedTime >= ShortPressTime));
 			var newText = GetTextFromKeys(freshKeys, pressedKeys);
-			var resultText = text + newText;
+			var resultText = text;
+
+			if (false == string.IsNullOrEmpty(newText))
+			{
+				if (true == resultTextEditingState.IsHighlighting)
+				{
+					(var start, var length) = resultTextEditingState.GetHighlightedTextStartAndLength();
+					text = text.Remove(start, length);
+
+					if (0 > resultTextEditingState.SelectionOffset)
+					{
+						resultTextEditingState.TextEditorPosition -= length;
+					}
+					
+					resultTextEditingState.SelectionOffset = 0;
+				}
+
+				var existingLeft = text[..resultTextEditingState.TextEditorPosition];
+				var existingRight = text[resultTextEditingState.TextEditorPosition..];
+				resultText = existingLeft + newText + existingRight;
+			}
+
+			if (text.Length < resultText.Length)
+			{
+				resultTextEditingState.TextEditorPosition += (resultText.Length - text.Length);
+			}
 
 			if ((true == removeText) &&
 				(0 != resultText.Length))
-				resultText = resultText[..^1];
+			{
+				if (true == resultTextEditingState.IsHighlighting)
+				{
+					(var start, var length) = resultTextEditingState.GetHighlightedTextStartAndLength();
+					resultText = resultText.Remove(start, length);
+
+					if (0 > resultTextEditingState.SelectionOffset)
+					{
+						resultTextEditingState.TextEditorPosition -= length;
+					}
+
+					resultTextEditingState.SelectionOffset = 0;
+				}
+				else
+				{
+					var maintainLeft = text[..(resultTextEditingState.TextEditorPosition - 1)];
+					var maintianRight = text[resultTextEditingState.TextEditorPosition..];
+					resultTextEditingState.TextEditorPosition--;
+					resultText = maintainLeft + maintianRight;
+				}
+			}
 
 			var result = new TypingResult
 			{
@@ -109,7 +154,7 @@ namespace Engine.Controls.Typing
 		/// <param name="freshKeys">The fresh keys.</param>
 		/// <param name="pressedKeys">The pressed keys.</param>
 		/// <returns>The text range from the keys.</returns>
-		static TextEditingState GetTextEditingStateFromKeys(string text, TextEditingState existingTextEditingState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+		static public TextEditingState GetTextEditingStateFromKeys(string text, TextEditingState existingTextEditingState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
 		{
 			var leftActive = freshKeys.Contains(Keys.Left) ||
 							 pressedKeys.Any(e => (e.Subject == Keys.Left) &&
@@ -120,16 +165,43 @@ namespace Engine.Controls.Typing
 												   (e.ElaspedTime > LongPressTime) &&
 												   (e.ElaspedTime >= ShortPressTime));
 
-			if (leftActive && rightActive)
+			if ((true == leftActive) &&
+				(true == rightActive))
 				return existingTextEditingState;
 
-			if ((true == leftActive) &&
-				(0 != existingTextEditingState.TextEditorPosition + existingTextEditingState.SelectionOffset))
-				existingTextEditingState.SelectionOffset--;
+			if ((true == leftActive) ||
+				(true == rightActive))
+			{
+				var highlightKeyActive = pressedKeys.Any(e => ShiftKeys.Contains(e.Subject));
 
-			if ((true == rightActive) &&
-				(text.Length != existingTextEditingState.TextEditorPosition + existingTextEditingState.SelectionOffset))
-				existingTextEditingState.SelectionOffset++;
+				if (false == highlightKeyActive)
+				{
+					if (0 != existingTextEditingState.SelectionOffset)
+					{
+						existingTextEditingState.TextEditorPosition += existingTextEditingState.SelectionOffset;
+						existingTextEditingState.SelectionOffset = 0;
+
+						if (0 > existingTextEditingState.TextEditorPosition)
+							existingTextEditingState.TextEditorPosition = 0;
+					}
+					else if ((true == leftActive) &&
+							 (0 <= existingTextEditingState.TextEditorPosition - 1))
+						existingTextEditingState.TextEditorPosition--;
+					else if ((true == rightActive) &&
+							 (text.Length != existingTextEditingState.TextEditorPosition))
+						existingTextEditingState.TextEditorPosition++;
+				}
+				else
+				{
+					if ((true == leftActive) &&
+						(0 <= existingTextEditingState.TextEditorPosition + (existingTextEditingState.SelectionOffset - 1)))
+						existingTextEditingState.SelectionOffset--;
+					else if ((true == rightActive) &&
+							 (text.Length != existingTextEditingState.TextEditorPosition + existingTextEditingState.SelectionOffset))
+						existingTextEditingState.SelectionOffset++;
+
+				}
+			}
 
 			return existingTextEditingState;
 		}

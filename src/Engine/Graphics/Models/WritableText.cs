@@ -2,8 +2,6 @@
 using Engine.Controls.Typing.Models;
 using Engine.Controls.Typing.Models.Contracts;
 using Engine.Physics.Models;
-using Engine.RunTime.Services.Contracts;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
@@ -48,32 +46,6 @@ namespace Engine.Graphics.Models
 
 			if (true == conformText)
 				this.ConformTextToMaxWidth();
-		}
-
-		/// <summary>
-		/// Draws the text cursor.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		/// <param name="coordinates">The coordinates.</param>
-		/// <param name="offset">The offset.</param>
-		public void DrawTextCursor(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
-		{
-			this.TextEditingState.TypingCursor?.Draw(gameTime, gameServices, coordinates, this.TextEditingState.TypingCursorColor, offset);
-		}
-
-		public void DrawHighlightedTextIndicator(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
-		{
-			if (false == this.TextEditingState.IsHighlighting)
-				return;
-
-			var drawingService = gameServices.GetService<IDrawingService>();
-			var highlightedRectangle = this.TextEditingState.GetHighlightedRectangle(this.Text, this.Font, coordinates, offset);
-
-			if (highlightedRectangle is null)
-				return;
-
-			drawingService.DrawRectangle(highlightedRectangle.Value, this.TextEditingState.TextHighlightColor);
 		}
 	}
 }

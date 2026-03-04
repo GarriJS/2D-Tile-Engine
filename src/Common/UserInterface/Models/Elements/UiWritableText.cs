@@ -67,7 +67,7 @@ namespace Common.UserInterface.Models.Elements
 		{
 			var graphicOffset = offset + this.CachedOffset ?? default;
 
-			if (this.Active)
+			if (true == this.Active)
 				this.ActiveGraphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			else
 				this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
@@ -96,15 +96,16 @@ namespace Common.UserInterface.Models.Elements
 				var graphicTextOffset = graphicOffset + textJustificationOffset;
 				this.WritableText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
 
-				if (this.Active)
+				if (true == this.Active)
 				{
 					var textCursorOffset = graphicOffset + new Vector2
 					{
 						X = textDimensions.X,
 						Y = (textDimensions.Y - this.WritableText.TextEditingState.TypingCursor.Area.Height) / 2
 					};
-					this.WritableText.DrawTextCursor(gameTime, gameServices, coordinates, textCursorOffset);
-					this.WritableText.DrawHighlightedTextIndicator(gameTime, gameServices, coordinates, textCursorOffset);
+					this.WritableText.TextEditingState.UpdateTextEditorOffset(this.WritableText.Text, this.WritableText.Font, coordinates, textCursorOffset);
+					this.WritableText.TextEditingState.UpdateHighlightedRectangle(this.WritableText.Text, this.WritableText.Font, coordinates, textCursorOffset);
+					this.WritableText.TextEditingState.Draw(gameTime, gameServices, coordinates, color, textCursorOffset);
 				}
 			}
 		}
