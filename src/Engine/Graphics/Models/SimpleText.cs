@@ -31,9 +31,9 @@ namespace Engine.Graphics.Models
 		required public string FontName { get; set; }
 
 		/// <summary>
-		/// Gets the text.
+		/// Gets or sets the text lines.
 		/// </summary>
-		required public string Text { get; set; }
+		required public List<string> TextLines { get; set; }
 
 		/// <summary>
 		/// Gets or sets the text color
@@ -48,17 +48,26 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets the text dimensions.
 		/// </summary>
-		/// <param name="alwaysGetFontHeight">A value indicating whether to always get the font height.</param>
+		/// <param name="includeFontHeightWhenEmpty">value indicating whether the font height should be returned when the text contains no lines.</param>
 		/// <returns>The text dimensions.</returns>
-		virtual public Vector2 GetTextDimensions(bool alwaysGetFontHeight = false)
+		virtual public Vector2 GetTextDimensions(bool includeFontHeightWhenEmpty = false)
 		{
-			var result = this.Font.MeasureString(this.Text);
+			var result = Vector2.Zero;
 
-			if (alwaysGetFontHeight &&
-				result.Y <= 0)
+			foreach (var textLine in this.TextLines)
+			{ 
+				var lineDimensions = this.Font.MeasureString(textLine);
+				result.Y += lineDimensions.Y;
+
+				if (result.X < lineDimensions.X)
+					result.X = lineDimensions.X;
+			}
+
+			if ((true == includeFontHeightWhenEmpty) &&
+				(0 >= result.Y))
 			{
-				var simpleMeasure = this.Font.MeasureString("a");
-				result.Y = simpleMeasure.Y;
+				var dummyMeasure = this.Font.MeasureString("A");
+				result.Y = dummyMeasure.Y;
 			}
 
 			return result;
@@ -71,26 +80,25 @@ namespace Engine.Graphics.Models
 		/// <returns>A value indicating whether the text needs conforming.</returns>
 		public bool NeedsConforming(string text, bool maintainExistingLineBreaks = false)
 		{
-			if ((false == this.MaxLineCharacterCount.HasValue) &&
+			if ((false == this.MaxLineCharacterCount.HasValue) && 
 				(false == this.MaxLinesCount.HasValue))
 				return false;
 
 			var maxChars = this.MaxLineCharacterCount ?? int.MaxValue;
 			var maxLines = this.MaxLinesCount ?? int.MaxValue;
 			var lineCount = 0;
-			var sourceText = text.ReplaceLineEndings();
-			var paragraphs = maintainExistingLineBreaks
-				? sourceText.Split(Environment.NewLine)
-				: [sourceText.Replace(Environment.NewLine, " ")];
+			var sourceLines = true == maintainExistingLineBreaks
+				? text.ReplaceLineEndings().Split(Environment.NewLine)
+				: [string.Join(" ", text.ReplaceLineEndings().Split(Environment.NewLine))];
 
-			foreach (var paragraph in paragraphs)
+			foreach (var line in sourceLines)
 			{
-				var words = paragraph.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+				var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 				var currentLineLength = 0;
 
 				foreach (var word in words)
 				{
-					var testLength = currentLineLength == 0
+					var testLength = 0 == currentLineLength
 						? word.Length
 						: currentLineLength + 1 + word.Length;
 
@@ -110,7 +118,7 @@ namespace Engine.Graphics.Models
 					}
 				}
 
-				if (currentLineLength > 0)
+				if (0 < currentLineLength)
 				{
 					lineCount++;
 
@@ -129,25 +137,24 @@ namespace Engine.Graphics.Models
 		public void ConformTextToLimits(bool maintainExistingLineBreaks = false)
 		{
 			if ((false == this.MaxLineCharacterCount.HasValue) && 
-				(false == MaxLinesCount.HasValue))
+				(false == this.MaxLinesCount.HasValue))
 				return;
 
 			var maxChars = this.MaxLineCharacterCount ?? int.MaxValue;
 			var maxLines = this.MaxLinesCount ?? int.MaxValue;
 			List<string> finalLines = [];
-			var sourceText = this.Text.ReplaceLineEndings();
-			var paragraphs = maintainExistingLineBreaks
-				? sourceText.Split(Environment.NewLine)
-				: [sourceText.Replace(Environment.NewLine, " ")];
+			var sourceLines = true == maintainExistingLineBreaks
+				? this.TextLines
+				: [string.Join(" ", this.TextLines)];
 
-			foreach (var paragraph in paragraphs)
+			foreach (var line in sourceLines)
 			{
-				var words = paragraph.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+				var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 				var currentLine = new StringBuilder();
 
 				foreach (var word in words)
 				{
-					var testLength = currentLine.Length == 0
+					var testLength = 0 == currentLine.Length
 						? word.Length
 						: currentLine.Length + 1 + word.Length;
 
@@ -166,7 +173,7 @@ namespace Engine.Graphics.Models
 
 							if (finalLines.Count >= maxLines)
 							{
-								this.Text = string.Join(Environment.NewLine, finalLines);
+								this.TextLines = finalLines;
 								
 								return;
 							}
@@ -177,19 +184,20 @@ namespace Engine.Graphics.Models
 					}
 				}
 
-				if (currentLine.Length > 0)
+				if (0 < currentLine.Length)
 				{
 					finalLines.Add(currentLine.ToString());
 
 					if (finalLines.Count >= maxLines)
 					{
-						this.Text = string.Join(Environment.NewLine, finalLines);
+						this.TextLines = finalLines;
+						
 						return;
 					}
 				}
 			}
 
-			this.Text = string.Join(Environment.NewLine, finalLines);
+			this.TextLines = finalLines;
 		}
 
 		/// <summary>
@@ -201,12 +209,18 @@ namespace Engine.Graphics.Models
 		/// <param name="offset">The offset.</param>
 		virtual public void Write(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
-			if (true == string.IsNullOrEmpty(this.Text))
+			if (0 == this.TextLines.Count)
 				return;
-		
+
 			var writingService = gameServices.GetService<IWritingService>();
 			var textOffset = coordinates + offset;
-			writingService.Draw(this.Font, this.Text, textOffset, this.TextColor);
+
+			foreach (var textLine in this.TextLines)
+			{
+				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
+				var lineDimensions = this.Font.MeasureString(textLine);
+				textOffset.Y += lineDimensions.Y;
+			}
 		}
 
 		/// <summary>
@@ -217,7 +231,7 @@ namespace Engine.Graphics.Models
 		{
 			var result = new SimpleTextModel
 			{
-				Text = this.Text,
+				//Text = this.Text,
 				TextColor = this.TextColor,
 				FontName = this.FontName,
 			};

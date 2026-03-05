@@ -9,5 +9,10 @@
 		/// Gets or sets the text editing state.
 		/// </summary>
 		public TextEditingState TextEditingState { get; set; }
+
+		/// <summary>
+		/// Gets or sets the typing cursor.
+		/// </summary>
+		public TypingCursor TypingCursor { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Engine.Graphics.Models.Contracts
 {
@@ -25,9 +26,9 @@ namespace Engine.Graphics.Models.Contracts
 		public string FontName { get; }
 
 		/// <summary>
-		/// Gets the text.
+		/// Gets the text lines.
 		/// </summary>
-		public string Text { get; }
+		public List<string> TextLines { get; }
 
 		/// <summary>
 		/// Gets the text color

@@ -9,7 +9,7 @@ namespace Engine.Controls.Typing.Models
 	/// <summary>
 	/// Represents a text editing state.
 	/// </summary>
-	public class TextEditingState : IAmSubDrawable
+	public struct TextEditingState : IAmSubDrawable
 	{
 		/// <summary>
 		/// Gets a value indicating whether the text editing state is highlighting text.
@@ -45,11 +45,6 @@ namespace Engine.Controls.Typing.Models
 		/// Gets or sets the highlighted rectangle.
 		/// </summary>
 		private Rectangle? HighlightedRectangle { get; set; }
-
-		/// <summary>
-		/// Gets or sets the typing cursor.
-		/// </summary>
-		required public TypingCursor TypingCursor { get; set; }
 
 		/// <summary>
 		/// Updates the text editor offsets.
@@ -182,26 +177,6 @@ namespace Engine.Controls.Typing.Models
 
 			var drawingService = gameServices.GetService<IDrawingService>();
 			drawingService.DrawRectangle(this.HighlightedRectangle.Value, this.TextHighlightColor);
-		}
-		
-		/// <summary>
-		/// Gets a copy of this text editing state.
-		/// </summary>
-		/// <returns>A copy of this text editing state.</returns>
-		public TextEditingState Copy()
-		{
-			var result = new TextEditingState
-			{
-				TextEditorPosition = this.TextEditorPosition,
-				SelectionOffset = this.SelectionOffset,
-				TypingCursorColor = this.TypingCursorColor,
-				TextHighlightColor = this.TextHighlightColor,
-				TextEditorCoordinates = this.TextEditorCoordinates,
-				HighlightedRectangle = this.HighlightedRectangle,
-				TypingCursor = this.TypingCursor,
-			};
-
-			return result;
 		}
 	}
 }
