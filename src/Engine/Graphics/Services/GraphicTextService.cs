@@ -102,7 +102,8 @@ namespace Engine.Graphics.Services
 			font ??= fontService.DebugSpriteFont;
 			var result = new SimpleText
 			{
-				MaxLineWidth = model.MaxLineWidth,
+				MaxLineCharacterCount = 30,
+				MaxLinesCount = 1,
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,
@@ -116,8 +117,9 @@ namespace Engine.Graphics.Services
 		/// Gets the writable text from the model.
 		/// </summary>
 		/// <param name="model">The model.</param>
+		/// <param name="maxLineWidth">The max line width.</param>
 		/// <returns>The writable text.</returns>
-		public WritableText GetWritableTextFromModel(WritableTextModel model)
+		public WritableText GetWritableTextFromModel(WritableTextModel model, int? maxLineWidth = null)
 		{
 			if (model is null)
 				return null;
@@ -127,7 +129,9 @@ namespace Engine.Graphics.Services
 			font ??= fontService.DebugSpriteFont;
 			var result = new WritableText
 			{
-				MaxLineWidth = model.MaxLineWidth,
+				TextIsBeingEdited = false,
+				MaxLinesCount = 1,
+				MaxLineCharacterCount = 30,
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,

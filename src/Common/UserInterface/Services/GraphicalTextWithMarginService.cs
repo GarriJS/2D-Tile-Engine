@@ -34,7 +34,8 @@ namespace Common.UserInterface.Services
 			var margin = uiMarginService.GetUiMarginFromModel(model.Margin);
 			var result = new SimpleTextWithMargin
 			{
-				MaxLineWidth = null,
+				MaxLineCharacterCount = null,
+				MaxLinesCount = null,
 				FontName = model.FontName,
 				Text = model.Text,
 				TextColor = model.TextColor,

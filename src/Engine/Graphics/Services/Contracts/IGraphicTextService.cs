@@ -54,7 +54,8 @@ namespace Engine.Graphics.Services.Contracts
 		/// Gets the writable text from the model.
 		/// </summary>
 		/// <param name="model">The model.</param>
+		/// <param name="maxLineWidth">The max line width.</param>
 		/// <returns>The writable text.</returns>
-		public WritableText GetWritableTextFromModel(WritableTextModel model);
+		WritableText GetWritableTextFromModel(WritableTextModel model, int? maxLineWidth = null);
 	}
 }

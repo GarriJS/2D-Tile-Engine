@@ -59,56 +59,53 @@ namespace Engine.Controls.Typing
 							 pressedKeys.Any(e => (true == RemoveTextKeys.Contains(e.Subject)) &&
 												  (e.ElaspedTime > LongPressTime) &&
 												  (e.ElaspedTime >= ShortPressTime));
-			var newText = GetTextFromKeys(freshKeys, pressedKeys);
 			var resultText = text;
-
-			if (false == string.IsNullOrEmpty(newText))
-			{
-				if (true == resultTextEditingState.IsHighlighting)
-				{
-					(var start, var length) = resultTextEditingState.GetHighlightedTextStartAndLength();
-					text = text.Remove(start, length);
-
-					if (0 > resultTextEditingState.SelectionOffset)
-					{
-						resultTextEditingState.TextEditorPosition -= length;
-					}
-					
-					resultTextEditingState.SelectionOffset = 0;
-				}
-
-				var existingLeft = text[..resultTextEditingState.TextEditorPosition];
-				var existingRight = text[resultTextEditingState.TextEditorPosition..];
-				resultText = existingLeft + newText + existingRight;
-			}
-
-			if (text.Length < resultText.Length)
-			{
-				resultTextEditingState.TextEditorPosition += (resultText.Length - text.Length);
-			}
 
 			if ((true == removeText) &&
 				(0 != resultText.Length))
 			{
 				if (true == resultTextEditingState.IsHighlighting)
 				{
-					(var start, var length) = resultTextEditingState.GetHighlightedTextStartAndLength();
-					resultText = resultText.Remove(start, length);
+					var highlightedTextRange = resultTextEditingState.GetHighlightedTextStartAndLength();
+					resultText = resultText.Remove(highlightedTextRange.StartIndex, highlightedTextRange.Length);
 
 					if (0 > resultTextEditingState.SelectionOffset)
 					{
-						resultTextEditingState.TextEditorPosition -= length;
+						resultTextEditingState.TextEditorPosition -= highlightedTextRange.Length;
 					}
 
 					resultTextEditingState.SelectionOffset = 0;
 				}
-				else
+				else if (0 != resultTextEditingState.TextEditorPosition)
 				{
-					var maintainLeft = text[..(resultTextEditingState.TextEditorPosition - 1)];
-					var maintianRight = text[resultTextEditingState.TextEditorPosition..];
+					var maintainLeft = resultText[..(resultTextEditingState.TextEditorPosition - 1)];
+					var maintianRight = resultText[resultTextEditingState.TextEditorPosition..];
 					resultTextEditingState.TextEditorPosition--;
 					resultText = maintainLeft + maintianRight;
 				}
+			}
+
+			var newText = GetTextFromKeys(freshKeys, pressedKeys);
+
+			if (false == string.IsNullOrEmpty(newText))
+			{
+				if (true == resultTextEditingState.IsHighlighting)
+				{
+					var highlightedTextRange = resultTextEditingState.GetHighlightedTextStartAndLength();
+					resultText = resultText.Remove(highlightedTextRange.StartIndex, highlightedTextRange.Length);
+
+					if (0 > resultTextEditingState.SelectionOffset)
+					{
+						resultTextEditingState.TextEditorPosition -= highlightedTextRange.Length;
+					}
+
+					resultTextEditingState.SelectionOffset = 0;
+				}
+
+				var existingLeft = resultText[..resultTextEditingState.TextEditorPosition];
+				var existingRight = resultText[resultTextEditingState.TextEditorPosition..];
+				resultText = existingLeft + newText + existingRight;
+				resultTextEditingState.TextEditorPosition += newText.Length;
 			}
 
 			var result = new TypingResult

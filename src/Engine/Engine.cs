@@ -145,7 +145,7 @@ namespace Engine
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.OemTilde))
 				Exit();
 
-			if (true == controlState.FreshPressedKeys.Any(e => e == Keys.G))
+			if (true == controlState.FreshPressedKeys.Any(e => e == Keys.F1))
 			{
 				var gameStateService = this.Services.GetService<IGameStateService>();
 

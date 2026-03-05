@@ -22,9 +22,9 @@ namespace Common.UserInterface.Models.Elements
 		required public Vector2 ClickableAreaScaler { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the user interface writable text is being written to.
+		/// Gets or sets a value indicating whether the user interface writable text is being edited.
 		/// </summary>
-		required public bool Active { get; set; }
+		public bool Active { get => this.WritableText.TextIsBeingEdited; set => this.WritableText.TextIsBeingEdited = value; }
 
 		/// <summary>
 		/// Get or sets the horizontal text justification type.
@@ -95,17 +95,6 @@ namespace Common.UserInterface.Models.Elements
 				};
 				var graphicTextOffset = graphicOffset + textJustificationOffset;
 				this.WritableText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
-
-				if (true == this.Active)
-				{
-					var textCursorOffset = graphicOffset + new Vector2
-					{
-						X = textDimensions.X,
-						Y = (textDimensions.Y - this.WritableText.TextEditingState.TypingCursor.Area.Height) / 2
-					};
-					this.WritableText.TextEditingState.UpdateTextEditorOffsets(this.WritableText.Text, this.WritableText.Font, coordinates, textCursorOffset);
-					this.WritableText.TextEditingState.Draw(gameTime, gameServices, coordinates, color, textCursorOffset);
-				}
 			}
 		}
 

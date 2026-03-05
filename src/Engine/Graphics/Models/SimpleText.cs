@@ -16,9 +16,14 @@ namespace Engine.Graphics.Models
 	public class SimpleText : IAmGraphicText, ICanBeSerialized<SimpleTextModel>
 	{
 		/// <summary>
-		/// Gets or sets the max line width.
+		/// Gets or sets the max line character count.
 		/// </summary>
-		required public float? MaxLineWidth { get; set; }
+		required public int? MaxLineCharacterCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the max line count.
+		/// </summary>
+		required public int? MaxLinesCount { get; set; }
 
 		/// <summary>
 		/// Gets or sets the font name.
@@ -60,15 +65,76 @@ namespace Engine.Graphics.Models
 		}
 
 		/// <summary>
-		/// Conforms the text to the max width.
+		/// Determines if the text needs conforming.
+		/// </summary>
+		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain existing line breaks.</param>
+		/// <returns>A value indicating whether the text needs conforming.</returns>
+		public bool NeedsConforming(string text, bool maintainExistingLineBreaks = false)
+		{
+			if ((false == this.MaxLineCharacterCount.HasValue) &&
+				(false == this.MaxLinesCount.HasValue))
+				return false;
+
+			var maxChars = this.MaxLineCharacterCount ?? int.MaxValue;
+			var maxLines = this.MaxLinesCount ?? int.MaxValue;
+			var lineCount = 0;
+			var sourceText = text.ReplaceLineEndings();
+			var paragraphs = maintainExistingLineBreaks
+				? sourceText.Split(Environment.NewLine)
+				: [sourceText.Replace(Environment.NewLine, " ")];
+
+			foreach (var paragraph in paragraphs)
+			{
+				var words = paragraph.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+				var currentLineLength = 0;
+
+				foreach (var word in words)
+				{
+					var testLength = currentLineLength == 0
+						? word.Length
+						: currentLineLength + 1 + word.Length;
+
+					if (testLength <= maxChars)
+						currentLineLength = testLength;
+					else
+					{
+						lineCount++;
+
+						if (lineCount >= maxLines)
+							return true;
+
+						currentLineLength = word.Length;
+
+						if (currentLineLength > maxChars)
+							return true;
+					}
+				}
+
+				if (currentLineLength > 0)
+				{
+					lineCount++;
+
+					if (lineCount > maxLines)
+						return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Conforms the text to its line limits and characters per line limit.
 		/// </summary>
 		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain the existing line breaks in the text.</param>
-		public void ConformTextToMaxWidth(bool maintainExistingLineBreaks = false)
+		public void ConformTextToLimits(bool maintainExistingLineBreaks = false)
 		{
-			if (false == this.MaxLineWidth.HasValue)
+			if ((false == this.MaxLineCharacterCount.HasValue) && 
+				(false == MaxLinesCount.HasValue))
 				return;
 
-			var finalLines = new List<string>();
+			var maxChars = this.MaxLineCharacterCount ?? int.MaxValue;
+			var maxLines = this.MaxLinesCount ?? int.MaxValue;
+			List<string> finalLines = [];
 			var sourceText = this.Text.ReplaceLineEndings();
 			var paragraphs = maintainExistingLineBreaks
 				? sourceText.Split(Environment.NewLine)
@@ -81,20 +147,30 @@ namespace Engine.Graphics.Models
 
 				foreach (var word in words)
 				{
-					var testLine = currentLine.Length == 0
-						? word
-						: currentLine + " " + word;
-					var testDimensions = this.Font.MeasureString(testLine);
+					var testLength = currentLine.Length == 0
+						? word.Length
+						: currentLine.Length + 1 + word.Length;
 
-					if (testDimensions.X <= this.MaxLineWidth)
+					if (testLength <= maxChars)
 					{
-						currentLine.Clear();
-						currentLine.Append(testLine);
+						if (0 < currentLine.Length)
+							currentLine.Append(' ');
+
+						currentLine.Append(word);
 					}
 					else
 					{
-						if (currentLine.Length > 0)
+						if (0 < currentLine.Length)
+						{
 							finalLines.Add(currentLine.ToString());
+
+							if (finalLines.Count >= maxLines)
+							{
+								this.Text = string.Join(Environment.NewLine, finalLines);
+								
+								return;
+							}
+						}
 
 						currentLine.Clear();
 						currentLine.Append(word);
@@ -102,7 +178,15 @@ namespace Engine.Graphics.Models
 				}
 
 				if (currentLine.Length > 0)
+				{
 					finalLines.Add(currentLine.ToString());
+
+					if (finalLines.Count >= maxLines)
+					{
+						this.Text = string.Join(Environment.NewLine, finalLines);
+						return;
+					}
+				}
 			}
 
 			this.Text = string.Join(Environment.NewLine, finalLines);

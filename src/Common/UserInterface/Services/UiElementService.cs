@@ -172,13 +172,12 @@ namespace Common.UserInterface.Services
 				Y = (area.Height - clickableArea.Height) / 2
 			};
 			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, clickableArea, clickOffset: clickableOffset);
-			var writableText = graphicTextService.GetWritableTextFromModel(uiWritableTextModel.Text);
+			var writableText = graphicTextService.GetWritableTextFromModel(uiWritableTextModel.Text, (int)area.Width);
 			var graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic;
 			var activeGraphic = graphicService.GetGraphicFromModel(uiWritableTextModel.ActiveGraphic);
 			activeGraphic.SetDrawDimensions(graphic.Dimensions);
 			var uiWritableText = new UiWritableText
 			{
-				Active = false,
 				Name = uiWritableTextModel.Name,
 				HorizontalSizeType = uiWritableTextModel.HorizontalSizeType,
 				VerticalSizeType = uiWritableTextModel.VerticalSizeType,

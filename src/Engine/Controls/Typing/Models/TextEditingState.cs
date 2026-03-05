@@ -91,8 +91,6 @@ namespace Engine.Controls.Typing.Models
 		/// </summary>
 		/// <param name="text">The text.</param>
 		/// <param name="font">The font.</param>
-		/// <param name="coordinates">The coordinates.</param>
-		/// <param name="offset">The offset.</param>
 		private void UpdateHighlightedRectangle(string text, SpriteFont font)
 		{
 			this.HighlightedRectangle = null;
@@ -103,8 +101,8 @@ namespace Engine.Controls.Typing.Models
 			if (false == this.IsHighlighting)
 				return;
 
-			(var start, var length) = this.GetHighlightedTextStartAndLength();
-			var highlightedText = text.Substring(start, length); ;
+			var highlightedTextRange = this.GetHighlightedTextStartAndLength();
+			var highlightedText = text.Substring(highlightedTextRange.StartIndex, highlightedTextRange.Length); ;
 			var highlightedDimensions = font.MeasureString(highlightedText);
 			var horizontalPosition = 0 < this.SelectionOffset ?
 				(int)this.TextEditorCoordinates.X :
@@ -123,7 +121,7 @@ namespace Engine.Controls.Typing.Models
 		/// Gets the highlighted text start and length.
 		/// </summary>
 		/// <returns>The text start and length.</returns>
-		public (int start, int length) GetHighlightedTextStartAndLength()
+		public TextRange GetHighlightedTextStartAndLength()
 		{
 			var start = Math.Min(this.TextEditorPosition, this.TextEditorPosition + this.SelectionOffset);
 			var length = Math.Abs(this.SelectionOffset);
@@ -134,7 +132,13 @@ namespace Engine.Controls.Typing.Models
 			if (0 > length)
 				length = 0;
 
-			return new(start, length);
+			var result = new TextRange
+			{
+				StartIndex = start,
+				Length = length
+			};
+
+			return result;
 		}
 
 		/// <summary>
@@ -178,6 +182,26 @@ namespace Engine.Controls.Typing.Models
 
 			var drawingService = gameServices.GetService<IDrawingService>();
 			drawingService.DrawRectangle(this.HighlightedRectangle.Value, this.TextHighlightColor);
+		}
+		
+		/// <summary>
+		/// Gets a copy of this text editing state.
+		/// </summary>
+		/// <returns>A copy of this text editing state.</returns>
+		public TextEditingState Copy()
+		{
+			var result = new TextEditingState
+			{
+				TextEditorPosition = this.TextEditorPosition,
+				SelectionOffset = this.SelectionOffset,
+				TypingCursorColor = this.TypingCursorColor,
+				TextHighlightColor = this.TextHighlightColor,
+				TextEditorCoordinates = this.TextEditorCoordinates,
+				HighlightedRectangle = this.HighlightedRectangle,
+				TypingCursor = this.TypingCursor,
+			};
+
+			return result;
 		}
 	}
 }

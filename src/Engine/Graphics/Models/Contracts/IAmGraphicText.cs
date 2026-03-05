@@ -10,9 +10,14 @@ namespace Engine.Graphics.Models.Contracts
 	public interface IAmGraphicText : IAmSubWritable
 	{
 		/// <summary>
-		/// Gets the max line width.
+		/// Gets or sets the max line character count.
 		/// </summary>
-		public float? MaxLineWidth { get; }
+		public int? MaxLineCharacterCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the max line count.
+		/// </summary>
+		public int? MaxLinesCount { get; set; }
 
 		/// <summary>
 		/// Gets the font name.
@@ -42,10 +47,17 @@ namespace Engine.Graphics.Models.Contracts
 		public Vector2 GetTextDimensions(bool alwaysGetFontHeight = false);
 
 		/// <summary>
-		/// Conforms the text to the max width.
+		/// Determines if the text needs conforming.
+		/// </summary>
+		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain existing line breaks.</param>
+		/// <returns>A value indicating whether the text needs conforming.</returns>
+		public bool NeedsConforming(string text, bool maintainExistingLineBreaks = false);
+
+		/// <summary>
+		/// Conforms the text to its line limits and characters per line limit.
 		/// </summary>
 		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain the existing line breaks in the text.</param>
-		public void ConformTextToMaxWidth(bool maintainExistingLineBreaks = false);
+		public void ConformTextToLimits(bool maintainExistingLineBreaks = false);
 
 	}
 }
