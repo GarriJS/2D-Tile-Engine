@@ -1,7 +1,6 @@
 ﻿using Engine.Controls.Typing.Models;
 using Engine.Physics.Models;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,16 +56,27 @@ namespace Engine.Controls.Typing
 		{
 			textEditState = HandleTextCursorMovement(textEditState, textCursor, freshKeys, pressedKeys);
 			var removeText = AnyKeyIsActive([.. RemoveTextKeys], freshKeys, pressedKeys);
-			var textFromKeys = GetTextFromKeys(freshKeys, pressedKeys);
 			var textCursorPosition = textCursor.Position;
 			var textHighlightingState = textEditState.TextHighlightingState;
+			TextPosition[] anchors = [];
+			TextPosition startAnchor = default;
+			TextPosition endAnchor = default;
+
+			if (true == textEditState.TextHighlightingState.IsHighlighting)
+			{
+				anchors = [textEditState.TextHighlightingState.TextAnchor.Value, textCursor.Position];
+				anchors = [.. anchors.OrderBy(e => e.Line).ThenBy(e => e.Index)];
+				startAnchor = anchors.First();
+				endAnchor = anchors.Last();
+			}
 
 			if (true == removeText)
 			{
 				if (true == textEditState.TextHighlightingState.IsHighlighting)
 				{
-					textEditState.TextLines = RemoveHighlightedText(textEditState, textCursor);
+					textEditState.TextLines = RemoveHighlightedText(startAnchor, endAnchor, textEditState, textCursor);
 					textHighlightingState.TextAnchor = null;
+					textCursorPosition = startAnchor;
 				}
 				else if (0 != textCursorPosition.Index)
 				{
@@ -75,30 +85,27 @@ namespace Engine.Controls.Typing
 				}
 			}
 
+			var textFromKeys = GetTextFromKeys(freshKeys, pressedKeys);
 			textCursor.Position = textCursorPosition;
 			textEditState.TextHighlightingState = textHighlightingState;
-			//var newText = GetTextFromKeys(freshKeys, pressedKeys);
 
-			//if (false == string.IsNullOrEmpty(newText))
-			//{
-			//	if (true == resultTextEditingState.IsHighlighting)
-			//	{
-			//		var highlightedTextRange = resultTextEditingState.GetHighlightedTextStartAndLength();
-			//		resultText = resultText.Remove(highlightedTextRange.StartIndex, highlightedTextRange.Length);
+			if (false == string.IsNullOrEmpty(textFromKeys))
+			{
+				if (true == textEditState.TextHighlightingState.IsHighlighting)
+				{
+					textEditState.TextLines = RemoveHighlightedText(startAnchor, endAnchor, textEditState, textCursor);
+					textHighlightingState.TextAnchor = null; 
+					textCursorPosition = startAnchor;
+				}
 
-			//		if (0 > resultTextEditingState.SelectionOffset)
-			//		{
-			//			resultTextEditingState.TextEditorPosition -= highlightedTextRange.Length;
-			//		}
+				var existingLeft = textEditState.TextLines[textCursorPosition.Line][..textCursorPosition.Index];
+				var existingRight = textEditState.TextLines[textCursorPosition.Line][textCursorPosition.Index..];
+				textEditState.TextLines[textCursorPosition.Line] = existingLeft + textFromKeys + existingRight;
+				textCursorPosition.Index += textFromKeys.Length;
+			}
 
-			//		resultTextEditingState.SelectionOffset = 0;
-			//	}
-
-			//	var existingLeft = resultText[..resultTextEditingState.TextEditorPosition];
-			//	var existingRight = resultText[resultTextEditingState.TextEditorPosition..];
-			//	resultText = existingLeft + newText + existingRight;
-			//	resultTextEditingState.TextEditorPosition += newText.Length;
-			//}
+			textCursor.Position = textCursorPosition;
+			textEditState.TextHighlightingState = textHighlightingState;
 
 			return textEditState;
 		}
@@ -189,21 +196,13 @@ namespace Engine.Controls.Typing
 		/// <summary>
 		/// Removes the highlighted text.
 		/// </summary>
+		/// <param name="startAnchor">The start anchor.</param>
+		/// <param name="endAnchor">The end anchor.</param>
 		/// <param name="textEditState">The text edit state.</param>
 		/// <param name="textCursor">The text cursor.</param>
 		/// <returns>The new text line.</returns>
-		static public string[] RemoveHighlightedText(TextEditingState textEditState, TextCursor textCursor)
+		static public string[] RemoveHighlightedText(TextPosition startAnchor, TextPosition endAnchor, TextEditingState textEditState, TextCursor textCursor)
 		{
-			if (textEditState.TextHighlightingState.TextAnchor is null)
-				return textEditState.TextLines;
-
-			TextPosition[] anchors = [ textEditState.TextHighlightingState.TextAnchor.Value, textCursor.Position ];
-			var startAnchor = anchors.OrderBy(e => e.Line)
-								     .ThenBy(e => e.Index)
-								     .FirstOrDefault();
-			var endAnchor = anchors.OrderByDescending(e => e.Line)
-								   .ThenByDescending(e => e.Index)
-								   .FirstOrDefault();
 			List<string> resultLines = [];
 			resultLines.AddRange(textEditState.TextLines.Take(startAnchor.Line));
 			var startLineText = textEditState.TextLines[startAnchor.Line][..startAnchor.Index];
