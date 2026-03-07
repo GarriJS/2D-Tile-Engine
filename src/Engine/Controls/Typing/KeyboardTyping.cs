@@ -33,6 +33,11 @@ namespace Engine.Controls.Typing
 		static readonly List<Keys> ShiftKeys = [Keys.LeftShift, Keys.RightShift];
 
 		/// <summary>
+		/// The new line keys.
+		/// </summary>
+		static readonly List<Keys> NewLineKeys = [Keys.Enter];
+
+		/// <summary>
 		/// Formats the string for drawing.
 		/// </summary>
 		/// <param name="text">The text.</param>
@@ -83,6 +88,28 @@ namespace Engine.Controls.Typing
 					textEditState.TextLines[textCursorPosition.Line] = textEditState.TextLines[textCursorPosition.Line].Remove(textCursorPosition.Index - 1, 1);
 					textCursorPosition.Index--;
 				}
+			}
+
+			textCursor.Position = textCursorPosition;
+			textEditState.TextHighlightingState = textHighlightingState;
+			var newLine = AnyKeyIsActive([.. NewLineKeys], freshKeys, pressedKeys);
+
+			if ((true == newLine) &&
+				((false == textEditState.MaxLinesCount.HasValue) ||
+				 (textEditState.TextLines.Length < textEditState.MaxLinesCount)))
+			{
+				if (true == textEditState.TextHighlightingState.IsHighlighting)
+				{
+					textEditState.TextLines = RemoveHighlightedText(startAnchor, endAnchor, textEditState, textCursor);
+					textHighlightingState.TextAnchor = null;
+					textCursorPosition = startAnchor;
+				}
+
+				var textLines = textEditState.TextLines.ToList();
+				textLines.Insert(textCursorPosition.Line + 1, "");
+				textEditState.TextLines = [.. textLines];
+				textCursorPosition.Line++;
+				textCursorPosition.Index = 0;
 			}
 
 			var textFromKeys = GetTextFromKeys(freshKeys, pressedKeys);
@@ -152,7 +179,7 @@ namespace Engine.Controls.Typing
 					(0 != textCursorPosition.Line))
 				{
 					textCursorPosition.Line--;
-					textCursorPosition.Index = textEditState.TextLines[textCursorPosition.Line].Length - 1;
+					textCursorPosition.Index = textEditState.TextLines[textCursorPosition.Line].Length;
 				}
 				else if (0 != textCursorPosition.Index)
 					textCursorPosition.Index--;
@@ -160,7 +187,7 @@ namespace Engine.Controls.Typing
 			else if ((true == rightActive) &&
 					 (false == leftActive))
 			{
-				if ((textCursorPosition.Index == textEditState.TextLines[textCursorPosition.Line].Length - 1) &&
+				if ((textCursorPosition.Index == textEditState.TextLines[textCursorPosition.Line].Length) &&
 					(textCursorPosition.Line < textEditState.TextLines.Length - 1))
 				{
 					textCursorPosition.Line++;
@@ -175,7 +202,7 @@ namespace Engine.Controls.Typing
 				if (0 != textCursorPosition.Line)
 					textCursorPosition.Line--;
 
-				if (textCursorPosition.Index < textEditState.TextLines[textCursorPosition.Line].Length)
+				if (textCursorPosition.Index > textEditState.TextLines[textCursorPosition.Line].Length)
 					textCursorPosition.Index = textEditState.TextLines[textCursorPosition.Line].Length;
 			}
 			else if ((true == downActive) &&
@@ -184,7 +211,7 @@ namespace Engine.Controls.Typing
 				if (textCursorPosition.Line < textEditState.TextLines.Length - 1)
 					textCursorPosition.Line++;
 
-				if (textCursorPosition.Index < textEditState.TextLines[textCursorPosition.Line].Length)
+				if (textCursorPosition.Index > textEditState.TextLines[textCursorPosition.Line].Length)
 					textCursorPosition.Index = textEditState.TextLines[textCursorPosition.Line].Length;
 			}
 

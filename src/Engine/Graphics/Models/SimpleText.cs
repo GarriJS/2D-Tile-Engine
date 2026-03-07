@@ -95,6 +95,25 @@ namespace Engine.Graphics.Models
 		}
 
 		/// <summary>
+		/// Gets the line offset height.
+		/// </summary>
+		/// <param name="lineNumber">The number.</param>
+		/// <returns>The line offset height.</returns>
+		public float GetLineOffsetHeight(int lineNumber)
+		{
+			float result = 0;
+
+			for (int i = 0; i < lineNumber; i++)
+			{
+				var lineText = this.TextLines[i];
+				var lineDimensions = this.GetTextDimensions(lineText, includeFontHeightWhenEmpty: true);
+				result += lineDimensions.Y;
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Determines if the text needs conforming.
 		/// </summary>
 		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain existing line breaks.</param>

@@ -106,10 +106,11 @@ namespace Engine.Graphics.Models
 		{
 			var cursorText = this.TextLines[this.TextCursor.Position.Line][..this.TextCursor.Position.Index];
 			var cursorTextOffset = this.GetTextDimensions(cursorText, includeFontHeightWhenEmpty: true);
+			var lineOffsetHeight = this.GetLineOffsetHeight(this.TextCursor.Position.Line);
 			var textEditingStateOffset = offset + new Vector2
 			{
 				X = cursorTextOffset.X,
-				Y = (cursorTextOffset.Y - this.TextCursor.Area.Height) / 2
+				Y = lineOffsetHeight + ((cursorTextOffset.Y - this.TextCursor.Area.Height) / 2)
 			};
 			this.TextCursor.Draw(gameTime, gameServices, coordinates, this.TextCursor.Color, textEditingStateOffset);
 		}
@@ -147,8 +148,8 @@ namespace Engine.Graphics.Models
 			{
 				var textLength = startAnchor.Line == endAnchor.Line ?
 					endAnchor.Index - startAnchor.Index :
-					textLine.Length - startAnchor.Index;
-				var highlightedText = textLine.Substring(startAnchor.Index, textLength);
+					endAnchor.Index;
+				var highlightedText = textLine.Substring(0, textLength);
 				var textDimensions = this.GetTextDimensions(highlightedText, includeFontHeightWhenEmpty: true);
 				result = new Rectangle
 				{

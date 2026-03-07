@@ -130,7 +130,7 @@ namespace Engine.Graphics.Services
 			var result = new WritableText
 			{
 				TextIsBeingEdited = false,
-				MaxLinesCount = 1,
+				MaxLinesCount = 3,
 				MaxLineCharacterCount = 30,
 				FontName = model.FontName,
 				TextLines = [model.Text],
