@@ -149,7 +149,7 @@ namespace Engine.Graphics.Models
 				var textLength = startAnchor.Line == endAnchor.Line ?
 					endAnchor.Index - startAnchor.Index :
 					endAnchor.Index;
-				var highlightedText = textLine.Substring(0, textLength);
+				var highlightedText = textLine[..textLength];
 				var textDimensions = this.GetTextDimensions(highlightedText, includeFontHeightWhenEmpty: true);
 				result = new Rectangle
 				{
