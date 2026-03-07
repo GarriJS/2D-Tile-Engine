@@ -104,16 +104,14 @@ namespace Engine.Graphics.Models
 		/// <param name="offset">The offset.</param>
 		private void DrawTextEditingState(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
-			var textDimensions = this.GetTextDimensions(includeFontHeightWhenEmpty: true);
+			var cursorText = this.TextLines[this.TextCursor.Position.Line][..this.TextCursor.Position.Index];
+			var cursorTextOffset = this.GetTextDimensions(cursorText, includeFontHeightWhenEmpty: true);
 			var textEditingStateOffset = offset + new Vector2
 			{
-				X = 0,
-				Y = (textDimensions.Y - this.TextCursor.Area.Height) / 2
+				X = cursorTextOffset.X,
+				Y = (cursorTextOffset.Y - this.TextCursor.Area.Height) / 2
 			};
-			var cursorText = this.TextLines[this.TextCursor.Position.Line][..this.TextCursor.Position.Index];
-			var cursorTextOffset = this.GetTextDimensions(cursorText, includeFontHeightWhenEmpty: false);
-			textEditingStateOffset.X += cursorTextOffset.X;
-			this.TextCursor.Draw(gameTime, gameServices, coordinates, Color.White, textEditingStateOffset);
+			this.TextCursor.Draw(gameTime, gameServices, coordinates, this.TextCursor.Color, textEditingStateOffset);
 		}
 
 		/// <summary>
@@ -127,8 +125,7 @@ namespace Engine.Graphics.Models
 		/// <returns>The highlight rectangle.</returns>
 		private Rectangle GetHighlightRectangle(string textLine, Vector2 offset, TextPosition startAnchor, TextPosition endAnchor, TextHighlightResultType highlightResult)
 		{
-			var result = Rectangle.Empty;
-			var textDimensions = Vector2.Zero;
+			Rectangle result;
 
 			if (TextHighlightResultType.StartLine == highlightResult)
 			{
@@ -137,7 +134,7 @@ namespace Engine.Graphics.Models
 					endAnchor.Index - startAnchor.Index :
 					textLine.Length - startAnchor.Index;
 				var highlightedText = textLine.Substring(startAnchor.Index, textLength);
-				textDimensions = this.GetTextDimensions(highlightedText, includeFontHeightWhenEmpty: true);
+				var textDimensions = this.GetTextDimensions(highlightedText, includeFontHeightWhenEmpty: true);
 				result = new Rectangle
 				{
 					X = (int)(offset.X + leftDimensions.X),
@@ -152,7 +149,7 @@ namespace Engine.Graphics.Models
 					endAnchor.Index - startAnchor.Index :
 					textLine.Length - startAnchor.Index;
 				var highlightedText = textLine.Substring(startAnchor.Index, textLength);
-				textDimensions = this.GetTextDimensions(highlightedText, includeFontHeightWhenEmpty: true);
+				var textDimensions = this.GetTextDimensions(highlightedText, includeFontHeightWhenEmpty: true);
 				result = new Rectangle
 				{
 					X = (int)offset.X,
@@ -163,7 +160,7 @@ namespace Engine.Graphics.Models
 			}
 			else
 			{
-				textDimensions = this.GetTextDimensions(textLine, includeFontHeightWhenEmpty: true);
+				var textDimensions = this.GetTextDimensions(textLine, includeFontHeightWhenEmpty: true);
 				result = new Rectangle
 				{
 					X = (int)offset.X,
