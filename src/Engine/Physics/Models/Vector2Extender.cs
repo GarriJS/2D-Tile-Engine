@@ -6,16 +6,16 @@ namespace Engine.Physics.Models
 	/// Represents a vector2 extender.
 	/// </summary>
 	/// <typeparam name="T">The type being extended with vector2.</typeparam>
-	public struct Vector2Extender<T>
+	readonly public struct Vector2Extender<T>
 	{
 		/// <summary>
 		/// Gets or sets the vector.
 		/// </summary>
-		required public Vector2 Vector { get; set; }
+		required readonly public Vector2 Vector { get; init; }
 
 		/// <summary>
 		/// Gets or sets the subject.
 		/// </summary>
-		required public T Subject { get; set; }
+		required readonly public T Subject { get; init; }
 	}
 }

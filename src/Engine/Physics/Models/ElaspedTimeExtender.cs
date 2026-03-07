@@ -4,16 +4,16 @@
 	/// Represents a elapsed time extender.
 	/// </summary>
 	/// <typeparam name="T">The type being extended with elapsed time.</typeparam>
-	public struct ElaspedTimeExtender<T>
+	readonly public struct ElaspedTimeExtender<T>
 	{
 		/// <summary>
 		/// Gets or sets the elapsed time.
 		/// </summary>
-		required public double ElaspedTime { get; set; }
+		required readonly public double ElaspedTime { get; init; }
 
 		/// <summary>
 		/// Gets or sets the subject.
 		/// </summary>
-		required public T Subject { get; set; }
+		required readonly public T Subject { get; init; }
 	}
 }

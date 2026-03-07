@@ -7,17 +7,17 @@ using Microsoft.Xna.Framework;
 namespace Engine.Controls.Typing.Models
 {
 	/// <summary>
-	/// Represents a typing cursor.
+	/// Represents a text cursor.
 	/// </summary>
-	sealed public class TypingCursor : IAmSubDrawable, IHaveASubArea
+	sealed public class TextCursor : IAmSubDrawable, IHaveASubArea
 	{
 		/// <summary>
-		/// Get or sets a value indicating whether the typing cursor should blink.
+		/// Get or sets a value indicating whether the text cursor should blink.
 		/// </summary>
 		required public bool Blink { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the typing cursor is visible.
+		/// Gets or sets a value indicating whether the text cursor is visible.
 		/// </summary>
 		required public bool IsVisible { get; set; }
 
@@ -25,6 +25,16 @@ namespace Engine.Controls.Typing.Models
 		/// Gets or sets the current blink time in milliseconds.
 		/// </summary>
 		required public double ElaspedFrameDuration { get; set; }
+
+		/// <summary>
+		/// Gets or sets the color.
+		/// </summary>
+		required public Color Color { get; set; }
+
+		/// <summary>
+		/// Gets or sets the position.
+		/// </summary>
+		required public TextPosition Position { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area.

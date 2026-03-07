@@ -18,21 +18,30 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets the text dimensions.
 		/// </summary>
-		/// <param name="alwaysGetFontHeight">A value indicating whether to always get the font height.</param>
+		/// <param name="includeFontHeightWhenEmpty">value indicating whether the font height should be returned when the text contains no lines.</param>
 		/// <returns>The text dimensions.</returns>
-		override public Vector2 GetTextDimensions(bool alwaysGetFontHeight = false)
+		override public Vector2 GetTextDimensions(bool includeFontHeightWhenEmpty = false)
 		{
-			var result = this.Font.MeasureString(this.Text);
+			var result = Vector2.Zero;
 
-			if (alwaysGetFontHeight &&
-				result.Y <= 0)
+			foreach (var textLine in this.TextLines)
 			{
-				var simpleMeasure = this.Font.MeasureString("a");
-				result.Y = simpleMeasure.Y;
+				var lineDimensions = this.Font.MeasureString(textLine);
+				result.Y += lineDimensions.Y;
+
+				if (result.X < lineDimensions.X)
+					result.X = lineDimensions.X;
 			}
 
-			result.X = result.X + this.Margin.LeftMargin + this.Margin.RightMargin;
-			result.Y = result.Y + this.Margin.TopMargin + this.Margin.BottomMargin;
+			if ((true == includeFontHeightWhenEmpty) &&
+				(0 >= result.Y))
+			{
+				var dummyMeasure = this.Font.MeasureString("A");
+				result.Y = dummyMeasure.Y;
+			}
+
+			result.X += this.Margin.LeftMargin + this.Margin.RightMargin;
+			result.Y += this.Margin.TopMargin + this.Margin.BottomMargin;
 
 			return result;
 		}
@@ -46,16 +55,22 @@ namespace Common.UserInterface.Models
 		/// <param name="offset">The offset.</param>
 		override public void Write(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
-			if (true == string.IsNullOrEmpty(this.Text))
+			if (0 == this.TextLines.Count)
 				return;
 
 			var writingService = gameServices.GetService<IWritingService>();
-			var contentOffset = coordinates + offset + new Vector2
+			var textOffset = coordinates + offset + new Vector2
 			{
 				X = this.Margin.LeftMargin,
 				Y = this.Margin.TopMargin
 			};
-			writingService.Draw(this.Font, this.Text, contentOffset, this.TextColor);
+
+			foreach (var textLine in this.TextLines)
+			{
+				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
+				var lineDimensions = this.Font.MeasureString(textLine);
+				textOffset.Y += lineDimensions.Y;
+			}
 		}
 
 		/// <summary>
@@ -66,7 +81,7 @@ namespace Common.UserInterface.Models
 		{
 			var result = new SinmpleTextWithMarginModel
 			{
-				Text = this.Text,
+				//Text = this.Text,
 				TextColor = this.TextColor,
 				FontName = this.FontName,
 				Margin = this.Margin.ToModel()

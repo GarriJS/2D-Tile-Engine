@@ -73,6 +73,27 @@ namespace Engine.Graphics.Models
 			return result;
 		}
 
+
+		/// <summary>
+		/// Gets the text dimensions.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="includeFontHeightWhenEmpty">value indicating whether the font height should be returned when the text contains no lines.</param>
+		/// <returns>The text dimensions.</returns>
+	    public Vector2 GetTextDimensions(string text, bool includeFontHeightWhenEmpty = false)
+		{
+			var result = this.Font.MeasureString(text);
+
+			if ((true == includeFontHeightWhenEmpty) &&
+				(0 >= result.Y))
+			{
+				var dummyMeasure = this.Font.MeasureString("A");
+				result.Y = dummyMeasure.Y;
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Determines if the text needs conforming.
 		/// </summary>

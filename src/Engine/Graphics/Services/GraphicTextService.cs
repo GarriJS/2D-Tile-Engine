@@ -56,7 +56,7 @@ namespace Engine.Graphics.Services
 		/// <param name="model">The model.</param>
 		/// <returns></returns>
 		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextBaseModel model)
-		{ 
+		{
 			var result = this.GetGraphicTextFromModel<IAmGraphicText>(model);
 
 			return result;
@@ -105,7 +105,7 @@ namespace Engine.Graphics.Services
 				MaxLineCharacterCount = 30,
 				MaxLinesCount = 1,
 				FontName = model.FontName,
-				Text = model.Text,
+				TextLines = [model.Text],
 				TextColor = model.TextColor,
 				Font = font
 			};
@@ -133,29 +133,33 @@ namespace Engine.Graphics.Services
 				MaxLinesCount = 1,
 				MaxLineCharacterCount = 30,
 				FontName = model.FontName,
-				Text = model.Text,
+				TextLines = [model.Text],
 				TextColor = model.TextColor,
 				Font = font,
-				TextEditingState = new TextEditingState
+				TextHighlightingState = new TextHighlightingState
 				{
-					TypingCursorColor = Color.DarkSlateGray,
+					TextAnchor = null,
 					TextHighlightColor = new Color(
 						Color.DarkSlateBlue.R,
 						Color.DarkSlateBlue.G,
 						Color.DarkSlateBlue.B,
-						(byte)51),
-					TextEditorPosition = model.Text.Length,
-					SelectionOffset = 0,
-					TypingCursor = new TypingCursor
+						(byte)51)
+				},
+				TextCursor = new TextCursor
+				{
+					Blink = true,
+					IsVisible = true,
+					ElaspedFrameDuration = 0,
+					Color = Color.DarkSlateGray,
+					Position = new TextPosition
 					{
-						Blink = true,
-						IsVisible = true,
-						ElaspedFrameDuration = 0,
-						Area = new SubArea
-						{
-							Width = 2,
-							Height = 15
-						}
+						Index = model.Text.Length,
+						Line = 0
+					},
+					Area = new SubArea
+					{
+						Width = 2,
+						Height = 15
 					}
 				}
 			};

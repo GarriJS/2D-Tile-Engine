@@ -12,7 +12,7 @@ namespace Engine.Graphics.Models
 	/// <summary>
 	/// Represents writable text.
 	/// </summary>
-	sealed public class WritableText : SimpleText, IHaveATextEditingState
+	sealed public class WritableText : SimpleText, IHaveATextHighlightingState
 	{
 		/// <summary>
 		/// Gets or sets a value indicating whether the text is being edited.
@@ -20,9 +20,14 @@ namespace Engine.Graphics.Models
 		required public bool TextIsBeingEdited { get; set; }
 
 		/// <summary>
-		/// Gets or sets the text editing state.
+		/// Gets or sets the text highlighting state.
 		/// </summary>
-		required public TextEditingState TextEditingState { get; set; }
+		required public TextHighlightingState TextHighlightingState { get; set; }
+
+		/// <summary>
+		/// Gets or sets the text cursor.
+		/// </summary>
+		required public TextCursor TextCursor { get; set; }
 
 		/// <summary>
 		/// Updates the text.
@@ -33,13 +38,16 @@ namespace Engine.Graphics.Models
 		/// <returns>The dimensions of the next text.</returns>
 		public void UpdateText(List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys, bool conformText = true)
 		{
-			var typingResult = KeyboardTyping.ModifyTextFromKeys(this.Text, this.TextEditingState.Copy(), freshKeys, pressedKeys);
-
-			if (this.MaxLineCharacterCount < typingResult.Text.Length)
-				return;
-			
-			this.Text = typingResult.Text;
-			this.TextEditingState = typingResult.TextEditingState;
+			var textEditingState = new TextEditingState
+			{
+				MaxLineCharacterCount = this.MaxLineCharacterCount,
+				MaxLinesCount = this.MaxLinesCount,
+				TextHighlightingState = this.TextHighlightingState,
+				TextLines = [.. this.TextLines],
+			};
+			var typingResult = KeyboardTyping.ModifyTextFromKeys(textEditingState, this.TextCursor, freshKeys, pressedKeys);			
+			this.TextLines = [.. typingResult.TextLines];
+			this.TextHighlightingState = typingResult.TextHighlightingState;
 		}
 
 		/// <summary>
@@ -51,12 +59,18 @@ namespace Engine.Graphics.Models
 		/// <param name="offset">The offset.</param>
 		override public void Write(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
-			if (true == string.IsNullOrEmpty(this.Text))
+			if (0 == this.TextLines.Count)
 				return;
 
 			var writingService = gameServices.GetService<IWritingService>();
 			var textOffset = coordinates + offset;
-			writingService.Draw(this.Font, this.Text, textOffset, this.TextColor);
+
+			foreach (var textLine in this.TextLines)
+			{
+				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
+				var lineDimensions = this.Font.MeasureString(textLine);
+				textOffset.Y += lineDimensions.Y;
+			}
 
 			if (true == this.TextIsBeingEdited)
 				this.DrawTextEditingState(gameTime, gameServices, coordinates, offset);
@@ -75,10 +89,13 @@ namespace Engine.Graphics.Models
 			var textEditingStateOffset = offset + new Vector2
 			{
 				X = textDimensions.X,
-				Y = (textDimensions.Y - this.TextEditingState.TypingCursor.Area.Height) / 2
+				Y = (textDimensions.Y - this.TextCursor.Area.Height) / 2
 			};
-			this.TextEditingState.UpdateTextEditorOffsets(this.Text, this.Font, coordinates, textEditingStateOffset);
-			this.TextEditingState.Draw(gameTime, gameServices, coordinates, Color.White, textEditingStateOffset);
+			var cursorText = this.TextLines[this.TextCursor.Position.Line][..this.TextCursor.Position.Index];
+			var cursorTextOffset = this.GetTextDimensions(cursorText, includeFontHeightWhenEmpty: false);
+			textEditingStateOffset.X += cursorTextOffset.X;
+			this.TextCursor.Draw(gameTime, gameServices, coordinates, Color.White, textEditingStateOffset);
+			//this.TextHighlightingState.Draw(gameTime, gameServices, coordinates, Color.White, textEditingStateOffset);
 		}
 	}
 }
