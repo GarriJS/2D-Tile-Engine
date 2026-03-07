@@ -71,7 +71,7 @@ namespace Engine.Graphics.Models
 			{
 				var textLine = this.TextLines[i];
 				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
-				var lineDimensions = this.Font.MeasureString(textLine);
+				var lineDimensions = this.GetTextDimensions(textLine, includeFontHeightWhenEmpty: true);
 
 				if (true == this.TextHighlightingState.IsHighlighting)
 				{
