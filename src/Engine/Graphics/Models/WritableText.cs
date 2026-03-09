@@ -1,12 +1,10 @@
-﻿using Engine.Controls.Typing;
-using Engine.Controls.Typing.Models;
+﻿using Engine.Controls.Typing.Models;
 using Engine.Controls.Typing.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Engine.Graphics.Models
 {
@@ -19,11 +17,21 @@ namespace Engine.Graphics.Models
 		/// Gets or sets a value indicating whether the text is being edited.
 		/// </summary>
 		required public bool TextIsBeingEdited { get; set; }
-
+		
 		/// <summary>
 		/// Gets or sets the text highlighting state.
 		/// </summary>
 		required public TextHighlightingState TextHighlightingState { get; set; }
+
+		/// <summary>
+		/// Gets the start anchor.
+		/// </summary>
+		required public TextPosition StartAnchor { get; set; }
+
+		/// <summary>
+		/// Gets the end anchor.
+		/// </summary>
+		required public TextPosition EndAnchor { get; set; }
 
 		/// <summary>
 		/// Gets or sets the text cursor.
@@ -39,16 +47,18 @@ namespace Engine.Graphics.Models
 		/// <returns>The dimensions of the next text.</returns>
 		public void UpdateText(List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys, bool conformText = true)
 		{
-			var textEditingState = new TextEditingState
+			var textConstraints = new TextConstraints
 			{
 				MaxLineCharacterCount = this.MaxLineCharacterCount,
 				MaxLinesCount = this.MaxLinesCount,
-				TextHighlightingState = this.TextHighlightingState,
-				TextLines = [.. this.TextLines],
+				TextHighlightingState = this.TextHighlightingState
 			};
-			var typingResult = KeyboardTyping.ModifyTextFromKeys(textEditingState, this.TextCursor, freshKeys, pressedKeys);			
-			this.TextLines = [.. typingResult.TextLines];
+			var textEditor = new TextEditor(this.TextLines);
+			var typingResult = textEditor.ModifyTextLines(textConstraints, this.TextCursor.Position, freshKeys, pressedKeys);
 			this.TextHighlightingState = typingResult.TextHighlightingState;
+			this.StartAnchor = typingResult.StartAnchor;
+			this.EndAnchor = typingResult.EndAnchor;
+			this.TextCursor.Position = typingResult.TextCursorPosition;
 		}
 
 		/// <summary>
@@ -75,15 +85,11 @@ namespace Engine.Graphics.Models
 
 				if (true == this.TextHighlightingState.IsHighlighting)
 				{
-					TextPosition[] anchors = [this.TextHighlightingState.TextAnchor.Value, this.TextCursor.Position];
-					anchors = [.. anchors.OrderBy(e => e.Line).ThenBy(e => e.Index)];
-					var startAnchor = anchors.First();
-					var endAnchor = anchors.Last();
-					var highlightResult = TextLineHasHighlighting(startAnchor, endAnchor, i);
+					var highlightResult = TextLineHasHighlighting(this.StartAnchor, this.EndAnchor, i);
 
 					if (TextHighlightResultType.None != highlightResult)
 					{
-						var highlightRectangle = this.GetHighlightRectangle(textLine, textOffset, startAnchor, endAnchor, highlightResult);
+						var highlightRectangle = this.GetHighlightRectangle(textLine, textOffset, this.StartAnchor, this.EndAnchor, highlightResult);
 						drawingService.DrawRectangle(highlightRectangle, this.TextHighlightingState.TextHighlightColor);
 					}
 				}

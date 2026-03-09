@@ -145,6 +145,8 @@ namespace Engine.Graphics.Services
 						Color.DarkSlateBlue.B,
 						(byte)51)
 				},
+				StartAnchor = default,
+				EndAnchor = default,
 				TextCursor = new TextCursor
 				{
 					Blink = true,

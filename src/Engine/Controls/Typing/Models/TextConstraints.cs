@@ -1,9 +1,9 @@
 ﻿namespace Engine.Controls.Typing.Models
 {
 	/// <summary>
-	/// Represents a text editing state.
+	/// Represents text contraints.
 	/// </summary>
-	public struct TextEditingState
+	readonly public struct TextConstraints
 	{
 		/// <summary>
 		/// Gets or sets the max line character count.
@@ -18,11 +18,6 @@
 		/// <summary>
 		/// Gets or sets the text highlighting state.
 		/// </summary>
-		required public TextHighlightingState TextHighlightingState { get; set; }
-
-		/// <summary>
-		/// Gets or sets the text lines.
-		/// </summary>
-		required public string[] TextLines { get; set; }
+		readonly required public TextHighlightingState TextHighlightingState { get; init; }
 	}
 }
