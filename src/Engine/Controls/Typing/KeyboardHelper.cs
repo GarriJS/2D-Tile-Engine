@@ -15,7 +15,7 @@ namespace Engine.Controls.Typing
 		/// <summary>
 		/// The long press time.
 		/// </summary>
-		static readonly public int LongPressTime = 750;
+		static readonly public int LongPressTime = 500;
 
 		/// <summary>
 		/// The remove text keys.`
