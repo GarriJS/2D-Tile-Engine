@@ -124,8 +124,8 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_858585)
 												}
 											},
-											Text = new GraphicalTextModel
-											{ 
+											Text = new SimpleTextModel
+                                            { 
 												Text = "Top Left",
 												TextColor = Color.Black,
 												FontName = FontNames.MonoBold
@@ -217,8 +217,8 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_858585)
 												}
 											},
-											Text = new GraphicalTextModel
-											{
+											Text = new SimpleTextModel
+                                            {
 												Text = "Top Right",
 												TextColor = Color.Black,
 												FontName = FontNames.MonoBold
@@ -310,8 +310,8 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_858585)
 												}
 											},
-											Text = new GraphicalTextModel
-											{
+											Text = new SimpleTextModel
+                                            {
 												Text = "Bottom Right",
 												TextColor = Color.Black,
 												FontName = FontNames.MonoBold
@@ -403,8 +403,8 @@ namespace UserInterfaceTests.UiZoneJustificationTests
 													TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_858585)
 												}
 											},
-											Text = new GraphicalTextModel
-											{
+											Text = new SimpleTextModel
+                                            {
 												Text = "Bottom Left",
 												TextColor = Color.Black,
 												FontName = FontNames.MonoBold

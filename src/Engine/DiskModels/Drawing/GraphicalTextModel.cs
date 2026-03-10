@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Text.Json.Serialization;
 
-namespace Engine.DiskModels.Drawing.Abstract
+namespace Engine.DiskModels.Drawing
 {
-	public class GraphicalTextBaseModel : BaseDiskModel
+	public class GraphicalTextModel : BaseDiskModel
 	{
 		[JsonPropertyName("text")]
 		public string Text { get; set; }

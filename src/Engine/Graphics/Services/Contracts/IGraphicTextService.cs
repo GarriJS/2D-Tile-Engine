@@ -1,5 +1,4 @@
 ﻿using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Microsoft.Xna.Framework;
@@ -33,7 +32,7 @@ namespace Engine.Graphics.Services.Contracts
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <returns></returns>
-		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextBaseModel model);
+		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextModel model);
 
 		/// <summary>
 		/// Gets the graphic text from the model.
@@ -41,7 +40,7 @@ namespace Engine.Graphics.Services.Contracts
 		/// <typeparam name="T">The type of graphic text.</typeparam>
 		/// <param name="model">The model.</param>
 		/// <returns>The graphic text.</returns>
-		public T GetGraphicTextFromModel<T>(GraphicalTextBaseModel model) where T : IAmGraphicText;
+		public T GetGraphicTextFromModel<T>(GraphicalTextModel model) where T : IAmGraphicText;
 
 		/// <summary>
 		/// Gets the simple text from the model.

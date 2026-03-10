@@ -1,9 +1,8 @@
-﻿using Engine.DiskModels.Drawing.Abstract;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Engine.DiskModels.Drawing
 {
-	public class WritableTextModel : GraphicalTextBaseModel
+	public class WritableTextModel : GraphicalTextModel
 	{
 		[JsonPropertyName("maxLineWidth")]
 		public float? MaxLineWidth { get; set; }

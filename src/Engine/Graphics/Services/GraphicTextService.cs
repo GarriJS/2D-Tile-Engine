@@ -1,7 +1,6 @@
 ﻿using Engine.Controls.Typing.Models;
 using Engine.Core.Fonts.Services.Contracts;
 using Engine.DiskModels.Drawing;
-using Engine.DiskModels.Drawing.Abstract;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
@@ -55,7 +54,7 @@ namespace Engine.Graphics.Services
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <returns></returns>
-		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextBaseModel model)
+		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextModel model)
 		{
 			var result = this.GetGraphicTextFromModel<IAmGraphicText>(model);
 
@@ -68,7 +67,7 @@ namespace Engine.Graphics.Services
 		/// <typeparam name="T">The type of graphic text.</typeparam>
 		/// <param name="model">The model.</param>
 		/// <returns>The graphic text.</returns>
-		public T GetGraphicTextFromModel<T>(GraphicalTextBaseModel model) where T : IAmGraphicText
+		public T GetGraphicTextFromModel<T>(GraphicalTextModel model) where T : IAmGraphicText
 		{
 			IAmGraphicText text = model switch
 			{

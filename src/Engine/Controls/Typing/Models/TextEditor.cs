@@ -1,5 +1,6 @@
 ﻿using Engine.Physics.Models;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,11 @@ namespace Engine.Controls.Typing.Models
 	/// <param name="textLine">The text lines.</param>
 	sealed public class TextEditor(List<string> textLine)
 	{
+		/// <summary>
+		/// Gets the total characters in the text line.
+		/// </summary>
+		public int TotalCharacters { get => this.TextLines.Sum(e => e.Length); }
+
 		/// <summary>
 		/// Gets the text lines.
 		/// </summary>
@@ -299,9 +305,19 @@ namespace Engine.Controls.Typing.Models
 			}
 
 			var existingLeft = this.TextLines[textCursorPosition.Line][..textCursorPosition.Index];
-			var existingRight = this.TextLines[textCursorPosition.Line][textCursorPosition.Index..];
-			this.TextLines[textCursorPosition.Line] = existingLeft + textFromKeys + existingRight;
-			textCursorPosition.Index += textFromKeys.Length;
+
+			if ((true == textEditState.MaxLineCharacterCount.HasValue) &&
+				(textEditState.MaxLineCharacterCount <= existingLeft.Length + textFromKeys.Length))
+			{
+				this.AddTextToLine(textEditState, textCursorPosition.Line, textFromKeys);
+			}
+			else
+			{
+				var existingRight = this.TextLines[textCursorPosition.Line][textCursorPosition.Index..];
+				this.TextLines[textCursorPosition.Line] = existingLeft + textFromKeys + existingRight;
+				textCursorPosition.Index += textFromKeys.Length;
+			}
+
 			var result = new TextEditState
 			{
 				MaxLineCharacterCount = textEditState.MaxLineCharacterCount,
@@ -320,9 +336,109 @@ namespace Engine.Controls.Typing.Models
 		}
 
 		/// <summary>
+		/// Adds the text to the line.
+		/// </summary>
+		/// <param name="textEditState">The text edit state.</param>
+		/// <param name="line">The line.</param>
+		/// <param name="newText">The new text.</param>
+		private void AddTextToLine(TextEditState textEditState, int line, string newText)
+		{
+			if (!textEditState.MaxLineCharacterCount.HasValue ||
+				!textEditState.MaxLinesCount.HasValue)
+				return;
+
+			int maxChars = textEditState.MaxLineCharacterCount.Value;
+			int maxLines = textEditState.MaxLinesCount.Value;
+
+			int cursorIndex = textEditState.TextCursorPosition.Index;
+
+			while (!string.IsNullOrEmpty(newText) && line < maxLines)
+			{
+				// Ensure line exists
+				if (line >= TextLines.Count)
+					TextLines.Add(string.Empty);
+
+				var currentLine = TextLines[line];
+
+				int insertIndex = (line == textEditState.TextCursorPosition.Line)
+					? cursorIndex
+					: currentLine.Length;
+
+				int spaceLeft = maxChars - insertIndex;
+
+				if (spaceLeft <= 0)
+				{
+					line++;
+					cursorIndex = 0;
+					continue;
+				}
+
+				int take = Math.Min(spaceLeft, newText.Length);
+
+				var left = currentLine[..insertIndex];
+				var right = currentLine[insertIndex..];
+
+				var chunk = newText[..take];
+
+				TextLines[line] = left + chunk + right;
+
+				newText = newText[take..];
+
+				line++;
+				cursorIndex = 0;
+			}
+		}
+		//private void AddTextToLine(TextEditState textEditState, int line, string newText)
+		//{
+		//	if (false == textEditState.MaxLineCharacterCount.HasValue ||
+		//		false == textEditState.MaxLinesCount.HasValue)
+		//		return;
+
+		//	if (this.GetChracterSpaceLeftForTextPosition(textEditState.TextCursorPosition, textEditState.MaxLineCharacterCount.Value, textEditState.MaxLinesCount.Value) < newText.Length)
+		//	{ 
+		//		return;
+		//	}
+
+		//	var cutoffIndex = textEditState.MaxLineCharacterCount.Value - this.TextLines[line].Length;
+
+		//	if (0 < cutoffIndex)
+		//	{
+		//		var sameLineNewText = newText[..cutoffIndex];
+		//		var nextLineNewText = newText[cutoffIndex..];
+		//		this.TextLines[line] = this.TextLines[line] + sameLineNewText;
+
+		//		if (false == string.IsNullOrEmpty(nextLineNewText))
+		//			this.AddTextToLine(textEditState, line+1, nextLineNewText);
+		//	}
+
+		//}
+
+		/// <summary>
+		/// Gets the character space left for the text position.
+		/// </summary>
+		/// <param name="textPosition">The text position.</param>
+		/// <param name="maxLineCharacterCount">The max line character count.</param>
+		/// <param name="maxLinesCount">The max line count.</param>
+		/// <returns>The character space left.</returns>
+		private int GetChracterSpaceLeftForTextPosition(TextPosition textPosition, int maxLineCharacterCount, int maxLinesCount)
+		{
+			if ((0 >= maxLineCharacterCount) || 
+				(0 >= maxLinesCount))
+				return 0;
+
+			var spaceLeft = 0;
+			spaceLeft += maxLineCharacterCount - textPosition.Index;
+			var remainingLines = maxLinesCount - textPosition.Line - 1;
+
+			if (remainingLines > 0)
+				spaceLeft += remainingLines * maxLineCharacterCount;
+
+			return spaceLeft;
+		}
+
+		/// <summary>
 		/// Removes the highlighted text.
 		/// </summary>
-		/// <param name="textLine">The text lines.</param>
 		/// <param name="startAnchor">The start anchor.</param>
 		/// <param name="endAnchor">The end anchor.</param>
 		/// <returns>The new text line.</returns>
