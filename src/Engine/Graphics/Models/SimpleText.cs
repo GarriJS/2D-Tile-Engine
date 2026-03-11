@@ -1,4 +1,5 @@
-﻿using Engine.Core.Files.Models.Contract;
+﻿using Engine.Controls.Typing.Models;
+using Engine.Core.Files.Models.Contract;
 using Engine.DiskModels.Drawing;
 using Engine.Graphics.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
@@ -6,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Engine.Graphics.Models
 {
@@ -33,7 +33,7 @@ namespace Engine.Graphics.Models
 		/// <summary>
 		/// Gets or sets the text lines.
 		/// </summary>
-		required public List<string> TextLines { get; set; }
+		required public List<TextLine> TextLines { get; set; }
 
 		/// <summary>
 		/// Gets or sets the text color
@@ -56,7 +56,7 @@ namespace Engine.Graphics.Models
 
 			foreach (var textLine in this.TextLines)
 			{ 
-				var lineDimensions = this.Font.MeasureString(textLine);
+				var lineDimensions = this.Font.MeasureString(textLine.Text);
 				result.Y += lineDimensions.Y;
 
 				if (result.X < lineDimensions.X)
@@ -105,8 +105,8 @@ namespace Engine.Graphics.Models
 
 			for (int i = 0; i < lineNumber; i++)
 			{
-				var lineText = this.TextLines[i];
-				var lineDimensions = this.GetTextDimensions(lineText, includeFontHeightWhenEmpty: true);
+				var textLines = this.TextLines[i];
+				var lineDimensions = this.GetTextDimensions(textLines.Text, includeFontHeightWhenEmpty: true);
 				result += lineDimensions.Y;
 			}
 
@@ -176,68 +176,7 @@ namespace Engine.Graphics.Models
 		/// <param name="maintainExistingLineBreaks">A value indicating whether to maintain the existing line breaks in the text.</param>
 		public void ConformTextToLimits(bool maintainExistingLineBreaks = false)
 		{
-			if ((false == this.MaxLineCharacterCount.HasValue) && 
-				(false == this.MaxLinesCount.HasValue))
-				return;
-
-			var maxChars = this.MaxLineCharacterCount ?? int.MaxValue;
-			var maxLines = this.MaxLinesCount ?? int.MaxValue;
-			List<string> finalLines = [];
-			var sourceLines = true == maintainExistingLineBreaks
-				? this.TextLines
-				: [string.Join(" ", this.TextLines)];
-
-			foreach (var line in sourceLines)
-			{
-				var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-				var currentLine = new StringBuilder();
-
-				foreach (var word in words)
-				{
-					var testLength = 0 == currentLine.Length
-						? word.Length
-						: currentLine.Length + 1 + word.Length;
-
-					if (testLength <= maxChars)
-					{
-						if (0 < currentLine.Length)
-							currentLine.Append(' ');
-
-						currentLine.Append(word);
-					}
-					else
-					{
-						if (0 < currentLine.Length)
-						{
-							finalLines.Add(currentLine.ToString());
-
-							if (finalLines.Count >= maxLines)
-							{
-								this.TextLines = finalLines;
-								
-								return;
-							}
-						}
-
-						currentLine.Clear();
-						currentLine.Append(word);
-					}
-				}
-
-				if (0 < currentLine.Length)
-				{
-					finalLines.Add(currentLine.ToString());
-
-					if (finalLines.Count >= maxLines)
-					{
-						this.TextLines = finalLines;
-						
-						return;
-					}
-				}
-			}
-
-			this.TextLines = finalLines;
+			
 		}
 
 		/// <summary>
@@ -257,8 +196,8 @@ namespace Engine.Graphics.Models
 
 			foreach (var textLine in this.TextLines)
 			{
-				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
-				var lineDimensions = this.Font.MeasureString(textLine);
+				writingService.Draw(this.Font, textLine.Text, textOffset, this.TextColor);
+				var lineDimensions = this.Font.MeasureString(textLine.Text);
 				textOffset.Y += lineDimensions.Y;
 			}
 		}

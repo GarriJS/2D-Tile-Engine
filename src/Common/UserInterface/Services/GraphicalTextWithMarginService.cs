@@ -1,6 +1,7 @@
 ﻿using Common.DiskModels.UserInterface;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
+using Engine.Controls.Typing.Models;
 using Engine.Core.Fonts.Services.Contracts;
 using Microsoft.Xna.Framework;
 
@@ -37,7 +38,7 @@ namespace Common.UserInterface.Services
 				MaxLineCharacterCount = null,
 				MaxLinesCount = null,
 				FontName = model.FontName,
-				TextLines = [model.Text],
+				TextLines = [new TextLine { IsManualBreak = true, Text = model.Text }],
 				TextColor = model.TextColor,
 				Font = font,
 				Margin = margin

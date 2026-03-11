@@ -1,7 +1,7 @@
 ﻿namespace Engine.Controls.Typing.Models
 {
 	/// <summary>
-	/// Represents text contraints.
+	/// Represents text constraints.
 	/// </summary>
 	readonly public struct TextConstraints
 	{

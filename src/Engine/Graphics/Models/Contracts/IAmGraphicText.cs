@@ -1,4 +1,5 @@
-﻿using Engine.RunTime.Models.Contracts;
+﻿using Engine.Controls.Typing.Models;
+using Engine.RunTime.Models.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Engine.Graphics.Models.Contracts
 		/// <summary>
 		/// Gets the text lines.
 		/// </summary>
-		public List<string> TextLines { get; }
+		public List<TextLine> TextLines { get; }
 
 		/// <summary>
 		/// Gets the text color

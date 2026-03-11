@@ -80,8 +80,8 @@ namespace Engine.Graphics.Models
 			for (int i = 0; i < this.TextLines.Count; i++)
 			{
 				var textLine = this.TextLines[i];
-				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
-				var lineDimensions = this.GetTextDimensions(textLine, includeFontHeightWhenEmpty: true);
+				writingService.Draw(this.Font, textLine.Text, textOffset, this.TextColor);
+				var lineDimensions = this.GetTextDimensions(textLine.Text, includeFontHeightWhenEmpty: true);
 
 				if (true == this.TextHighlightingState.IsHighlighting)
 				{
@@ -89,7 +89,7 @@ namespace Engine.Graphics.Models
 
 					if (TextHighlightResultType.None != highlightResult)
 					{
-						var highlightRectangle = this.GetHighlightRectangle(textLine, textOffset, this.StartAnchor, this.EndAnchor, highlightResult);
+						var highlightRectangle = this.GetHighlightRectangle(textLine.Text, textOffset, this.StartAnchor, this.EndAnchor, highlightResult);
 						drawingService.DrawRectangle(highlightRectangle, this.TextHighlightingState.TextHighlightColor);
 					}
 				}
@@ -110,7 +110,7 @@ namespace Engine.Graphics.Models
 		/// <param name="offset">The offset.</param>
 		private void DrawTextEditingState(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Vector2 offset = default)
 		{
-			var cursorText = this.TextLines[this.TextCursor.Position.Line][..this.TextCursor.Position.Index];
+			var cursorText = this.TextLines[this.TextCursor.Position.Line].Text[..this.TextCursor.Position.Index];
 			var cursorTextOffset = this.GetTextDimensions(cursorText, includeFontHeightWhenEmpty: true);
 			var lineOffsetHeight = this.GetLineOffsetHeight(this.TextCursor.Position.Line);
 			var textEditingStateOffset = offset + new Vector2

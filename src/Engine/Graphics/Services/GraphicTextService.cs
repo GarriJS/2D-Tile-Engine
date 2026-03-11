@@ -104,7 +104,7 @@ namespace Engine.Graphics.Services
 				MaxLineCharacterCount = 30,
 				MaxLinesCount = 1,
 				FontName = model.FontName,
-				TextLines = [model.Text],
+				TextLines = [new TextLine { IsManualBreak = true, Text = model.Text }],
 				TextColor = model.TextColor,
 				Font = font
 			};
@@ -132,7 +132,7 @@ namespace Engine.Graphics.Services
 				MaxLinesCount = 3,
 				MaxLineCharacterCount = 30,
 				FontName = model.FontName,
-				TextLines = [model.Text],
+				TextLines = [new TextLine { IsManualBreak = true, Text = model.Text }],
 				TextColor = model.TextColor,
 				Font = font,
 				TextHighlightingState = new TextHighlightingState

@@ -26,7 +26,7 @@ namespace Common.UserInterface.Models
 
 			foreach (var textLine in this.TextLines)
 			{
-				var lineDimensions = this.Font.MeasureString(textLine);
+				var lineDimensions = this.Font.MeasureString(textLine.Text);
 				result.Y += lineDimensions.Y;
 
 				if (result.X < lineDimensions.X)
@@ -67,8 +67,8 @@ namespace Common.UserInterface.Models
 
 			foreach (var textLine in this.TextLines)
 			{
-				writingService.Draw(this.Font, textLine, textOffset, this.TextColor);
-				var lineDimensions = this.Font.MeasureString(textLine);
+				writingService.Draw(this.Font, textLine.Text, textOffset, this.TextColor);
+				var lineDimensions = this.Font.MeasureString(textLine.Text);
 				textOffset.Y += lineDimensions.Y;
 			}
 		}

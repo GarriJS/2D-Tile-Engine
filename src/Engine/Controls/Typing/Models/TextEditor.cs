@@ -9,17 +9,17 @@ namespace Engine.Controls.Typing.Models
     /// Represents a text editor.
     /// </summary>
     /// <param name="textLine">The text lines.</param>
-    sealed public class TextEditor(List<string> textLine)
+    sealed public class TextEditor(List<TextLine> textLine)
     {
         /// <summary>
         /// Gets the total characters in the text line.
         /// </summary>
-        public int TotalCharacters { get => this.TextLines.Sum(e => e.Length); }
+        public int TotalCharacters { get => this.TextLines.Sum(e => e.Text.Length); }
 
         /// <summary>
         /// Gets the text lines.
         /// </summary>
-        public List<string> TextLines { get; } = textLine;
+        public List<TextLine> TextLines { get; } = textLine;
 
         /// <summary>
         /// Modifies the text from the keys.
@@ -100,7 +100,7 @@ namespace Engine.Controls.Typing.Models
                     (0 != textCursorPosition.Line))
                 {
                     textCursorPosition.Line--;
-                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Length;
+                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Text.Length;
                 }
                 else if (0 != textCursorPosition.Index)
                     textCursorPosition.Index--;
@@ -108,13 +108,13 @@ namespace Engine.Controls.Typing.Models
             else if ((true == rightActive) &&
                      (false == leftActive))
             {
-                if ((textCursorPosition.Index == this.TextLines[textCursorPosition.Line].Length) &&
+                if ((textCursorPosition.Index == this.TextLines[textCursorPosition.Line].Text.Length) &&
                     (textCursorPosition.Line < this.TextLines.Count - 1))
                 {
                     textCursorPosition.Line++;
                     textCursorPosition.Index = 0;
                 }
-                else if (textCursorPosition.Index < this.TextLines[textCursorPosition.Line].Length)
+                else if (textCursorPosition.Index < this.TextLines[textCursorPosition.Line].Text.Length)
                     textCursorPosition.Index++;
             }
             else if ((true == upActive) &&
@@ -123,8 +123,8 @@ namespace Engine.Controls.Typing.Models
                 if (0 != textCursorPosition.Line)
                     textCursorPosition.Line--;
 
-                if (textCursorPosition.Index > this.TextLines[textCursorPosition.Line].Length)
-                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Length;
+                if (textCursorPosition.Index > this.TextLines[textCursorPosition.Line].Text.Length)
+                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Text.Length;
             }
             else if ((true == downActive) &&
                      (false == upActive))
@@ -132,8 +132,8 @@ namespace Engine.Controls.Typing.Models
                 if (textCursorPosition.Line < this.TextLines.Count - 1)
                     textCursorPosition.Line++;
 
-                if (textCursorPosition.Index > this.TextLines[textCursorPosition.Line].Length)
-                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Length;
+                if (textCursorPosition.Index > this.TextLines[textCursorPosition.Line].Text.Length)
+                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Text.Length;
             }
 
             var (startAnchor, endAnchor) = KeyboardHelper.GetAnchors(textEditState.TextCursorPosition, textEditState.TextHighlightingState.TextAnchor);
@@ -183,28 +183,33 @@ namespace Engine.Controls.Typing.Models
             {
                 if (0 != textCursorPosition.Index)
                 {
-                    this.TextLines[textCursorPosition.Line] = this.TextLines[textCursorPosition.Line].Remove(textCursorPosition.Index - 1, 1);
+                    this.TextLines[textCursorPosition.Line].Text = this.TextLines[textCursorPosition.Line].Text.Remove(textCursorPosition.Index - 1, 1);
                     textCursorPosition.Index--;
                 }
                 else if ((0 == textCursorPosition.Index) &&
                          (0 != textCursorPosition.Line))
                 {
-                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line - 1].Length;
-                    var lineText = this.TextLines[textCursorPosition.Line];
+                    if (false == string.IsNullOrEmpty(this.TextLines[textCursorPosition.Line].Text))
+                    {
+                        this.TextLines[textCursorPosition.Line - 1].Text = this.TextLines[textCursorPosition.Line - 1].Text[..^1];
+                        textCursorPosition.Index = this.TextLines[textCursorPosition.Line - 1].Text.Length;
+                    }
+
+                    var lineText = this.TextLines[textCursorPosition.Line].Text;
                     this.TextLines.RemoveAt(textCursorPosition.Line);
                     textCursorPosition.Line--;
-                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Length;
-                    this.AddTextToLine(textEditState, textCursorPosition, lineText);
+                    textCursorPosition.Index = this.TextLines[textCursorPosition.Line].Text.Length;
+                    this.AddTextToLine(textEditState, textCursorPosition, lineText, replaceEndingWhitespace: true);
                 }
             }
             else if (true == deleteActive)
             {
-                if (textCursorPosition.Index != this.TextLines[textCursorPosition.Line].Length)
-                    this.TextLines[textCursorPosition.Line] = this.TextLines[textCursorPosition.Line].Remove(textCursorPosition.Index, 1);
-                else if ((textCursorPosition.Index == this.TextLines[textCursorPosition.Line].Length) &&
+                if (textCursorPosition.Index != this.TextLines[textCursorPosition.Line].Text.Length)
+                    this.TextLines[textCursorPosition.Line].Text = this.TextLines[textCursorPosition.Line].Text.Remove(textCursorPosition.Index, 1);
+                else if ((textCursorPosition.Index == this.TextLines[textCursorPosition.Line].Text.Length) &&
                          (textCursorPosition.Line != this.TextLines.Count - 1))
                 {
-                    this.TextLines[textCursorPosition.Line] += this.TextLines[textCursorPosition.Line + 1];
+                    this.TextLines[textCursorPosition.Line].Text += this.TextLines[textCursorPosition.Line + 1].Text;
                     this.TextLines.RemoveAt(textCursorPosition.Line + 1);
                 }
             }
@@ -253,11 +258,16 @@ namespace Engine.Controls.Typing.Models
             if ((false == textEditState.MaxLinesCount.HasValue) ||
                 (this.TextLines.Count < textEditState.MaxLinesCount) ||
                 ((textCursorPosition.Line != this.TextLines.Count - 1) &&
-                 (this.TextLines.Skip(textCursorPosition.Line + 1).Any(string.IsNullOrEmpty))))
+                 (this.TextLines.Skip(textCursorPosition.Line + 1).Any(e  => string.IsNullOrEmpty(e.Text)))))
             {
-                var existingRight = this.TextLines[textCursorPosition.Line][textCursorPosition.Index..];
-                this.TextLines[textCursorPosition.Line] = this.TextLines[textCursorPosition.Line][..textCursorPosition.Index];
-                this.TextLines.Insert(textCursorPosition.Line + 1, existingRight);
+                var existingRight = this.TextLines[textCursorPosition.Line].Text[textCursorPosition.Index..];
+                this.TextLines[textCursorPosition.Line].Text = this.TextLines[textCursorPosition.Line].Text[..textCursorPosition.Index];
+                var newTextLine = new TextLine
+                {
+                    IsManualBreak = true,
+                    Text = existingRight
+                };
+                this.TextLines.Insert(textCursorPosition.Line + 1, newTextLine);
                 textCursorPosition.Line++;
                 textCursorPosition.Index = 0;
             }
@@ -296,6 +306,10 @@ namespace Engine.Controls.Typing.Models
             var textCursorPosition = textEditState.TextCursorPosition;
             var highlightTextAnchor = textEditState.TextHighlightingState.TextAnchor;
 
+            if ((textCursorPosition.Index == textEditState.MaxLineCharacterCount) &&
+                (true == string.IsNullOrEmpty(textFromKeys)))
+                return textEditState;
+
             if (true == textEditState.TextHighlightingState.IsHighlighting)
             {
                 this.RemoveHighlightedText(textEditState.StartAnchor, textEditState.EndAnchor);
@@ -303,7 +317,7 @@ namespace Engine.Controls.Typing.Models
                 textCursorPosition = textEditState.StartAnchor;
             }
 
-            textCursorPosition = this.AddTextToLine(textEditState, textCursorPosition, textFromKeys);
+            textCursorPosition = this.AddTextToLine(textEditState, textCursorPosition, textFromKeys, replaceEndingWhitespace: true);
             var result = new TextEditState
             {
                 MaxLineCharacterCount = textEditState.MaxLineCharacterCount,
@@ -329,12 +343,12 @@ namespace Engine.Controls.Typing.Models
         /// <param name="newText">The new text.</param>
         private TextPosition AddTextToLine(TextEditState textEditState, TextPosition textCursorPosition, string newText, bool replaceEndingWhitespace)
         {
-            var existingLeft = this.TextLines[textCursorPosition.Line][..textCursorPosition.Index];
-            var existingRight = this.TextLines[textCursorPosition.Line][textCursorPosition.Index..];
+            var existingLeft = this.TextLines[textCursorPosition.Line].Text[..textCursorPosition.Index];
+            var existingRight = this.TextLines[textCursorPosition.Line].Text[textCursorPosition.Index..];
 
             if (false == textEditState.MaxLineCharacterCount.HasValue)
             {
-                this.TextLines[textCursorPosition.Line] = existingLeft + newText + existingRight;
+                this.TextLines[textCursorPosition.Line].Text = existingLeft + newText + existingRight;
                 var freeSpaceResult = new TextPosition
                 {
                     Index = existingLeft.Length + newText.Length,
@@ -348,14 +362,14 @@ namespace Engine.Controls.Typing.Models
                 (false == this.ChracterSpaceIsLeftForNewText(textCursorPosition, textEditState.MaxLineCharacterCount.Value, textEditState.MaxLinesCount.Value)))
                 return textCursorPosition;
 
-            var remainingCharSpace = textEditState.MaxLineCharacterCount.Value - this.TextLines[textCursorPosition.Line].Length;
+            var remainingCharSpace = textEditState.MaxLineCharacterCount.Value - this.TextLines[textCursorPosition.Line].Text.Length;
 
             if (remainingCharSpace < 0)
                 remainingCharSpace = 0;
 
             if (newText.Length <= remainingCharSpace)
             {
-                this.TextLines[textCursorPosition.Line] = existingLeft + newText + existingRight;
+                this.TextLines[textCursorPosition.Line].Text = existingLeft + newText + existingRight;
                 var freeSpaceResult = new TextPosition
                 {
                     Index = textCursorPosition.Index + newText.Length,
@@ -365,10 +379,30 @@ namespace Engine.Controls.Typing.Models
                 return freeSpaceResult;
             }
 
-            this.TextLines[textCursorPosition.Line] = existingLeft + newText + existingRight;
-            var carryText = this.TextLines[textCursorPosition.Line][textEditState.MaxLineCharacterCount.Value..];
+            if ((true == replaceEndingWhitespace) &&
+                (false == string.IsNullOrWhiteSpace(newText)))
+            {
+                var lineEndWhiteSpaceCount = this.TextLines[textCursorPosition.Line].Text.Length - this.TextLines[textCursorPosition.Line].Text.TrimEnd().Length;
+
+                if (newText.Length <= lineEndWhiteSpaceCount)
+                {
+                    this.TextLines[textCursorPosition.Line].Text = existingLeft + newText + existingRight;
+                    this.TextLines[textCursorPosition.Line].Text = this.TextLines[textCursorPosition.Line].Text[..textEditState.MaxLineCharacterCount.Value];
+
+                    var whiteSpaceResult = new TextPosition
+                    {
+                        Index = textCursorPosition.Index + newText.Length,
+                        Line = textCursorPosition.Line
+                    };
+
+                    return whiteSpaceResult;
+                }
+            }
+
+            this.TextLines[textCursorPosition.Line].Text = existingLeft + newText + existingRight;
+            var carryText = this.TextLines[textCursorPosition.Line].Text[textEditState.MaxLineCharacterCount.Value..];
             this.AddTextToLineStart(textEditState, textCursorPosition.Line + 1, carryText);
-            this.TextLines[textCursorPosition.Line] = this.TextLines[textCursorPosition.Line][..textEditState.MaxLineCharacterCount.Value];
+            this.TextLines[textCursorPosition.Line].Text = this.TextLines[textCursorPosition.Line].Text[..textEditState.MaxLineCharacterCount.Value];
 
             if (textCursorPosition.Index == textEditState.MaxLineCharacterCount)
             {
@@ -400,19 +434,26 @@ namespace Engine.Controls.Typing.Models
         private void AddTextToLineStart(TextEditState textEditState, int line, string newText)
         {
             if (this.TextLines.Count - 1 < line)
-                this.TextLines.Add(string.Empty);
-
-            if (newText.Length + this.TextLines[line].Length <= textEditState.MaxLineCharacterCount)
             {
-                this.TextLines[line] = newText + this.TextLines[line];
+                var emptyTextLine = new TextLine
+                {
+                    IsManualBreak = false,
+                    Text = string.Empty
+                };
+                this.TextLines.Add(emptyTextLine);
+            }
+
+            if (newText.Length + this.TextLines[line].Text.Length <= textEditState.MaxLineCharacterCount)
+            {
+                this.TextLines[line].Text = newText + this.TextLines[line].Text;
 
                 return;
             }
 
-            this.TextLines[line] = newText + this.TextLines[line];
-            var carryText = this.TextLines[line][textEditState.MaxLineCharacterCount.Value..];
+            this.TextLines[line].Text = newText + this.TextLines[line].Text;
+            var carryText = this.TextLines[line].Text[textEditState.MaxLineCharacterCount.Value..];
             this.AddTextToLineStart(textEditState, line + 1, carryText);
-            this.TextLines[line] = this.TextLines[line][..textEditState.MaxLineCharacterCount.Value];
+            this.TextLines[line].Text = this.TextLines[line].Text[..textEditState.MaxLineCharacterCount.Value];
         }
 
         /// <summary>
@@ -428,7 +469,7 @@ namespace Engine.Controls.Typing.Models
                 return true;
 
             for (var i = textPosition.Line; i < this.TextLines.Count; i++)
-                if (this.TextLines[i].Length < maxLineCharacterCount)
+                if (this.TextLines[i].Text.Length < maxLineCharacterCount)
                     return true;
 
             return false;
@@ -444,15 +485,15 @@ namespace Engine.Controls.Typing.Models
         {
             if (startAnchor.Line == endAnchor.Line)
             {
-                var line = TextLines[startAnchor.Line];
-                this.TextLines[startAnchor.Line] = line[..startAnchor.Index] + line[endAnchor.Index..];
+                var lineText = this.TextLines[startAnchor.Line].Text;
+                this.TextLines[startAnchor.Line].Text = lineText[..startAnchor.Index] + lineText[endAnchor.Index..];
 
                 return;
             }
 
-            var prefix = TextLines[startAnchor.Line][..startAnchor.Index];
-            var suffix = TextLines[endAnchor.Line][endAnchor.Index..];
-            this.TextLines[startAnchor.Line] = prefix + suffix;
+            var prefix = this.TextLines[startAnchor.Line].Text[..startAnchor.Index];
+            var suffix = this.TextLines[endAnchor.Line].Text[endAnchor.Index..];
+            this.TextLines[startAnchor.Line].Text = prefix + suffix;
             this.TextLines.RemoveRange(startAnchor.Line + 1, endAnchor.Line - startAnchor.Line);
         }
     }
