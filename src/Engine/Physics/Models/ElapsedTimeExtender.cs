@@ -4,7 +4,7 @@
 	/// Represents a elapsed time extender.
 	/// </summary>
 	/// <typeparam name="T">The type being extended with elapsed time.</typeparam>
-	readonly public struct ElaspedTimeExtender<T>
+	readonly public struct ElapsedTimeExtender<T>
 	{
 		/// <summary>
 		/// Gets or sets the elapsed time.

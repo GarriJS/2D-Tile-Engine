@@ -71,7 +71,7 @@ namespace Engine.Controls.Typing
 		/// <param name="pressedKeys">The pressed keys.</param>
 		/// <param name="ignoreTime">A value indicating whether to ignore the time the key has been pressed.</param>
 		/// <returns>A value indicating whether any of the keys are active.</returns>
-		static public bool AnyKeyIsActive(Keys[] keys, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys, bool ignoreTime = false)
+		static public bool AnyKeyIsActive(Keys[] keys, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys, bool ignoreTime = false)
 		{
 			foreach (var key in keys)
 				if (true == KeyIsActive(key, freshKeys, pressedKeys, ignoreTime))
@@ -88,7 +88,7 @@ namespace Engine.Controls.Typing
 		/// <param name="pressedKeys">The pressed keys.</param>
 		/// <param name="ignoreTime">A value indicating whether to ignore the time the key has been pressed.</param>
 		/// <returns>A value indicating whether the key is active.</returns>
-		static public bool KeyIsActive(Keys key, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys, bool ignoreTime = false)
+		static public bool KeyIsActive(Keys key, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys, bool ignoreTime = false)
 		{
 			var result = (true == freshKeys?.Contains(key)) ||
 						 (true == pressedKeys?.Any(e => (e.Subject == key) &&
@@ -104,13 +104,13 @@ namespace Engine.Controls.Typing
 		/// <param name="freshKeys">The fresh keys.</param>
 		/// <param name="pressedKeys">The pressed keys.</param>
 		/// <returns>A matching string for the keys.</returns>
-		static public string GetTextFromKeys(List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+		static public string GetTextFromKeys(List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys)
 		{
 			var textKeys = pressedKeys.Where(e => KeyIsActive(e.Subject, freshKeys, pressedKeys))
 									  .Select(e => e.Subject)
 									  .ToArray();
-			var isShiftPressed = AnyKeyIsActive(ShiftKeys, freshKeys, pressedKeys);
-			var rawResult = ToString(textKeys, isShiftPressed);
+			var isShiftPressed = IsShiftPressed(pressedKeys);
+            var rawResult = ToString(textKeys, isShiftPressed);
 			var result = FormatForDrawString(rawResult);
 
 			return result;
@@ -140,12 +140,24 @@ namespace Engine.Controls.Typing
 		}
 
 		/// <summary>
-		/// Gets the matching char for the key.
+		/// Determines whether any shift key is being pressed.
 		/// </summary>
-		/// <param name="key">The key.</param>
-		/// <param name="isShiftPressed">A value indicating whether the shift key is pressed.</param>
-		/// <returns>The matching char for the key.</returns>
-		static public char? ToChar(Keys key, bool isShiftPressed)
+		/// <param name="pressedKeys">The pressed keys.</param>
+		/// <returns>A value indicating whether a shift key is pressed.</returns>
+		static public bool IsShiftPressed(IList<ElapsedTimeExtender<Keys>> pressedKeys)
+		{
+			var result = pressedKeys.Any(e => ShiftKeys.Contains(e.Subject));
+		
+			return result;
+        }
+
+        /// <summary>
+        /// Gets the matching char for the key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="isShiftPressed">A value indicating whether the shift key is pressed.</param>
+        /// <returns>The matching char for the key.</returns>
+        static public char? ToChar(Keys key, bool isShiftPressed)
 		{
 			if (key == Keys.A) return isShiftPressed ? 'A' : 'a';
 			if (key == Keys.B) return isShiftPressed ? 'B' : 'b';

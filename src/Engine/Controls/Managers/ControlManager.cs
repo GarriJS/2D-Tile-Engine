@@ -97,8 +97,8 @@ namespace Engine.Controls.Managers
             var mouseState = Mouse.GetState();
             var pressedMouseButtons = GetPressedMouseButtons(mouseState);
             var mouseVerticalScrollDelta = GetMouseVerticalScrollDelta(mouseState, this.PriorControlState.MouseState);
-            var activeActionControls = new List<ElaspedTimeExtender<ActionControlConfiguration>>();
-			var pressedKeys = new List<ElaspedTimeExtender<Keys>>();
+            var activeActionControls = new List<ElapsedTimeExtender<ActionControlConfiguration>>();
+			var pressedKeys = new List<ElapsedTimeExtender<Keys>>();
 
 			foreach (var priorActiveActionControl in this.PriorControlState.ActiveActionControls)
             {
@@ -106,7 +106,7 @@ namespace Engine.Controls.Managers
                     (false == pressedMouseButtons.Any(m => true == priorActiveActionControl.Subject.ControlMouseButtons?.Contains(m))))
                     continue;
 
-                var activeActionControl = new ElaspedTimeExtender<ActionControlConfiguration>()
+                var activeActionControl = new ElapsedTimeExtender<ActionControlConfiguration>()
                 {
                     ElaspedTime = priorActiveActionControl.ElaspedTime + gameTime.ElapsedGameTime.TotalMilliseconds,
                     Subject = priorActiveActionControl.Subject
@@ -118,7 +118,7 @@ namespace Engine.Controls.Managers
                                                                                   ((true == activeKeys.Any(k => true == e.ControlKeys?.Contains(k))) ||
                                                                                    (true == pressedMouseButtons.Any(m => true == e.ControlMouseButtons?.Contains(m)))))
                                                                       .ToList();
-            activeActionControls.AddRange(freshActionControls.Select(e => new ElaspedTimeExtender<ActionControlConfiguration>
+            activeActionControls.AddRange(freshActionControls.Select(e => new ElapsedTimeExtender<ActionControlConfiguration>
             {
                 ElaspedTime = 0,
                 Subject = e,
@@ -129,7 +129,7 @@ namespace Engine.Controls.Managers
                 if (false == activeKeys.Contains(priorPressedKey.Subject))
                     continue;
 
-				var activeActionControl = new ElaspedTimeExtender<Keys>()
+				var activeActionControl = new ElapsedTimeExtender<Keys>()
 				{
 					ElaspedTime = priorPressedKey.ElaspedTime + gameTime.ElapsedGameTime.TotalMilliseconds,
 					Subject = priorPressedKey.Subject
@@ -139,7 +139,7 @@ namespace Engine.Controls.Managers
 
             var freshPressedKeys = activeKeys.Where(e => false == pressedKeys.Any(k => k.Subject == e))
                                              .ToList();
-            pressedKeys.AddRange(freshPressedKeys.Select(e => new ElaspedTimeExtender<Keys>
+            pressedKeys.AddRange(freshPressedKeys.Select(e => new ElapsedTimeExtender<Keys>
             {
                 ElaspedTime = 0,
                 Subject = e

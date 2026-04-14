@@ -39,7 +39,7 @@ namespace Engine.Controls.Models
 		/// <summary>
 		/// Gets or sets the pressed keys.
 		/// </summary>
-		required public List<ElaspedTimeExtender<Keys>> PressedKeys { get; set; }
+		required public List<ElapsedTimeExtender<Keys>> PressedKeys { get; set; }
 
 		/// <summary>
 		/// Gets or sets the fresh action names. 
@@ -49,7 +49,7 @@ namespace Engine.Controls.Models
 		/// <summary>
 		/// Gets or sets the active action names.
 		/// </summary>
-		required public List<ElaspedTimeExtender<ActionControlConfiguration>> ActiveActionControls { get; set; }
+		required public List<ElapsedTimeExtender<ActionControlConfiguration>> ActiveActionControls { get; set; }
 
 		/// <summary>
 		/// Determines if the key is fresh.

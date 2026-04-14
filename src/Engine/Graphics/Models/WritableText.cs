@@ -45,7 +45,7 @@ namespace Engine.Graphics.Models
 		/// <param name="pressedKeys">The pressed keys.</param>
 		/// <param name="conformText">A value indicating whether to conform the text.</param>
 		/// <returns>The dimensions of the next text.</returns>
-		public void UpdateText(List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys, bool conformText = true)
+		public void UpdateText(List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys, bool conformText = true)
 		{
 			var textConstraints = new TextConstraints
 			{
@@ -53,7 +53,10 @@ namespace Engine.Graphics.Models
 				MaxLinesCount = this.MaxLinesCount,
 				TextHighlightingState = this.TextHighlightingState
 			};
-			var textEditor = new TextEditor(this.TextLines);
+			var textEditor = new TextEditor
+			{
+				TextLines = this.TextLines
+			};
 			var typingResult = textEditor.ModifyTextLines(textConstraints, this.TextCursor.Position, freshKeys, pressedKeys);
 			this.TextHighlightingState = typingResult.TextHighlightingState;
 			this.StartAnchor = typingResult.StartAnchor;

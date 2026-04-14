@@ -8,18 +8,12 @@ namespace Engine.Controls.Typing.Models
     /// <summary>
     /// Represents a text editor.
     /// </summary>
-    /// <param name="textLine">The text lines.</param>
-    sealed public class TextEditor(List<TextLine> textLine)
+    sealed public class TextEditor
     {
-        /// <summary>
-        /// Gets the total characters in the text line.
-        /// </summary>
-        public int TotalCharacters { get => this.TextLines.Sum(e => e.Text.Length); }
-
         /// <summary>
         /// Gets the text lines.
         /// </summary>
-        public List<TextLine> TextLines { get; } = textLine;
+        required public List<TextLine> TextLines { get; init; }
 
         /// <summary>
         /// Modifies the text from the keys.
@@ -29,7 +23,7 @@ namespace Engine.Controls.Typing.Models
         /// <param name="freshKeys">The fresh keys.</param>
         /// <param name="pressedKeys">The pressed keys.</param>
         /// <returns>The text edit state.</returns>
-        public TextEditState ModifyTextLines(TextConstraints textState, TextPosition textCursorPosition, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+        public TextEditState ModifyTextLines(TextConstraints textState, TextPosition textCursorPosition, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys)
         {
             if (0 == this.TextLines.Count)
                 return default;
@@ -47,8 +41,9 @@ namespace Engine.Controls.Typing.Models
             var deleteResult = this.ProcessTextDelete(movementResult, freshKeys, pressedKeys);
             var newLineResult = this.ProcessNewLine(deleteResult, freshKeys, pressedKeys);
             var newTextResult = this.ProcessNewText(newLineResult, freshKeys, pressedKeys);
+            var softBreakResult = this.ProcessSoftTextBreaks(newTextResult); 
 
-            return newTextResult;
+            return softBreakResult;
         }
 
         /// <summary>
@@ -58,7 +53,7 @@ namespace Engine.Controls.Typing.Models
         /// <param name="freshKeys">The fresh keys.</param>
         /// <param name="pressedKeys">The pressed keys.</param>
         /// <returns>The text edit state.</returns>
-        private TextEditState ProcessTextCursorMovement(TextEditState textEditState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+        private TextEditState ProcessTextCursorMovement(TextEditState textEditState, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys)
         {
             var leftActive = KeyboardHelper.KeyIsActive(Keys.Left, freshKeys, pressedKeys);
             var rightActive = KeyboardHelper.KeyIsActive(Keys.Right, freshKeys, pressedKeys);
@@ -161,7 +156,7 @@ namespace Engine.Controls.Typing.Models
         /// <param name="freshKeys">The fresh keys.</param>
         /// <param name="pressedKeys">The pressed keys.</param>
         /// <returns>The text edit state.</returns>
-        private TextEditState ProcessTextDelete(TextEditState textEditState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+        private TextEditState ProcessTextDelete(TextEditState textEditState, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys)
         {
             var backspaceActive = KeyboardHelper.KeyIsActive(Keys.Back, freshKeys, pressedKeys);
             var deleteActive = KeyboardHelper.KeyIsActive(Keys.Delete, freshKeys, pressedKeys);
@@ -191,7 +186,11 @@ namespace Engine.Controls.Typing.Models
                 {
                     if (false == string.IsNullOrEmpty(this.TextLines[textCursorPosition.Line].Text))
                     {
-                        this.TextLines[textCursorPosition.Line - 1].Text = this.TextLines[textCursorPosition.Line - 1].Text[..^1];
+                        if (textEditState.MaxLineCharacterCount < this.TextLines[textCursorPosition.Line].Text.Length + this.TextLines[textCursorPosition.Line - 1].Text.Length)
+                        {
+                            this.TextLines[textCursorPosition.Line - 1].Text = this.TextLines[textCursorPosition.Line - 1].Text[..^1];
+                        }
+
                         textCursorPosition.Index = this.TextLines[textCursorPosition.Line - 1].Text.Length;
                     }
 
@@ -238,7 +237,7 @@ namespace Engine.Controls.Typing.Models
         /// <param name="freshKeys">The fresh keys.</param>
         /// <param name="pressedKeys">The pressed keys.</param>
         /// <returns>The text edit state.</returns>
-        private TextEditState ProcessNewLine(TextEditState textEditState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+        private TextEditState ProcessNewLine(TextEditState textEditState, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys)
         {
             var newLine = KeyboardHelper.AnyKeyIsActive(KeyboardHelper.NewLineKeys, freshKeys, pressedKeys);
 
@@ -262,6 +261,7 @@ namespace Engine.Controls.Typing.Models
             {
                 var existingRight = this.TextLines[textCursorPosition.Line].Text[textCursorPosition.Index..];
                 this.TextLines[textCursorPosition.Line].Text = this.TextLines[textCursorPosition.Line].Text[..textCursorPosition.Index];
+                this.TextLines[textCursorPosition.Line].IsManualBreak = true;
                 var newTextLine = new TextLine
                 {
                     IsManualBreak = true,
@@ -296,7 +296,7 @@ namespace Engine.Controls.Typing.Models
         /// <param name="freshKeys">The fresh keys.</param>
         /// <param name="pressedKeys">The pressed keys.</param>
         /// <returns>The text edit state.</returns>
-        private TextEditState ProcessNewText(TextEditState textEditState, List<Keys> freshKeys, List<ElaspedTimeExtender<Keys>> pressedKeys)
+        private TextEditState ProcessNewText(TextEditState textEditState, List<Keys> freshKeys, List<ElapsedTimeExtender<Keys>> pressedKeys)
         {
             var textFromKeys = KeyboardHelper.GetTextFromKeys(freshKeys, pressedKeys);
 
@@ -336,11 +336,58 @@ namespace Engine.Controls.Typing.Models
         }
 
         /// <summary>
+        /// Processes the soft text breaks.
+        /// </summary>
+        /// <param name="textEditState">The text edit state.</param>
+        /// <returns></returns>
+        private TextEditState ProcessSoftTextBreaks(TextEditState textEditState)
+        {
+            if ((false == textEditState.MaxLineCharacterCount.HasValue) ||
+                (1 >= this.TextLines.Count))
+                return textEditState;
+
+            var currentLine = this.TextLines.FirstOrDefault(e => (false == e.IsManualBreak) &&
+                                                                 (textEditState.MaxLineCharacterCount != e.Text.Length));
+
+            if (null == currentLine)
+                return textEditState;
+
+            var currentLineIndex = this.TextLines.IndexOf(currentLine);
+            var result = textEditState;
+
+            if ((currentLineIndex >= 0) && 
+                (currentLineIndex < this.TextLines.Count - 1))
+            {
+                var nextLine = this.TextLines[currentLineIndex + 1];
+
+                if (currentLine.Text.Length + nextLine.Text.Length <= textEditState.MaxLineCharacterCount)
+                {
+                    currentLine.Text += nextLine.Text;
+                    currentLine.IsManualBreak = nextLine.IsManualBreak;
+                    this.TextLines.RemoveAt(currentLineIndex + 1);
+                }
+                else
+                { 
+                    var remainingCharSpace = textEditState.MaxLineCharacterCount.Value - currentLine.Text.Length;
+                    var carryText = nextLine.Text[..remainingCharSpace];
+                    nextLine.Text = nextLine.Text[remainingCharSpace..];
+                    currentLine.Text += carryText;
+                    currentLine.IsManualBreak = false;
+                }
+
+                result = this.ProcessSoftTextBreaks(textEditState);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Adds the text to the line.
         /// </summary>
         /// <param name="textEditState">The text edit state.</param>
         /// <param name="textCursorPosition">The text cursor position.</param>
         /// <param name="newText">The new text.</param>
+        /// <param name="replaceEndingWhitespace">A value indicating whether to replace the ending whitespace.</param>
         private TextPosition AddTextToLine(TextEditState textEditState, TextPosition textCursorPosition, string newText, bool replaceEndingWhitespace)
         {
             var existingLeft = this.TextLines[textCursorPosition.Line].Text[..textCursorPosition.Index];
@@ -359,7 +406,7 @@ namespace Engine.Controls.Typing.Models
             }
 
             if ((true == textEditState.MaxLinesCount.HasValue) &&
-                (false == this.ChracterSpaceIsLeftForNewText(textCursorPosition, textEditState.MaxLineCharacterCount.Value, textEditState.MaxLinesCount.Value)))
+                (false == this.CharacterSpaceIsLeftForNewText(textCursorPosition, textEditState.MaxLineCharacterCount.Value, textEditState.MaxLinesCount.Value)))
                 return textCursorPosition;
 
             var remainingCharSpace = textEditState.MaxLineCharacterCount.Value - this.TextLines[textCursorPosition.Line].Text.Length;
@@ -463,7 +510,7 @@ namespace Engine.Controls.Typing.Models
         /// <param name="maxLineCharacterCount">The max line character count.</param>
         /// <param name="maxLinesCount">The max line count.</param>
         /// <returns>The character space left.</returns>
-        private bool ChracterSpaceIsLeftForNewText(TextPosition textPosition, int maxLineCharacterCount, int maxLinesCount)
+        private bool CharacterSpaceIsLeftForNewText(TextPosition textPosition, int maxLineCharacterCount, int maxLinesCount)
         {
             if (this.TextLines.Count < maxLinesCount)
                 return true;

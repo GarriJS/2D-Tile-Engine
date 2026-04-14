@@ -38,7 +38,7 @@ namespace Common.UserInterface.Services
 				MaxLineCharacterCount = null,
 				MaxLinesCount = null,
 				FontName = model.FontName,
-				TextLines = [new TextLine { IsManualBreak = true, Text = model.Text }],
+				TextLines = [new TextLine { IsManualBreak = false, Text = model.Text }],
 				TextColor = model.TextColor,
 				Font = font,
 				Margin = margin
