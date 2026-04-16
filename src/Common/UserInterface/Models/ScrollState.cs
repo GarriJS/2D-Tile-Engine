@@ -114,7 +114,7 @@ namespace Common.UserInterface.Models
 				return;
 
 			var drawingSerivce = gameServices.GetService<IDrawingService>();
-			var scrollStateOffset = offset + this.CachedOffset ?? default;
+			var scrollStateOffset = offset + (this.CachedOffset ?? default);
 			var backgroundRectangle = new Rectangle
 			{
 				X = (int)(coordinates.X + scrollStateOffset.X),

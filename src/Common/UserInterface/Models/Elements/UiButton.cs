@@ -57,7 +57,7 @@ namespace Common.UserInterface.Models.Elements
 		/// <param name="offset">The offset.</param>
 		override public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			var graphicOffset = offset + this.CachedOffset ?? default;
+			var graphicOffset = offset + (this.CachedOffset ?? default);
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 			this.ClickAnimation?.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 

@@ -122,7 +122,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <param name="offset">The offset.</param>
 		virtual public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			var graphicOffset = offset + CachedOffset ?? default;
+			var graphicOffset = offset + (this.CachedOffset ?? default);
 			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
