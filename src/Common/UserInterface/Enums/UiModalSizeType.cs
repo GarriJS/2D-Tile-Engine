@@ -6,6 +6,11 @@
 	public enum UiModalSizeType
 	{
         /// <summary>
+        /// The fit content type.
+        /// </summary>
+        FitContent = 0,
+
+        /// <summary>
         /// The tiny type.
         /// </summary>
         Tiny = 1,

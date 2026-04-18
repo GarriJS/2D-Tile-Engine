@@ -95,7 +95,21 @@ namespace Common.UserInterface.Services
 			foreach (var dynamicRow in dynamicRows ?? [])
 				uiRowService.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
 
-			if (((uiModalModel.ScrollStateModel is null) ||
+			if (UiModalSizeType.FitContent == uiModalModel.HorizontalModalSizeType)
+			{ 
+				var contentWidth = blocks.Max(e => e.TotalWidth);
+				area.Width = contentWidth;
+				area.Position.X -= contentWidth;
+            }
+
+            if (UiModalSizeType.FitContent == uiModalModel.VerticalModalSizeType)
+            {
+                var contentHigh = blocks.Sum(e => e.TotalHeight);
+                area.Height = contentHigh;
+                area.Position.Y -= contentHigh;
+            }
+
+            if (((uiModalModel.ScrollStateModel is null) ||
 				 (true == uiModalModel.ScrollStateModel.DisableScrolling)) &&
 				(contentHeight > area.Height))
 			{

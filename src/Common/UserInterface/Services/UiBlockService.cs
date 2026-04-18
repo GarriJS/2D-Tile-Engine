@@ -98,10 +98,13 @@ namespace Common.UserInterface.Services
 				contentHeight = uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y;
 			}
 
-			var margin = uiMarginService.GetUiMarginFromModel(uiBlockModel.Margin);
-			var area = new SubArea
+			var margin = uiMarginService.GetUiMarginFromModel(uiBlockModel.Margin); 
+			var availableWidth = (outterArea != null && outterArea.Width > 0f)
+				? outterArea.Width
+				: contentWidth;
+            var area = new SubArea
 			{
-				Width = outterArea?.Width ?? contentWidth,
+				Width = availableWidth,
 				Height = contentHeight
 			};
 			IAmAGraphic background = null;
@@ -143,7 +146,7 @@ namespace Common.UserInterface.Services
 				Name = uiBlockModel.Name,
 				FlexRows = true,
 				ExtendBackgroundToMargin = uiBlockModel.ExtendBackgroundToMargin,
-				AvailableWidth = outterArea.Width,
+				AvailableWidth = availableWidth,
 				Area = area,
 				Margin = margin,
 				HorizontalJustificationType = uiBlockModel.HorizontalJustificationType,

@@ -406,8 +406,8 @@ namespace LevelEditor.Scenes.Services
                 VerticalLocationType = UiModalVerticalLocationType.Center,
                 HorizontalJustificationType = UiHorizontalJustificationType.Center,
                 VerticalJustificationType = UiVerticalJustificationType.SpaceBetween,
-                HorizontalModalSizeType = UiModalSizeType.ExtraSmall,
-                VerticalModalSizeType = UiModalSizeType.ExtraSmall,
+                HorizontalModalSizeType = UiModalSizeType.FitContent,
+                VerticalModalSizeType = UiModalSizeType.FitContent,
                 HoverCursorName = CommonCursorNames.BasicCursorName,
                 BackgroundTexture = new SimpleImageModel
                 {
