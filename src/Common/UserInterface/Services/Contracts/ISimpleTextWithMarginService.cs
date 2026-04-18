@@ -13,6 +13,6 @@ namespace Common.UserInterface.Services.Contracts
 		/// </summary>
 		/// <param name="model">The simple text with margin.</param>
 		/// <returns>The simple text with margin.</returns>
-		public SimpleTextWithMargin GetSimpleTextWithMarginFromModel(SinmpleTextWithMarginModel model);
+		public SimpleTextWithMargin GetSimpleTextWithMarginFromModel(SimpleTextWithMarginModel model);
 	}
 }

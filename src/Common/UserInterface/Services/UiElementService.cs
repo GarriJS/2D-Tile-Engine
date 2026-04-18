@@ -23,6 +23,7 @@ using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.UserInterface.Services
 {
@@ -429,7 +430,8 @@ namespace Common.UserInterface.Services
 		private SubArea GetElementFitDimensions(IAmAUiElementModel elementModel)
 		{
 			var fontService = this._gameServices.GetService<IFontService>();
-			var width = 0;
+			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
+            var width = 0;
 			var height = 0;
 			var result = new SubArea
 			{
@@ -442,57 +444,63 @@ namespace Common.UserInterface.Services
 
 			switch (elementModel)
 			{
-				case UiTextModel textModel:
+				case UiTextModel uiTextModel:
 
-					if (textModel.Text is null)
+					if (uiTextModel.Text is null)
 						break;
 
-					if (false == string.IsNullOrEmpty(textModel.Text.FontName))
+					if (false == string.IsNullOrEmpty(uiTextModel.Text.FontName))
 					{
-						var font = fontService.GetSpriteFont(textModel.Text.FontName);
-						var textDimensions = font.MeasureString(textModel.Text.Text);
-						result.Width = (int)Math.Max(
-							textDimensions.X
-							+ (textModel.Margin?.LeftMargin ?? 0)
-							+ (textModel.Margin?.RightMargin ?? 0),
+						var font = fontService.GetSpriteFont(uiTextModel.Text.FontName);
+                        var textDimensions = graphicTextService.MeasureTextLines(font, [.. uiTextModel.Text.TextLines.Select(e => e.Text)]);
+
+                        if (textDimensions.Y <= 0)
+                            textDimensions.Y = font.LineSpacing;
+
+                        if (textDimensions.X <= 0)
+                            textDimensions.X = font.MeasureString("W").X * (uiTextModel.Text.MaxLineCharacterCount ?? 1);
+
+                        result.Width = (int)Math.Max(
+							textDimensions.X,
 							width);
 						result.Height = (int)Math.Max(
-							textDimensions.Y
-							+ (textModel.Margin?.TopMargin ?? 0)
-							+ (textModel.Margin?.BottomMargin ?? 0),
+							textDimensions.Y,
 							height);
 					}
 
-					if (textModel.Text is SinmpleTextWithMarginModel graphicalTextWithMarginModel)
+					if (uiTextModel.Text is SimpleTextWithMarginModel simpleTextWithMarginModel)
 					{
-						result.Width += (graphicalTextWithMarginModel.Margin?.LeftMargin ?? 0)
-										+ (graphicalTextWithMarginModel.Margin?.RightMargin ?? 0);
-						result.Height += (graphicalTextWithMarginModel.Margin?.TopMargin ?? 0)
-										 + (graphicalTextWithMarginModel.Margin?.BottomMargin ?? 0);
+						result.Width += (simpleTextWithMarginModel.Margin?.LeftMargin ?? 0)
+										+ (simpleTextWithMarginModel.Margin?.RightMargin ?? 0);
+						result.Height += (simpleTextWithMarginModel.Margin?.TopMargin ?? 0)
+										 + (simpleTextWithMarginModel.Margin?.BottomMargin ?? 0);
 					}
 
 					break;
 
-				case UiWritableTextModel writableTextModel:
+				case UiWritableTextModel uiWritableTextModel:
 
-					if (writableTextModel.Text is null)
+					if (uiWritableTextModel.Text is null)
 						break;
 
-					if (false == string.IsNullOrEmpty(writableTextModel.Text.FontName))
+					if (false == string.IsNullOrEmpty(uiWritableTextModel.Text.FontName))
 					{
-						var font = fontService.GetSpriteFont(writableTextModel.Text.FontName);
-						var textDimensions = font.MeasureString(writableTextModel.Text.Text);
-						result.Width = (int)Math.Max(
-							textDimensions.X
-							+ (writableTextModel.Margin?.LeftMargin ?? 0)
-							+ (writableTextModel.Margin?.RightMargin ?? 0),
+						var font = fontService.GetSpriteFont(uiWritableTextModel.Text.FontName);
+                        var textDimensions = graphicTextService.MeasureTextLines(font, [.. uiWritableTextModel.Text.TextLines.Select(e => e.Text)]);
+
+                        if (textDimensions.Y <= 0)
+                            textDimensions.Y = font.LineSpacing;
+
+                        if (textDimensions.X <= 0)
+                            textDimensions.X = font.MeasureString("W").X * (uiWritableTextModel.Text.MaxLineCharacterCount ?? 1);
+
+                        result.Width = (int)Math.Max(
+							textDimensions.X,
 							width);
 						result.Height = (int)Math.Max(
-							textDimensions.Y
-							+ (writableTextModel.Margin?.TopMargin ?? 0)
-							+ (writableTextModel.Margin?.BottomMargin ?? 0),
+							textDimensions.Y,
 							height);
-					}
+                    }
 
 					break;
 

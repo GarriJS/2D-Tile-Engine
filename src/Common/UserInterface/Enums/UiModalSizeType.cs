@@ -5,34 +5,39 @@
 	/// </summary>
 	public enum UiModalSizeType
 	{
+        /// <summary>
+        /// The tiny type.
+        /// </summary>
+        Tiny = 1,
+
 		/// <summary>
-		/// The extra small.
+		/// The extra small type.
 		/// </summary>
-		ExtraSmall = 1,
+		ExtraSmall = 2,
 
 		/// <summary>
 		/// The small type.
 		/// </summary>
-		Small = 2,
+		Small = 3,
 
 		/// <summary>
 		/// The medium type.
 		/// </summary>
-		Medium = 3,
+		Medium = 4,
 
 		/// <summary>
 		/// The large type.
 		/// </summary>
-		Large = 4,
+		Large = 5,
 
 		/// <summary>
 		/// The extra large type.
 		/// </summary>
-		ExtraLarge = 5,
+		ExtraLarge = 6,
 
 		/// <summary>
 		/// The full screen type.
 		/// </summary>
-		Fullscreen = 6
+		Fullscreen = 7
 	}
 }

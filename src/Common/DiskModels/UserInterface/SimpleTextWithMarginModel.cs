@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Common.DiskModels.UserInterface
 {
-	public class SinmpleTextWithMarginModel : SimpleTextModel
+	public class SimpleTextWithMarginModel : SimpleTextModel
 	{
 		[JsonPropertyName("margin")]
 		public UiMarginModel Margin { get; set; }

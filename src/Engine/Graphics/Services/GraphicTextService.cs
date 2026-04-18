@@ -7,6 +7,8 @@ using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.Graphics.Services
 {
@@ -48,13 +50,67 @@ namespace Engine.Graphics.Services
 
 			return result;
 		}
-
+		
 		/// <summary>
-		/// Gets the graphic text from the model.
+		/// Measures the text lines.
 		/// </summary>
-		/// <param name="model">The model.</param>
-		/// <returns></returns>
-		public IAmGraphicText GetGraphicTextFromModel(GraphicalTextModel model)
+		/// <param name="fontName">The font name.</param>
+		/// <param name="textLines">The text lines.</param>
+		/// <returns>The text line measurements.</returns>
+		public Vector2 MeasureTextLines(string fontName, IList<string> textLines)
+		{
+            var fontService = this._gameServices.GetService<IFontService>();
+            var font = fontService.GetSpriteFont(fontName);
+            var result = this.MeasureTextLines(font, textLines);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Measures the text lines.
+        /// </summary>
+        /// <param name="font">The font.</param>
+        /// <param name="textLines">The text lines.</param>
+        /// <returns>The text line measurements.</returns>
+        public Vector2 MeasureTextLines(SpriteFont font, IList<string> textLines)
+		{ 
+			var result = new Vector2(0, 0);
+
+			foreach (var textLine in textLines)
+			{ 
+				var textLineMeasurement = this.MeasureString(font, textLine);
+				result.X = MathHelper.Max(result.X, textLineMeasurement.X);
+				result.Y += textLineMeasurement.Y;
+            }
+
+			return result;
+		}
+
+        /// <summary>
+        /// Gets the text line from the model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns>The text line.</returns>
+        public TextLine GetTextLineFromModel(TextLineModel model)
+        {
+            if (model is null)
+                return null;
+
+            var result = new TextLine
+            {
+                IsManualBreak = model.IsManualBreak,
+                Text = model.Text
+            };
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the graphic text from the model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public IAmGraphicText GetGraphicTextFromModel(GraphicalTextModel model)
 		{
 			var result = this.GetGraphicTextFromModel<IAmGraphicText>(model);
 
@@ -96,15 +152,20 @@ namespace Engine.Graphics.Services
 			if (model is null)
 				return null;
 
-			var fontService = this._gameServices.GetService<IFontService>();
+            var fontService = this._gameServices.GetService<IFontService>();
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
-			var result = new SimpleText
+            var textLines = new List<TextLine>(model.TextLines.Length);
+
+            for (int i = 0; i < model.TextLines.Length; i++)
+                textLines.Add(this.GetTextLineFromModel(model.TextLines[i]));
+
+            var result = new SimpleText
 			{
-				MaxLineCharacterCount = 30,
-				MaxLinesCount = 1,
+				MaxLineCharacterCount = model.MaxLineCharacterCount,
+				MaxLinesCount = model.MaxLinesCount,
 				FontName = model.FontName,
-				TextLines = [new TextLine { IsManualBreak = false, Text = model.Text }],
+				TextLines = textLines,
 				TextColor = model.TextColor,
 				Font = font
 			};
@@ -123,16 +184,21 @@ namespace Engine.Graphics.Services
 			if (model is null)
 				return null;
 
-			var fontService = this._gameServices.GetService<IFontService>();
+            var fontService = this._gameServices.GetService<IFontService>();
 			var font = fontService.GetSpriteFont(model.FontName);
 			font ??= fontService.DebugSpriteFont;
-			var result = new WritableText
+            var textLines = new List<TextLine>(model.TextLines.Length);
+
+            for (int i = 0; i < model.TextLines.Length; i++)
+                textLines.Add(this.GetTextLineFromModel(model.TextLines[i]));
+
+            var result = new WritableText
 			{
 				TextIsBeingEdited = false,
-				MaxLinesCount = 3,
-				MaxLineCharacterCount = 30,
+				MaxLinesCount = model.MaxLinesCount,
+				MaxLineCharacterCount = model.MaxLineCharacterCount,
 				FontName = model.FontName,
-				TextLines = [new TextLine { IsManualBreak = false, Text = model.Text }],
+				TextLines = textLines,
 				TextColor = model.TextColor,
 				Font = font,
 				TextHighlightingState = new TextHighlightingState
@@ -154,9 +220,9 @@ namespace Engine.Graphics.Services
 					Color = Color.DarkSlateGray,
 					Position = new TextPosition
 					{
-						Index = model.Text.Length,
-						Line = 0
-					},
+						Index = textLines.LastOrDefault()?.Text.Length ?? 0,
+						Line = textLines?.Count - 1 ?? 0
+                    },
 					Area = new SubArea
 					{
 						Width = 2,

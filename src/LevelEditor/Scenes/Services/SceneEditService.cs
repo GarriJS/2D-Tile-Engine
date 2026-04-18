@@ -147,9 +147,16 @@ namespace LevelEditor.Scenes.Services
                                         },
                                         Text = new SimpleTextModel
                                         {
-                                            Text = "Toggle Tile Grid",
                                             TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold
+                                            FontName = FontNames.MonoBold,
+                                            TextLines = 
+                                            [
+                                                new TextLineModel
+                                                {
+                                                    IsManualBreak = true,
+                                                    Text = "Toggle Tile Grid"
+                                                }
+                                            ]
                                         },
                                         HorizontalSizeType = UiElementSizeType.FitContent,
                                         VerticalSizeType = UiElementSizeType.FitContent,
@@ -248,9 +255,8 @@ namespace LevelEditor.Scenes.Services
                                 ],
                                 RestingFrameIndex = 0
                             },
-                            Text = new SinmpleTextWithMarginModel
+                            Text = new SimpleTextWithMarginModel
                             {
-                                Text = savedTileMapNames[i],
                                 TextColor = PalletColors.Hex_BF6F4A,
                                 FontName = FontNames.MonoBold,
                                 Margin = new UiMarginModel
@@ -259,7 +265,15 @@ namespace LevelEditor.Scenes.Services
                                     BottomMargin = 15,
                                     LeftMargin = 50,
                                     RightMargin = 50
-                                }
+                                },
+                                TextLines =
+                                [
+                                    new TextLineModel
+                                    {
+                                        IsManualBreak = true,
+                                        Text = savedTileMapNames[i]
+                                    }
+                                ]
                             },
                             ClickableAreaScaler = new Vector2
                             {
@@ -392,8 +406,8 @@ namespace LevelEditor.Scenes.Services
                 VerticalLocationType = UiModalVerticalLocationType.Center,
                 HorizontalJustificationType = UiHorizontalJustificationType.Center,
                 VerticalJustificationType = UiVerticalJustificationType.SpaceBetween,
-                HorizontalModalSizeType = UiModalSizeType.Small,
-                VerticalModalSizeType = UiModalSizeType.Small,
+                HorizontalModalSizeType = UiModalSizeType.ExtraSmall,
+                VerticalModalSizeType = UiModalSizeType.ExtraSmall,
                 HoverCursorName = CommonCursorNames.BasicCursorName,
                 BackgroundTexture = new SimpleImageModel
                 {
@@ -435,9 +449,16 @@ namespace LevelEditor.Scenes.Services
                                         VerticalSizeType = UiElementSizeType.FitContent,
                                         Text = new SimpleTextModel
                                         {
-                                            Text = "Name Scene",
                                             TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold
+                                            FontName = FontNames.MonoBold,
+                                            TextLines =
+                                            [
+                                                new TextLineModel
+                                                {
+                                                    IsManualBreak = true,
+                                                    Text = "Name Scene"
+                                                }
+                                            ]
                                         },
                                         Graphic = new SimpleImageModel
                                         {
@@ -473,6 +494,9 @@ namespace LevelEditor.Scenes.Services
                                         Name = "Save Scene Modal Editor Element",
                                         HoverCursorName = CommonCursorNames.BasicCursorName,
                                         ResizeTexture = true,
+                                        HorizontalSizeType = UiElementSizeType.FitContent,
+                                        VerticalSizeType = UiElementSizeType.FitContent,
+                                        HorizontalTextJustificationType = UiHorizontalTextJustification.Left,
                                         ClickableAreaScaler = new Vector2
                                         {
                                             X = 1,
@@ -483,14 +507,20 @@ namespace LevelEditor.Scenes.Services
                                             LeftMargin = 10,
                                             RightMargin = 10,
                                         },
-                                        HorizontalSizeType = UiElementSizeType.FitContent,
-                                        VerticalSizeType = UiElementSizeType.FitContent,
-                                        HorizontalTextJustificationType = UiHorizontalTextJustification.Left,
                                         Text = new WritableTextModel
                                         {
-                                            Text = "    ",
+                                            MaxLineCharacterCount = 15,
+                                            MaxLinesCount = 1,
                                             TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold
+                                            FontName = FontNames.MonoBold,
+                                            TextLines =
+                                            [
+                                                new TextLineModel
+                                                {
+                                                    IsManualBreak = true,
+                                                    Text = ""
+                                                }
+                                            ]
                                         },
                                         Graphic = new SimpleImageModel
                                         {
@@ -537,9 +567,16 @@ namespace LevelEditor.Scenes.Services
                                         VerticalSizeType = UiElementSizeType.FitContent,
                                         Text = new SimpleTextModel
                                         {
-                                            Text = "Back",
                                             TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold
+                                            FontName = FontNames.MonoBold,
+                                            TextLines =
+                                            [
+                                                new TextLineModel
+                                                {
+                                                    IsManualBreak = true,
+                                                    Text = "Back"
+                                                }
+                                            ]
                                         },
                                         ClickableAreaAnimation = new TriggeredAnimationModel
                                         {
@@ -566,9 +603,16 @@ namespace LevelEditor.Scenes.Services
                                         VerticalSizeType = UiElementSizeType.FitContent,
                                         Text = new SimpleTextModel
                                         {
-                                            Text = "Confirm",
                                             TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold
+                                            FontName = FontNames.MonoBold,
+                                            TextLines =
+                                            [
+                                                new TextLineModel
+                                                {
+                                                    IsManualBreak = true,
+                                                    Text = "Confirm"
+                                                }
+                                            ]
                                         },
                                         ClickableAreaAnimation = new TriggeredAnimationModel
                                         {

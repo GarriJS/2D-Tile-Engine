@@ -5,13 +5,19 @@ namespace Engine.DiskModels.Drawing
 {
 	public class GraphicalTextModel : BaseDiskModel
 	{
-		[JsonPropertyName("text")]
-		public string Text { get; set; }
-
 		[JsonPropertyName("textColor")]
 		public Color TextColor { get; set; }
 
 		[JsonPropertyName("fontName")]
 		public string FontName { get; set; }
-	}
+
+        [JsonPropertyName("maxLineCharacterCount")]
+        public int? MaxLineCharacterCount { get; set; }
+
+        [JsonPropertyName("maxLinesCount")]
+        public int? MaxLinesCount { get; set; }
+
+        [JsonPropertyName("textLines")]
+        public TextLineModel[] TextLines { get; set; }
+    }
 }

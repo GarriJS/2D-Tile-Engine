@@ -238,7 +238,16 @@ namespace Common.UserInterface.Models
 				(this.ScrollState is not null))
 				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-			foreach (var block in this._blocks)
+            var spaceBetweenBlocks = 0f;
+            var carryOverVerticalOffset = 0f;
+
+            if (UiVerticalJustificationType.SpaceBetween == this.VerticalJustificationType)
+                if (1 < this._blocks.Count)
+                    spaceBetweenBlocks = (this.Area.Height - contentHeight) / (this._blocks.Count - 1);
+                else
+                    carryOverVerticalOffset = (this.Area.Height - contentHeight) / 2;
+
+            foreach (var block in this._blocks)
 			{
 				var horizontalOffset = block.HorizontalJustificationType switch
 				{
@@ -246,7 +255,7 @@ namespace Common.UserInterface.Models
 					UiHorizontalJustificationType.Right => this.Area.Width - block.TotalWidth,
 					_ => 0
 				};
-				var blockTop = verticalOffset + block.Margin.TopMargin;
+				var blockTop = verticalOffset + carryOverVerticalOffset + block.Margin.TopMargin;
 				var blockLeft = horizontalOffset + block.Margin.LeftMargin;
                 var result = new Vector2Extender<UiBlock>
 				{
@@ -261,10 +270,7 @@ namespace Common.UserInterface.Models
 				yield return result;
 
                 if (UiVerticalJustificationType.SpaceBetween == this.VerticalJustificationType)
-                {
-                    var spaceBetweenBlocks = (this.Area.Height - contentHeight) / (this._blocks.Count);
                     verticalOffset += spaceBetweenBlocks;
-                }
 
                 verticalOffset += block.TotalHeight;
 			}

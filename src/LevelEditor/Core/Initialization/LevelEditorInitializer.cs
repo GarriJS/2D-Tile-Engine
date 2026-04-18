@@ -177,10 +177,17 @@ namespace LevelEditor.Core.Initialization
 													VerticalSizeType = UiElementSizeType.FitContent,
 													Text = new SimpleTextModel
 													{
-														Text = "Level Editor",
 														TextColor = PalletColors.Hex_BF6F4A,
-														FontName = FontNames.MonoBold
-													},
+														FontName = FontNames.MonoBold,
+														TextLines = 
+														[
+															new TextLineModel
+															{
+																IsManualBreak = true,
+																Text = "Level Editor"
+															}
+                                                        ]
+                                                    },
 													Graphic = new SimpleImageModel
 													{
 														TextureName = "pallet",
@@ -244,10 +251,17 @@ namespace LevelEditor.Core.Initialization
 													},
 													Text = new SimpleTextModel
 													{
-														Text = "Create Level",
 														TextColor = PalletColors.Hex_BF6F4A,
-														FontName = FontNames.MonoBold
-													},
+														FontName = FontNames.MonoBold,
+														TextLines = 
+														[
+															new TextLineModel
+															{
+																IsManualBreak = true,
+																Text = "Create Level"
+															}
+                                                        ]
+                                                    },
 													HorizontalSizeType = UiElementSizeType.FitContent,
 													VerticalSizeType = UiElementSizeType.FitContent
 												},
@@ -309,10 +323,17 @@ namespace LevelEditor.Core.Initialization
 													},
 													Text = new SimpleTextModel
 													{
-														Text = "Save Level",
 														TextColor = PalletColors.Hex_BF6F4A,
-														FontName = FontNames.MonoBold
-													},
+														FontName = FontNames.MonoBold,
+														TextLines = 
+														[
+															new TextLineModel
+															{
+																IsManualBreak = true,
+																Text = "Save Level"
+															}
+                                                        ]
+                                                    },
 													HorizontalSizeType = UiElementSizeType.FitContent,
 													VerticalSizeType = UiElementSizeType.FitContent
 												},
@@ -377,10 +398,17 @@ namespace LevelEditor.Core.Initialization
 													Name = "Saved Levels Element",
 													Text = new SimpleTextModel
 													{
-														Text = "Saved Levels",
 														TextColor = PalletColors.Hex_BF6F4A,
-														FontName = FontNames.MonoBold
-													},
+														FontName = FontNames.MonoBold,
+														TextLines = 
+														[
+															new TextLineModel
+															{
+																IsManualBreak = true,
+																Text = "Saved Levels"
+															}
+                                                        ]
+                                                    },
 													HorizontalSizeType = UiElementSizeType.FitContent,
 													VerticalSizeType = UiElementSizeType.FitContent
 												}

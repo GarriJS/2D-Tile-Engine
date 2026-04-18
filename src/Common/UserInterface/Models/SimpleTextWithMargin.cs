@@ -77,9 +77,9 @@ namespace Common.UserInterface.Models
 		/// Converts the object to a serialization model.
 		/// </summary>
 		/// <returns>The serialization model.</returns>
-		new public SinmpleTextWithMarginModel ToModel()
+		new public SimpleTextWithMarginModel ToModel()
 		{
-			var result = new SinmpleTextWithMarginModel
+			var result = new SimpleTextWithMarginModel
 			{
 				//Text = this.Text,
 				TextColor = this.TextColor,
