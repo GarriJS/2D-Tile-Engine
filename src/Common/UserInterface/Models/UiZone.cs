@@ -228,7 +228,7 @@ namespace Common.UserInterface.Models
 			{
 				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
 				UiVerticalJustificationType.Bottom => this.Area.Height - contentHeight,
-				_ => 0
+                _ => 0
 			};
 
 			if (verticalOffset < 0)
@@ -248,7 +248,7 @@ namespace Common.UserInterface.Models
 				};
 				var blockTop = verticalOffset + block.Margin.TopMargin;
 				var blockLeft = horizontalOffset + block.Margin.LeftMargin;
-				var result = new Vector2Extender<UiBlock>
+                var result = new Vector2Extender<UiBlock>
 				{
 					Vector = new Vector2
 					{
@@ -260,7 +260,13 @@ namespace Common.UserInterface.Models
 
 				yield return result;
 
-				verticalOffset += block.TotalHeight;
+                if (UiVerticalJustificationType.SpaceBetween == this.VerticalJustificationType)
+                {
+                    var spaceBetweenBlocks = (this.Area.Height - contentHeight) / (this._blocks.Count);
+                    verticalOffset += spaceBetweenBlocks;
+                }
+
+                verticalOffset += block.TotalHeight;
 			}
 		}
 

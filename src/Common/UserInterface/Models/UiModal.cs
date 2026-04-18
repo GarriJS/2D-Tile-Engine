@@ -18,286 +18,298 @@ using System.Linq;
 
 namespace Common.UserInterface.Models
 {
-	/// <summary>
-	/// Represents a user interface modal
-	/// </summary>
-	public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
-	{
-		/// <summary>
-		/// Gets or sets a value indicating if the user interface modal will recalculate the cached offsets on the next draw.
-		/// </summary>
-		required public bool ResetCalculateCachedOffsets { get; set; }
+    /// <summary>
+    /// Represents a user interface modal
+    /// </summary>
+    public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+    {
+        /// <summary>
+        /// Gets or sets a value indicating if the user interface modal will recalculate the cached offsets on the next draw.
+        /// </summary>
+        required public bool ResetCalculateCachedOffsets { get; set; }
 
-		/// <summary>
-		/// Gets or sets the user interface modal name.
-		/// </summary>
-		required public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the user interface modal name.
+        /// </summary>
+        required public string Name { get; set; }
 
-		/// <summary>
-		/// Gets or sets the draw layer.
-		/// </summary>
-		required public int DrawLayer { get; set; }
+        /// <summary>
+        /// Gets or sets the draw layer.
+        /// </summary>
+        required public int DrawLayer { get; set; }
 
-		/// <summary>
-		/// Gets or sets the user interface modal vertical justification type. 
-		/// </summary>
-		required public UiVerticalJustificationType VerticalJustificationType { get; set; }
+        /// <summary>
+        /// Gets or sets the user interface modal vertical justification type. 
+        /// </summary>
+        required public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
-		/// <summary>
-		/// Gets or sets the horizontal modal size type.
-		/// </summary>
-		required public UiModalSizeType HorizontalModalSizeType { get; set; }
-		
-		/// <summary>
-		/// Gets or sets the vertical modal size type.
-		/// </summary>
-		required public UiModalSizeType VerticalModalSizeType { get; set; }
+        /// <summary>
+        /// Gets or sets the horizontal modal size type.
+        /// </summary>
+        required public UiModalSizeType HorizontalModalSizeType { get; set; }
 
-		/// <summary>
-		/// Gets the SimpleText.
-		/// </summary>
-		required public IAmAGraphic Graphic { get; set; }
+        /// <summary>
+        /// Gets or sets the vertical modal size type.
+        /// </summary>
+        required public UiModalSizeType VerticalModalSizeType { get; set; }
 
-		/// <summary>
-		/// Gets the position.
-		/// </summary>
-		public Position Position { get => this.Area?.Position; }
+        /// <summary>
+        /// Gets the SimpleText.
+        /// </summary>
+        required public IAmAGraphic Graphic { get; set; }
 
-		/// <summary>
-		/// Gets or sets the area.
-		/// </summary>
-		required public IAmAArea Area { get; set; }
+        /// <summary>
+        /// Gets the position.
+        /// </summary>
+        public Position Position { get => this.Area?.Position; }
 
-		/// <summary>
-		/// Gets the scroll state.
-		/// </summary>
-		required public ScrollState ScrollState { get; set; }
+        /// <summary>
+        /// Gets or sets the area.
+        /// </summary>
+        required public IAmAArea Area { get; set; }
 
-		/// <summary>
-		/// Gets or sets the hover cursor.
-		/// </summary>
-		required public Cursor HoverCursor { get; set; }
+        /// <summary>
+        /// Gets the scroll state.
+        /// </summary>
+        required public ScrollState ScrollState { get; set; }
 
-		/// <summary>
-		/// Gets the base cursor configuration.
-		/// </summary>
-		public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
+        /// <summary>
+        /// Gets or sets the hover cursor.
+        /// </summary>
+        required public Cursor HoverCursor { get; set; }
 
-		/// <summary>
-		/// Gets or sets the cursor configuration
-		/// </summary>
-		required public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
+        /// <summary>
+        /// Gets the base cursor configuration.
+        /// </summary>
+        public BaseCursorConfiguration BaseCursorConfiguration { get => this.CursorConfiguration; }
 
-		/// <summary>
-		/// The user interface blocks.
-		/// </summary>
-		readonly private List<UiBlock> _blocks = [];
+        /// <summary>
+        /// Gets or sets the cursor configuration
+        /// </summary>
+        required public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
 
-		/// <summary>
-		/// The user interface blocks.
-		/// </summary>
-		public List<UiBlock> Blocks { get => this._blocks; }
+        /// <summary>
+        /// The user interface blocks.
+        /// </summary>
+        readonly private List<UiBlock> _blocks = [];
 
-		/// <summary>
-		/// Raises the hover event.
-		/// </summary>
-		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseHoverEvent(CursorInteraction<UiZone> cursorInteraction)
-		{
-			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
-		}
+        /// <summary>
+        /// The user interface blocks.
+        /// </summary>
+        public List<UiBlock> Blocks { get => this._blocks; }
 
-		/// <summary>
-		/// Draws the drawable.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void Draw(GameTime gameTime, GameServiceContainer gameServices)
-		{
-			var drawingService = gameServices.GetService<IDrawingService>();
+        /// <summary>
+        /// Raises the hover event.
+        /// </summary>
+        /// <param name="cursorInteraction">The cursor interaction.</param>
+        public void RaiseHoverEvent(CursorInteraction<UiZone> cursorInteraction)
+        {
+            this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
+        }
 
-			if (this.ScrollState?.ScrollRenderTarget is not null)
-			{
-				var sourceRectangle = this.ScrollState.GetSourceRectanlge();
-				drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White);
-				this.ScrollState.Draw(gameTime, gameServices, this.Position.Coordinates, Color.White);
-			}
-			else
-				this.DrawContents(gameTime, gameServices, this.Position.Coordinates, Color.White);
-		}
+        /// <summary>
+        /// Draws the drawable.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        public void Draw(GameTime gameTime, GameServiceContainer gameServices)
+        {
+            var drawingService = gameServices.GetService<IDrawingService>();
 
-		/// <summary>
-		/// Draws the contents.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		/// <param name="coordinates">The coordinates.</param>
-		/// <param name="color">The color.</param>
-		/// <param name="offset">The offset.</param>
-		private void DrawContents(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
-		{
-			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
+            if (this.ScrollState?.ScrollRenderTarget is not null)
+            {
+                var sourceRectangle = this.ScrollState.GetSourceRectanlge();
+                drawingService.Draw(this.ScrollState.ScrollRenderTarget, this.Position.Coordinates, sourceRectangle, Color.White);
+                this.ScrollState.Draw(gameTime, gameServices, this.Position.Coordinates, Color.White);
+            }
+            else
+                this.DrawContents(gameTime, gameServices, this.Position.Coordinates, Color.White);
+        }
 
-			if (true == this.ResetCalculateCachedOffsets)
-				this.UpdateZoneOffsets();
+        /// <summary>
+        /// Draws the contents.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        /// <param name="coordinates">The coordinates.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="offset">The offset.</param>
+        private void DrawContents(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
+        {
+            this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
 
-			foreach (var block in this._blocks ?? [])
-				block.Draw(gameTime, gameServices, coordinates, color, offset);
-		}
+            if (true == this.ResetCalculateCachedOffsets)
+                this.UpdateZoneOffsets();
 
-		/// <summary>
-		/// Assess if prerendering is needed.
-		/// </summary>
-		/// <returns>A value indicating whether prerendering is needed.</returns>
-		public bool ShouldPreRender()
-		{
-			var needsSubRender = this._blocks.Any(e => true == e.ShouldPreRender());
+            foreach (var block in this._blocks ?? [])
+                block.Draw(gameTime, gameServices, coordinates, color, offset);
+        }
 
-			if (true == needsSubRender)
-				return true;
+        /// <summary>
+        /// Assess if prerendering is needed.
+        /// </summary>
+        /// <returns>A value indicating whether prerendering is needed.</returns>
+        public bool ShouldPreRender()
+        {
+            var needsSubRender = this._blocks.Any(e => true == e.ShouldPreRender());
 
-			if (this.ScrollState is null)
-				return false;
+            if (true == needsSubRender)
+                return true;
 
-			var contentHeight = this._blocks.Sum(e => e.TotalHeight);
-			var hasExessHeight = contentHeight > this.ScrollState.MaxVisibleHeight;
+            if (this.ScrollState is null)
+                return false;
 
-			return hasExessHeight;
-		}
+            var contentHeight = this._blocks.Sum(e => e.TotalHeight);
+            var hasExessHeight = contentHeight > this.ScrollState.MaxVisibleHeight;
 
-		/// <summary>
-		/// Does the prerender.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game service.</param>
-		public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
-		{
-			var subPrerenders = this._blocks.Where(e => true == e.ShouldPreRender())
-										   .ToArray();
+            return hasExessHeight;
+        }
 
-			foreach (var subPrerender in subPrerenders ?? [])
-				subPrerender.PreRender(gameTime, gameServices, default, Color.White);
+        /// <summary>
+        /// Does the prerender.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game service.</param>
+        public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
+        {
+            var subPrerenders = this._blocks.Where(e => true == e.ShouldPreRender())
+                                           .ToArray();
 
-			if ((this.ScrollState is null) ||
-				(true == this.ScrollState.DisableScrolling))
-				return;
+            foreach (var subPrerender in subPrerenders ?? [])
+                subPrerender.PreRender(gameTime, gameServices, default, Color.White);
 
-			var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
-			var device = graphicDeviceService.GraphicsDevice;
-			var drawingService = gameServices.GetService<IDrawingService>();
-			var contentHeight = this._blocks.Sum(e => e.TotalHeight);
+            if ((this.ScrollState is null) ||
+                (true == this.ScrollState.DisableScrolling))
+                return;
 
-			if ((this.ScrollState.ScrollRenderTarget is null) ||
-				(this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
-				(this.ScrollState.ScrollRenderTarget.Height != contentHeight))
-			{
-				this.ScrollState.ScrollRenderTarget?.Dispose();
-				this.ScrollState.ScrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, (int)contentHeight);
-			}
+            var graphicDeviceService = gameServices.GetService<IGraphicsDeviceService>();
+            var device = graphicDeviceService.GraphicsDevice;
+            var drawingService = gameServices.GetService<IDrawingService>();
+            var contentHeight = this._blocks.Sum(e => e.TotalHeight);
 
-			var previousTargets = device.GetRenderTargets();
-			device.SetRenderTarget(this.ScrollState.ScrollRenderTarget);
-			device.Clear(Color.Transparent);
-			drawingService.BeginDraw();
+            if ((this.ScrollState.ScrollRenderTarget is null) ||
+                (this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
+                (this.ScrollState.ScrollRenderTarget.Height != contentHeight))
+            {
+                this.ScrollState.ScrollRenderTarget?.Dispose();
+                this.ScrollState.ScrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, (int)contentHeight);
+            }
 
-			this.DrawContents(gameTime, gameServices, default, Color.White);
+            var previousTargets = device.GetRenderTargets();
+            device.SetRenderTarget(this.ScrollState.ScrollRenderTarget);
+            device.Clear(Color.Transparent);
+            drawingService.BeginDraw();
 
-			drawingService.EndDraw();
-			device.SetRenderTargets(previousTargets);
-		}
+            this.DrawContents(gameTime, gameServices, default, Color.White);
 
-		/// <summary>
-		/// Updates the modal offsets.
-		/// </summary>
-		public void UpdateZoneOffsets()
-		{
-			foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
-			{
-				blockLayout.Subject.CachedOffset = blockLayout.Vector;
-				blockLayout.Subject.UpdateOffsets();
-			}
+            drawingService.EndDraw();
+            device.SetRenderTargets(previousTargets);
+        }
 
-			this.ScrollState?.UpdateOffset(this.Area.Width, this.Area.Width, 0);
-			this.ResetCalculateCachedOffsets = false;
-		}
+        /// <summary>
+        /// Updates the modal offsets.
+        /// </summary>
+        public void UpdateZoneOffsets()
+        {
+            foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
+            {
+                blockLayout.Subject.CachedOffset = blockLayout.Vector;
+                blockLayout.Subject.UpdateOffsets();
+            }
 
-		/// <summary>
-		/// Enumerates the Block blockLayout.
-		/// </summary>
-		/// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
-		/// <returns>The enumerated Block blockLayout.</returns>
-		public IEnumerable<Vector2Extender<UiBlock>> EnumerateLayout(bool includeScrollOffset)
-		{
-			var contentHeight = this._blocks.Sum(r => r.TotalHeight);
-			var verticalOffset = this.VerticalJustificationType switch
-			{
-				UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
-				UiVerticalJustificationType.Bottom => this.Area.Height - contentHeight,
-				_ => 0
-			};
+            this.ScrollState?.UpdateOffset(this.Area.Width, this.Area.Width, 0);
+            this.ResetCalculateCachedOffsets = false;
+        }
 
-			if (verticalOffset < 0)
-				verticalOffset = 0;
+        /// <summary>
+        /// Enumerates the Block blockLayout.
+        /// </summary>
+        /// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
+        /// <returns>The enumerated Block blockLayout.</returns>
+        public IEnumerable<Vector2Extender<UiBlock>> EnumerateLayout(bool includeScrollOffset)
+        {
+            var contentHeight = this._blocks.Sum(r => r.TotalHeight);
+            var verticalOffset = this.VerticalJustificationType switch
+            {
+                UiVerticalJustificationType.Center => (this.Area.Height - contentHeight) / 2,
+                UiVerticalJustificationType.Bottom => this.Area.Height - contentHeight,
+                _ => 0
+            };
 
-			if ((true == includeScrollOffset) &&
-				(this.ScrollState is not null))
-				verticalOffset -= this.ScrollState.VerticalScrollOffset;
+            if (verticalOffset < 0)
+                verticalOffset = 0;
 
-			foreach (var block in this._blocks)
-			{
-				var horizontalOffset = block.HorizontalJustificationType switch
-				{
-					UiHorizontalJustificationType.Center => (block.AvailableWidth - block.TotalWidth) / 2,
-					UiHorizontalJustificationType.Right => block.AvailableWidth - block.TotalWidth,
-					_ => 0
-				};
-				var blockTop = verticalOffset + block.Margin.TopMargin;
-				var blockLeft = horizontalOffset + block.Margin.LeftMargin;
-				var result = new Vector2Extender<UiBlock>
-				{
-					Vector = new Vector2
-					{
-						X = blockLeft,
-						Y = blockTop
-					},
-					Subject = block
-				};
+            if ((true == includeScrollOffset) &&
+                (this.ScrollState is not null))
+                verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-				yield return result;
+            var spaceBetweenBlocks = 0f;
+            var carryOverVerticalOffset = 0f;
 
-				verticalOffset += block.TotalHeight;
-			}
-		}
+            if (UiVerticalJustificationType.SpaceBetween == this.VerticalJustificationType)
+                if (1 < this._blocks.Count)
+                    spaceBetweenBlocks = (this.Area.Height - contentHeight) / (this._blocks.Count - 1);
+                else
+                    carryOverVerticalOffset = (this.Area.Height - contentHeight) / 2;
 
-		/// <summary>
-		/// Draws the debug drawable.
-		/// </summary>
-		/// <param name="gameTime">The game time.</param>
-		/// <param name="gameServices">The game services.</param>
-		public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices)
-		{
-			var offset = new Vector2
-			{
-				X = 0,
-				Y = -this.ScrollState?.VerticalScrollOffset ?? default
-			};
+            foreach (var block in this._blocks)
+            {
+                var horizontalOffset = block.HorizontalJustificationType switch
+                {
+                    UiHorizontalJustificationType.Center => (block.AvailableWidth - block.TotalWidth) / 2,
+                    UiHorizontalJustificationType.Right => block.AvailableWidth - block.TotalWidth,
+                    _ => 0
+                };
+                var blockTop = verticalOffset + carryOverVerticalOffset + block.Margin.TopMargin;
+                var blockLeft = horizontalOffset + block.Margin.LeftMargin;
+                var result = new Vector2Extender<UiBlock>
+                {
+                    Vector = new Vector2
+                    {
+                        X = blockLeft,
+                        Y = blockTop
+                    },
+                    Subject = block
+                };
 
-			foreach (var block in this._blocks)
-				block.DrawDebug(gameTime, gameServices, this.Position.Coordinates, Color.MonoGameOrange, offset);
+                yield return result;
 
-			this.Area.Draw(gameTime, gameServices, Color.MonoGameOrange);
-		}
+                if (UiVerticalJustificationType.SpaceBetween == this.VerticalJustificationType)
+                    verticalOffset += spaceBetweenBlocks;
 
-		/// <summary>
-		/// Disposes of the user interface container.
-		/// </summary>
-		public void Dispose()
-		{
-			this.ScrollState?.Dispose();
-			this.CursorConfiguration?.Dispose();
+                verticalOffset += block.TotalHeight;
+            }
+        }
 
-			foreach (var block in this._blocks)
-				block?.Dispose();
-		}
-	}
+        /// <summary>
+        /// Draws the debug drawable.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices)
+        {
+            var offset = new Vector2
+            {
+                X = 0,
+                Y = -this.ScrollState?.VerticalScrollOffset ?? default
+            };
+
+            foreach (var block in this._blocks)
+                block.DrawDebug(gameTime, gameServices, this.Position.Coordinates, Color.MonoGameOrange, offset);
+
+            this.Area.Draw(gameTime, gameServices, Color.MonoGameOrange);
+        }
+
+        /// <summary>
+        /// Disposes of the user interface container.
+        /// </summary>
+        public void Dispose()
+        {
+            this.ScrollState?.Dispose();
+            this.CursorConfiguration?.Dispose();
+
+            foreach (var block in this._blocks)
+                block?.Dispose();
+        }
+    }
 }

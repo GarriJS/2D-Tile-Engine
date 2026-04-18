@@ -253,6 +253,7 @@ namespace Common.UserInterface.Models
 		/// <returns>The enumerated rowLayout.</returns>
 		public IEnumerable<Vector2Extender<UiRow>> EnumerateLayout(bool includeScrollOffset)
 		{
+			var contentWidth = this._rows.Sum(e => e.TotalWidth);
 			var contentHeight = this._rows.Sum(e => e.TotalHeight);
 			var verticalOffset = this.VerticalJustificationType switch
 			{
@@ -268,20 +269,29 @@ namespace Common.UserInterface.Models
 				(this.ScrollState is not null))
 				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-			foreach (var row in this._rows)
+			var spaceBetweenBlocks = 0f;
+            var carryOverHorizontalOffset = 0f;
+
+            if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
+				if (1 < this._rows.Count)
+					spaceBetweenBlocks = (this.TotalWidth - contentWidth) / (this._rows.Count - 1);
+				else
+                    carryOverHorizontalOffset = (this.TotalWidth - contentWidth) / 2;	
+
+            foreach (var row in this._rows)
 			{
 				var horizontalOffset = row.HorizontalJustificationType switch
 				{
 					UiHorizontalJustificationType.Center => (this.InsideWidth - row.TotalWidth) / 2,
 					UiHorizontalJustificationType.Right => this.InsideWidth - row.TotalWidth,
-					_ => 0
+                    _ => 0
 				};
 
 				if (horizontalOffset < 0)
 					horizontalOffset = 0;
 
 				var rowTop = verticalOffset + row.Margin.TopMargin;
-				var rowLeft = horizontalOffset + row.Margin.LeftMargin;
+				var rowLeft = horizontalOffset + carryOverHorizontalOffset + row.Margin.LeftMargin;
 				var result = new Vector2Extender<UiRow>
 				{
 					Vector = new Vector2
@@ -294,7 +304,10 @@ namespace Common.UserInterface.Models
 
 				yield return result;
 
-				verticalOffset += row.TotalHeight;
+                if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
+                    carryOverHorizontalOffset += spaceBetweenBlocks;
+
+                verticalOffset += row.TotalHeight;
 			}
 		}
 

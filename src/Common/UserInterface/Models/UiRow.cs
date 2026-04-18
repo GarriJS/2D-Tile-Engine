@@ -172,7 +172,17 @@ namespace Common.UserInterface.Models
 			if (horizontalOffset < 0)
 				horizontalOffset = 0;
 
-			foreach (var element in this._elements)
+            var spaceBetweenBlocks = 0f;
+            var carryOverHorizontalOffset = 0f;
+
+
+            if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
+                if (1 < this._elements.Count)
+                    spaceBetweenBlocks = (this.TotalWidth - contentWidth) / (this._elements.Count - 1);
+                else
+                    carryOverHorizontalOffset = (this.TotalWidth - contentWidth) / 2;
+
+            foreach (var element in this._elements)
 			{
 				var verticalOffset = this.VerticalJustificationType switch
 				{
@@ -184,8 +194,8 @@ namespace Common.UserInterface.Models
 				if (verticalOffset < 0)
 					verticalOffset = 0;
 
-				var elementLeft = horizontalOffset + element.Margin.LeftMargin;
-				var elementTop = verticalOffset + element.Margin.TopMargin;
+                var elementTop = verticalOffset + element.Margin.TopMargin;
+                var elementLeft = horizontalOffset + carryOverHorizontalOffset + element.Margin.LeftMargin;
 				var result = new Vector2Extender<IAmAUiElement>
 				{
 					Vector = new Vector2
@@ -198,7 +208,10 @@ namespace Common.UserInterface.Models
 
 				yield return result;
 
-				horizontalOffset += element.TotalWidth;
+                if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
+                    carryOverHorizontalOffset += spaceBetweenBlocks;
+
+                horizontalOffset += element.TotalWidth;
 			}
 		}
 

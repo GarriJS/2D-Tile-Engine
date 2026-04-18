@@ -3,6 +3,7 @@ using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.UserInterface;
 using Common.UserInterface.Constants;
+using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
 using Engine.Graphics.Models;
@@ -74,6 +75,15 @@ namespace Common.UserInterface.Services
 			foreach (var dynamicRow in dynamicRows)
 				dynamicRow.Area.Width = dynamicWidth;
 
+			if (null != outterArea)
+			{
+				var spaceBetweenRows = rows.Where(e => UiHorizontalJustificationType.SpaceBetween == e.HorizontalJustificationType).ToArray();
+				var spaceBetweenWidth = (outterArea.Width - contentWidth) / spaceBetweenRows.Length;
+
+				foreach (var spaceBetweenRow in spaceBetweenRows)
+					spaceBetweenRow.Area.Width += spaceBetweenWidth;
+			}
+
 			contentWidth = rows.Select(e => e.TotalWidth).OrderDescending().FirstOrDefault();
 
 			if (contentWidth <= 0)
@@ -91,7 +101,7 @@ namespace Common.UserInterface.Services
 			var margin = uiMarginService.GetUiMarginFromModel(uiBlockModel.Margin);
 			var area = new SubArea
 			{
-				Width = contentWidth,
+				Width = outterArea?.Width ?? contentWidth,
 				Height = contentHeight
 			};
 			IAmAGraphic background = null;

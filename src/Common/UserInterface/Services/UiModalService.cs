@@ -161,8 +161,8 @@ namespace Common.UserInterface.Services
 			if (true == this._activeUiModals.Contains(uiModal))
 				return false;
 
-			var runtimeDrawingService = this._gameServices.GetService<IRuntimeDrawService>();
-			runtimeDrawingService.AddDrawable(uiModal);
+			var runTimeOverliadDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
+            runTimeOverliadDrawService.AddDrawable(uiModal);
 			this._activeUiModals.Add(uiModal);
 
 			return true;
@@ -178,8 +178,8 @@ namespace Common.UserInterface.Services
 			if (false == this._activeUiModals.Contains(uiModal))
 				return false;
 
-			var runtimeDrawingService = this._gameServices.GetService<IRuntimeDrawService>();
-			runtimeDrawingService.RemoveDrawable(uiModal);
+            var runTimeOverliadDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
+            runTimeOverliadDrawService.RemoveDrawable(uiModal);
 			this._activeUiModals.Remove(uiModal);
 
 			return true;
