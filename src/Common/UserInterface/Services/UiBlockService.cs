@@ -1,18 +1,13 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
-using Common.Controls.Cursors.Models;
+﻿using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.UserInterface;
-using Common.UserInterface.Constants;
-using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
-using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Common.UserInterface.Services
 {
@@ -35,101 +30,24 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface block.</returns>
 		public UiBlock GetUiBlockFromModel(UiBlockModel uiBlockModel, SubArea outterArea = null)
 		{
-			var uiElementService = this._gameServices.GetService<IUiElementService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
-			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
-			var uiScreenService = this._gameServices.GetService<IUiScreenService>();
 			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
 			var uiMarginService = this._gameServices.GetService<IUiMarginService>();
 			var uiRowService = this._gameServices.GetService<IUiRowService>();
-			outterArea ??= uiScreenService.ScreenZoneSize;
 			var rows = new List<UiRow>();
 
 			foreach (var rowModel in uiBlockModel.Rows ?? [])
 			{
 				var row = uiRowService.GetUiRowFromModel(rowModel);
-
-				if ((true == uiBlockModel.FlexRows) &&
-					(row.TotalWidth > outterArea.Width))
-				{
-					var splitRows = uiRowService.SplitRow(row, rowModel, outterArea.Width);
-					rows.AddRange(splitRows);
-				}
-				else
-					rows.Add(row);
-			}
-
-			var contentWidth = rows.Select(e => e.TotalWidth).OrderDescending().FirstOrDefault();
-			var contentHeight = rows.Sum(e => e.TotalHeight);
-			var dynamicRows = rows.Where(r => r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType))).ToArray();
-			var remainingWidth = outterArea.Width - contentWidth;
-			var dynamicWidth = remainingWidth / dynamicRows.Length;
-
-			if (outterArea.Width * ElementSizesScalars.ExtraSmall.X > dynamicWidth)
-			{
-				// LOGGING
-				dynamicWidth = outterArea.Width * ElementSizesScalars.ExtraSmall.X;
-			}
-
-			foreach (var dynamicRow in dynamicRows)
-				dynamicRow.Area.Width = dynamicWidth;
-
-			if (null != outterArea)
-			{
-				var spaceBetweenRows = rows.Where(e => UiHorizontalJustificationType.SpaceBetween == e.HorizontalJustificationType).ToArray();
-				var spaceBetweenWidth = (outterArea.Width - contentWidth) / spaceBetweenRows.Length;
-
-				foreach (var spaceBetweenRow in spaceBetweenRows)
-					spaceBetweenRow.Area.Width += spaceBetweenWidth;
-			}
-
-			contentWidth = rows.Select(e => e.TotalWidth).OrderDescending().FirstOrDefault();
-
-			if (contentWidth <= 0)
-			{
-				// LOGGING
-				contentWidth = uiScreenService.ScreenZoneSize.Width * ElementSizesScalars.ExtraSmall.X;
-			}
-
-			if (contentHeight <= 0)
-			{
-				// LOGGING
-				contentHeight = uiScreenService.ScreenZoneSize.Height * ElementSizesScalars.ExtraSmall.Y;
+				rows.Add(row);
 			}
 
 			var margin = uiMarginService.GetUiMarginFromModel(uiBlockModel.Margin); 
-			var availableWidth = (outterArea != null && outterArea.Width > 0f)
-				? outterArea.Width
-				: contentWidth;
-            var area = new SubArea
-			{
-				Width = availableWidth,
-				Height = contentHeight
-			};
 			IAmAGraphic background = null;
 
 			if (uiBlockModel.BackgroundTexture is not null)
-			{
-				var graphicArea = new SubArea
-				{ 
-					Width = area.Width,
-					Height = area.Height
-				};
-
-				if (true == uiBlockModel.ExtendBackgroundToMargin)
-					graphicArea = new SubArea
-					{
-						Width = outterArea.Width,
-						Height = area.Height + margin.TopMargin + margin.BottomMargin
-					};
-
 				background = imageService.GetImageFromModel(uiBlockModel.BackgroundTexture);
-
-				if ((true == uiBlockModel.ResizeTexture) ||
-					(background is CompositeImage))
-					background.SetDrawDimensions(graphicArea);
-			}
 
 			Cursor hoverCursor = null;
 
@@ -140,21 +58,18 @@ namespace Common.UserInterface.Services
 			}
 
 			var scrollState = scrollStateService.GetScrollStateFromModel(uiBlockModel.ScrollStateModel);
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(area, null);
 			var result = new UiBlock
 			{
 				Name = uiBlockModel.Name,
-				FlexRows = true,
+				ResizeTexture = uiBlockModel.ResizeTexture,
+				FlexRows = uiBlockModel.FlexRows,
 				ExtendBackgroundToMargin = uiBlockModel.ExtendBackgroundToMargin,
-				AvailableWidth = availableWidth,
-				Area = area,
 				Margin = margin,
 				HorizontalJustificationType = uiBlockModel.HorizontalJustificationType,
 				VerticalJustificationType = uiBlockModel.VerticalJustificationType,
 				Graphic = background,
 				ScrollState = scrollState,
 				HoverCursor = hoverCursor,
-				CursorConfiguration = cursorConfiguration
 			};
 			result._rows.AddRange(rows);
 

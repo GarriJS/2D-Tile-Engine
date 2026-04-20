@@ -1,13 +1,15 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Services.Contracts;
 using Engine.Debugging.Models.Contracts;
+using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
-using Engine.Physics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
@@ -22,12 +24,12 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface block.
 	/// </summary>
-	sealed public class UiBlock : IAmSubDrawable, IAmSubPreRenderable, IAmDebugSubDrawable, IAmScrollable, IHaveASubArea, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
+	sealed public class UiBlock : IAmSubDrawable, IAmSubPreRenderable, IAmDebugSubDrawable, IAmScrollable, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
 	{
 		/// <summary>
-		/// Gets or sets the cached offset.
+		/// Gets or sets the user interface layout cache.
 		/// </summary>
-		public Vector2? CachedOffset { get; set; }
+		public UiLayoutCache UiLayoutCache { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface block name.
@@ -39,15 +41,15 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		required public bool FlexRows { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether to extend the background to the margins.
-		/// </summary>
-		required public bool ExtendBackgroundToMargin { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether to resize the texture.
+        /// </summary>
+        required public bool ResizeTexture { get; set; }
 
-		/// <summary>
-		/// Gets or sets the available width to the row.
-		/// </summary>
-		required public float AvailableWidth { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether to extend the background to the margins.
+        /// </summary>
+        required public bool ExtendBackgroundToMargin { get; set; }
 
 		/// <summary>
 		/// Gets the total width.
@@ -62,12 +64,12 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Get the inside width.
 		/// </summary>
-		public float InsideWidth { get => this.Area.Width; }
+		public float InsideWidth { get => this.UiLayoutCache?.InsideArea.Width ?? 0; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => this.Area.Height; }
+		public float InsideHeight { get => this.UiLayoutCache?.InsideArea.Height ?? 0; }
 
 		/// <summary>
 		/// Gets or sets the user interface margin
@@ -83,11 +85,6 @@ namespace Common.UserInterface.Models
 		/// Gets or sets the user interface vertical justification type.
 		/// </summary>
 		required public UiVerticalJustificationType VerticalJustificationType { get; set; }
-
-		/// <summary>
-		/// Gets or sets the area.
-		/// </summary>
-		required public SubArea Area { get; set; }
 
 		/// <summary>
 		/// Gets the graphic.
@@ -112,7 +109,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the hover configuration.
 		/// </summary>
-		required public CursorConfiguration<UiBlock> CursorConfiguration { get; set; }
+		public CursorConfiguration<UiBlock> CursorConfiguration { get; set; }
 
 		/// <summary>
 		/// The rows.
@@ -139,7 +136,7 @@ namespace Common.UserInterface.Models
 		public void Draw(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var drawingService = gameServices.GetService<IDrawingService>();
-			var graphicOffset = offset + (this.CachedOffset ?? default);
+			var graphicOffset = offset + (this.UiLayoutCache?.Offset ?? default);
 
 			if (this.ScrollState?.ScrollRenderTarget is not null)
 			{
@@ -197,7 +194,8 @@ namespace Common.UserInterface.Models
 		/// <param name="gameServices">The game service.</param>
 		public void PreRender(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
-			if ((this.ScrollState is null) ||
+			if ((null == this.UiLayoutCache) ||
+				(this.ScrollState is null) ||
 				(true == this.ScrollState.DisableScrolling))
 				return;
 
@@ -207,11 +205,11 @@ namespace Common.UserInterface.Models
 			var contentHeight = this._rows.Sum(e => e.TotalHeight);
 
 			if ((this.ScrollState.ScrollRenderTarget is null) ||
-				(this.ScrollState.ScrollRenderTarget.Width != this.Area.Width) ||
+				(this.ScrollState.ScrollRenderTarget.Width != this.UiLayoutCache.TotalArea.Width) ||
 				(this.ScrollState.ScrollRenderTarget.Height != contentHeight))
 			{
 				this.ScrollState.ScrollRenderTarget?.Dispose();
-				this.ScrollState.ScrollRenderTarget = new RenderTarget2D(device, (int)this.Area.Width, (int)contentHeight);
+				this.ScrollState.ScrollRenderTarget = new RenderTarget2D(device, (int)this.UiLayoutCache.TotalArea.Width, (int)contentHeight);
 			}
 
 			var previousTargets = device.GetRenderTargets();
@@ -225,33 +223,153 @@ namespace Common.UserInterface.Models
 			device.SetRenderTargets(previousTargets);
 		}
 
-		/// <summary>
-		/// Updates the offsets.
-		/// </summary>
-		public void UpdateOffsets()
+        /// <summary>
+        /// Refreshes the layout cache.
+        /// </summary>
+        public void RefreshLayoutCache(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
+        {
+            var fixedSizedWidth = this._rows.Where(e => e.HasWidthFlexElements).Sum(e => e.TotalWidth);
+            var fixedSizedHeight = this._rows.Where(e => e.HasHeightFlexElements).Sum(e => e.TotalHeight);
+            this.UiLayoutCache = new UiLayoutCache
+            {
+                FixedSizedWidth = fixedSizedWidth,
+                FixedSizedHeight = fixedSizedHeight,
+                InsideArea = new SubArea
+                {
+                    Width = 0,
+                    Height = 0
+                },
+                TotalArea = new SubArea
+                {
+                    Width = 0 + this.Margin.LeftMargin + this.Margin.RightMargin,
+                    Height = 0 + this.Margin.TopMargin + this.Margin.BottomMargin
+                }
+            };
+            this.UpdateBlockSize(gameTime, gameServices, availableWidth, availabelHeight);
+        }
+
+        /// <summary>
+        /// Updates the block size.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        /// <param name="availableWidth">The available width.</param>
+        /// <param name="availabelHeight">The available height.</param>
+        private void UpdateBlockSize(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
 		{
-			foreach (var rowLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
+			this._rows.RemoveAll(e => 0 == e._elements.Count);
+
+            if ((null == this.UiLayoutCache) ||
+				(0 == this._rows.Count))
+                return;
+
+            availableWidth -= this.Margin.LeftMargin + this.Margin.RightMargin;
+            availabelHeight -= this.Margin.TopMargin + this.Margin.BottomMargin;
+            var uiRowService = gameServices.GetService<IUiRowService>();
+            var flexWidthRows = this._rows.Where(e => e.HasWidthFlexElements).ToList();
+			var flexHeightRows = this._rows.Where(e => e.HasHeightFlexElements).ToList();
+			var flexWidth = 0f;
+			var flexHeight = 0f;
+
+            if (0 != flexWidthRows.Count)
+				flexWidth = availableWidth - this.UiLayoutCache.FixedSizedWidth / flexWidthRows.Count;
+
+            if (0 != flexHeightRows.Count)
+                flexHeight = availabelHeight - this.UiLayoutCache.FixedSizedHeight / flexHeightRows.Count;
+
+            foreach (var row in this._rows)
+                row.RefreshLayoutCache(gameTime, gameServices, flexWidth, flexHeight);
+
+			if (true == this.FlexRows)
 			{
-				rowLayout.Subject.CachedOffset = rowLayout.Vector;
-				rowLayout.Subject.UpdateOffsets();
+				var overflowingRows = this._rows.Where(e => e.TotalWidth > availableWidth)
+												.ToArray();
+
+				if (0 != overflowingRows.Length)
+				{
+					float? targetWidth = null;
+
+					foreach (var row in overflowingRows)
+					{
+						// this is really split even and not center
+						if (UiHorizontalJustificationType.Center == this.HorizontalJustificationType)
+							targetWidth = availableWidth / (float)Math.Ceiling(row.TotalWidth / availableWidth);
+
+						var newRows = uiRowService.SplitRow(row, availableWidth);
+						
+						foreach (var newRow in newRows)
+							newRow.RefreshLayoutCache(gameTime, gameServices, flexWidth, flexHeight);
+
+						var originalRowIndex = this._rows.IndexOf(row);
+						this._rows.InsertRange(originalRowIndex, newRows);
+						this._rows.Remove(row);
+                    }
+				}
 			}
 
-			var contentWidth = this._rows.Select(e => e.TotalWidth)
-										 .OrderDescending()
-										 .FirstOrDefault();
-			var smallestRowOffSet = this._rows.Where(e => true == e.CachedOffset.HasValue)
-											  .Select(e => e.CachedOffset.Value.X)
-											  .Order()
-											  .FirstOrDefault();
-			this.ScrollState?.UpdateOffset(this.AvailableWidth, contentWidth, smallestRowOffSet);
+			var contentWidth = this._rows.Max(e => e.TotalWidth);
+            var contentHeight = this._rows.Sum(e => e.TotalHeight);
+            this.UpdateBlockArea(gameServices, contentWidth, contentHeight);
+        }
+
+        /// <summary>
+        /// Updates the block area.
+        /// </summary>
+        /// <param name="gameServices">The game service.</param>
+        /// <param name="insideWidth">The inside width.</param>
+        /// <param name="insideHeight">The inside height.</param>
+        private void UpdateBlockArea(GameServiceContainer gameServices, float insideWidth, float insideHeight)
+        {
+            this.UiLayoutCache.InsideArea = new SubArea
+            {
+                Width = (int)insideWidth,
+                Height = (int)insideHeight
+            };
+            this.UiLayoutCache.TotalArea = new SubArea
+            {
+                Width = (int)insideWidth + this.Margin.LeftMargin + this.Margin.RightMargin,
+                Height = (int)insideHeight + this.Margin.TopMargin + this.Margin.BottomMargin
+            };
+
+			if (null == this.CursorConfiguration)
+            {
+                var cursorInteractionService = gameServices.GetService<ICursorInteractionService>();
+                this.CursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(this.UiLayoutCache.TotalArea);
+			}
+			else
+				this.CursorConfiguration.Area = this.UiLayoutCache.TotalArea;
+
+            if ((null != this.Graphic) &&
+                ((true == this.ResizeTexture) ||
+                 (this.Graphic is CompositeImage)))
+                if (this.ExtendBackgroundToMargin)
+                    this.Graphic.SetDrawDimensions(this.UiLayoutCache.TotalArea);
+                else
+                    this.Graphic.SetDrawDimensions(this.UiLayoutCache.InsideArea);
+        }
+
+        /// <summary>
+        /// Updates the offsets.
+        /// </summary>
+        public void UpdateOffsets()
+		{
+			foreach (var rowLayout in this.EnumerateRowPosition(includeScrollOffset: false) ?? [])
+			{
+				rowLayout.Subject.UiLayoutCache.Offset = rowLayout.Vector2;
+				rowLayout.Subject.UpdateElementOffsets();
+			}
+
+			var contentWidth = this._rows.Max(e => e.TotalWidth);
+			var smallestRowOffSet = this._rows.Min(e => e.UiLayoutCache.Offset.X);
+			this.ScrollState?.UpdateOffset(this.TotalWidth, contentWidth, smallestRowOffSet);
 		}
 
 		/// <summary>
-		/// Enumerates the rowLayout.
+		/// Enumerates the row positions.
 		/// </summary>
 		/// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
-		/// <returns>The enumerated rowLayout.</returns>
-		public IEnumerable<Vector2Extender<UiRow>> EnumerateLayout(bool includeScrollOffset)
+		/// <returns>The enumerated row positions.</returns>
+		public IEnumerable<Vector2Extender<UiRow>> EnumerateRowPosition(bool includeScrollOffset)
 		{
 			var contentWidth = this._rows.Sum(e => e.TotalWidth);
 			var contentHeight = this._rows.Sum(e => e.TotalHeight);
@@ -294,7 +412,7 @@ namespace Common.UserInterface.Models
 				var rowLeft = horizontalOffset + carryOverHorizontalOffset + row.Margin.LeftMargin;
 				var result = new Vector2Extender<UiRow>
 				{
-					Vector = new Vector2
+					Vector2 = new Vector2
 					{
 						X = rowLeft,
 						Y = rowTop
@@ -326,12 +444,12 @@ namespace Common.UserInterface.Models
 				X = 0,
 				Y = -this.ScrollState?.VerticalScrollOffset ?? default
 			};
-			var graphicOffset = offset + scrollOffset + (this.CachedOffset ?? default);
+			var graphicOffset = offset + scrollOffset + (this.UiLayoutCache?.Offset ?? default);
 
 			foreach (var uiRow in this._rows)
 				uiRow.DrawDebug(gameTime, gameServices, coordinates, color, graphicOffset);
 
-			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+            this.UiLayoutCache?.TotalArea.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
 		/// <summary>

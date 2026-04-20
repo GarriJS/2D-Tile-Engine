@@ -41,7 +41,7 @@ namespace Common.UserInterface.Services
 				hoverState.TopHoverCursor = uiParent.HoverCursor;
 				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
 				{
-					Vector = uiParent.Position.Coordinates,
+					Vector2 = uiParent.Position.Coordinates,
 					Subject = uiParent
 				};
 				hoverState._hoveredObjects[typeof(UiZone)] = uiParent;
@@ -61,7 +61,7 @@ namespace Common.UserInterface.Services
 
 				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
 				{
-					Vector = locatedBlock.Vector,
+					Vector2 = locatedBlock.Vector2,
 					Subject = locatedBlock.Subject
 				};
 				hoverState._hoveredObjects[typeof(UiBlock)] = locatedBlock.Subject;
@@ -77,7 +77,7 @@ namespace Common.UserInterface.Services
 
 				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
 				{
-					Vector = locatedRow.Vector,
+					Vector2 = locatedRow.Vector2,
 					Subject = locatedRow.Subject
 				};
 				hoverState._hoveredObjects[typeof(UiRow)] = locatedRow.Subject;
@@ -93,7 +93,7 @@ namespace Common.UserInterface.Services
 
 				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
 				{
-					Vector = locatedElement.Vector,
+					Vector2 = locatedElement.Vector2,
 					Subject = locatedElement.Subject
 				};
 				hoverState._hoveredObjects[typeof(IAmAUiElement)] = locatedElement.Subject;
@@ -179,7 +179,7 @@ namespace Common.UserInterface.Services
 
 			foreach (var blockLayout in uiZone.EnumerateLayout(includeScrollOffset: true) ?? [])
 			{
-				var blockTop = uiZoneLocation.Y + blockLayout.Vector.Y;
+				var blockTop = uiZoneLocation.Y + blockLayout.Vector2.Y;
 				var blockBottom = blockTop + blockLayout.Subject.InsideHeight;
 
 				if ((location.Y < blockTop) ||
@@ -188,7 +188,7 @@ namespace Common.UserInterface.Services
 
 				uiBlock = new Vector2Extender<UiBlock>
 				{
-					Vector = uiZoneLocation + blockLayout.Vector,
+					Vector2 = uiZoneLocation + blockLayout.Vector2,
 					Subject = blockLayout.Subject
 				};
 
@@ -212,9 +212,9 @@ namespace Common.UserInterface.Services
 				(0 == locatedUiBlock.Subject._rows.Count))
 				return false;
 
-			foreach (var rowLayout in locatedUiBlock.Subject.EnumerateLayout(includeScrollOffset: true) ?? [])
+			foreach (var rowLayout in locatedUiBlock.Subject.EnumerateRowPosition(includeScrollOffset: true) ?? [])
 			{
-				var rowTop = locatedUiBlock.Vector.Y + rowLayout.Vector.Y;
+				var rowTop = locatedUiBlock.Vector2.Y + rowLayout.Vector2.Y;
 				var rowBottom = rowTop + rowLayout.Subject.InsideHeight;
 
 				if ((location.Y < rowTop) ||
@@ -223,7 +223,7 @@ namespace Common.UserInterface.Services
 
 				uiRow = new Vector2Extender<UiRow>
 				{
-					Vector = locatedUiBlock.Vector + rowLayout.Vector,
+					Vector2 = locatedUiBlock.Vector2 + rowLayout.Vector2,
 					Subject = rowLayout.Subject
 				};
 
@@ -247,16 +247,16 @@ namespace Common.UserInterface.Services
 				(0 == locatedUiRow.Subject._elements.Count))
 				return false;
 
-			foreach (var elementLayout in locatedUiRow.Subject.EnumerateLayout() ?? [])
+			foreach (var elementLayout in locatedUiRow.Subject.EnumerateElementPosition() ?? [])
 			{
-				var elementLeft = locatedUiRow.Vector.X + elementLayout.Vector.X;
+				var elementLeft = locatedUiRow.Vector2.X + elementLayout.Vector2.X;
 				var elementRight = elementLeft + elementLayout.Subject.InsideWidth;
 
 				if ((elementLeft > location.X) ||
 					(elementRight < location.X))
 					continue;
 
-				var elementTop = locatedUiRow.Vector.Y + elementLayout.Vector.Y;
+				var elementTop = locatedUiRow.Vector2.Y + elementLayout.Vector2.Y;
 				var elementBottom = elementTop + elementLayout.Subject.InsideHeight;
 
 				if ((elementTop > location.Y) &&
@@ -265,7 +265,7 @@ namespace Common.UserInterface.Services
 
 				locatedUiElement = new Vector2Extender<IAmAUiElement>
 				{
-					Vector = locatedUiRow.Vector + elementLayout.Vector,
+					Vector2 = locatedUiRow.Vector2 + elementLayout.Vector2,
 					Subject = elementLayout.Subject,
 				};
 

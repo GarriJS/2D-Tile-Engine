@@ -3,6 +3,7 @@ using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
+using Common.UserInterface.Services;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
@@ -24,10 +25,20 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// </summary>
 		required public string Name { get; set; }
 
-		/// <summary>
-		/// Gets the total width.
-		/// </summary>
-		public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
+        /// <summary>
+        /// Gets a value indicating whether the user interface element has a flexible width.
+        /// </summary>
+        public bool IsFlexWidth { get => true == UiGroupService._dynamicSizedTypes.Contains(this.HorizontalSizeType); }
+
+        /// <summary>
+        /// Gets a value indicating whether the user interface element has a flexible height.
+        /// </summary>
+        public bool IsFlexHeight { get => true == UiGroupService._dynamicSizedTypes.Contains(this.VerticalSizeType); }
+
+        /// <summary>
+        /// Gets the total width.
+        /// </summary>
+        public float TotalWidth { get => this.Margin.LeftMargin + this.InsideWidth + this.Margin.RightMargin; }
 
 		/// <summary>
 		/// Gets the total height.

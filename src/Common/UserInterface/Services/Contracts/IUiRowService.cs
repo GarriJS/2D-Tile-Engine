@@ -16,19 +16,12 @@ namespace Common.UserInterface.Services.Contracts
 		public UiRow GetUiRowFromModel(UiRowModel uiRowModel);
 
 		/// <summary>
-		/// Splits the block to accommodate  
+		/// Splits the row to accommodate the max width.
 		/// </summary>
-		/// <param name="uiRow">The user interface block.</param>
-		/// <param name="originalModel">The original row model.</param>
+		/// <param name="uiRow">The user interface row.</param>
 		/// <param name="maxWidth">The max width.</param>
-		/// <returns>The user interface rows.</returns>
-		public UiRow[] SplitRow(UiRow uiRow, UiRowModel originalModel, float maxWidth);
-
-		/// <summary>
-		/// Updates the block dynamic height.
-		/// </summary>
-		/// <param name="uiRow">The user interface block.</param>
-		/// <param name="dynamicHeight">The dynamic height.</param>
-		public void UpdateRowDynamicHeight(UiRow uiRow, float dynamicHeight);
+		/// <param name="targetWidth">The target width.</param>
+		/// <returns>The split rows.</returns>
+		public UiRow[] SplitRow(UiRow uiRow, float maxWidth, float? targetWidth = null);
 	}
 }

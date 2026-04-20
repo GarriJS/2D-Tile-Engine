@@ -18,6 +18,6 @@ namespace Common.Controls.CursorInteraction.Services.Contracts
 		/// <param name="offset">The offset.</param>
 		/// <param name="clickOffset">The clickable offset.</param>
 		/// <returns>The hover configuration.</returns>
-		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, SubArea clickArea, Vector2 offset = default, Vector2 clickOffset = default);
+		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, SubArea clickArea = null, Vector2 offset = default, Vector2 clickOffset = default);
 	}
 }

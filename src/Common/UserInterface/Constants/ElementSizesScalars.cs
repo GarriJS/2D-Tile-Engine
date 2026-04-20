@@ -8,11 +8,6 @@ namespace Common.UserInterface.Constants
     static public class ElementSizesScalars
     {
         /// <summary>
-        /// The none element size scalars.
-        /// </summary>
-        static public Vector2 None { get; } = default;
-
-        /// <summary>
         /// The extra small element size scalars.
         /// </summary>
         static public Vector2 ExtraSmall { get; } = new Vector2(1f / 5f, 1f / 6f);

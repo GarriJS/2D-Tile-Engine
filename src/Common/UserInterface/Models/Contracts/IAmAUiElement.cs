@@ -24,10 +24,20 @@ namespace Common.UserInterface.Models.Contracts
 		/// </summary>
 		public string Name { get; set; }
 
-		/// <summary>
-		/// Gets the total width.
-		/// </summary>
-		public float TotalWidth { get; }
+        /// <summary>
+        /// Gets a value indicating whether the user interface element has a flexible width.
+        /// </summary>
+        public bool IsFlexWidth { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the user interface element has a flexible height.
+        /// </summary>
+        public bool IsFlexHeight { get; }
+
+        /// <summary>
+        /// Gets the total width.
+        /// </summary>
+        public float TotalWidth { get; }
 
 		/// <summary>
 		/// Gets the total height.

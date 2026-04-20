@@ -134,7 +134,10 @@ namespace Common.UserInterface.Models
 			this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
 
 			if (true == this.ResetCalculateCachedOffsets)
-				this.UpdateZoneOffsets();
+			{
+				this.RefreshLayoutCache(gameTime, gameServices);
+                this.UpdateZoneOffsets();
+			}
 
 			foreach (var block in this._blocks)
 				block.Draw(gameTime, gameServices, coordinates, color, offset);
@@ -201,6 +204,17 @@ namespace Common.UserInterface.Models
 			device.SetRenderTargets(previousTargets);
 		}
 
+        /// <summary>
+        /// Refreshes the layout caches.
+        /// </summary>
+		/// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        public void RefreshLayoutCache(GameTime gameTime, GameServiceContainer gameServices)
+		{ 
+			foreach (var block in this._blocks)
+				block.RefreshLayoutCache(gameTime, gameServices, this.Area.Width, this.Area.Height);
+		}
+
 		/// <summary>
 		/// Updates the zone offsets.
 		/// </summary>
@@ -208,7 +222,7 @@ namespace Common.UserInterface.Models
 		{
 			foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
 			{
-				blockLayout.Subject.CachedOffset = blockLayout.Vector;
+				blockLayout.Subject.UiLayoutCache.Offset = blockLayout.Vector2;
 				blockLayout.Subject.UpdateOffsets();
 			}
 
@@ -259,7 +273,7 @@ namespace Common.UserInterface.Models
 				var blockLeft = horizontalOffset + block.Margin.LeftMargin;
                 var result = new Vector2Extender<UiBlock>
 				{
-					Vector = new Vector2
+					Vector2 = new Vector2
 					{
 						X = blockLeft,
 						Y = blockTop

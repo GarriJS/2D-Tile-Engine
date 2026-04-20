@@ -3,17 +3,14 @@ using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.UserInterface;
-using Common.UserInterface.Constants;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
-using Engine.Core.Initialization.Services.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Graphics.Services.Contracts;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Common.UserInterface.Services
 {
@@ -36,14 +33,11 @@ namespace Common.UserInterface.Services
 		public UiZone GetUiZoneFromModel(UiZoneModel uiZoneModel)
 		{
 			var uiZoneService = this._gameServices.GetService<IUiScreenService>();
-			var uiElementService = this._gameServices.GetService<IUiElementService>();
-			var functionService = this._gameServices.GetService<IFunctionService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
 			var uiBlockService = this._gameServices.GetService<IUiBlockService>();
-			var uiRowService = this._gameServices.GetService<IUiRowService>();
 
 			if (false == uiZoneService.UiScreenZones.TryGetValue(uiZoneModel.UiZonePositionType, out UiScreenZone uiScreenZone))
 				uiScreenZone = uiZoneService.UiScreenZones[UiZonePositionType.Unknown];
@@ -56,34 +50,18 @@ namespace Common.UserInterface.Services
 				blocks.Add(block);
 			}
 
-			var contentHeight = blocks.Sum(e => e.TotalHeight);
-			var rows = blocks.Where(e => 0 != e._rows.Count).SelectMany(e => e._rows).ToArray();
-			var dynamicRows = rows.Where(r => true == r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
-								  .ToArray();
-			var remainingHeight = uiScreenZone.Area.Height - contentHeight;
-			var dynamicHeight = remainingHeight / dynamicRows.Length;
+			//if (((uiZoneModel.ScrollStateModel is null) ||
+			//	 (true == uiZoneModel.ScrollStateModel.DisableScrolling)) &&
+			//	(contentHeight > uiScreenZone.Area.Height))
+			//{
+			//	var exessHeight = contentHeight - uiScreenZone.Area.Height;
+			//	var scrollableBlocks = blocks.Where(e => false == e.ScrollState?.DisableScrolling)
+			//								 .ToArray();
+			//	var splitExessHeight = exessHeight / scrollableBlocks.Length;
 
-			if (uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y > dynamicHeight)
-			{
-				// LOGGING
-				dynamicHeight = uiScreenZone.Area.Height * ElementSizesScalars.ExtraSmall.Y;
-			}
-
-			foreach (var dynamicRow in dynamicRows)
-				uiRowService.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
-
-			if (((uiZoneModel.ScrollStateModel is null) ||
-				 (true == uiZoneModel.ScrollStateModel.DisableScrolling)) &&
-				(contentHeight > uiScreenZone.Area.Height))
-			{
-				var exessHeight = contentHeight - uiScreenZone.Area.Height;
-				var scrollableBlocks = blocks.Where(e => false == e.ScrollState?.DisableScrolling)
-											 .ToArray();
-				var splitExessHeight = exessHeight / scrollableBlocks.Length;
-
-				foreach (var scrollableBlock in scrollableBlocks)
-					scrollableBlock.ScrollState.MaxVisibleHeight -= splitExessHeight;
-			}
+			//	foreach (var scrollableBlock in scrollableBlocks)
+			//		scrollableBlock.ScrollState.MaxVisibleHeight -= splitExessHeight;
+			//}
 
 			IAmAGraphic background = null;
 

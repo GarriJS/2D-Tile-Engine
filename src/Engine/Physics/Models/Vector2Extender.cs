@@ -9,9 +9,9 @@ namespace Engine.Physics.Models
 	readonly public struct Vector2Extender<T>
 	{
 		/// <summary>
-		/// Gets or sets the vector.
+		/// Gets or sets the vector2.
 		/// </summary>
-		required readonly public Vector2 Vector { get; init; }
+		required readonly public Vector2 Vector2 { get; init; }
 
 		/// <summary>
 		/// Gets or sets the subject.

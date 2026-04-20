@@ -1,13 +1,16 @@
 ﻿using Common.Controls.CursorInteraction.Models;
 using Common.Controls.CursorInteraction.Models.Abstract;
 using Common.Controls.CursorInteraction.Models.Contracts;
+using Common.Controls.CursorInteraction.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
 using Engine.Debugging.Models.Contracts;
+using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -21,7 +24,7 @@ namespace Common.UserInterface.Models
     /// <summary>
     /// Represents a user interface modal
     /// </summary>
-    public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+    public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiModal>, IDisposable
     {
         /// <summary>
         /// Gets or sets a value indicating if the user interface modal will recalculate the cached offsets on the next draw.
@@ -37,6 +40,11 @@ namespace Common.UserInterface.Models
         /// Gets or sets the draw layer.
         /// </summary>
         required public int DrawLayer { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to resize the texture.
+        /// </summary>
+        required public bool ResizeTexture { get; set; }
 
         /// <summary>
         /// Gets or sets the user interface modal vertical justification type. 
@@ -86,7 +94,7 @@ namespace Common.UserInterface.Models
         /// <summary>
         /// Gets or sets the cursor configuration
         /// </summary>
-        required public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
+        required public CursorConfiguration<UiModal> CursorConfiguration { get; set; }
 
         /// <summary>
         /// The user interface blocks.
@@ -102,7 +110,7 @@ namespace Common.UserInterface.Models
         /// Raises the hover event.
         /// </summary>
         /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void RaiseHoverEvent(CursorInteraction<UiZone> cursorInteraction)
+        public void RaiseHoverEvent(CursorInteraction<UiModal> cursorInteraction)
         {
             this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
         }
@@ -139,7 +147,10 @@ namespace Common.UserInterface.Models
             this.Graphic?.Draw(gameTime, gameServices, coordinates, color, offset);
 
             if (true == this.ResetCalculateCachedOffsets)
-                this.UpdateZoneOffsets();
+            {
+                this.RefreshLayoutCache(gameTime, gameServices);
+                this.UpdateModalOffsets();
+            }
 
             foreach (var block in this._blocks ?? [])
                 block.Draw(gameTime, gameServices, coordinates, color, offset);
@@ -173,7 +184,7 @@ namespace Common.UserInterface.Models
         public void PreRender(GameTime gameTime, GameServiceContainer gameServices)
         {
             var subPrerenders = this._blocks.Where(e => true == e.ShouldPreRender())
-                                           .ToArray();
+                                            .ToArray();
 
             foreach (var subPrerender in subPrerenders ?? [])
                 subPrerender.PreRender(gameTime, gameServices, default, Color.White);
@@ -207,13 +218,62 @@ namespace Common.UserInterface.Models
         }
 
         /// <summary>
+        /// Refreshes the layout caches.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        public void RefreshLayoutCache(GameTime gameTime, GameServiceContainer gameServices)
+        {
+            foreach (var block in this._blocks)
+                block.RefreshLayoutCache(gameTime, gameServices, this.Area.Width, this.Area.Height);
+
+            if ((UiModalSizeType.FitContent == this.HorizontalModalSizeType) ||
+                (UiModalSizeType.FitContent == this.VerticalModalSizeType))
+            {
+                this.FitModalContent(gameServices);
+
+                foreach (var block in this._blocks)
+                    block.RefreshLayoutCache(gameTime, gameServices, this.Area.Width, this.Area.Height);
+            }
+        }
+
+        /// <summary>
+        /// Updates the modal area to fit its content.
+        /// </summary>
+        /// <param name="gameServices">The game service.</param>
+        private void FitModalContent(GameServiceContainer gameServices)
+        {
+            var contentWidth = this._blocks.Max(r => r.TotalWidth);
+            var contentHeight = this._blocks.Sum(r => r.TotalHeight);
+            this.Area = new SimpleArea
+            {
+                Position = this.Area.Position,
+                Width = contentWidth,
+                Height = contentHeight,
+            };
+
+            if (null == this.CursorConfiguration)
+            {
+                var cursorInteractionService = gameServices.GetService<ICursorInteractionService>();
+                this.CursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiModal>(this.Area.ToSubArea);
+            }
+            else
+                this.CursorConfiguration.Area = this.Area.ToSubArea;
+
+            if ((null != this.Graphic) &&
+                ((true == this.ResizeTexture) ||
+                 (this.Graphic is CompositeImage)))
+                    this.Graphic.SetDrawDimensions(this.Area.ToSubArea);
+        }
+
+        /// <summary>
         /// Updates the modal offsets.
         /// </summary>
-        public void UpdateZoneOffsets()
+        public void UpdateModalOffsets()
         {
             foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
             {
-                blockLayout.Subject.CachedOffset = blockLayout.Vector;
+                blockLayout.Subject.UiLayoutCache.Offset = blockLayout.Vector2;
                 blockLayout.Subject.UpdateOffsets();
             }
 
@@ -256,15 +316,15 @@ namespace Common.UserInterface.Models
             {
                 var horizontalOffset = block.HorizontalJustificationType switch
                 {
-                    UiHorizontalJustificationType.Center => (block.AvailableWidth - block.TotalWidth) / 2,
-                    UiHorizontalJustificationType.Right => block.AvailableWidth - block.TotalWidth,
+                    UiHorizontalJustificationType.Center => (this.Area.Width - block.TotalWidth) / 2,
+                    UiHorizontalJustificationType.Right => this.Area.Width - block.TotalWidth,
                     _ => 0
                 };
                 var blockTop = verticalOffset + carryOverVerticalOffset + block.Margin.TopMargin;
                 var blockLeft = horizontalOffset + block.Margin.LeftMargin;
                 var result = new Vector2Extender<UiBlock>
                 {
-                    Vector = new Vector2
+                    Vector2 = new Vector2
                     {
                         X = blockLeft,
                         Y = blockTop

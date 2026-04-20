@@ -7,7 +7,6 @@ using Common.UserInterface.Constants;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
 using Common.UserInterface.Services.Contracts;
-using Engine.Core.Initialization.Services.Contracts;
 using Engine.DiskModels.Physics;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
@@ -18,7 +17,6 @@ using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Common.UserInterface.Services
 {
@@ -58,16 +56,11 @@ namespace Common.UserInterface.Services
 		/// <returns>The user interface modal.</returns>
 		public UiModal GetUiModalFromModel(UiModalModel uiModalModel, bool makeActive = true)
 		{
-			var uiZoneService = this._gameServices.GetService<IUiScreenService>();
-			var uiElementService = this._gameServices.GetService<IUiElementService>();
-			var functionService = this._gameServices.GetService<IFunctionService>();
 			var imageService = this._gameServices.GetService<IImageService>();
 			var cursorService = this._gameServices.GetService<ICursorService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var scrollStateService = this._gameServices.GetService<IScrollStateService>();
 			var uiBlockService = this._gameServices.GetService<IUiBlockService>();
-			var uiRowService = this._gameServices.GetService<IUiRowService>();
-			var runTimeOverlaidDrawService = this._gameServices.GetService<IRuntimeOverlaidDrawService>();
 			var area = this.GetModalArea(uiModalModel);
 			var blocks = new List<UiBlock>();
 
@@ -77,50 +70,18 @@ namespace Common.UserInterface.Services
 				blocks.Add(block);
 			}
 
-			var contentHeight = blocks.Sum(e => e.TotalHeight);
-			var rows = blocks.Where(e => e._rows.Count != 0)
-							 .SelectMany(e => e._rows)
-							 .ToArray();
-			var dynamicRows = rows.Where(r => r._elements.Any(e => true == UiGroupService._dynamicSizedTypes.Contains(e.VerticalSizeType)))
-								  .ToArray();
-			var remainingHeight = area.Height - contentHeight;
-			var dynamicHeight = remainingHeight / dynamicRows.Length;
+			//if (((uiModalModel.ScrollStateModel is null) ||
+			//	 (true == uiModalModel.ScrollStateModel.DisableScrolling)) &&
+			//	(contentHeight > area.Height))
+			//{
+			//	var exessHeight = contentHeight - area.Height;
+			//	var scrollableBlocks = blocks.Where(e => false == e.ScrollState?.DisableScrolling)
+			//								 .ToArray();
+			//	var splitExessHeight = exessHeight / scrollableBlocks.Length;
 
-			if (area.Height * ElementSizesScalars.ExtraSmall.Y > dynamicHeight)
-			{
-				// LOGGING
-				dynamicHeight = area.Height * ElementSizesScalars.ExtraSmall.Y;
-			}
-
-			foreach (var dynamicRow in dynamicRows ?? [])
-				uiRowService.UpdateRowDynamicHeight(dynamicRow, dynamicHeight);
-
-			if (UiModalSizeType.FitContent == uiModalModel.HorizontalModalSizeType)
-			{ 
-				var contentWidth = blocks.Max(e => e.TotalWidth);
-				area.Width = contentWidth;
-				area.Position.X -= contentWidth;
-            }
-
-            if (UiModalSizeType.FitContent == uiModalModel.VerticalModalSizeType)
-            {
-                var contentHigh = blocks.Sum(e => e.TotalHeight);
-                area.Height = contentHigh;
-                area.Position.Y -= contentHigh;
-            }
-
-            if (((uiModalModel.ScrollStateModel is null) ||
-				 (true == uiModalModel.ScrollStateModel.DisableScrolling)) &&
-				(contentHeight > area.Height))
-			{
-				var exessHeight = contentHeight - area.Height;
-				var scrollableBlocks = blocks.Where(e => false == e.ScrollState?.DisableScrolling)
-											 .ToArray();
-				var splitExessHeight = exessHeight / scrollableBlocks.Length;
-
-				foreach (var scrollableBlock in scrollableBlocks)
-					scrollableBlock.ScrollState.MaxVisibleHeight -= splitExessHeight;
-			}
+			//	foreach (var scrollableBlock in scrollableBlocks)
+			//		scrollableBlock.ScrollState.MaxVisibleHeight -= splitExessHeight;
+			//}
 
 			IAmAGraphic background = null;
 
@@ -142,11 +103,12 @@ namespace Common.UserInterface.Services
 			}
 
 			var scrollState = scrollStateService.GetScrollStateFromModel(uiModalModel.ScrollStateModel);
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiZone>(area.ToSubArea, null);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiModal>(area.ToSubArea, null);
 			var result = new UiModal
 			{
 				ResetCalculateCachedOffsets = true,
 				Name = uiModalModel.Name,
+				ResizeTexture = uiModalModel.ResizeTexture,
 				DrawLayer = RunTimeConstants.BaseUiDrawLayer,
 				VerticalJustificationType = uiModalModel.VerticalJustificationType,
 				HorizontalModalSizeType = uiModalModel.HorizontalModalSizeType,
