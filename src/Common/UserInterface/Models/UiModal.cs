@@ -224,14 +224,19 @@ namespace Common.UserInterface.Models
         /// <param name="gameServices">The game services.</param>
         public void RefreshLayoutCache(GameTime gameTime, GameServiceContainer gameServices)
         {
+            this._blocks.RemoveAll(e => 0 == e._rows.Count);
+
             foreach (var block in this._blocks)
                 block.RefreshLayoutCache(gameTime, gameServices, this.Area.Width, this.Area.Height);
 
-            if ((UiModalSizeType.FitContent == this.HorizontalModalSizeType) ||
-                (UiModalSizeType.FitContent == this.VerticalModalSizeType))
-            {
-                this.FitModalContent(gameServices);
+            var updateWidth = UiModalSizeType.FitContent == this.HorizontalModalSizeType;
+            var updateHeight = UiModalSizeType.FitContent == this.VerticalModalSizeType;
 
+            if ((true == updateWidth) ||
+                (true == updateHeight))
+            {
+                this.FitModalContent(gameServices, updateWidth, updateHeight);
+                    
                 foreach (var block in this._blocks)
                     block.RefreshLayoutCache(gameTime, gameServices, this.Area.Width, this.Area.Height);
             }
@@ -241,15 +246,17 @@ namespace Common.UserInterface.Models
         /// Updates the modal area to fit its content.
         /// </summary>
         /// <param name="gameServices">The game service.</param>
-        private void FitModalContent(GameServiceContainer gameServices)
+        /// <param name="updateWidth">A value indicating whether to update the width.</param>
+        /// <param name="updateHeight">A value indicating whether to update the height.</param>
+        private void FitModalContent(GameServiceContainer gameServices, bool updateWidth = true, bool updateHeight = true)
         {
             var contentWidth = this._blocks.Max(r => r.TotalWidth);
             var contentHeight = this._blocks.Sum(r => r.TotalHeight);
             this.Area = new SimpleArea
             {
                 Position = this.Area.Position,
-                Width = contentWidth,
-                Height = contentHeight,
+                Width = updateWidth ? contentWidth : this.Area.Width,
+                Height = updateHeight ? contentHeight : this.Area.Height,
             };
 
             if (null == this.CursorConfiguration)

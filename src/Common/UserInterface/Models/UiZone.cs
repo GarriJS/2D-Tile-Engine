@@ -210,8 +210,10 @@ namespace Common.UserInterface.Models
 		/// <param name="gameTime">The game time.</param>
         /// <param name="gameServices">The game services.</param>
         public void RefreshLayoutCache(GameTime gameTime, GameServiceContainer gameServices)
-		{ 
-			foreach (var block in this._blocks)
+		{
+            this._blocks.RemoveAll(e => 0 == e._rows.Count);
+
+            foreach (var block in this._blocks)
 				block.RefreshLayoutCache(gameTime, gameServices, this.Area.Width, this.Area.Height);
 		}
 

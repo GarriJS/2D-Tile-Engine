@@ -404,10 +404,9 @@ namespace LevelEditor.Scenes.Services
                 ResizeTexture = true,
                 HorizontalLocationType = UiModalHorizontalLocationType.Center,
                 VerticalLocationType = UiModalVerticalLocationType.Center,
-                HorizontalJustificationType = UiHorizontalJustificationType.Center,
                 VerticalJustificationType = UiVerticalJustificationType.SpaceBetween,
                 HorizontalModalSizeType = UiModalSizeType.FitContent,
-                VerticalModalSizeType = UiModalSizeType.FitContent,
+                VerticalModalSizeType = UiModalSizeType.Medium,
                 HoverCursorName = CommonCursorNames.BasicCursorName,
                 BackgroundTexture = new SimpleImageModel
                 {

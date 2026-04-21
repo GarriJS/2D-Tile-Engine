@@ -153,6 +153,10 @@ namespace Common.UserInterface.Models
         /// <summary>
         /// Refreshes the layout cache.
         /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        /// <param name="gameServices">The game services.</param>
+        /// <param name="availableWidth">The available width.</param>
+        /// <param name="availabelHeight">The available height.</param>
         public void RefreshLayoutCache(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
         {
             var fixedSizedWidth = this._elements.Where(e => e.IsFlexWidth).Sum(e => e.TotalWidth);

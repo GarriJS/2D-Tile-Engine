@@ -20,9 +20,6 @@ namespace Common.DiskModels.UserInterface
 		[JsonPropertyName("verticalLocationType")]
 		public UiModalVerticalLocationType VerticalLocationType { get; set; }
 
-		[JsonPropertyName("horizontalJustificationType")]
-		public UiHorizontalJustificationType HorizontalJustificationType { get; set; }
-
 		[JsonPropertyName("verticalJustificationType")]
 		public UiVerticalJustificationType VerticalJustificationType { get; set; }
 
