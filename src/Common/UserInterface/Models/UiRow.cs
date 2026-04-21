@@ -172,17 +172,17 @@ namespace Common.UserInterface.Models
                     Height = 0 + this.Margin.TopMargin + this.Margin.BottomMargin
                 }
             };
-            this.UpdateRowSize(gameTime, gameServices, availableWidth, availabelHeight);
+            this.UpdateElementSize(gameTime, gameServices, availableWidth, availabelHeight);
         }
 
         /// <summary>
-        /// Updates the row size.
+        /// Updates the element size.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         /// <param name="gameServices">The game services.</param>
         /// <param name="availableWidth">The available width.</param>
         /// <param name="availabelHeight">The available height.</param>
-        private void UpdateRowSize(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
+        private void UpdateElementSize(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
         {
             if ((null == this.UiLayoutCache) ||
                 (0 == this._elements.Count))
@@ -225,9 +225,20 @@ namespace Common.UserInterface.Models
                     uiElementService.UpdateElementHeight(element, flexHeight);
             }
 
-            var contentWidth = this._elements.Sum(e => e.TotalWidth);
-            var contentHeight = this._elements.Max(e => e.TotalHeight);
-            this.UpdateRowArea(gameServices, contentWidth, contentHeight);
+            var insideWidth = 0f;
+            var insideHeight = 0f;
+
+            if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
+                insideWidth = availableWidth;
+            else
+                insideWidth = this._elements.Sum(e => e.TotalWidth);
+
+            if (UiVerticalJustificationType.SpaceBetween == this.VerticalJustificationType)
+                insideHeight = availabelHeight;
+            else
+                insideHeight = this._elements.Max(e => e.TotalHeight);
+
+            this.UpdateRowArea(gameServices, insideWidth, insideHeight);
         }
 
         /// <summary>

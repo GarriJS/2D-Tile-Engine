@@ -245,17 +245,17 @@ namespace Common.UserInterface.Models
                     Height = 0 + this.Margin.TopMargin + this.Margin.BottomMargin
                 }
             };
-            this.UpdateBlockSize(gameTime, gameServices, availableWidth, availabelHeight);
+            this.UpdateRowSizes(gameTime, gameServices, availableWidth, availabelHeight);
         }
 
         /// <summary>
-        /// Updates the block size.
+        /// Updates the row sizes.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         /// <param name="gameServices">The game services.</param>
         /// <param name="availableWidth">The available width.</param>
         /// <param name="availabelHeight">The available height.</param>
-        private void UpdateBlockSize(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
+        private void UpdateRowSizes(GameTime gameTime, GameServiceContainer gameServices, float availableWidth, float availabelHeight)
 		{
 			this._rows.RemoveAll(e => 0 == e._elements.Count);
 
@@ -263,16 +263,20 @@ namespace Common.UserInterface.Models
 				(0 == this._rows.Count))
                 return;
 
-            availableWidth -= this.Margin.LeftMargin + this.Margin.RightMargin;
+            var insideWidth = availableWidth - (this.Margin.LeftMargin + this.Margin.RightMargin);
             availabelHeight -= this.Margin.TopMargin + this.Margin.BottomMargin;
             var uiRowService = gameServices.GetService<IUiRowService>();
-            var flexWidthRows = this._rows.Where(e => e.HasWidthFlexElements).ToList();
-			var flexHeightRows = this._rows.Where(e => e.HasHeightFlexElements).ToList();
+            var flexWidthRows = this._rows.Where(e => e.HasWidthFlexElements || 
+													  (UiHorizontalJustificationType.SpaceBetween == e.HorizontalJustificationType))
+										  .ToList();
+			var flexHeightRows = this._rows.Where(e => e.HasHeightFlexElements ||
+													   (UiVerticalJustificationType.SpaceBetween == e.VerticalJustificationType))
+										   .ToList();
 			var flexWidth = 0f;
 			var flexHeight = 0f;
 
             if (0 != flexWidthRows.Count)
-				flexWidth = availableWidth - this.UiLayoutCache.FixedSizedWidth / flexWidthRows.Count;
+				flexWidth = insideWidth;
 
             if (0 != flexHeightRows.Count)
                 flexHeight = availabelHeight - this.UiLayoutCache.FixedSizedHeight / flexHeightRows.Count;
@@ -282,7 +286,7 @@ namespace Common.UserInterface.Models
 
 			if (true == this.FlexRows)
 			{
-				var overflowingRows = this._rows.Where(e => e.TotalWidth > availableWidth)
+				var overflowingRows = this._rows.Where(e => e.TotalWidth > insideWidth)
 												.ToArray();
 
 				if (0 != overflowingRows.Length)
@@ -293,9 +297,9 @@ namespace Common.UserInterface.Models
 					{
 						// this is really split even and not center
 						if (UiHorizontalJustificationType.Center == this.HorizontalJustificationType)
-							targetWidth = availableWidth / (float)Math.Ceiling(row.TotalWidth / availableWidth);
+							targetWidth = insideWidth / (float)Math.Ceiling(row.TotalWidth / insideWidth);
 
-						var newRows = uiRowService.SplitRow(row, availableWidth);
+						var newRows = uiRowService.SplitRow(row, insideWidth);
 						
 						foreach (var newRow in newRows)
 							newRow.RefreshLayoutCache(gameTime, gameServices, flexWidth, flexHeight);
@@ -307,9 +311,11 @@ namespace Common.UserInterface.Models
 				}
 			}
 
-			var contentWidth = this._rows.Max(e => e.TotalWidth);
-            var contentHeight = this._rows.Sum(e => e.TotalHeight);
-            this.UpdateBlockArea(gameServices, contentWidth, contentHeight);
+			if (0 == insideWidth)
+				insideWidth = this._rows.Max(e => e.TotalWidth);
+
+			var contentHight = this._rows.Sum(e => e.TotalHeight);
+            this.UpdateBlockArea(gameServices, insideWidth, contentHight);
         }
 
         /// <summary>
@@ -387,15 +393,6 @@ namespace Common.UserInterface.Models
 				(this.ScrollState is not null))
 				verticalOffset -= this.ScrollState.VerticalScrollOffset;
 
-			var spaceBetweenBlocks = 0f;
-            var carryOverHorizontalOffset = 0f;
-
-            if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
-				if (1 < this._rows.Count)
-					spaceBetweenBlocks = (this.TotalWidth - contentWidth) / (this._rows.Count - 1);
-				else
-                    carryOverHorizontalOffset = (this.TotalWidth - contentWidth) / 2;	
-
             foreach (var row in this._rows)
 			{
 				var horizontalOffset = row.HorizontalJustificationType switch
@@ -409,7 +406,7 @@ namespace Common.UserInterface.Models
 					horizontalOffset = 0;
 
 				var rowTop = verticalOffset + row.Margin.TopMargin;
-				var rowLeft = horizontalOffset + carryOverHorizontalOffset + row.Margin.LeftMargin;
+				var rowLeft = horizontalOffset + row.Margin.LeftMargin;
 				var result = new Vector2Extender<UiRow>
 				{
 					Vector2 = new Vector2
@@ -421,9 +418,6 @@ namespace Common.UserInterface.Models
 				};
 
 				yield return result;
-
-                if (UiHorizontalJustificationType.SpaceBetween == this.HorizontalJustificationType)
-                    carryOverHorizontalOffset += spaceBetweenBlocks;
 
                 verticalOffset += row.TotalHeight;
 			}

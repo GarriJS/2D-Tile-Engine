@@ -271,7 +271,7 @@ namespace Common.UserInterface.Models
         /// </summary>
         public void UpdateModalOffsets()
         {
-            foreach (var blockLayout in this.EnumerateLayout(includeScrollOffset: false) ?? [])
+            foreach (var blockLayout in this.EnumerateBlockPositions(includeScrollOffset: false) ?? [])
             {
                 blockLayout.Subject.UiLayoutCache.Offset = blockLayout.Vector2;
                 blockLayout.Subject.UpdateOffsets();
@@ -282,11 +282,11 @@ namespace Common.UserInterface.Models
         }
 
         /// <summary>
-        /// Enumerates the Block blockLayout.
+        /// Enumerates the Block positions.
         /// </summary>
         /// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
-        /// <returns>The enumerated Block blockLayout.</returns>
-        public IEnumerable<Vector2Extender<UiBlock>> EnumerateLayout(bool includeScrollOffset)
+        /// <returns>The enumerated Block positions.</returns>
+        public IEnumerable<Vector2Extender<UiBlock>> EnumerateBlockPositions(bool includeScrollOffset)
         {
             var contentHeight = this._blocks.Sum(r => r.TotalHeight);
             var verticalOffset = this.VerticalJustificationType switch

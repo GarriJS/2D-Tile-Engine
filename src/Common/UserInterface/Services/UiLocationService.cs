@@ -177,7 +177,7 @@ namespace Common.UserInterface.Services
 
 			var uiZoneLocation = uiZone.Position.Coordinates;
 
-			foreach (var blockLayout in uiZone.EnumerateLayout(includeScrollOffset: true) ?? [])
+			foreach (var blockLayout in uiZone.EnumerateBlockPositions(includeScrollOffset: true) ?? [])
 			{
 				var blockTop = uiZoneLocation.Y + blockLayout.Vector2.Y;
 				var blockBottom = blockTop + blockLayout.Subject.InsideHeight;

@@ -20,6 +20,6 @@ namespace Common.UserInterface.Models.Contracts
 		/// </summary>
 		/// <param name="includeScrollOffset">A value indicating whether to include the scroll offset.</param>
 		/// <returns>The enumerated Block blockLayout.</returns>
-		public IEnumerable<Vector2Extender<UiBlock>> EnumerateLayout(bool includeScrollOffset);
+		public IEnumerable<Vector2Extender<UiBlock>> EnumerateBlockPositions(bool includeScrollOffset);
 	}
 }
