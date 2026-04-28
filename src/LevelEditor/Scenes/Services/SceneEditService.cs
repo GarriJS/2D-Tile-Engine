@@ -30,6 +30,7 @@ using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace LevelEditor.Scenes.Services
 {
@@ -414,8 +415,13 @@ namespace LevelEditor.Scenes.Services
 			if (this.CurrentScene is null)
                 return;
 
-            var uiModalService = this._gameServices.GetService<IUiModalService>();
-            var saveSceneModalModel = new UiModalModel
+            var modalName = "Save Scene Modal";
+			var uiModalService = this._gameServices.GetService<IUiModalService>();
+            
+            if (uiModalService.ActiveUiModals.Any(e => e.Name == modalName))
+                return;
+
+			var saveSceneModalModel = new UiModalModel
             {
                 Name = "Save Scene Modal",
                 ResizeTexture = true,
