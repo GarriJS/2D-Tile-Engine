@@ -5,6 +5,7 @@ using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
 using Common.Debugging.Services.Contracts;
 using Common.UserInterface.Models;
+using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Models;
 using Engine.Core.State.Contracts;
 using Engine.Debugging.Services;
@@ -107,10 +108,13 @@ namespace Common.Controls.Cursors.Models
 			}
 
 			this.UpdateActiveCursors(gameTime);
+            var uiModalService = this._gameServices.GetService<IUiModalService>();
 
-			if (hoverState.UiLocationDescent.PrimaryUiObject is not null)
+            if ((hoverState.UiLocationDescent.PrimaryUiObject is not null) &&
+				((hoverState.UiLocationDescent.PrimaryUiObject is UiModal) ||
+			 	 (false == uiModalService.HasActiveModals)))
 			{
-				var cursorInteraction = new CursorInteraction
+                var cursorInteraction = new CursorInteraction
 				{
 					CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
 					SubjectLocation = hoverState.UiLocationDescent.PrimaryUiObjectLocation,
