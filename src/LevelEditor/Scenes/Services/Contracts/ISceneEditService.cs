@@ -1,10 +1,9 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using Common.Controls.CursorInteractions.Models;
 using Common.DiskModels.Tiling;
 using Common.DiskModels.UserInterface;
 using Common.Scenes.Models;
 using Common.Tiling.Models;
 using Common.UserInterface.Models;
-using Common.UserInterface.Models.Contracts;
 using Engine.Core.Contracts;
 using LevelEditor.Scenes.Models;
 
@@ -29,19 +28,19 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// The create scene button click event processor.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction);
+		public void CreateSceneButtonClickEventProcessor(CursorInteraction cursorInteraction);
 
 		/// <summary>
 		/// The load scene button click event processor.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction);
+		public void LoadSceneButtonClickEventProcessor(CursorInteraction cursorInteraction);
 
 		/// <summary>
 		/// The toggle tile grid click event processor.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void ToggleTileGridClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction);
+		public void ToggleTileGridClickEventProcessor(CursorInteraction cursorInteraction);
 
 		/// <summary>
 		/// Gets the tile grid user interface zone.
@@ -82,7 +81,7 @@ namespace LevelEditor.Scenes.Services.Contracts
 		/// Saves the scene.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void SaveScene(CursorInteraction<IAmAUiElement> cursorInteraction);
+		public void SaveScene(CursorInteraction cursorInteraction);
 
 		/// <summary>
 		/// Loads the tile map model.

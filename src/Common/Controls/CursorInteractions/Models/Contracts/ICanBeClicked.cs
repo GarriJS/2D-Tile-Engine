@@ -1,14 +1,12 @@
-﻿using Engine.Graphics.Models;
-using Engine.Physics.Models.Contracts;
+﻿using Engine.Physics.Models.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace Common.Controls.CursorInteraction.Models.Contracts
+namespace Common.Controls.CursorInteractions.Models.Contracts
 {
 	/// <summary>
 	/// Represents something that can be clicked.
 	/// </summary>
-	/// <typeparam name="T">The type being clicked.</typeparam>
-	public interface ICanBeClicked<T> : IHaveASubArea, IHaveATypedCursorConfiguration<T>
+	public interface ICanBeClicked : IHaveASubArea, IHaveACursorConfiguration
 	{
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
@@ -19,6 +17,6 @@ namespace Common.Controls.CursorInteraction.Models.Contracts
 		/// Raises the click event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseClickEvent(CursorInteraction<T> cursorInteraction);
+		public void RaiseClickEvent(CursorInteraction cursorInteraction);
     }
 }

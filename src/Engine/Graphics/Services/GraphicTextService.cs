@@ -223,7 +223,7 @@ namespace Engine.Graphics.Services
 						Index = textLines.LastOrDefault()?.Text.Length ?? 0,
 						Line = textLines?.Count - 1 ?? 0
                     },
-					Area = new SubArea
+					SubArea = new SubArea
 					{
 						Width = 2,
 						Height = 15

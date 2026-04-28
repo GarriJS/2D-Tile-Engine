@@ -1,4 +1,5 @@
-﻿using Common.Controls.Cursors.Models;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.UserInterface;
 using Common.UserInterface.Models;
@@ -105,9 +106,9 @@ namespace Common.UserInterface.Services
                         Margin = uiRow.Margin.Copy(),
                         HorizontalJustificationType = uiRow.HorizontalJustificationType,
                         VerticalJustificationType = uiRow.VerticalJustificationType,
-                        Graphic = uiRow.Graphic, //copy?
+                        Graphic = uiRow.Graphic, //copy
                         HoverCursor = uiRow.HoverCursor,
-                        CursorConfiguration = uiRow.CursorConfiguration
+                        CursorConfiguration = uiRow.BaseCursorConfiguration as CursorConfiguration //copy
                     };
                     newRow._elements.AddRange(elementList);
                     rows.Add(newRow);
@@ -129,7 +130,7 @@ namespace Common.UserInterface.Services
                     VerticalJustificationType = uiRow.VerticalJustificationType,
                     Graphic = uiRow.Graphic, //copy?
                     HoverCursor = uiRow.HoverCursor,
-                    CursorConfiguration = uiRow.CursorConfiguration
+                    CursorConfiguration = uiRow.BaseCursorConfiguration as CursorConfiguration //copy
                 };
                 lastRow._elements.AddRange(elementList);
                 rows.Add(lastRow);

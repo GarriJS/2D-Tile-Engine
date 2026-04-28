@@ -1,10 +1,11 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteractions.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
 using Common.DiskModels.UserInterface;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
+using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Graphics.Models;
 using Engine.Graphics.Models.Contracts;
@@ -83,7 +84,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var scrollState = scrollStateService.GetScrollStateFromModel(uiZoneModel.ScrollStateModel);
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiZone>(uiScreenZone.Area.ToSubArea, null);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration(uiScreenZone.Area.ToSubArea, null);
 			var result = new UiZone
 			{
 				ResetCalculateCachedOffsets = true,

@@ -119,7 +119,7 @@ namespace Engine.Graphics.Models
 			var textEditingStateOffset = offset + new Vector2
 			{
 				X = cursorTextOffset.X,
-				Y = lineOffsetHeight + ((cursorTextOffset.Y - this.TextCursor.Area.Height) / 2)
+				Y = lineOffsetHeight + ((cursorTextOffset.Y - this.TextCursor.SubArea.Height) / 2)
 			};
 			this.TextCursor.Draw(gameTime, gameServices, coordinates, this.TextCursor.Color, textEditingStateOffset);
 		}

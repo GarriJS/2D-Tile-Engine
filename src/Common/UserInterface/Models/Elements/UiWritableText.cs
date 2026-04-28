@@ -1,7 +1,6 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Contracts;
 using Common.UserInterface.Enums;
-using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements.Abstract;
 using Engine.Controls.Models;
 using Engine.Controls.Models.Contracts;
@@ -14,7 +13,7 @@ namespace Common.UserInterface.Models.Elements
 	/// <summary>
 	/// Represents user interface writable text.
 	/// </summary>
-	sealed public class UiWritableText : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>, IAmAControlContextComponent
+	sealed public class UiWritableText : UiElementBase, IHaveGraphicText, ICanBeClicked, IAmAControlContextComponent
 	{
 		/// <summary>
 		/// Gets or sets the clickable area scaler.
@@ -50,7 +49,7 @@ namespace Common.UserInterface.Models.Elements
 		/// Raises the click event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseClickEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
+		public void RaiseClickEvent(CursorInteraction cursorInteraction)
 		{
 			this.CursorConfiguration?.RaiseClickEvent(cursorInteraction);
 		}
@@ -79,13 +78,13 @@ namespace Common.UserInterface.Models.Elements
 				{
 					UiHorizontalTextJustification.Center => new Vector2
 					{
-						X = (this.Area.Width - textDimensions.X) / 2f,
-						Y = (this.Area.Height - textDimensions.Y) / 2f
+						X = (this.SubArea.Width - textDimensions.X) / 2f,
+						Y = (this.SubArea.Height - textDimensions.Y) / 2f
 					},
 					UiHorizontalTextJustification.Right => new Vector2
 					{
-						X = (this.Area.Width - textDimensions.X),
-						Y = (this.Area.Height - textDimensions.Y)
+						X = (this.SubArea.Width - textDimensions.X),
+						Y = (this.SubArea.Height - textDimensions.Y)
 					},
 					_ => new Vector2
 					{

@@ -1,5 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Abstract;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Abstract;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
@@ -48,12 +48,12 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <summary>
 		/// Gets the inside width.
 		/// </summary>
-		public float InsideWidth { get => this.Area.Width; }
+		public float InsideWidth { get => this.SubArea.Width; }
 
 		/// <summary>
 		/// Gets the inside height.
 		/// </summary>
-		public float InsideHeight { get => this.Area.Height; }
+		public float InsideHeight { get => this.SubArea.Height; }
 
 		/// <summary>
 		/// Gets or sets the horizontal user interface size type.
@@ -68,7 +68,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		required public SubArea Area { get; set; }
+		required public SubArea SubArea { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user interface margin.
@@ -93,13 +93,13 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// <summary>
 		/// Gets or sets the cursor configuration
 		/// </summary>
-		required public CursorConfiguration<IAmAUiElement> CursorConfiguration { get; set; }
+		required public CursorConfiguration CursorConfiguration { protected get; init; }
 
 		/// <summary>
 		/// Raises the hover event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseHoverEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
+		public void RaiseHoverEvent(CursorInteraction cursorInteraction)
 		{
 			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
@@ -108,7 +108,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		/// Raises the press event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaisePressEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
+		public void RaisePressEvent(CursorInteraction cursorInteraction)
 		{
 			this.CursorConfiguration?.RaisePressEvent(cursorInteraction);
 		}
@@ -134,7 +134,7 @@ namespace Common.UserInterface.Models.Elements.Abstract
 		virtual public void DrawDebug(GameTime gameTime, GameServiceContainer gameServices, Vector2 coordinates, Color color, Vector2 offset = default)
 		{
 			var graphicOffset = offset + (this.CachedOffset ?? default);
-			this.Area.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
+			this.SubArea.Draw(gameTime, gameServices, coordinates, color, graphicOffset);
 		}
 
 		/// <summary>

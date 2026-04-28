@@ -1,4 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.Controls;
 using Engine.Core.Contracts;

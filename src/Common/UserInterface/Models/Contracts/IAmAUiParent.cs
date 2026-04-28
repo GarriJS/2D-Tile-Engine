@@ -1,4 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteractions.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
 using System.Collections.Generic;
@@ -8,8 +8,8 @@ namespace Common.UserInterface.Models.Contracts
 	/// <summary>
 	/// Represents a user interface parent.
 	/// </summary>
-	public interface IAmAUiParent : IHaveArea, IHaveAHoverCursor, IHaveACursorConfiguration
-	{
+	public interface IAmAUiParent : IHaveArea, IHaveAHoverCursor, ICanBeHovered, IAmScrollable
+    {
 		/// <summary>
 		/// The user interface blocks.
 		/// </summary>

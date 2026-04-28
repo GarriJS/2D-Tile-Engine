@@ -1,6 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Abstract;
-using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Abstract;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
@@ -8,6 +7,7 @@ using Engine.Debugging.Models.Contracts;
 using Engine.Graphics.Models.Contracts;
 using Engine.Physics.Models;
 using Engine.Physics.Models.Contracts;
+using Engine.Physics.Models.SubAreas;
 using Engine.RunTime.Models.Contracts;
 using Engine.RunTime.Services.Contracts;
 using Microsoft.Xna.Framework;
@@ -21,17 +21,17 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface zone.
 	/// </summary>
-	sealed public class UiZone : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiZone>, IDisposable
+	sealed public class UiZone : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmAUiParent, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets a value indicating if the user interface zone will recalculate the cached offsets on the next draw.
 		/// </summary>
 		required public bool ResetCalculateCachedOffsets { get; set; }
 
-		/// <summary>
-		/// Gets or sets the user interface zone name.
-		/// </summary>
-		required public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets the user interface zone name.
+        /// </summary>
+        required public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the draw layer.
@@ -52,6 +52,11 @@ namespace Common.UserInterface.Models
 		/// Gets the position.
 		/// </summary>
 		public Position Position { get => this.UserInterfaceScreenZone?.Position; }
+
+		/// <summary>
+		/// Gets the sub area.
+		/// </summary>
+		public SubArea SubArea { get => this.Area?.ToSubArea; }
 
 		/// <summary>
 		/// Gets or sets the area.
@@ -76,7 +81,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the cursor configuration
 		/// </summary>
-		required public CursorConfiguration<UiZone> CursorConfiguration { get; set; }
+		required public CursorConfiguration CursorConfiguration { private get; init; }
 
 		/// <summary>
 		/// Gets or sets the user interface screen zone.
@@ -97,7 +102,7 @@ namespace Common.UserInterface.Models
 		/// Raises the hover event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseHoverEvent(CursorInteraction<UiZone> cursorInteraction)
+		public void RaiseHoverEvent(CursorInteraction cursorInteraction)
 		{
 			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}

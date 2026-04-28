@@ -1,7 +1,7 @@
 ﻿using Common.Controls.Cursors.Models;
 using System;
 
-namespace Common.Controls.CursorInteraction.Models.Contracts
+namespace Common.Controls.CursorInteractions.Models.Contracts
 {
 	/// <summary>
 	/// Represents something with a hover configuration.

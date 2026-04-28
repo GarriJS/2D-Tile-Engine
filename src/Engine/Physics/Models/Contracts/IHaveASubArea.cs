@@ -8,8 +8,8 @@ namespace Engine.Physics.Models.Contracts
 	public interface IHaveASubArea
 	{
 		/// <summary>
-		/// Gets the area.
+		/// Gets the sub area.
 		/// </summary>
-		public SubArea Area { get; set; }
+		public SubArea SubArea { get; }
 	}
 }

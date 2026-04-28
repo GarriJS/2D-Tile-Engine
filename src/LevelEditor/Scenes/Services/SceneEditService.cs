@@ -1,6 +1,6 @@
 ﻿using BaseContent.BaseContentConstants.Fonts;
 using BaseContent.BaseContentConstants.Images;
-using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Constants;
 using Common.DiskModels.Tiling;
 using Common.DiskModels.Tiling.Options;
@@ -66,32 +66,43 @@ namespace LevelEditor.Scenes.Services
         /// The create scene button click event processor.
         /// </summary>
         /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void CreateSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
+        public void CreateSceneButtonClickEventProcessor(CursorInteraction cursorInteraction)
         {
-            _ = this.CreateNewScene(setCurrent: true, cursorInteraction.Subject.Name);
+            if (cursorInteraction.Subject is not IAmAUiElement element)
+            {
+                // LOGGING
+                return;
+            }
+
+            _ = this.CreateNewScene(setCurrent: true, element.Name);
         }
 
         /// <summary>
         /// The load scene button click event processor.
         /// </summary>
         /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void LoadSceneButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
-        {
-            var tileMapModel = this.LoadTileMapModel(cursorInteraction.Subject.Name);
+        public void LoadSceneButtonClickEventProcessor(CursorInteraction cursorInteraction)
+		{
+			if (cursorInteraction.Subject is not IAmAUiElement element)
+			{
+				// LOGGING
+				return;
+			}
 
+			var tileMapModel = this.LoadTileMapModel(element.Name);
             if (tileMapModel is null)
                 return;
 
             var tileService = this._gameServices.GetService<ITileService>();
             var tileMap = tileService.GetTileMapFromModel(tileMapModel);
-            this.CreateNewScene(true, tileMap, cursorInteraction.Subject.Name);
+            this.CreateNewScene(true, tileMap, element.Name);
         }
 
         /// <summary>
         /// The toggle tile grid click event processor.
         /// </summary>
         /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void ToggleTileGridClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction)
+        public void ToggleTileGridClickEventProcessor(CursorInteraction cursorInteraction)
         {
             this.AddTileComponent.ToggleBackgroundGraphic();
         }
@@ -392,9 +403,15 @@ namespace LevelEditor.Scenes.Services
         /// Saves the scene.
         /// </summary>
         /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void SaveScene(CursorInteraction<IAmAUiElement> cursorInteraction)
+        public void SaveScene(CursorInteraction cursorInteraction)
         {
-            if (this.CurrentScene is null)
+			if (cursorInteraction.Subject is not IAmAUiElement element)
+			{
+				// LOGGING
+				return;
+			}
+
+			if (this.CurrentScene is null)
                 return;
 
             var uiModalService = this._gameServices.GetService<IUiModalService>();

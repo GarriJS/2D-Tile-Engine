@@ -1,4 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using Common.Controls.CursorInteractions.Models;
 using Engine.Controls.Models;
 using Engine.Controls.Models.Contracts;
 using Microsoft.Xna.Framework;

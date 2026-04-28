@@ -1,4 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
@@ -130,9 +130,15 @@ namespace Common.Controls.Cursors.Services
 		public HoverState GetCursorHoverState()
 		{
 			var uiLocationService = this._gameServices.GetService<IUiLocationService>();
-			var uiObject = uiLocationService.GetUiObjectAtScreenLocation(this.CursorControlComponent.CursorPosition.Coordinates);
+			var cursorPosition = this.CursorControlComponent.CursorPosition;
+            var uiLocationDescent = uiLocationService.GetUiDescentAtScreenLocation(location: cursorPosition.Coordinates);
+			var hoverState = new HoverState
+			{
+				HoverLocation = cursorPosition.Coordinates,
+				UiLocationDescent = uiLocationDescent
+			};
 
-			return uiObject;
+			return hoverState;
 		}
 	}
 }

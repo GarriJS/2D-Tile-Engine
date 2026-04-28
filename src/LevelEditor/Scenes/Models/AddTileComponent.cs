@@ -1,5 +1,5 @@
 ﻿using BaseContent.BaseContentConstants.Controls;
-using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
 using Common.DiskModels.Tiling;
@@ -15,7 +15,6 @@ using Engine.Graphics.Services.Contracts;
 using Engine.RunTime.Services.Contracts;
 using LevelEditor.Scenes.Services.Contracts;
 using Microsoft.Xna.Framework;
-using System.Net.NetworkInformation;
 
 namespace LevelEditor.Scenes.Models
 {
@@ -74,9 +73,7 @@ namespace LevelEditor.Scenes.Models
 
 			if ((sceneEditService.CurrentScene is null) ||
 				(this.AddTileParameters is null) ||
-				((hoverState is not null) &&
-				 ((hoverState.HoverObjectLocation?.Subject is not UiZone uiZone) ||
-				  (uiZone.Graphic is not null))))
+				(hoverState.UiLocationDescent.UiParent is not null))
 				return;
 
 			var cursorService = this._gameServices.GetService<ICursorService>();

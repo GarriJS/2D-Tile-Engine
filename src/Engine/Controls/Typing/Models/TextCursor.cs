@@ -39,7 +39,7 @@ namespace Engine.Controls.Typing.Models
 		/// <summary>
 		/// Gets or sets the area.
 		/// </summary>
-		required public SubArea Area { get; set; }
+		required public SubArea SubArea { get; set; }
 
 		/// <summary>
 		/// Draws the sub drawable.
@@ -68,7 +68,7 @@ namespace Engine.Controls.Typing.Models
 				return;
 
 			var drawingService = gameServices.GetService<IDrawingService>();
-			drawingService.DrawRectangle(this.Area.ToRectangle(coordinates + offset), color);
+			drawingService.DrawRectangle(this.SubArea.ToRectangle(coordinates + offset), color);
 		}
 	}
 }

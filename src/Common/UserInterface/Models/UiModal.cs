@@ -1,7 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Abstract;
-using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Abstract;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
@@ -24,7 +22,7 @@ namespace Common.UserInterface.Models
     /// <summary>
     /// Represents a user interface modal
     /// </summary>
-    public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmScrollable, IAmAUiParent, IHaveAHoverCursor, ICanBeHovered<UiModal>, IDisposable
+    public class UiModal : IAmDrawable, IAmPreRenderable, IAmDebugDrawable, IAmAUiParent, IDisposable
     {
         /// <summary>
         /// Gets or sets a value indicating if the user interface modal will recalculate the cached offsets on the next draw.
@@ -72,6 +70,11 @@ namespace Common.UserInterface.Models
         public Position Position { get => this.Area?.Position; }
 
         /// <summary>
+        /// Gets the sub area.
+        /// </summary>
+        public SubArea SubArea { get => this.Area?.ToSubArea; }
+
+        /// <summary>
         /// Gets or sets the area.
         /// </summary>
         required public IAmAArea Area { get; set; }
@@ -94,7 +97,7 @@ namespace Common.UserInterface.Models
         /// <summary>
         /// Gets or sets the cursor configuration
         /// </summary>
-        required public CursorConfiguration<UiModal> CursorConfiguration { get; set; }
+        required public CursorConfiguration CursorConfiguration { private get; init; }
 
         /// <summary>
         /// The user interface blocks.
@@ -110,7 +113,7 @@ namespace Common.UserInterface.Models
         /// Raises the hover event.
         /// </summary>
         /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void RaiseHoverEvent(CursorInteraction<UiModal> cursorInteraction)
+        public void RaiseHoverEvent(CursorInteraction cursorInteraction)
         {
             this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
         }
@@ -259,13 +262,8 @@ namespace Common.UserInterface.Models
                 Height = updateHeight ? contentHeight : this.Area.Height,
             };
 
-            if (null == this.CursorConfiguration)
-            {
-                var cursorInteractionService = gameServices.GetService<ICursorInteractionService>();
-                this.CursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiModal>(this.Area.ToSubArea);
-            }
-            else
-                this.CursorConfiguration.Area = this.Area.ToSubArea;
+            if (null != this.CursorConfiguration)
+                this.CursorConfiguration.SubArea = this.Area.ToSubArea;
 
             if ((null != this.Graphic) &&
                 ((true == this.ResizeTexture) ||

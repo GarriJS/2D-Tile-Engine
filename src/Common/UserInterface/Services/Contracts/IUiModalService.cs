@@ -9,10 +9,15 @@ namespace Common.UserInterface.Services.Contracts
 	/// </summary>
 	public interface IUiModalService
 	{
-		/// <summary>
-		/// Gets the active user interface modals.
-		/// </summary>
-		public List<UiModal> ActiveUiModals { get; }
+        /// <summary>
+        /// Gets a value indicating whether there are active user interface modals.
+        /// </summary>
+        public bool HasActiveModals { get; }
+
+        /// <summary>
+        /// Gets the active user interface modals.
+        /// </summary>
+        public List<UiModal> ActiveUiModals { get; }
 
 		/// <summary>
 		/// Gets the active user interface modal from the model.

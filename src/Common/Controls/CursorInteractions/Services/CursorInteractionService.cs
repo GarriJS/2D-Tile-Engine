@@ -1,9 +1,9 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Services.Contracts;
 using Engine.Physics.Models.SubAreas;
 using Microsoft.Xna.Framework;
 
-namespace Common.Controls.CursorInteraction.Services
+namespace Common.Controls.CursorInteractions.Services
 {
 	/// <summary>
 	/// Represents a cursor interaction service.
@@ -19,17 +19,16 @@ namespace Common.Controls.CursorInteraction.Services
 		/// <summary>
 		/// Gets the hover configuration.
 		/// </summary>
-		/// <typeparam name="T">The parent type.</typeparam>
 		/// <param name="area">The area.</param>
 		/// <param name="clickArea">The clickable area.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="clickOffset">The clickable offset.</param>
 		/// <returns>The hover configuration.</returns>
-		public CursorConfiguration<T> GetCursorConfiguration<T>(SubArea area, SubArea clickArea = null, Vector2 offset = default, Vector2 clickOffset = default)
+		public CursorConfiguration GetCursorConfiguration(SubArea area, SubArea clickArea = null, Vector2 offset = default, Vector2 clickOffset = default)
 		{
-			var result = new CursorConfiguration<T>
+			var result = new CursorConfiguration
 			{
-				Area = area,
+				SubArea = area,
 				ClickArea = clickArea,
 				Offset = offset,
 				ClickOffset = clickOffset

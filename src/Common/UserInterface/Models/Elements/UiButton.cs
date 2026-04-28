@@ -1,5 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Contracts;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Contracts;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Models.Elements.Abstract;
 using Engine.Graphics.Models;
@@ -11,7 +11,7 @@ namespace Common.UserInterface.Models.Elements
 	/// <summary>
 	/// Represents a user interface button.
 	/// </summary>
-	sealed public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked<IAmAUiElement>, IHaveAClickAnimation
+	sealed public class UiButton : UiElementBase, IHaveGraphicText, ICanBeClicked, IHaveAClickAnimation
 	{
 		/// <summary>
 		/// Gets or sets the pressed text offset. 
@@ -42,7 +42,7 @@ namespace Common.UserInterface.Models.Elements
 		/// Raises the click event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseClickEvent(CursorInteraction<IAmAUiElement> cursorInteraction)
+		public void RaiseClickEvent(CursorInteraction cursorInteraction)
 		{
 			this.CursorConfiguration?.RaiseClickEvent(cursorInteraction);
 		}
@@ -66,8 +66,8 @@ namespace Common.UserInterface.Models.Elements
 				var textDimensions = this.GraphicText.GetTextDimensions();
 				var centeredOffset = new Vector2
 				{ 
-					X = (this.Area.Width - textDimensions.X) / 2f,
-					Y = (this.Area.Height - textDimensions.Y) / 2f
+					X = (this.SubArea.Width - textDimensions.X) / 2f,
+					Y = (this.SubArea.Height - textDimensions.Y) / 2f
 				};
 				var animationOffset = Vector2.Zero;
 

@@ -1,6 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.UserInterface.Models;
+﻿using Common.UserInterface.Models;
 using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Physics.Models;
@@ -20,98 +18,77 @@ namespace Common.UserInterface.Services
 	{
 		readonly private GameServiceContainer _gameServices = gameServices;
 
-		/// <summary>
-		/// Gets the user interface hover state at the screen location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <returns>The user interface hover state at the location if one is found.</returns>
-		/// <remarks>TODO could be optimized further.</remarks>
-		public HoverState GetUiObjectAtScreenLocation(Vector2 location)
+        /// <summary>
+        /// Gets the user interface location descent.
+        /// </summary>
+        /// <param name="uiParent">The user interface parent.</param>
+        /// <param name="locatedUiBlock">The located user interface block.</param>
+        /// <param name="locatedUiRow">The located user interface row.</param>
+        /// <param name="locatedUiElement">The located user interface element.</param>
+        /// <returns>The user interface location descent.</returns>
+        public UiLocationDescent GetUiLocationDescent(IAmAUiParent uiParent, Vector2Extender<UiBlock> locatedUiBlock, Vector2Extender<UiRow> locatedUiRow, Vector2Extender<IAmAUiElement> locatedUiElement)
+        {
+            var uiLocationDescent = new UiLocationDescent
+            {
+                UiParent = uiParent,
+                UiLocatedBlock = locatedUiBlock,
+                UiLocatedRow = locatedUiRow,
+                UiLocatedElement = locatedUiElement
+            };
+
+            return uiLocationDescent;
+        }
+
+        /// <summary>
+        /// Gets the user interface descent at the screen location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <returns>The user interface descent at the location.</returns>
+        public UiLocationDescent GetUiDescentAtScreenLocation(Vector2 location)
 		{
-			var hoverState = new HoverState();
+			this.TryGetUiParentAtLocation(location, out var uiParent);
+			this.TryGetUiBlockAtLocation(location, out var locatedBlock, uiParent);
+			this.TryGetUiRowAtLocation(location, out var locatedRow, locatedBlock);
+            this.TryGetUiElementAtLocation(location, out var locatedElement);
+			var uiDescent = this.GetUiLocationDescent(uiParent, locatedBlock, locatedRow, locatedElement);
 
-			if (true == this.TryGetUiParentAtLocation(location, out var uiParent))
-			{
-				if ((uiParent is IAmScrollable scrollable) &&
-					(scrollable.ScrollState is not null) &&
-					(false == scrollable.ScrollState.DisableScrolling))
-					hoverState.BottomScrollable = scrollable;
-
-				hoverState.TopCursorConfiguration = uiParent.BaseCursorConfiguration;
-				hoverState.TopHoverCursor = uiParent.HoverCursor;
-				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
-				{
-					Vector2 = uiParent.Position.Coordinates,
-					Subject = uiParent
-				};
-				hoverState._hoveredObjects[typeof(UiZone)] = uiParent;
-			}
-
-			if (true == this.TryGetUiBlockAtLocation(location, out var locatedBlock))
-			{
-				if (locatedBlock.Subject.CursorConfiguration is not null)
-					hoverState.TopCursorConfiguration = locatedBlock.Subject.CursorConfiguration;
-
-				if (locatedBlock.Subject.HoverCursor is not null)
-					hoverState.TopHoverCursor = locatedBlock.Subject.HoverCursor;
-
-				if ((locatedBlock.Subject.ScrollState is not null) &&
-					(false == locatedBlock.Subject.ScrollState.DisableScrolling))
-					hoverState.BottomScrollable = locatedBlock.Subject;
-
-				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
-				{
-					Vector2 = locatedBlock.Vector2,
-					Subject = locatedBlock.Subject
-				};
-				hoverState._hoveredObjects[typeof(UiBlock)] = locatedBlock.Subject;
-			}
-
-			if (true == this.TryGetUiRowAtLocation(location, out var locatedRow))
-			{
-				if (locatedRow.Subject.CursorConfiguration is not null)
-					hoverState.TopCursorConfiguration = locatedRow.Subject.CursorConfiguration;
-
-				if (locatedRow.Subject.HoverCursor is not null)
-					hoverState.TopHoverCursor = locatedRow.Subject.HoverCursor;
-
-				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
-				{
-					Vector2 = locatedRow.Vector2,
-					Subject = locatedRow.Subject
-				};
-				hoverState._hoveredObjects[typeof(UiRow)] = locatedRow.Subject;
-			}
-
-			if (true == this.TryGetUiElementAtLocation(location, out var locatedElement))
-			{
-				if (locatedElement.Subject.CursorConfiguration is not null)
-					hoverState.TopCursorConfiguration = locatedElement.Subject.CursorConfiguration;
-
-				if (locatedElement.Subject.HoverCursor is not null)
-					hoverState.TopHoverCursor = locatedElement.Subject.HoverCursor;
-
-				hoverState.HoverObjectLocation = new Vector2Extender<IHaveACursorConfiguration>
-				{
-					Vector2 = locatedElement.Vector2,
-					Subject = locatedElement.Subject
-				};
-				hoverState._hoveredObjects[typeof(IAmAUiElement)] = locatedElement.Subject;
-			}
-
-			if (hoverState.HoverObjectLocation is null)
-				return null;
-
-			return hoverState;
+			return uiDescent;
 		}
 
-		/// <summary>
-		/// Tries to get the user interface modal at the given location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="uiModal">The user interface modal.</param>
-		/// <returns>A value indicating whether the user interface modal was found at the location.</returns>
-		public bool TryGetUiModalAtLocation(Vector2 location, out UiModal uiModal)
+        /// <summary>
+        /// Tries to get the user interface parent at the given location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <param name="uiParent">The user interface parent.</param>
+        /// <returns>A value indicating whether the user interface parent was found at the location.</returns>
+        private bool TryGetUiParentAtLocation(Vector2 location, out IAmAUiParent uiParent)
+        {
+            if (true == this.TryGetUiModalAtLocation(location, out var uiModal))
+            {
+                uiParent = uiModal;
+
+                return true;
+            }
+
+            if (true == this.TryGetUiZoneAtLocation(location, out var uiZone))
+            {
+                uiParent = uiZone;
+
+                return true;
+            }
+
+            uiParent = null;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to get the user interface modal at the given location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <param name="uiModal">The user interface modal.</param>
+        /// <returns>A value indicating whether the user interface modal was found at the location.</returns>
+        public bool TryGetUiModalAtLocation(Vector2 location, out UiModal uiModal)
 		{
 			var uiModalService = this._gameServices.GetService<IUiModalService>();
 			uiModal = uiModalService.ActiveUiModals.FirstOrDefault(e => true == e.Area.Contains(location));
@@ -119,13 +96,13 @@ namespace Common.UserInterface.Services
 			return uiModal is not null;
 		}
 
-		/// <summary>
-		/// Tries to get the user interface zone at the given location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="uiZone">The user interface zone.</param>
-		/// <returns>A value indicating whether the user interface zone was found at the location.</returns>
-		public bool TryGetUiZoneAtLocation(Vector2 location, out UiZone uiZone)
+        /// <summary>
+        /// Tries to get the user interface zone at the given location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <param name="uiZone">The user interface zone.</param>
+        /// <returns>A value indicating whether the user interface zone was found at the location.</returns>
+        public bool TryGetUiZoneAtLocation(Vector2 location, out UiZone uiZone)
 		{
 			var uiGroupService = this._gameServices.GetService<IUiGroupService>();
 			var activeUiGroup = uiGroupService.UserInterfaceGroups.FirstOrDefault(e => e.VisibilityGroupId == uiGroupService.ActiveVisibilityGroupId);
@@ -135,49 +112,24 @@ namespace Common.UserInterface.Services
 		}
 
 		/// <summary>
-		/// Tries to get the user interface parent at the given location.
-		/// </summary>
-		/// <param name="location">The location.</param>
-		/// <param name="uiParent">The user interface parent.</param>
-		/// <returns>A value indicating whether the user interface parent was found at the location.</returns>
-		private bool TryGetUiParentAtLocation(Vector2 location, out IAmAUiParent uiParent)
-		{
-			if (true == this.TryGetUiModalAtLocation(location, out var uiModal))
-			{
-				uiParent = uiModal;
-
-				return true;
-			}
-
-			if (true == this.TryGetUiZoneAtLocation(location, out var uiZone))
-			{
-				uiParent = uiZone;
-
-				return true;
-			}
-
-			uiParent = null;
-
-			return false;
-		}
-
-		/// <summary>
 		/// Tries to get the user interface block at the given location.
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="uiBlock">The located user interface block.</param>
+		/// <param name="uiParent">The user interface parent.</param>
 		/// <returns>A value indicating whether a user interface block was found at the location.</returns>
-		public bool TryGetUiBlockAtLocation(Vector2 location, out Vector2Extender<UiBlock> uiBlock)
+		public bool TryGetUiBlockAtLocation(Vector2 location, out Vector2Extender<UiBlock> uiBlock, IAmAUiParent uiParent = null)
 		{
 			uiBlock = default;
 
-			if ((false == this.TryGetUiParentAtLocation(location, out var uiZone)) ||
-				(0 == uiZone.Blocks.Count))
+			if ((uiParent is null) &&
+				((false == this.TryGetUiParentAtLocation(location, out uiParent)) ||
+				 (0 == uiParent.Blocks.Count)))
 				return false;
 
-			var uiZoneLocation = uiZone.Position.Coordinates;
+			var uiZoneLocation = uiParent.Position.Coordinates;
 
-			foreach (var blockLayout in uiZone.EnumerateBlockPositions(includeScrollOffset: true) ?? [])
+			foreach (var blockLayout in uiParent.EnumerateBlockPositions(includeScrollOffset: true) ?? [])
 			{
 				var blockTop = uiZoneLocation.Y + blockLayout.Vector2.Y;
 				var blockBottom = blockTop + blockLayout.Subject.InsideHeight;
@@ -203,13 +155,15 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		/// <param name="location">The location.</param>
 		/// <param name="uiRow">The located user interface row.</param>
+		/// <param name="locatedUiBlock">The user interface block.</param>
 		/// <returns>A value indicating whether a user interface row was found at the location.</returns>
-		public bool TryGetUiRowAtLocation(Vector2 location, out Vector2Extender<UiRow> uiRow)
+		public bool TryGetUiRowAtLocation(Vector2 location, out Vector2Extender<UiRow> uiRow, Vector2Extender<UiBlock> locatedUiBlock = default)
 		{
 			uiRow = default;
 
-			if ((false == this.TryGetUiBlockAtLocation(location, out var locatedUiBlock)) ||
-				(0 == locatedUiBlock.Subject._rows.Count))
+			if ((locatedUiBlock.Subject is null) &&
+				((false == this.TryGetUiBlockAtLocation(location, out locatedUiBlock)) ||
+				 (0 == locatedUiBlock.Subject._rows.Count)))
 				return false;
 
 			foreach (var rowLayout in locatedUiBlock.Subject.EnumerateRowPosition(includeScrollOffset: true) ?? [])
@@ -239,12 +193,13 @@ namespace Common.UserInterface.Services
 		/// <param name="location">The location.</param>
 		/// <param name="locatedUiElement">The located user interface element.</param>
 		/// <returns>A value indicated whether a user interface element was found at the location.</returns>
-		public bool TryGetUiElementAtLocation(Vector2 location, out Vector2Extender<IAmAUiElement> locatedUiElement)
+		public bool TryGetUiElementAtLocation(Vector2 location, out Vector2Extender<IAmAUiElement> locatedUiElement, Vector2Extender<UiRow> locatedUiRow = default)
 		{
 			locatedUiElement = default;
 
-			if ((false == this.TryGetUiRowAtLocation(location, out var locatedUiRow)) ||
-				(0 == locatedUiRow.Subject._elements.Count))
+			if ((locatedUiRow.Subject is null) &&
+				((false == this.TryGetUiRowAtLocation(location, out locatedUiRow)) ||
+				 (0 == locatedUiRow.Subject._elements.Count)))
 				return false;
 
 			foreach (var elementLayout in locatedUiRow.Subject.EnumerateElementPosition() ?? [])

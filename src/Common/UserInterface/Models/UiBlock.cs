@@ -1,7 +1,6 @@
-﻿using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Abstract;
-using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Abstract;
+using Common.Controls.CursorInteractions.Models.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models.Contracts;
@@ -24,7 +23,7 @@ namespace Common.UserInterface.Models
 	/// <summary>
 	/// Represents a user interface block.
 	/// </summary>
-	sealed public class UiBlock : IAmSubDrawable, IAmSubPreRenderable, IAmDebugSubDrawable, IAmScrollable, IHaveAHoverCursor, ICanBeHovered<UiBlock>, IDisposable
+	sealed public class UiBlock : IAmSubDrawable, IAmSubPreRenderable, IAmDebugSubDrawable, IAmScrollable, IHaveAHoverCursor, ICanBeHovered, IDisposable
 	{
 		/// <summary>
 		/// Gets or sets the user interface layout cache.
@@ -76,6 +75,11 @@ namespace Common.UserInterface.Models
 		/// </summary>
 		required public UiMargin Margin { get; set; }
 
+        /// <summary>
+        /// Gets the area.
+        /// </summary>
+        public SubArea SubArea { get => this.UiLayoutCache?.TotalArea; }
+
 		/// <summary>
 		/// Gets or sets the user interface horizontal justification type. 
 		/// </summary>
@@ -109,7 +113,7 @@ namespace Common.UserInterface.Models
 		/// <summary>
 		/// Gets or sets the hover configuration.
 		/// </summary>
-		public CursorConfiguration<UiBlock> CursorConfiguration { get; set; }
+		public CursorConfiguration CursorConfiguration { private get; init; }
 
 		/// <summary>
 		/// The rows.
@@ -120,7 +124,7 @@ namespace Common.UserInterface.Models
 		/// Raises the hover event.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void RaiseHoverEvent(CursorInteraction<UiBlock> cursorInteraction)
+		public void RaiseHoverEvent(CursorInteraction cursorInteraction)
 		{
 			this.CursorConfiguration?.RaiseHoverEvent(cursorInteraction);
 		}
@@ -341,13 +345,8 @@ namespace Common.UserInterface.Models
                 Height = (int)insideHeight + this.Margin.TopMargin + this.Margin.BottomMargin
             };
 
-			if (null == this.CursorConfiguration)
-            {
-                var cursorInteractionService = gameServices.GetService<ICursorInteractionService>();
-                this.CursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiBlock>(this.UiLayoutCache.TotalArea);
-			}
-			else
-				this.CursorConfiguration.Area = this.UiLayoutCache.TotalArea;
+			if (null != this.CursorConfiguration)
+				this.CursorConfiguration.SubArea = this.UiLayoutCache.TotalArea;
 
             if ((null != this.Graphic) &&
                 ((true == this.ResizeTexture) ||
@@ -456,7 +455,7 @@ namespace Common.UserInterface.Models
 		public void Dispose()
 		{
 			this.ScrollState?.Dispose();
-			this.CursorConfiguration.Dispose();
+			this.CursorConfiguration?.Dispose();
 
 			foreach (var row in this._rows ?? [])
 				row?.Dispose();

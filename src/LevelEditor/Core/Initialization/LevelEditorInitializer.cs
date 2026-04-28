@@ -1,6 +1,6 @@
 ﻿using BaseContent.BaseContentConstants.Fonts;
 using BaseContent.BaseContentConstants.Images;
-using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Constants;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.UserInterface;
@@ -73,11 +73,11 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the hover event processors.</returns>
-		static public Dictionary<string, Action<CursorInteraction<IAmAUiElement>>> GetHoverEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<CursorInteraction>> GetHoverEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 
-			var dict = new Dictionary<string, Action<CursorInteraction<IAmAUiElement>>>
+			var dict = new Dictionary<string, Action<CursorInteraction>>
 			{
 
 			};
@@ -90,9 +90,9 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the press event processors.</returns>
-		static public Dictionary<string, Action<CursorInteraction<IAmAUiElement>>> GetPressEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<CursorInteraction>> GetPressEventProcessors(GameServiceContainer gameServices)
 		{
-			var dict = new Dictionary<string, Action<CursorInteraction<IAmAUiElement>>>
+			var dict = new Dictionary<string, Action<CursorInteraction>>
 			{
 
 			};
@@ -105,12 +105,12 @@ namespace LevelEditor.Core.Initialization
 		/// </summary>
 		/// <param name="gameServices">The game services.</param>
 		/// <returns>A dictionary of the click event processors.</returns>
-		static public Dictionary<string, Action<CursorInteraction<IAmAUiElement>>> GetClickEventProcessors(GameServiceContainer gameServices)
+		static public Dictionary<string, Action<CursorInteraction>> GetClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
 			var sceneEditService = gameServices.GetService<ISceneEditService>();
 
-			var dict = new Dictionary<string, Action<CursorInteraction<IAmAUiElement>>>
+			var dict = new Dictionary<string, Action<CursorInteraction>>
 			{
 				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
 				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,

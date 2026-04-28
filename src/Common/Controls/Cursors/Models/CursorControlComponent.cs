@@ -1,10 +1,10 @@
 ﻿using BaseContent.BaseContentConstants.Controls;
-using Common.Controls.CursorInteraction.Models;
+using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Contracts;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Controls.Models.Contracts;
 using Common.Debugging.Services.Contracts;
 using Common.UserInterface.Models;
-using Common.UserInterface.Models.Contracts;
 using Engine.Controls.Models;
 using Engine.Core.State.Contracts;
 using Engine.Debugging.Services;
@@ -65,7 +65,6 @@ namespace Common.Controls.Cursors.Models
 		public void ConsumeControlState(GameTime gameTime, ControlState controlState, ControlState priorControlState)
 		{
 			var cursorService = this._gameServices.GetService<ICursorService>();
-
 			var hoverState = cursorService.GetCursorHoverState();
 			this.ConsumeControlState(gameTime, controlState, priorControlState, hoverState);
 		}
@@ -90,10 +89,10 @@ namespace Common.Controls.Cursors.Models
 
 			this.CursorPosition.Coordinates = controlState.MousePosition;
 
-			if (hoverState?.TopHoverCursor is not null)
+			if (hoverState.UiLocationDescent.TopHoverCursor is not null)
 			{
 				this.SetHoverState();
-				this.SetPrimaryHoverCursor(hoverState.TopHoverCursor, clearSecondaryCursors: false);
+				this.SetPrimaryHoverCursor(hoverState.UiLocationDescent.TopHoverCursor, clearSecondaryCursors: false);
 
 				foreach (var secondaryCursor in this._secondaryHoverCursors)
 					this.AddSecondaryHoverCursor(secondaryCursor, false);
@@ -109,75 +108,38 @@ namespace Common.Controls.Cursors.Models
 
 			this.UpdateActiveCursors(gameTime);
 
-			if (hoverState?.HoverObjectLocation is null)
-				return;
-
-			var uiObject = hoverState.HoverObjectLocation.Value.Subject;
-			var elementLocation = hoverState.HoverObjectLocation.Value.Vector2;
-
-			switch (uiObject)
+			if (hoverState.UiLocationDescent.PrimaryUiObject is not null)
 			{
-				case IAmAUiElement uiElement:
+				var cursorInteraction = new CursorInteraction
+				{
+					CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
+					SubjectLocation = hoverState.UiLocationDescent.PrimaryUiObjectLocation,
+					Subject = hoverState.UiLocationDescent.PrimaryUiObject
+				};
 
-					var elementCursorInteraction = new CursorInteraction<IAmAUiElement>
-					{
-						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
-						SubjectLocation = elementLocation,
-						Subject = uiElement
-					};
-
-					if (true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick))
-					{
-						uiElement.RaisePressEvent(elementCursorInteraction);
-					}
-					else
-					{
-						uiElement.RaiseHoverEvent(elementCursorInteraction);
-					}
-
-					break;
-
-				case UiRow uiRowWithLocation:
-
-					var rowCursorInteraction = new CursorInteraction<UiRow>
-					{
-						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
-						SubjectLocation = elementLocation,
-						Subject = uiRowWithLocation
-					};
-					uiRowWithLocation.RaiseHoverEvent(rowCursorInteraction);
-
-					break;
-
-				case UiZone uiZone:
-
-					var zoneCursorInteraction = new CursorInteraction<UiZone>
-					{
-						CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
-						SubjectLocation = elementLocation,
-						Subject = uiZone
-					};
-					uiZone.RaiseHoverEvent(zoneCursorInteraction);
-
-					break;
+				if ((hoverState.UiLocationDescent.PrimaryUiObject is ICanBePressed pressable) &&
+					(true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick)))
+					pressable.RaisePressEvent(cursorInteraction);
+				else
+					hoverState.UiLocationDescent.PrimaryUiObject.RaiseHoverEvent(cursorInteraction);
 			}
 
 			gameStateService.CheckGameStateFlagValue(DebugService.DebugFlagName, out var isDebugMode);
 
 			if ((true == isDebugMode) &&
-				(true == hoverState._hoveredObjects.TryGetValue(typeof(UiZone), out var value)))
+				(hoverState.UiLocationDescent.UiParent is not null))
 			{
-				if (value is UiZone hoveredUiZone)
+				if (hoverState.UiLocationDescent.UiParent is UiZone hoveredUiZone)
 					commonDebugService.AddDebugUserInterfaceZone(hoveredUiZone);
 
-				if (value is UiModal hoveredUiModal)
+				if (hoverState.UiLocationDescent.UiParent is UiModal hoveredUiModal)
 					commonDebugService.AddDebugUserInterfaceModal(hoveredUiModal);
 			}
 
-			if ((hoverState.BottomScrollable?.ScrollState is not null) &&
-				(false == hoverState.BottomScrollable.ScrollState.DisableScrolling) &&
+			if ((hoverState.UiLocationDescent.BottomScrollable?.ScrollState is not null) &&
+				(false == hoverState.UiLocationDescent.BottomScrollable.ScrollState.DisableScrolling) &&
 				(0 != controlState.MouseVerticalScrollDelta))
-				hoverState.BottomScrollable.ScrollState.Scroll(controlState.MouseVerticalScrollDelta);
+				hoverState.UiLocationDescent.BottomScrollable.ScrollState.Scroll(controlState.MouseVerticalScrollDelta);
 		}
 
 		/// <summary>

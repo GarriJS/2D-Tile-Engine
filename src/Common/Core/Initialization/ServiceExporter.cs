@@ -1,5 +1,5 @@
-﻿using Common.Controls.CursorInteraction.Services;
-using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteractions.Services;
+using Common.Controls.CursorInteractions.Services.Contracts;
 using Common.Controls.Cursors.Services;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Debugging.Services;

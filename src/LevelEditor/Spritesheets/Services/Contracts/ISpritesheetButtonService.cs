@@ -1,9 +1,8 @@
-﻿using Common.Controls.CursorInteraction.Models;
+﻿using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Models;
 using Common.DiskModels.UserInterface.Elements;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
-using Common.UserInterface.Models.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace LevelEditor.Spritesheets.Services.Contracts
@@ -17,7 +16,7 @@ namespace LevelEditor.Spritesheets.Services.Contracts
 		/// The spritesheet button click event processor.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void SpritesheetButtonClickEventProcessor(CursorInteraction<IAmAUiElement> cursorInteraction);
+		public void SpritesheetButtonClickEventProcessor(CursorInteraction cursorInteraction);
 
 		/// <summary>
 		/// Updates the spritesheet button trailing cursor.

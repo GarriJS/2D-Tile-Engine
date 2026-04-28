@@ -1,7 +1,7 @@
 ﻿using Common.Controls.Contexts;
-using Common.Controls.CursorInteraction.Models;
-using Common.Controls.CursorInteraction.Models.Contracts;
-using Common.Controls.CursorInteraction.Services.Contracts;
+using Common.Controls.CursorInteractions.Models;
+using Common.Controls.CursorInteractions.Models.Contracts;
+using Common.Controls.CursorInteractions.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.DiskModels.UserInterface;
@@ -65,14 +65,14 @@ namespace Common.UserInterface.Services
 				return null;
 			}
 
-			if (uiElement is ICanBeClicked<IAmAUiElement> clickableElement)
-				uiElement.CursorConfiguration.AddPressSubscription(this.CheckForUiElementClick);
+			if (uiElement is ICanBeClicked clickableElement)
+				uiElement.BaseCursorConfiguration.AddPressSubscription(this.CheckForUiElementClick);
 
-			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.HoverEventName, out var hoverAction))
-				uiElement.CursorConfiguration.AddHoverSubscription(hoverAction);
+			if (true == functionService.TryGetFunction<Action<CursorInteraction>>(uiElementModel.HoverEventName, out var hoverAction))
+				uiElement.BaseCursorConfiguration.AddHoverSubscription(hoverAction);
 
-			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiElementModel.PressEventName, out var pressAction))
-				uiElement.CursorConfiguration.AddPressSubscription(pressAction);
+			if (true == functionService.TryGetFunction<Action<CursorInteraction>>(uiElementModel.PressEventName, out var pressAction))
+				uiElement.BaseCursorConfiguration.AddPressSubscription(pressAction);
 
 			return uiElement;
 		}
@@ -132,14 +132,14 @@ namespace Common.UserInterface.Services
 			var graphicTextService = this._gameServices.GetService<IGraphicTextService>();
 			var cursorInteractionService = this._gameServices.GetService<ICursorInteractionService>();
 			var area = baseElements.GetValueOrDefault("area") as SubArea;
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, null);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration(area, null);
 			var simpleText = graphicTextService.GetSimpleTextFromModel(uiTextModel.Text);
 			var uiText = new UiText
 			{
 				Name = uiTextModel.Name,
 				HorizontalSizeType = uiTextModel.HorizontalSizeType,
 				VerticalSizeType = uiTextModel.VerticalSizeType,
-				Area = area,
+				SubArea = area,
 				Margin = baseElements.GetValueOrDefault("margin") as UiMargin? ?? default,
 				Graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic,
 				HoverCursor = baseElements.GetValueOrDefault("hoverCursor") as Cursor,
@@ -172,7 +172,7 @@ namespace Common.UserInterface.Services
 				X = (area.Width - clickableArea.Width) / 2,
 				Y = (area.Height - clickableArea.Height) / 2
 			};
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, clickableArea, clickOffset: clickableOffset);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration(area, clickableArea, clickOffset: clickableOffset);
 			var writableText = graphicTextService.GetWritableTextFromModel(uiWritableTextModel.Text, (int)area.Width);
 			var graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic;
 			var activeGraphic = graphicService.GetGraphicFromModel(uiWritableTextModel.ActiveGraphic);
@@ -183,7 +183,7 @@ namespace Common.UserInterface.Services
 				HorizontalSizeType = uiWritableTextModel.HorizontalSizeType,
 				VerticalSizeType = uiWritableTextModel.VerticalSizeType,
 				HorizontalTextJustificationType = uiWritableTextModel.HorizontalTextJustificationType,
-				Area = area,
+				SubArea = area,
 				Margin = baseElements.GetValueOrDefault("margin") as UiMargin? ?? default,
 				Graphic = graphic,
 				HoverCursor = baseElements.GetValueOrDefault("hoverCursor") as Cursor,
@@ -192,7 +192,7 @@ namespace Common.UserInterface.Services
 				WritableText = writableText,
 				ActiveGraphic = activeGraphic
 			};
-			uiWritableText.CursorConfiguration?.AddClickSubscription(this.TriggerUiWriting);
+			uiWritableText.BaseCursorConfiguration?.AddClickSubscription(this.TriggerUiWriting);
 
 			return uiWritableText;
 		}
@@ -221,7 +221,7 @@ namespace Common.UserInterface.Services
 				X = (area.Width - clickableArea.Width) / 2,
 				Y = (area.Height - clickableArea.Height) / 2
 			};
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<IAmAUiElement>(area, clickableArea, clickOffset: clickableOffset);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration(area, clickableArea, clickOffset: clickableOffset);
 			TriggeredAnimation clickAnimation = null;
 
 			if (uiButtonModel.ClickableAreaAnimation is not null)
@@ -237,7 +237,7 @@ namespace Common.UserInterface.Services
 				Name = uiButtonModel.Name,
 				HorizontalSizeType = uiButtonModel.HorizontalSizeType,
 				VerticalSizeType = uiButtonModel.VerticalSizeType,
-				Area = area,
+				SubArea = area,
 				Margin = baseElements.GetValueOrDefault("margin") as UiMargin? ?? default,
 				Graphic = baseElements.GetValueOrDefault("graphic") as IAmAGraphic,
 				HoverCursor = baseElements.GetValueOrDefault("hoverCursor") as Cursor,
@@ -246,10 +246,10 @@ namespace Common.UserInterface.Services
 				SimpleText = simpleText,
 				ClickAnimation = clickAnimation
 			};
-			uiButton.CursorConfiguration?.AddClickSubscription(this.TriggerUiButtonClickAnimation);
+			uiButton.BaseCursorConfiguration?.AddClickSubscription(this.TriggerUiButtonClickAnimation);
 
-			if (true == functionService.TryGetFunction<Action<CursorInteraction<IAmAUiElement>>>(uiButtonModel.ClickEventName, out var clickAction))
-				uiButton.CursorConfiguration?.AddClickSubscription(clickAction);
+			if (true == functionService.TryGetFunction<Action<CursorInteraction>>(uiButtonModel.ClickEventName, out var clickAction))
+				uiButton.BaseCursorConfiguration?.AddClickSubscription(clickAction);
 
 			return uiButton;
 		}
@@ -261,26 +261,26 @@ namespace Common.UserInterface.Services
 		/// <param name="width">The width.</param>
 		public void UpdateElementWidth(IAmAUiElement element, float width)
 		{
-			element.Area.Width = width;
-			element.Graphic.SetDrawDimensions(element.Area);
+			element.SubArea.Width = width;
+			element.Graphic.SetDrawDimensions(element.SubArea);
 
-			if (element is ICanBeClicked<IAmAUiElement> clickable)
+			if (element is ICanBeClicked clickable)
 			{
-				clickable.CursorConfiguration.Area = new SubArea
+				clickable.BaseCursorConfiguration.SubArea = new SubArea
 				{
-					Width = clickable.Area.Width * clickable.ClickableAreaScaler.X,
-					Height = clickable.Area.Height * clickable.ClickableAreaScaler.Y
+					Width = clickable.SubArea.Width * clickable.ClickableAreaScaler.X,
+					Height = clickable.SubArea.Height * clickable.ClickableAreaScaler.Y
 				};
-				clickable.CursorConfiguration.ClickOffset = new Vector2
+				clickable.BaseCursorConfiguration.ClickOffset = new Vector2
 				{
-					X = (clickable.Area.Width - clickable.CursorConfiguration.ClickArea.Width) / 2,
-					Y = (clickable.Area.Height - clickable.CursorConfiguration.ClickArea.Height) / 2
+					X = (clickable.SubArea.Width - clickable.BaseCursorConfiguration.ClickArea.Width) / 2,
+					Y = (clickable.SubArea.Height - clickable.BaseCursorConfiguration.ClickArea.Height) / 2
 				};
 			}
 
 			if (element is UiWritableText writableText)
 			{ 
-				writableText.ActiveGraphic.SetDrawDimensions(element.Area);
+				writableText.ActiveGraphic.SetDrawDimensions(element.SubArea);
 			}
 
 			//TODO updates press and hover areas?
@@ -297,7 +297,7 @@ namespace Common.UserInterface.Services
 			{
 				var subArea = new SubArea
 				{
-					Width = element.CursorConfiguration.Area.Width,
+					Width = element.BaseCursorConfiguration.SubArea.Width,
 					Height = frame.Dimensions.Width
 				};
 
@@ -312,26 +312,26 @@ namespace Common.UserInterface.Services
 		/// <param name="height">The height.</param>
 		public void UpdateElementHeight(IAmAUiElement element, float height)
 		{
-			element.Area.Height = height;
-			element.Graphic.SetDrawDimensions(element.Area);
+			element.SubArea.Height = height;
+			element.Graphic.SetDrawDimensions(element.SubArea);
 
-			if (element is ICanBeClicked<IAmAUiElement> clickable)
+			if (element is ICanBeClicked clickable)
 			{
-				clickable.CursorConfiguration.Area = new SubArea
+				clickable.BaseCursorConfiguration.SubArea = new SubArea
 				{
-					Width = clickable.Area.Width * clickable.ClickableAreaScaler.X,
-					Height = clickable.Area.Height * clickable.ClickableAreaScaler.Y
+					Width = clickable.SubArea.Width * clickable.ClickableAreaScaler.X,
+					Height = clickable.SubArea.Height * clickable.ClickableAreaScaler.Y
 				};
-				clickable.CursorConfiguration.ClickOffset = new Vector2
+				clickable.BaseCursorConfiguration.ClickOffset = new Vector2
 				{
-					X = (clickable.Area.Width - clickable.CursorConfiguration.ClickArea.Width) / 2,
-					Y = (clickable.Area.Height - clickable.CursorConfiguration.ClickArea.Height) / 2
+					X = (clickable.SubArea.Width - clickable.BaseCursorConfiguration.ClickArea.Width) / 2,
+					Y = (clickable.SubArea.Height - clickable.BaseCursorConfiguration.ClickArea.Height) / 2
 				};
 			}
 
 			if (element is UiWritableText writableText)
 			{
-				writableText.ActiveGraphic.SetDrawDimensions(element.Area);
+				writableText.ActiveGraphic.SetDrawDimensions(element.SubArea);
 			}
 
 			//TODO updates press and hover areas?
@@ -349,7 +349,7 @@ namespace Common.UserInterface.Services
 				var subArea = new SubArea
 				{
 					Width = frame.Dimensions.Width,
-					Height = element.CursorConfiguration.Area.Height
+					Height = element.BaseCursorConfiguration.SubArea.Height
 				};
 
 				frame.SetDrawDimensions(subArea);
@@ -524,12 +524,12 @@ namespace Common.UserInterface.Services
 		/// Checks the user interface element for a click.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		private void CheckForUiElementClick(CursorInteraction<IAmAUiElement> cursorInteraction)
+		private void CheckForUiElementClick(CursorInteraction cursorInteraction)
 		{
 			var clickableLocation = new Vector2
 			{
-				X = cursorInteraction.SubjectLocation.X + cursorInteraction.Subject.CursorConfiguration.ClickOffset.X + ((cursorInteraction.Subject.Area.Width - cursorInteraction.Subject.CursorConfiguration.ClickArea.Width) / 2),
-				Y = cursorInteraction.SubjectLocation.Y + cursorInteraction.Subject.CursorConfiguration.ClickOffset.Y + ((cursorInteraction.Subject.Area.Height - cursorInteraction.Subject.CursorConfiguration.ClickArea.Height) / 2)
+				X = cursorInteraction.SubjectLocation.X + cursorInteraction.Subject.BaseCursorConfiguration.ClickOffset.X + ((cursorInteraction.Subject.SubArea.Width - cursorInteraction.Subject.BaseCursorConfiguration.ClickArea.Width) / 2),
+				Y = cursorInteraction.SubjectLocation.Y + cursorInteraction.Subject.BaseCursorConfiguration.ClickOffset.Y + ((cursorInteraction.Subject.SubArea.Height - cursorInteraction.Subject.BaseCursorConfiguration.ClickArea.Height) / 2)
 			};
 
 			switch (cursorInteraction.Subject)
@@ -537,9 +537,9 @@ namespace Common.UserInterface.Services
 				case UiWritableText writableText:
 
 					if ((clickableLocation.X <= cursorInteraction.CursorLocation.X) &&
-						(clickableLocation.X + writableText.CursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
+						(clickableLocation.X + writableText.BaseCursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
 						(clickableLocation.Y <= cursorInteraction.CursorLocation.Y) &&
-						(clickableLocation.Y + writableText.CursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
+						(clickableLocation.Y + writableText.BaseCursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
 						writableText.RaiseClickEvent(cursorInteraction);
 
 					break;
@@ -547,9 +547,9 @@ namespace Common.UserInterface.Services
 				case UiButton button:
 
 					if ((clickableLocation.X <= cursorInteraction.CursorLocation.X) &&
-						(clickableLocation.X + button.CursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
+						(clickableLocation.X + button.BaseCursorConfiguration.ClickArea.Width >= cursorInteraction.CursorLocation.X) &&
 						(clickableLocation.Y <= cursorInteraction.CursorLocation.Y) &&
-						(clickableLocation.Y + button.CursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
+						(clickableLocation.Y + button.BaseCursorConfiguration.ClickArea.Height >= cursorInteraction.CursorLocation.Y))
 						button.RaiseClickEvent(cursorInteraction);
 
 					break;
@@ -560,7 +560,7 @@ namespace Common.UserInterface.Services
 		/// Triggers the user interface elements click animation.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		private void TriggerUiButtonClickAnimation(CursorInteraction<IAmAUiElement> cursorInteraction)
+		private void TriggerUiButtonClickAnimation(CursorInteraction cursorInteraction)
 		{
 			if (cursorInteraction.Subject is UiButton button)
 				button.ClickAnimation?.TriggerAnimation(allowReset: true);
@@ -570,7 +570,7 @@ namespace Common.UserInterface.Services
 		/// Triggers the user interface writing.
 		/// </summary>
 		/// <param name="cursorInteraction">The cursor interaction.</param>
-		private void TriggerUiWriting(CursorInteraction<IAmAUiElement> cursorInteraction)
+		private void TriggerUiWriting(CursorInteraction cursorInteraction)
 		{
 			if (cursorInteraction.Subject is not UiWritableText writableText)
 				return;

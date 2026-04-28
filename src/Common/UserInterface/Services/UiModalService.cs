@@ -1,4 +1,4 @@
-﻿using Common.Controls.CursorInteraction.Services.Contracts;
+﻿using Common.Controls.CursorInteractions.Services.Contracts;
 using Common.Controls.Cursors.Models;
 using Common.Controls.Cursors.Services.Contracts;
 using Common.Core.Constants;
@@ -36,10 +36,15 @@ namespace Common.UserInterface.Services
 		/// </summary>
 		readonly private List<UiModal> _activeUiModals = [];
 
-		/// <summary>
-		/// Gets the active user interface modals.
-		/// </summary>
-		public List<UiModal> ActiveUiModals { get => this._activeUiModals; }
+        /// <summary>
+        /// Gets a value indicating whether there are active user interface modals.
+        /// </summary>
+        public bool HasActiveModals { get => this._activeUiModals.Count != 0; }
+
+        /// <summary>
+        /// Gets the active user interface modals.
+        /// </summary>
+        public List<UiModal> ActiveUiModals { get => this._activeUiModals; }
 
 		/// <summary>
 		/// Gets the active user interface modal from the model.
@@ -103,7 +108,7 @@ namespace Common.UserInterface.Services
 			}
 
 			var scrollState = scrollStateService.GetScrollStateFromModel(uiModalModel.ScrollStateModel);
-			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration<UiModal>(area.ToSubArea, null);
+			var cursorConfiguration = cursorInteractionService.GetCursorConfiguration(area.ToSubArea, null);
 			var result = new UiModal
 			{
 				ResetCalculateCachedOffsets = true,

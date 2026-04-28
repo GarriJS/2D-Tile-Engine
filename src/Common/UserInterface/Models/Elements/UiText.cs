@@ -38,8 +38,8 @@ namespace Common.UserInterface.Models.Elements
 				var textDimensions = this.GraphicText.GetTextDimensions();
 				var centeredOffset = new Vector2
 				{
-					X = (this.Area.Width - textDimensions.X) / 2f,
-					Y = (this.Area.Height - textDimensions.Y) / 2f
+					X = (this.SubArea.Width - textDimensions.X) / 2f,
+					Y = (this.SubArea.Height - textDimensions.Y) / 2f
 				};
 				var graphicTextOffset = graphicOffset + centeredOffset;
 				this.GraphicText.Write(gameTime, gameServices, coordinates, graphicTextOffset);
