@@ -111,7 +111,7 @@ namespace Common.Controls.Cursors.Models
             var uiModalService = this._gameServices.GetService<IUiModalService>();
 
             if ((hoverState.UiLocationDescent.PrimaryUiObject is not null) &&
-				((hoverState.UiLocationDescent.PrimaryUiObject is UiModal) ||
+				((hoverState.UiLocationDescent.UiParent is UiModal) ||
 			 	 (false == uiModalService.HasActiveModals)))
 			{
                 var cursorInteraction = new CursorInteraction
