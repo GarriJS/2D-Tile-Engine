@@ -107,16 +107,17 @@ namespace LevelEditor.Core.Initialization
 		static public Dictionary<string, Action<CursorInteraction>> GetClickEventProcessors(GameServiceContainer gameServices)
 		{
 			var spritesheetButtonService = gameServices.GetService<ISpritesheetButtonService>();
-			var sceneEditService = gameServices.GetService<ISceneEditService>();
+			var sceneCursorInteractionService = gameServices.GetService<ISceneCursorInteractionService>();
 
 			var dict = new Dictionary<string, Action<CursorInteraction>>
 			{
 				[UiEventName.SpritesheetButtonClick] = spritesheetButtonService.SpritesheetButtonClickEventProcessor,
-				[UiEventName.CreateSceneClick] = sceneEditService.CreateSceneButtonClickEventProcessor,
-				[UiEventName.SaveSceneClick] = sceneEditService.SaveScene,
-				[UiEventName.ToggleTileGridClick] = sceneEditService.ToggleTileGridClickEventProcessor,
-				[UiEventName.LoadSceneClick] = sceneEditService.LoadSceneButtonClickEventProcessor,
-			};
+				[UiEventName.CreateSceneClick] = sceneCursorInteractionService.PrcoessCreateSceneButtonClickEvent,
+				[UiEventName.OpenSaveSceneModalClick] = sceneCursorInteractionService.ProcessOpenSaveSceneModalClickEvent,
+				[UiEventName.ToggleTileGridClick] = sceneCursorInteractionService.ProcessToggleTileGridClickEvent,
+				[UiEventName.LoadSceneClick] = sceneCursorInteractionService.ProcessLoadSceneButtonClickEvent,
+                [UiEventName.SaveSceneClick] = sceneCursorInteractionService.ProcessSaveSceneButtonClickEvent
+            };
 
 			return dict;
 		}
@@ -357,7 +358,7 @@ namespace LevelEditor.Core.Initialization
 														X = 1,
 														Y = 1
 													},
-													ClickEventName = UiEventName.SaveSceneClick
+													ClickEventName = UiEventName.OpenSaveSceneModalClick
 												}
 											]
 										}

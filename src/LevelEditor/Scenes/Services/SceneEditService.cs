@@ -1,6 +1,5 @@
 ﻿using BaseContent.BaseContentConstants.Fonts;
 using BaseContent.BaseContentConstants.Images;
-using Common.Controls.CursorInteractions.Models;
 using Common.Controls.Cursors.Constants;
 using Common.DiskModels.Tiling;
 using Common.DiskModels.Tiling.Options;
@@ -8,10 +7,8 @@ using Common.DiskModels.UserInterface;
 using Common.DiskModels.UserInterface.Elements;
 using Common.Scenes.Models;
 using Common.Tiling.Models;
-using Common.Tiling.Services.Contracts;
 using Common.UserInterface.Enums;
 using Common.UserInterface.Models;
-using Common.UserInterface.Models.Contracts;
 using Common.UserInterface.Services.Contracts;
 using Engine.Controls.Services.Contracts;
 using Engine.Core.Files.Services.Contracts;
@@ -30,7 +27,7 @@ using LevelEditor.Scenes.Services.Contracts;
 using LevelEditor.Spritesheets.Services.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
+using System;
 
 namespace LevelEditor.Scenes.Services
 {
@@ -61,51 +58,6 @@ namespace LevelEditor.Scenes.Services
         public void LoadContent()
         {
             this.AddTileComponent = new AddTileComponent(this._gameServices);
-        }
-
-        /// <summary>
-        /// The create scene button click event processor.
-        /// </summary>
-        /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void CreateSceneButtonClickEventProcessor(CursorInteraction cursorInteraction)
-        {
-            if (cursorInteraction.Subject is not IAmAUiElement element)
-            {
-                // LOGGING
-                return;
-            }
-
-            _ = this.CreateNewScene(setCurrent: true, element.Name);
-        }
-
-        /// <summary>
-        /// The load scene button click event processor.
-        /// </summary>
-        /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void LoadSceneButtonClickEventProcessor(CursorInteraction cursorInteraction)
-		{
-			if (cursorInteraction.Subject is not IAmAUiElement element)
-			{
-				// LOGGING
-				return;
-			}
-
-			var tileMapModel = this.LoadTileMapModel(element.Name);
-            if (tileMapModel is null)
-                return;
-
-            var tileService = this._gameServices.GetService<ITileService>();
-            var tileMap = tileService.GetTileMapFromModel(tileMapModel);
-            this.CreateNewScene(true, tileMap, element.Name);
-        }
-
-        /// <summary>
-        /// The toggle tile grid click event processor.
-        /// </summary>
-        /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void ToggleTileGridClickEventProcessor(CursorInteraction cursorInteraction)
-        {
-            this.AddTileComponent.ToggleBackgroundGraphic();
         }
 
         /// <summary>
@@ -161,7 +113,7 @@ namespace LevelEditor.Scenes.Services
                                         {
                                             TextColor = PalletColors.Hex_BF6F4A,
                                             FontName = FontNames.MonoBold,
-                                            TextLines = 
+                                            TextLines =
                                             [
                                                 new TextLineModel
                                                 {
@@ -356,6 +308,30 @@ namespace LevelEditor.Scenes.Services
         }
 
         /// <summary>
+        /// Saves the scene.
+        /// </summary>
+        /// <param name="scene">The scene.</param>
+        /// <returns>A value indicating whether the scene was saved or not.</returns>
+        public bool SaveScene(Scene scene)
+        {
+            var jsonService = this._gameServices.GetService<IJsonService>();
+            var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", scene.TileMap.TileMapName, createDirectoryIfDoesNotExist: true);
+            var serializer = new ModelSerializer<TileMapModel>();
+            var tileMapModel = this.CurrentScene.TileMap.ToModel();
+
+            try
+            {
+                serializer.Serialize(filePath, tileMapModel, TilingOptions.TileMapOptions);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Sets the current scene.
         /// </summary>
         /// <param name="scene"></param>
@@ -398,276 +374,6 @@ namespace LevelEditor.Scenes.Services
                 this.AddTileComponent.ToggleBackgroundGraphic();
 
             this.CurrentScene = scene;
-        }
-
-        /// <summary>
-        /// Saves the scene.
-        /// </summary>
-        /// <param name="cursorInteraction">The cursor interaction.</param>
-        public void SaveScene(CursorInteraction cursorInteraction)
-        {
-			if (cursorInteraction.Subject is not IAmAUiElement element)
-			{
-				// LOGGING
-				return;
-			}
-
-			if (this.CurrentScene is null)
-                return;
-
-            var modalName = "Save Scene Modal";
-			var uiModalService = this._gameServices.GetService<IUiModalService>();
-            
-            if (uiModalService.ActiveUiModals.Any(e => e.Name == modalName))
-                return;
-
-			var saveSceneModalModel = new UiModalModel
-            {
-                Name = "Save Scene Modal",
-                ResizeTexture = true,
-                HorizontalLocationType = UiModalHorizontalLocationType.Center,
-                VerticalLocationType = UiModalVerticalLocationType.Center,
-                VerticalJustificationType = UiVerticalJustificationType.SpaceBetween,
-                HorizontalModalSizeType = UiModalSizeType.FitContent,
-                VerticalModalSizeType = UiModalSizeType.Medium,
-                HoverCursorName = CommonCursorNames.BasicCursorName,
-                BackgroundTexture = new SimpleImageModel
-                {
-                    TextureName = "pallet",
-                    TextureRegion = new TextureRegionModel
-                    {
-                        TextureRegionType = TextureRegionType.Tile,
-                        TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_C7CFDD)
-                    }
-                },
-                Blocks =
-                [
-                    new UiBlockModel
-                    {
-                        Name = "Save Scene Modal Block 1",
-                        HorizontalJustificationType = UiHorizontalJustificationType.Center,
-                        VerticalJustificationType = UiVerticalJustificationType.Top,
-                        Rows =
-                        [
-                            new UiRowModel
-                            {
-                                Name = "Save Scene Modal Label Row 1",
-                                ResizeTexture = true,
-                                HorizontalJustificationType = UiHorizontalJustificationType.Center,
-                                VerticalJustificationType = UiVerticalJustificationType.Center,
-                                Elements =
-                                [
-                                    new UiTextModel
-                                    {
-                                        Name = "Save Scene Modal Element",
-                                        HoverCursorName = CommonCursorNames.BasicCursorName,
-                                        ResizeTexture = true,
-                                        Margin = new UiMarginModel
-                                        {
-                                            LeftMargin = 10,
-                                            RightMargin = 10,
-                                        },
-                                        HorizontalSizeType = UiElementSizeType.FitContent,
-                                        VerticalSizeType = UiElementSizeType.FitContent,
-                                        Text = new SimpleTextModel
-                                        {
-                                            TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold,
-                                            TextLines =
-                                            [
-                                                new TextLineModel
-                                                {
-                                                    IsManualBreak = true,
-                                                    Text = "Name Scene"
-                                                }
-                                            ]
-                                        },
-                                        Graphic = new SimpleImageModel
-                                        {
-                                            TextureName = "pallet",
-                                            TextureRegion = new TextureRegionModel
-                                            {
-                                                TextureRegionType = TextureRegionType.Fill,
-                                                TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1C121C)
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    new UiBlockModel
-                    {
-                        Name = "Save Scene Modal Block 2",
-                        HorizontalJustificationType = UiHorizontalJustificationType.Center,
-                        VerticalJustificationType = UiVerticalJustificationType.Center,
-                        Rows =
-                        [
-                            new UiRowModel
-                            {
-                                Name = "Save Scene Modal Editor Row 1",
-                                ResizeTexture = true,
-                                HorizontalJustificationType = UiHorizontalJustificationType.Center,
-                                VerticalJustificationType = UiVerticalJustificationType.Center,
-                                Elements =
-                                [
-                                    new UiWritableTextModel
-                                    {
-                                        Name = "Save Scene Modal Editor Element",
-                                        HoverCursorName = CommonCursorNames.BasicCursorName,
-                                        ResizeTexture = true,
-                                        HorizontalSizeType = UiElementSizeType.FitContent,
-                                        VerticalSizeType = UiElementSizeType.FitContent,
-                                        HorizontalTextJustificationType = UiHorizontalTextJustification.Left,
-                                        ClickableAreaScaler = new Vector2
-                                        {
-                                            X = 1,
-                                            Y = 1
-                                        },
-                                        Margin = new UiMarginModel
-                                        {
-                                            LeftMargin = 10,
-                                            RightMargin = 10,
-                                        },
-                                        Text = new WritableTextModel
-                                        {
-                                            MaxLineCharacterCount = 15,
-                                            MaxLinesCount = 1,
-                                            TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold,
-                                            TextLines =
-                                            [
-                                                new TextLineModel
-                                                {
-                                                    IsManualBreak = true,
-                                                    Text = ""
-                                                }
-                                            ]
-                                        },
-                                        Graphic = new SimpleImageModel
-                                        {
-                                            TextureName = "pallet",
-                                            TextureRegion = new TextureRegionModel
-                                            {
-                                                TextureRegionType = TextureRegionType.Fill,
-                                                TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1C121C)
-                                            }
-                                        },
-                                        ActiveGraphic = new SimpleImageModel
-                                        {
-                                            TextureName = "pallet",
-                                            TextureRegion = new TextureRegionModel
-                                            {
-                                                TextureRegionType = TextureRegionType.Fill,
-                                                TextureBox = PalletColorToTextureBoxHelper.GetPalletColorTextureBox(PalletColors.Hex_1E6F50)
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    new UiBlockModel
-                    {
-                        Name = "Save Scene Modal Block 3",
-                        HorizontalJustificationType = UiHorizontalJustificationType.SpaceBetween,
-                        VerticalJustificationType = UiVerticalJustificationType.Center,
-                        Rows =
-                        [
-                            new UiRowModel
-                            {
-                                Name = "Save Scene Modal Buttons Row 1",
-                                ResizeTexture = true,
-                                HorizontalJustificationType = UiHorizontalJustificationType.SpaceBetween,
-                                VerticalJustificationType = UiVerticalJustificationType.Center,
-                                Elements =
-                                [
-                                    new UiButtonModel
-                                    {
-                                        Name = "Save Scene Back Button",
-                                        HorizontalSizeType = UiElementSizeType.FitContent,
-                                        VerticalSizeType = UiElementSizeType.FitContent,
-                                        Text = new SimpleTextModel
-                                        {
-                                            TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold,
-                                            TextLines =
-                                            [
-                                                new TextLineModel
-                                                {
-                                                    IsManualBreak = true,
-                                                    Text = "Back"
-                                                }
-                                            ]
-                                        },
-                                        ClickableAreaAnimation = new TriggeredAnimationModel
-                                        {
-                                            CurrentFrameIndex = 0,
-                                            FrameDuration = 500,
-                                            Frames =
-                                            [
-                                                DarkBlueButtonsManifest.GetUnpressedCompositeEmptyButton(50, 50),
-                                                DarkBlueButtonsManifest.GetPressedCompositeEmptyButton(50, 50)
-                                            ],
-                                            RestingFrameIndex = 0,
-                                        },
-                                        ClickableAreaScaler = new Vector2
-                                        {
-                                            X = 1,
-                                            Y = 1
-                                        },
-                                        //ClickEventName = UiEventName.CreateSceneClick
-                                    },
-                                    new UiButtonModel
-                                    {
-                                        Name = "Save Scene Confirm Button",
-                                        HorizontalSizeType = UiElementSizeType.FitContent,
-                                        VerticalSizeType = UiElementSizeType.FitContent,
-                                        Text = new SimpleTextModel
-                                        {
-                                            TextColor = PalletColors.Hex_BF6F4A,
-                                            FontName = FontNames.MonoBold,
-                                            TextLines =
-                                            [
-                                                new TextLineModel
-                                                {
-                                                    IsManualBreak = true,
-                                                    Text = "Confirm"
-                                                }
-                                            ]
-                                        },
-                                        ClickableAreaAnimation = new TriggeredAnimationModel
-                                        {
-                                            CurrentFrameIndex = 0,
-                                            FrameDuration = 500,
-                                            Frames =
-                                            [
-                                                DarkBlueButtonsManifest.GetUnpressedCompositeEmptyButton(50, 50),
-                                                DarkBlueButtonsManifest.GetPressedCompositeEmptyButton(50, 50)
-                                            ],
-                                            RestingFrameIndex = 0,
-                                        },
-                                        ClickableAreaScaler = new Vector2
-                                        {
-                                            X = 1,
-                                            Y = 1
-                                        },
-                                        //ClickEventName = UiEventName.CreateSceneClick
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            };
-            var saveSceneModal = uiModalService.GetUiModalFromModel(saveSceneModalModel, makeActive: true);
-
-            //var jsonService = this._gameServices.GetService<IJsonService>();
-            //var tileMapName = "TestMap";
-            //var filePath = jsonService.GetJsonFilePath(ContentManagerParams.ContentManagerName, "TileMaps", tileMapName, createDirectoryIfDoesNotExist: true);
-            //var serializer = new ModelSerializer<TileMapModel>();
-            //var tileMapModel = this.CurrentScene.TileMap.ToModel();
-            //serializer.Serialize(filePath, tileMapModel, TilingOptions.TileMapOptions);
         }
 
         /// <summary>

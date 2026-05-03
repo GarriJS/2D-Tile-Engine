@@ -13,15 +13,15 @@ namespace Common.Controls.CursorInteractions.Models
 		/// </summary>
 		private event Action<CursorInteraction> HoverEvent;
 
-		/// <summary>
-		/// Gets or set the click event.
-		/// </summary>
-		private event Action<CursorInteraction> ClickEvent;
+        /// <summary>
+        /// Gets or set the press event.
+        /// </summary>
+        private event Action<CursorInteraction> PressEvent;
 
-		/// <summary>
-		/// Gets or set the press event.
-		/// </summary>
-		private event Action<CursorInteraction> PressEvent;
+        /// <summary>
+        /// Gets or set the click event.
+        /// </summary>
+        private event Action<CursorInteraction> ClickEvent;
 
 		/// <summary>
 		/// Adds the hover subscription.

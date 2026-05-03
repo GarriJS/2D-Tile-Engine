@@ -15,6 +15,14 @@ namespace Common.UserInterface.Models.Contracts
 		/// </summary>
 		public List<UiBlock> Blocks { get; }
 
+        /// <summary>
+        /// Tries to get a user interface element by its name.
+        /// </summary>
+        /// <param name="elementName">The element name.</param>
+        /// <param name="elments">The elements.</param>
+        /// <returns>A value indicating whether the element was found.</returns>
+        public bool TryGetUiElement(string elementName, out IAmAUiElement[] elments);
+
 		/// <summary>
 		/// Enumerates the Block blockLayout.
 		/// </summary>

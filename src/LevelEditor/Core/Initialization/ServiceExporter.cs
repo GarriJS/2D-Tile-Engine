@@ -22,8 +22,9 @@ namespace LevelEditor.Core.Initialization
 			return
 			[
 				(typeof(ISpritesheetButtonService), new SpritesheetButtonService(game.Services)),
-				(typeof(ISceneEditService), new SceneEditService(game.Services))
-			];
+				(typeof(ISceneEditService), new SceneEditService(game.Services)),
+                (typeof(ISceneCursorInteractionService), new SceneCursorInteractionService(game.Services))
+            ];
 		}
 	}
 }

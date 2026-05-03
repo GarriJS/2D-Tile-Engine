@@ -25,24 +25,6 @@ namespace LevelEditor.Scenes.Services.Contracts
 		public AddTileComponent AddTileComponent { get; }
 
 		/// <summary>
-		/// The create scene button click event processor.
-		/// </summary>
-		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void CreateSceneButtonClickEventProcessor(CursorInteraction cursorInteraction);
-
-		/// <summary>
-		/// The load scene button click event processor.
-		/// </summary>
-		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void LoadSceneButtonClickEventProcessor(CursorInteraction cursorInteraction);
-
-		/// <summary>
-		/// The toggle tile grid click event processor.
-		/// </summary>
-		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void ToggleTileGridClickEventProcessor(CursorInteraction cursorInteraction);
-
-		/// <summary>
 		/// Gets the tile grid user interface zone.
 		/// </summary>
 		/// <returns>The user interface zone.</returns>
@@ -72,16 +54,17 @@ namespace LevelEditor.Scenes.Services.Contracts
 		public Scene CreateNewScene(bool setCurrent, TileMap tileMap, string sceneName = null);
 
 		/// <summary>
-		/// Sets the current scene.
-		/// </summary>
-		/// <param name="scene"></param>
-		public void SetCurrentScene(Scene scene);
-
-		/// <summary>
 		/// Saves the scene.
 		/// </summary>
-		/// <param name="cursorInteraction">The cursor interaction.</param>
-		public void SaveScene(CursorInteraction cursorInteraction);
+		/// <param name="scene">The scene.</param>
+		/// <returns>A value indicating whether the scene was saved or not.</returns>
+		public bool SaveScene(Scene scene);
+
+        /// <summary>
+        /// Sets the current scene.
+        /// </summary>
+        /// <param name="scene"></param>
+        public void SetCurrentScene(Scene scene);
 
 		/// <summary>
 		/// Loads the tile map model.

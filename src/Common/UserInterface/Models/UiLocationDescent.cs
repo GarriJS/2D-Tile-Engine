@@ -13,6 +13,26 @@ namespace Common.UserInterface.Models
     sealed public class UiLocationDescent
     {
         /// <summary>
+        /// Gets or Initializes the user interface parent.
+        /// </summary>
+        public IAmAUiParent UiParent { get; init; }
+
+        /// <summary>
+        /// Initializes the user interface located block.
+        /// </summary>
+        public Vector2Extender<UiBlock>? UiLocatedBlock { private get; init; }
+
+        /// <summary>
+        /// Initializes the user interface located row.
+        /// </summary>
+        public Vector2Extender<UiRow>? UiLocatedRow { private get; init; }
+
+        /// <summary>
+        /// Initializes the user interface located element.
+        /// </summary>
+        public Vector2Extender<IAmAUiElement>? UiLocatedElement { private get; init; }
+
+        /// <summary>
         /// Gets the user interface block.
         /// </summary>
         public UiBlock UiBlock { get => this.UiLocatedBlock?.Subject; }
@@ -66,25 +86,5 @@ namespace Common.UserInterface.Models
         { 
             get => this.UiLocatedElement?.Vector2 ?? this.UiLocatedRow?.Vector2 ?? this.UiLocatedBlock?.Vector2 ?? this.UiParent?.Position.Coordinates ?? default;
         }
-
-        /// <summary>
-        /// Gets or Initializes the user interface parent.
-        /// </summary>
-        public IAmAUiParent UiParent { get; init; }
-
-        /// <summary>
-        /// Initializes the user interface located block.
-        /// </summary>
-        public Vector2Extender<UiBlock>? UiLocatedBlock { private get; init; }
-
-        /// <summary>
-        /// Initializes the user interface located row.
-        /// </summary>
-        public Vector2Extender<UiRow>? UiLocatedRow { private get; init; }
-
-        /// <summary>
-        /// Initializes the user interface located element.
-        /// </summary>
-        public Vector2Extender<IAmAUiElement>? UiLocatedElement { private get; init; }
     }
 }

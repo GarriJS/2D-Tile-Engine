@@ -221,6 +221,23 @@ namespace Common.UserInterface.Models
         }
 
         /// <summary>
+        /// Tries to get a user interface element by its name.
+        /// </summary>
+        /// <param name="elementName">The element name.</param>
+        /// <param name="elements">The elements.</param>
+        /// <returns>A value indicating whether the element was found.</returns>
+        public bool TryGetUiElement(string elementName, out IAmAUiElement[] elements)
+        { 
+            elements = [.. this._blocks.SelectMany(b => b._rows)
+                                       .SelectMany(r => r._elements)
+                                       .Where(e => e.Name == elementName)];
+
+            var result = elements.Length > 0;
+
+            return result;
+        }
+
+        /// <summary>
         /// Refreshes the layout caches.
         /// </summary>
         /// <param name="gameTime">The game time.</param>

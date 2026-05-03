@@ -118,8 +118,9 @@ namespace Common.Controls.Cursors.Models
 				{
 					CursorLocation = cursorService.CursorControlComponent.CursorPosition.Coordinates,
 					SubjectLocation = hoverState.UiLocationDescent.PrimaryUiObjectLocation,
-					Subject = hoverState.UiLocationDescent.PrimaryUiObject
-				};
+					Subject = hoverState.UiLocationDescent.PrimaryUiObject,
+					SubjectUiParent = hoverState.UiLocationDescent.UiParent
+                };
 
 				if ((hoverState.UiLocationDescent.PrimaryUiObject is ICanBePressed pressable) &&
 					(true == controlState.ActionNameIsFresh(BaseControlNames.LeftClick)))

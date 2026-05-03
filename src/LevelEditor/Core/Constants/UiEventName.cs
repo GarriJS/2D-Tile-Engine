@@ -16,9 +16,9 @@
         static public string CreateSceneClick { get; } = "CREATE_SCENE_CLICK";
 
 		/// <summary>
-		/// Gets the create scene click event name.
+		/// Gets the open save scene modal click event name.
 		/// </summary>
-		static public string SaveSceneClick { get; } = "SAVE_SCENE_CLICK";
+		static public string OpenSaveSceneModalClick { get; } = "OPEN_SAVE_SCENE_MODAL_CLICK";
 
 		/// <summary>
 		/// Gets the toggle tile grid click event name.
@@ -30,5 +30,9 @@
         /// </summary>
         static public string LoadSceneClick { get; } = "LOAD_SCENE_CLICK";
 
-	}
+        /// <summary>
+        /// Gets the save scene click event name.
+        /// </summary>
+        static public string SaveSceneClick { get; } = "SAVE_SCENE_CLICK";
+    }
 }
